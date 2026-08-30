@@ -1,0 +1,77 @@
+{
+  "name": "next-inspect-ui",
+  "version": "0.2.1",
+  "description": "Dev-only overlay for Next.js — hover any component to see its source, click to open it in your editor.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "next",
+    "nextjs",
+    "react",
+    "inspector",
+    "devtools",
+    "open-in-editor"
+  ],
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./plugin": {
+      "types": "./dist/plugin.d.ts",
+      "import": "./dist/plugin.js",
+      "require": "./dist/plugin.cjs"
+    },
+    "./babel-stamp": {
+      "types": "./dist/babel-stamp.d.ts",
+      "import": "./dist/babel-stamp.js",
+      "require": "./dist/babel-stamp.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "node --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7",
+    "babel-loader": ">=9",
+    "next": ">=16",
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "peerDependenciesMeta": {
+    "@babel/core": {
+      "optional": true
+    },
+    "babel-loader": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@types/babel__core": "^7.20.5",
+    "@types/node": "^20.19.43",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-loader": "^10.1.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

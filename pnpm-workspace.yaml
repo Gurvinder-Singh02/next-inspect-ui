@@ -1,0 +1,9 @@
+packages:
+  - next-inspect-ui-npm
+  - next-inspect-website
+
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+  msw: false
+  esbuild: true
