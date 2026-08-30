@@ -24,11 +24,29 @@ const API_SECTIONS: ApiSection[] = [
         description:
           "Absolute path to the project root. Used to resolve component source files.",
       },
+    ],
+  },
+  {
+    title: "next-inspect-ui-debug / InspectUI",
+    description:
+      "Debug overlay with the event log and verify scoring. Import from `next-inspect-ui-debug/inspect` — not shipped in `next-inspect-ui`.",
+    props: [
+      {
+        name: "projectRoot",
+        type: "string",
+        description: "Absolute path to the project root.",
+      },
       {
         name: "debug",
         type: "boolean",
         description:
           "Keep the bottom-left event log open for the session. Default `false`.",
+      },
+      {
+        name: "verify",
+        type: "boolean",
+        description:
+          "Score runtime resolution against compile-time stamps. Default `false`.",
       },
     ],
   },

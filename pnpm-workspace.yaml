@@ -1,6 +1,6 @@
 packages:
   - next-inspect-ui-npm
-  - next-inspect-ui-trace
+  - next-inspect-ui-debug
   - next-inspect-website
   - prod-test
 

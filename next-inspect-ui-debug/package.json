@@ -1,15 +1,15 @@
 {
-  "name": "next-inspect-ui-trace",
+  "name": "next-inspect-ui-debug",
   "version": "0.3.0",
-  "description": "Optional compile-time source tracing for next-inspect-ui. Development only — a no-op under next build.",
+  "description": "Debug harness and compile-time stamps for next-inspect-ui. Development only.",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Gurvinder-Singh02/next-inspect-ui.git",
-    "directory": "next-inspect-ui-trace"
+    "directory": "next-inspect-ui-debug"
   },
-  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui/tree/main/next-inspect-ui-trace#readme",
+  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui/tree/main/next-inspect-ui-debug#readme",
   "bugs": {
     "url": "https://github.com/Gurvinder-Singh02/next-inspect-ui/issues"
   },
@@ -27,6 +27,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./inspect": {
+      "types": "./dist/inspect.d.ts",
+      "import": "./dist/inspect.js",
+      "require": "./dist/inspect.cjs"
     },
     "./babel-stamp": {
       "types": "./dist/babel-stamp.d.ts",
@@ -47,10 +52,13 @@
   },
   "dependencies": {
     "@babel/core": "^7.29.7",
-    "babel-loader": "^10.1.1"
+    "babel-loader": "^10.1.1",
+    "next-inspect-ui": "workspace:*"
   },
   "peerDependencies": {
-    "next": ">=16"
+    "next": ">=16",
+    "react": ">=19",
+    "react-dom": ">=19"
   },
   "peerDependenciesMeta": {
     "next": {
@@ -60,6 +68,7 @@
   "devDependencies": {
     "@types/babel__core": "^7.20.5",
     "@types/node": "^20.19.43",
+    "@types/react": "^19",
     "tsup": "^8.5.0",
     "typescript": "^5"
   },

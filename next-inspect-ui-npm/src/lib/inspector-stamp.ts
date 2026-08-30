@@ -1,9 +1,9 @@
 /**
- * Reading the build-time stamps written by `plugin/babel-stamp`.
+ * Reads stamps written by `next-inspect-ui-debug` `babel-stamp`.
  *
- * Client-safe: no Node imports, so the runtime overlay and the verifier share
- * one definition of the stamp format. If the format ever changes, it changes
- * in one place and both ends move together.
+ * This file owns the attribute names and the parse format. The writer in
+ * the debug package must import these constants. A rename in only one
+ * package silently disables exact hover.
  */
 
 import type { SourceLocation } from "./inspector-source"

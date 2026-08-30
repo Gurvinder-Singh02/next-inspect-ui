@@ -1,5 +1,5 @@
 import type { NextConfig } from "next"
-import { withInspectUI } from "next-inspect-ui-trace"
+import { withInspectUI } from "next-inspect-ui-debug"
 
 const nextConfig: NextConfig = {}
 
