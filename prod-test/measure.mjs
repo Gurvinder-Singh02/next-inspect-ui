@@ -80,7 +80,7 @@ const CONFIGS = {
   plain: `const nextConfig = {}
 export default nextConfig
 `,
-  plugin: `import { withInspectUI } from "next-inspect-ui-trace"
+  plugin: `import { withInspectUI } from "next-inspect-ui-debug"
 
 const nextConfig = {}
 export default withInspectUI(nextConfig)
