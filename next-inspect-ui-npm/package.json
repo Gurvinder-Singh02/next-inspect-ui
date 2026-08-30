@@ -40,7 +40,8 @@
       "types": "./dist/babel-stamp.d.ts",
       "import": "./dist/babel-stamp.js",
       "require": "./dist/babel-stamp.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
