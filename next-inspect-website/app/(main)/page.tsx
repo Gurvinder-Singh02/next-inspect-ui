@@ -84,16 +84,10 @@ export default function OverviewPage() {
             Overlay variant test →
           </a>
           <a
-            href="/inspector-test"
+            href="/test"
             className="transition-colors hover:text-foreground"
           >
-            Inspector test suite →
-          </a>
-          <a
-            href="/algo-test"
-            className="transition-colors hover:text-foreground"
-          >
-            Resolution cases →
+            Test →
           </a>
           <a
             href="/dashboard"

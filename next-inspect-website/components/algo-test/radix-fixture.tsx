@@ -43,7 +43,7 @@ export const SlotFixtures = () => (
     </Clickable>
 
     <Clickable asChild>
-      <Link href="/algo-test">Slot renders a next/link</Link>
+      <Link href="/test/source-open">Slot renders a next/link</Link>
     </Clickable>
   </div>
 )
