@@ -51,7 +51,7 @@ import {
   type InspectorStrokeStyle,
   type TooltipAlign,
   type TooltipSide,
-} from "next-inspect-ui"
+} from "next-inspect-ui/lib"
 import { cn } from "@/lib/utils"
 
 const normalizeHex = (value: string) => {
@@ -451,7 +451,7 @@ const KitColorRow = ({
     <Popover
       open={open}
       onOpenChange={(nextOpen, details) => {
-        if (details.reason === "triggerPress") {
+        if (details.reason === "trigger-press") {
           details.cancel()
           setOpen((wasOpen) => !wasOpen)
           return
@@ -683,7 +683,7 @@ const KitShortcutCapture = ({
     <Popover
       open={open}
       onOpenChange={(nextOpen, details) => {
-        if (details.reason === "triggerPress") {
+        if (details.reason === "trigger-press") {
           details.cancel()
           setOpen((wasOpen) => !wasOpen)
           return
@@ -1097,7 +1097,7 @@ const CopySnippetButton = ({ snippet }: { snippet: string }) => {
     <Button
       type="button"
       size="sm"
-      variant="primary"
+      variant="default"
       className="flex-1"
       aria-label={hasCopied ? "Copied" : "Copy code"}
       onClick={() => {

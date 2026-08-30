@@ -2359,6 +2359,15 @@ export const InspectUI = ({
    */
   verify?: boolean
 }) => {
+  // Safety net for consumers who render this without their own NODE_ENV
+  // guard: a production bundle must never attach listeners or echo
+  // `projectRoot` (an absolute path on the author's machine) into the page.
+  // The early return sits before the hook, which is safe because NODE_ENV is
+  // fixed for the lifetime of the app — the hook count cannot change between
+  // renders. Bundlers inline the comparison, so the gated branch is free.
+  if (process.env.NODE_ENV !== "development") return null
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     initInspectorSettings()
 

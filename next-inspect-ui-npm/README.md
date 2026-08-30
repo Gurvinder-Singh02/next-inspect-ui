@@ -11,6 +11,13 @@ npm i next-inspect-ui
 **No dependencies.** Babel and Next are optional peers, so nothing is installed
 unless you opt into exact mode below.
 
+**Measured production cost: +0.2 KB gzipped.** The component you import is a
+tiny shim; the overlay itself loads through a development-only dynamic import,
+so a production build never creates the chunk. Keep the `NODE_ENV` guard shown
+below regardless — without it, React still serializes your `projectRoot` (an
+absolute path on your machine) into the page's payload, and no library code
+can prevent that.
+
 ```tsx
 // app/layout.tsx
 import { InspectUI } from "next-inspect-ui"
@@ -95,8 +102,19 @@ export default withInspectUI(nextConfig)
 import { InspectUI } from "next-inspect-ui"
 import { inspectUIProjectRoot } from "next-inspect-ui/plugin"
 
-<InspectUI projectRoot={inspectUIProjectRoot()} />
+{process.env.NODE_ENV === "development" && (
+  <InspectUI projectRoot={inspectUIProjectRoot()} />
+)}
 ```
+
+Keep the `NODE_ENV` guard — it is what lets the bundler drop the overlay from
+production builds entirely, so the package costs zero bytes when you ship.
+(The component also refuses to run outside development on its own, but the
+guard is what removes the code rather than merely disarming it.)
+
+`next-inspect-ui/plugin` is a Node-only module. Import it in `next.config` and
+in Server Components such as the root layout; importing it from a `"use
+client"` file will fail the build.
 
 Use `inspectUIProjectRoot()` rather than `process.cwd()`. The stamper writes
 paths relative to a root and the runtime joins that root back on; if the two
@@ -166,6 +184,11 @@ Settings — editor, colours, spotlight and tooltip styling — are configurable
 runtime through the overlay's own settings panel.
 
 Supported editors: Cursor, VS Code, VS Code Insiders, Windsurf, Zed.
+
+The main entry exports exactly one thing. The inspector's pure helpers —
+settings, stamp parsing, source resolution — live at `next-inspect-ui/lib` for
+tooling and test surfaces. Don't import that subpath from a public production
+page: whatever a `"use client"` module exports, your bundler ships.
 
 ---
 

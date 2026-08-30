@@ -1,5 +1,7 @@
 import { Option } from "lucide-react"
 
+import inspectUIPackage from "next-inspect-ui/package.json"
+
 import { InstallSection } from "@/components/landing/install-section"
 import { UsageCodeSection } from "@/components/landing/usage-code-section"
 import { Kbd } from "@/components/ui/kbd"
@@ -13,7 +15,7 @@ export default function OverviewPage() {
             next-inspect-ui
           </h1>
           <span className="font-inter text-[12px] text-muted-foreground">
-            v0.1.1 · react
+            v{inspectUIPackage.version} · react
           </span>
         </div>
 
@@ -77,24 +79,34 @@ export default function OverviewPage() {
           >
             Try the live demo →
           </a>
-          <a
-            href="/variant-test"
-            className="transition-colors hover:text-foreground"
-          >
-            Overlay variant test →
-          </a>
-          <a
-            href="/test"
-            className="transition-colors hover:text-foreground"
-          >
-            Test →
-          </a>
-          <a
-            href="/dashboard"
-            className="transition-colors hover:text-foreground"
-          >
-            Dashboard →
-          </a>
+          {process.env.NODE_ENV === "development" && (
+            <>
+              <a
+                href="/variant-test"
+                className="transition-colors hover:text-foreground"
+              >
+                Overlay variant test →
+              </a>
+              <a
+                href="/test"
+                className="transition-colors hover:text-foreground"
+              >
+                Test →
+              </a>
+              <a
+                href="/playtest"
+                className="transition-colors hover:text-foreground"
+              >
+                Playwright playtest →
+              </a>
+              <a
+                href="/dashboard"
+                className="transition-colors hover:text-foreground"
+              >
+                Dashboard →
+              </a>
+            </>
+          )}
         </div>
       </footer>
     </>

@@ -1,9 +1,18 @@
 {
   "name": "next-inspect-ui",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Dev-only overlay for Next.js — hover any component to see its source, click to open it in your editor.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gurvinder-Singh02/next-inspect-ui.git",
+    "directory": "next-inspect-ui-npm"
+  },
+  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui#readme",
+  "bugs": {
+    "url": "https://github.com/Gurvinder-Singh02/next-inspect-ui/issues"
+  },
   "keywords": [
     "next",
     "nextjs",
@@ -22,6 +31,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./lib": {
+      "types": "./dist/lib.d.ts",
+      "import": "./dist/lib.js",
+      "require": "./dist/lib.cjs"
+    },
     "./plugin": {
       "types": "./dist/plugin.d.ts",
       "import": "./dist/plugin.js",
@@ -31,7 +45,8 @@
       "types": "./dist/babel-stamp.d.ts",
       "import": "./dist/babel-stamp.js",
       "require": "./dist/babel-stamp.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -39,7 +54,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "node --test \"src/**/*.test.ts\"",
+    "test": "node --experimental-strip-types --test \"src/**/*.test.ts\"",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
