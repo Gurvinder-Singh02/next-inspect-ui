@@ -10,11 +10,7 @@ const shared = {
 export default defineConfig([
   {
     ...shared,
-    // Browser runtime. `index` is a lazy shim so production builds never
-    // download the overlay; the real component arrives as a split chunk via
-    // a development-only dynamic import. `lib` carries the pure helpers for
-    // tooling surfaces (the website's fixture matrix, the settings toolbar).
-    entry: { index: "src/index.ts", lib: "src/lib.ts" },
+    entry: { index: "src/index.ts" },
     clean: true,
     banner: {
       js: '"use client";',
@@ -22,9 +18,14 @@ export default defineConfig([
   },
   {
     ...shared,
+    // tsup runs this array in parallel, so a second clean would wipe index.
+    entry: { lib: "src/lib.ts" },
+    clean: false,
+  },
+  {
+    ...shared,
     // Overlay engine for the debug package. No `"use client"` banner — the
-    // barrel is functions and types. tsup runs this array in parallel, so this
-    // entry must not clean.
+    // barrel is functions and types.
     entry: { overlay: "src/overlay.ts" },
     clean: false,
   },

@@ -1,14 +1,12 @@
 /**
- * `withInspectUI(nextConfig)` — registers the build-time JSX stamper.
+ * Registers the build-time JSX stamper. Development only.
  *
- * Optional. Without it the inspector still works, falling back to runtime
- * inference from React's owner stacks and source maps. With it, hover and
- * click-to-open read a location the compiler wrote down, which is both exact
- * and synchronous (no source-map fetch in the hover path).
+ * Writes `data-inspect-host` and `data-inspect-owner` onto JSX. Public
+ * `InspectUI` from `next-inspect-ui` ignores those attributes. The debug
+ * overlay at `next-inspect-ui-debug/inspect` is the reader.
  *
- * Hard-gated to development. Stamps cannot reach a production build and there
- * is deliberately no override — this writes attributes into someone else's
- * HTML, and there is no legitimate reason to do that in production.
+ * Without this wrapper the debug overlay still works. It falls back to
+ * React owner stacks and source maps.
  */
 
 import { createRequire } from "node:module"
