@@ -638,7 +638,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
                     <span className="text-[11px] tracking-wide text-muted-foreground uppercase">
                       {metric.label}
                     </span>
-                    <span className="font-heading text-lg font-medium tabular-nums">
+                    <span className="font-heading text-xl tracking-tight font-medium">
                       {metric.value}
                     </span>
                   </div>
@@ -677,7 +677,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
                 className="max-w-[48ch]"
               >
                 <p className="text-sm text-muted-foreground">
-                  People shipping the inspector — avatars highlight as one
+                  People shipping the inspector - avatars highlight as one
                   group.
                 </p>
               </PreviewTarget>

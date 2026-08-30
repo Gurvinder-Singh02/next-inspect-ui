@@ -28,7 +28,7 @@ export default function ThirdPartyCase() {
 
       <Fixture label="next/link">
         <Link
-          href="/algo-test"
+          href="/test/source-open"
           className="font-inter text-[14px] underline underline-offset-4"
         >
           Back to the case index
@@ -37,7 +37,7 @@ export default function ThirdPartyCase() {
 
       <Fixture label="icon nested inside a link">
         <Link
-          href="/algo-test"
+          href="/test/source-open"
           className="inline-flex items-center gap-2 font-inter text-[14px]"
         >
           With an icon

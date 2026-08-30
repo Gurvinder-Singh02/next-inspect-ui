@@ -28,7 +28,7 @@ export default function BaseUiRenderCase() {
       </Fixture>
 
       <Fixture label="render prop — Button rendering a Link">
-        <Button nativeButton={false} render={<Link href="/algo-test" />}>
+        <Button nativeButton={false} render={<Link href="/test/source-open" />}>
           Rendered as an anchor
         </Button>
       </Fixture>

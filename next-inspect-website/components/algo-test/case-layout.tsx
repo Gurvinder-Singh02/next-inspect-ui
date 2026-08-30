@@ -31,7 +31,7 @@ export const CaseLayout = ({
           size="sm"
           className="-ml-3 w-fit rounded-full pr-4! pl-3! text-xs text-muted-foreground hover:bg-muted3"
           nativeButton={false}
-          render={<Link href="/algo-test" />}
+          render={<Link href="/test/source-open" />}
         >
           <Undo2Icon data-icon="inline-start" className="size-3!" />
           All cases
