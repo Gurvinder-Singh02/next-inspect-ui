@@ -18,13 +18,14 @@ see Findings.
 ## The Harness
 
 `prod-test/` — a bare one-page Next 16 fixture plus `measure.mjs`. It builds
-the fixture four ways and reports, per scenario:
+the fixture five ways and reports, per scenario:
 
 - client bytes: `.next/static`, raw + gzip, delta vs baseline
 - server bytes: `.next/server`, raw, delta vs baseline
 - sentinel grep: strings that exist only inside the library
-  (`data-inspect-host`, `data-inspect-owner`, `Could not resolve source`,
-  `inspect mode on`) must not appear anywhere in production output
+  (`data-inspect-host`, `data-inspect-owner`, `Could not resolve source`)
+  must not appear on the README path. P4 imports `/lib` and is allowed to
+  contain the stamp attribute names.
 - path leak: the `projectRoot` value (an absolute path on the author's
   machine) must not appear in served HTML
 
@@ -35,7 +36,8 @@ Run it with `pnpm --filter prod-test measure`.
 | P0 | baseline | no library | plain |
 | P1 | README pattern | `NODE_ENV === "development" && <InspectUI/>` | plain |
 | P2 | worst case | ungated `<InspectUI/>` | plain |
-| P3 | exact mode | gated | `withInspectUI()` |
+| P3 | gated + plugin | gated | `withInspectUI()` |
+| P4 | gated + `/lib` | gated + `LibProbe` | plain |
 
 Plus tarball-level cases run by hand (commands in Measured Results):
 
@@ -130,8 +132,9 @@ Fixture: bare one-page Next 16.2.6 app, Turbopack production build.
 | case | client raw Δ | client gzip Δ | server raw Δ | sentinels anywhere | path leak |
 |---|---|---|---|---|---|
 | P1 gated (README) | **+0.2 KB** | **+0.2 KB** | +8.5 KB | none | no |
-| P2 ungated | +0.2 KB | +0.2 KB | +10.0 KB | none | **yes** (RSC prop — unfixable library-side) |
+| P2 ungated | +0.2 KB | +0.2 KB | +10.3 KB | none | **yes** (RSC prop — unfixable library-side) |
 | P3 gated + plugin | +0.2 KB | +0.2 KB | +8.5 KB | none | no |
+| P4 gated + `/lib` | +0.3 KB | +0.2 KB | +48.1 KB | `data-inspect-host` | no |
 
 The server delta is build-directory disk, not network transfer. The client
 delta is the shim: a component that renders null in production.
