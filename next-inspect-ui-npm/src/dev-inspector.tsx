@@ -2354,7 +2354,7 @@ export const InspectUI = ({
    * Development harness, not a consumer feature: it runs the runtime path a
    * second time with stamp reads disabled so the two answers are independent.
    * Off by default — consumers pay nothing and keep their configured colours.
-   * Requires `withInspectUI()` in `next.config`; without stamps there is
+   * Requires `next-inspect-ui-stamper` in `next.config`; without stamps there is
    * nothing to score against.
    */
   verify?: boolean

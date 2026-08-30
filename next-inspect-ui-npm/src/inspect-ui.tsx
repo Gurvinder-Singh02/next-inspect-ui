@@ -10,7 +10,7 @@ export type InspectUIProps = {
   /**
    * Score the runtime resolver against the build-time stamps and paint the
    * hover outline green on agreement, red on disagreement. Maintainer
-   * harness, off by default; requires `withInspectUI()` in `next.config`.
+   * harness, off by default; requires `next-inspect-ui-stamper` in `next.config`.
    */
   verify?: boolean
 }
