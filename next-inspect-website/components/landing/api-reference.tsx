@@ -29,7 +29,7 @@ const API_SECTIONS: ApiSection[] = [
   {
     title: "next-inspect-ui-debug / InspectUI",
     description:
-      "Same overlay, with the event log and verify scoring. Import from `next-inspect-ui-debug/inspect`.",
+      "Debug overlay with the event log and verify scoring. Import from `next-inspect-ui-debug/inspect` — not shipped in `next-inspect-ui`.",
     props: [
       {
         name: "projectRoot",
