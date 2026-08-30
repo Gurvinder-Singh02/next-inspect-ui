@@ -1,5 +1,6 @@
 packages:
   - next-inspect-ui-npm
+  - next-inspect-ui-stamper
   - next-inspect-website
   - prod-test
 

@@ -1,0 +1,70 @@
+{
+  "name": "next-inspect-ui-stamper",
+  "version": "0.3.0",
+  "description": "Optional build-time JSX stamper for next-inspect-ui. Development only — a no-op under next build.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gurvinder-Singh02/next-inspect-ui.git",
+    "directory": "next-inspect-ui-stamper"
+  },
+  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui/tree/main/next-inspect-ui-stamper#readme",
+  "bugs": {
+    "url": "https://github.com/Gurvinder-Singh02/next-inspect-ui/issues"
+  },
+  "keywords": [
+    "next",
+    "nextjs",
+    "inspector",
+    "babel",
+    "devtools"
+  ],
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./babel-stamp": {
+      "types": "./dist/babel-stamp.d.ts",
+      "import": "./dist/babel-stamp.js",
+      "require": "./dist/babel-stamp.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "node --experimental-strip-types --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7",
+    "babel-loader": ">=9",
+    "next": ">=16"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@types/babel__core": "^7.20.5",
+    "@types/node": "^20.19.43",
+    "babel-loader": "^10.1.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

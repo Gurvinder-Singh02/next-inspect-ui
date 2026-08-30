@@ -59,7 +59,7 @@ export const inspectUIProjectRoot = (): string => realpathSync(process.cwd())
  */
 const resolveStampPluginPath = (): string => {
   const requireFromProject = createRequire(join(process.cwd(), "noop.js"))
-  return requireFromProject.resolve("next-inspect-ui/babel-stamp")
+  return requireFromProject.resolve("next-inspect-ui-stamper/babel-stamp")
 }
 
 const assertBabelAvailable = (requireFromProject: NodeRequire) => {
@@ -68,11 +68,11 @@ const assertBabelAvailable = (requireFromProject: NodeRequire) => {
       requireFromProject.resolve(dependency)
     } catch {
       throw new Error(
-        `[next-inspect-ui] withInspectUI() needs \`${dependency}\`, which isn't installed.\n` +
+        `[next-inspect-ui-stamper] withInspectUI() needs \`${dependency}\`, which isn't installed.\n` +
           `  Install both as dev dependencies:\n\n` +
-          `    npm i -D @babel/core babel-loader\n\n` +
-          `  Or drop withInspectUI() from next.config to stay on runtime-only ` +
-          `resolution (works with no build step, but is less accurate).`
+          `    npm i -D next-inspect-ui-stamper @babel/core babel-loader\n\n` +
+          `  Or drop withInspectUI() from next.config — next-inspect-ui still ` +
+          `resolves at runtime with no build step.`
       )
     }
   }
