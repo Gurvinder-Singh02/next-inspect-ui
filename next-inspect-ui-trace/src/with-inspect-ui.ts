@@ -52,25 +52,35 @@ const DEFAULT_INCLUDE = ["**/*.tsx", "**/*.jsx"]
 export const inspectUIProjectRoot = (): string => realpathSync(process.cwd())
 
 /**
- * Resolved from the *consumer's* project rather than from this file, so it
- * works the same whether this module was loaded as ESM or CJS — `next.config`
- * is loaded differently depending on the project, and `import.meta` /
- * `__dirname` are each unavailable in one of those worlds.
+ * Resolve Babel and this package's plugin from *our* install, not the
+ * consumer's. `@babel/core` and `babel-loader` are dependencies of this
+ * package, so `npm i -D next-inspect-ui-trace` is enough. Under pnpm they
+ * live next to this package, not in the app's node_modules — resolving from
+ * `process.cwd()` would miss them.
+ *
+ * Finding this package still starts from the consumer (same trick as before:
+ * `next.config` may be ESM or CJS, so `import.meta` / `__dirname` are each
+ * unavailable in one of those worlds).
  */
-const resolveStampPluginPath = (): string => {
+const requireFromTrace = (): NodeRequire => {
   const requireFromProject = createRequire(join(process.cwd(), "noop.js"))
-  return requireFromProject.resolve("next-inspect-ui-stamper/babel-stamp")
+  return createRequire(
+    requireFromProject.resolve("next-inspect-ui-trace/package.json")
+  )
 }
 
-const assertBabelAvailable = (requireFromProject: NodeRequire) => {
+const resolveStampPluginPath = (requireTrace: NodeRequire): string =>
+  requireTrace.resolve("next-inspect-ui-trace/babel-stamp")
+
+const assertBabelAvailable = (requireTrace: NodeRequire) => {
   for (const dependency of ["@babel/core", "babel-loader"]) {
     try {
-      requireFromProject.resolve(dependency)
+      requireTrace.resolve(dependency)
     } catch {
       throw new Error(
-        `[next-inspect-ui-stamper] withInspectUI() needs \`${dependency}\`, which isn't installed.\n` +
-          `  Install both as dev dependencies:\n\n` +
-          `    npm i -D next-inspect-ui-stamper @babel/core babel-loader\n\n` +
+        `[next-inspect-ui-trace] withInspectUI() needs \`${dependency}\`, which should have been installed with this package.\n` +
+          `  Reinstall:\n\n` +
+          `    npm i -D next-inspect-ui-trace\n\n` +
           `  Or drop withInspectUI() from next.config — next-inspect-ui still ` +
           `resolves at runtime with no build step.`
       )
@@ -85,8 +95,8 @@ export const withInspectUI = <T extends Record<string, any>>(
   // Not an error — `next build` legitimately calls this. Just a no-op.
   if (process.env.NODE_ENV === "production") return nextConfig
 
-  const requireFromProject = createRequire(join(process.cwd(), "noop.js"))
-  assertBabelAvailable(requireFromProject)
+  const requireTrace = requireFromTrace()
+  assertBabelAvailable(requireTrace)
 
   const root = options.root ?? realpathSync(process.cwd())
   const include =
@@ -105,7 +115,7 @@ export const withInspectUI = <T extends Record<string, any>>(
   const stampRule = {
     loaders: [
       {
-        loader: requireFromProject.resolve("babel-loader"),
+        loader: requireTrace.resolve("babel-loader"),
         options: {
           babelrc: false,
           configFile: false,
@@ -119,7 +129,7 @@ export const withInspectUI = <T extends Record<string, any>>(
           // attributes, and reprints. Turbopack still does the real compile,
           // so the app is built by the same pipeline as everyone else's.
           parserOpts: { plugins: ["typescript", "jsx"] },
-          plugins: [[resolveStampPluginPath(), { root, exclude }]],
+          plugins: [[resolveStampPluginPath(requireTrace), { root, exclude }]],
         },
       },
     ],
