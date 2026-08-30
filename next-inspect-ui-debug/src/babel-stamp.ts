@@ -1,3 +1,5 @@
+import { HOST_STAMP_ATTR, OWNER_STAMP_ATTR } from "next-inspect-ui/lib"
+
 /**
  * Build-time JSX stamping — the ground truth the inspector reads on hover.
  *
@@ -26,9 +28,6 @@
  *    the insertion site. A single strategy cannot serve both: a host must beat
  *    a caller's forwarded value, and an owner must yield to it.
  */
-
-const HOST_ATTR = "data-inspect-host"
-const OWNER_ATTR = "data-inspect-owner"
 
 /**
  * Never render DOM, so a stamp is either meaningless or an outright error
@@ -137,7 +136,7 @@ export default function inspectStampPlugin(
         const relativePath = toRelative(filePath)
         if (relativePath === null) return
 
-        const attribute = isHostName(name) ? HOST_ATTR : OWNER_ATTR
+        const attribute = isHostName(name) ? HOST_STAMP_ATTR : OWNER_STAMP_ATTR
 
         // Idempotent: the loader can run twice on a file across HMR rounds, and
         // a second stamp would shadow the first in `getAttribute`.
@@ -177,5 +176,3 @@ export default function inspectStampPlugin(
     },
   }
 }
-
-export { HOST_ATTR, OWNER_ATTR }
