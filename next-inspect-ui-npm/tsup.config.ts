@@ -1,22 +1,25 @@
 import { defineConfig } from "tsup"
 
-export default defineConfig({
-  // Browser runtime. `index` is a lazy shim so production builds never
-  // download the overlay; the real component arrives as a split chunk via
-  // a development-only dynamic import. `lib` carries the pure helpers for
-  // tooling surfaces (the website's fixture matrix, the settings toolbar).
-  entry: { index: "src/index.ts", lib: "src/lib.ts" },
-  format: ["esm", "cjs"],
+const shared = {
+  format: ["esm", "cjs"] as const,
   dts: true,
-  clean: true,
-  // Dynamic imports must stay dynamic in the ESM output or the shim would
-  // pull the overlay back into the entry and defeat its own purpose.
   splitting: true,
-  // Keep React out of the bundle — it comes from the consumer's app.
   external: ["react", "react-dom"],
-  // The inspector is a client component; bundlers strip the directive by
-  // default, which breaks it in the Next App Router. Re-add it to the output.
-  banner: {
-    js: '"use client";',
+}
+
+export default defineConfig([
+  {
+    ...shared,
+    entry: { index: "src/index.ts" },
+    clean: true,
+    banner: {
+      js: '"use client";',
+    },
   },
-})
+  {
+    ...shared,
+    // tsup runs this array in parallel, so a second clean would wipe index.
+    entry: { lib: "src/lib.ts" },
+    clean: false,
+  },
+])
