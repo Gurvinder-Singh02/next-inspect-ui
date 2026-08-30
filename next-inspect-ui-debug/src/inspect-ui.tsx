@@ -1,8 +1,6 @@
 "use client"
 
-import { useLayoutEffect } from "react"
-import { InspectUI as InspectUIRuntime } from "next-inspect-ui"
-import { setInspectDebugFlags } from "next-inspect-ui/lib"
+import { Suspense, createElement, lazy, type ComponentType } from "react"
 
 export type InspectUIProps = {
   projectRoot: string
@@ -10,17 +8,20 @@ export type InspectUIProps = {
   verify?: boolean
 }
 
-export const InspectUI = ({
-  projectRoot,
-  debug = false,
-  verify = false,
-}: InspectUIProps) => {
-  setInspectDebugFlags({ debug, verify })
+const LazyDebugInspector =
+  process.env.NODE_ENV === "development"
+    ? lazy(() =>
+        import("./debug-inspector").then((module) => ({
+          default: module.InspectUI as ComponentType<InspectUIProps>,
+        }))
+      )
+    : null
 
-  useLayoutEffect(() => {
-    setInspectDebugFlags({ debug, verify })
-    return () => setInspectDebugFlags({ debug: false, verify: false })
-  }, [debug, verify])
-
-  return <InspectUIRuntime projectRoot={projectRoot} />
+export const InspectUI = (props: InspectUIProps) => {
+  if (!LazyDebugInspector) return null
+  return createElement(
+    Suspense,
+    { fallback: null },
+    createElement(LazyDebugInspector, props)
+  )
 }

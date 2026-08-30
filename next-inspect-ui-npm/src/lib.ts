@@ -69,12 +69,6 @@ export {
 } from "./lib/inspector-settings"
 
 export {
-  getInspectDebugFlags,
-  setInspectDebugFlags,
-  type InspectDebugFlags,
-} from "./debug-flags"
-
-export {
   HOST_STAMP_ATTR,
   OWNER_STAMP_ATTR,
   documentHasStamps,

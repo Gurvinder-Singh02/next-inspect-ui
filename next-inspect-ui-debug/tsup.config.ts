@@ -17,6 +17,7 @@ export default defineConfig([
     format: ["esm", "cjs"],
     dts: true,
     clean: false,
+    splitting: true,
     external: ["react", "react-dom", "next-inspect-ui", "next-inspect-ui/lib"],
     banner: {
       js: '"use client";',
