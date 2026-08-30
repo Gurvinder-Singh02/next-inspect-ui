@@ -5,12 +5,11 @@ in, click to open it in your editor, hold ⌥ to climb to the component that
 rendered it.
 
 ```bash
-npm i next-inspect-ui
+npm i -D next-inspect-ui
 ```
 
-**No extra dependencies.** The package has no runtime dependencies and no
-Babel / plugin peers. Resolution is inferred at runtime from React's owner
-stacks and source maps.
+**No extra dependencies.** The package has no runtime dependencies. Resolution
+is inferred at runtime from React's owner stacks and source maps.
 
 **Measured production cost: +0.2 KB gzipped.** The component you import is a
 tiny shim; the overlay itself loads through a development-only dynamic import,
@@ -55,7 +54,7 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 |---|---|---|---|
 | `projectRoot` | `string` | — | absolute path your source is under |
 | `debug` | `boolean` | `false` | event log panel, draggable and resizable |
-| `verify` | `boolean` | `false` | score the resolver against compile-time stamps (needs [`next-inspect-ui-stamper`](https://www.npmjs.com/package/next-inspect-ui-stamper)) |
+| `verify` | `boolean` | `false` | score the resolver against compile-time traces (needs [`next-inspect-ui-trace`](https://www.npmjs.com/package/next-inspect-ui-trace)) |
 
 Settings — editor, colours, spotlight and tooltip styling — are configurable at
 runtime through the overlay's own settings panel.
@@ -69,10 +68,14 @@ page: whatever a `"use client"` module exports, your bundler ships.
 
 ## Exact locations (optional)
 
-Runtime mode is what you install. For compile-time stamps — exact hover, and
-the `verify` harness — install the separate
-[`next-inspect-ui-stamper`](https://www.npmjs.com/package/next-inspect-ui-stamper)
-package. Keep both on the same minor version.
+For compile-time traces — exact hover, and the `verify` harness — also install
+[`next-inspect-ui-trace`](https://www.npmjs.com/package/next-inspect-ui-trace).
+Babel arrives with that package; you do not install it separately. Keep both
+on the same minor version.
+
+```bash
+npm i -D next-inspect-ui-trace
+```
 
 ## License
 

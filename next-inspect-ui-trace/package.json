@@ -1,15 +1,15 @@
 {
-  "name": "next-inspect-ui-stamper",
+  "name": "next-inspect-ui-trace",
   "version": "0.3.0",
-  "description": "Optional build-time JSX stamper for next-inspect-ui. Development only — a no-op under next build.",
+  "description": "Optional compile-time source tracing for next-inspect-ui. Development only — a no-op under next build.",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Gurvinder-Singh02/next-inspect-ui.git",
-    "directory": "next-inspect-ui-stamper"
+    "directory": "next-inspect-ui-trace"
   },
-  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui/tree/main/next-inspect-ui-stamper#readme",
+  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui/tree/main/next-inspect-ui-trace#readme",
   "bugs": {
     "url": "https://github.com/Gurvinder-Singh02/next-inspect-ui/issues"
   },
@@ -17,7 +17,6 @@
     "next",
     "nextjs",
     "inspector",
-    "babel",
     "devtools"
   ],
   "files": [
@@ -46,9 +45,11 @@
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
+  "dependencies": {
+    "@babel/core": "^7.29.7",
+    "babel-loader": "^10.1.1"
+  },
   "peerDependencies": {
-    "@babel/core": "^7",
-    "babel-loader": ">=9",
     "next": ">=16"
   },
   "peerDependenciesMeta": {
@@ -57,10 +58,8 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
     "@types/babel__core": "^7.20.5",
     "@types/node": "^20.19.43",
-    "babel-loader": "^10.1.1",
     "tsup": "^8.5.0",
     "typescript": "^5"
   },
