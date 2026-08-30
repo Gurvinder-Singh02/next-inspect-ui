@@ -18,13 +18,14 @@ see Findings.
 ## The Harness
 
 `prod-test/` — a bare one-page Next 16 fixture plus `measure.mjs`. It builds
-the fixture four ways and reports, per scenario:
+the fixture five ways and reports, per scenario:
 
 - client bytes: `.next/static`, raw + gzip, delta vs baseline
 - server bytes: `.next/server`, raw, delta vs baseline
 - sentinel grep: strings that exist only inside the library
-  (`data-inspect-host`, `data-inspect-owner`, `Could not resolve source`,
-  `inspect mode on`) must not appear anywhere in production output
+  (`data-inspect-host`, `data-inspect-owner`, `Could not resolve source`)
+  must not appear on the README path. P4 imports `/lib` and is allowed to
+  contain the stamp attribute names.
 - path leak: the `projectRoot` value (an absolute path on the author's
   machine) must not appear in served HTML
 
@@ -35,14 +36,15 @@ Run it with `pnpm --filter prod-test measure`.
 | P0 | baseline | no library | plain |
 | P1 | README pattern | `NODE_ENV === "development" && <InspectUI/>` | plain |
 | P2 | worst case | ungated `<InspectUI/>` | plain |
-| P3 | exact mode | gated | `withInspectUI()` |
+| P3 | gated + debug plugin | gated | `withInspectUI()` |
+| P4 | gated + `/lib` | gated + `LibProbe` | plain |
 
 Plus tarball-level cases run by hand (commands in Measured Results):
 
 | # | case | what it proves |
 |---|---|---|
 | P5 | `npm pack` → install into a fresh app **outside** the workspace → build + dev | no `workspace:*` symlink blind spot; exports map works from a real install |
-| P6 | `require()` of `/plugin`, `/babel-stamp`, and the root from plain Node | the CJS `next.config.js` consumer path |
+| P6 | `require()` of `next-inspect-ui-debug`, `next-inspect-ui-debug/babel-stamp`, and `next-inspect-ui` from plain Node | the CJS `next.config.js` consumer path |
 | P7 | `npm pack --dry-run` audit | what users actually download |
 
 ## Findings
@@ -101,7 +103,7 @@ file. No code change needed; noted here because build.md still lists it open.
 2. **Internal production gate (fixes F2).** The overlay component returns
    null outside development — a safety net behind the shim's own gate.
 3. **README (mitigates F3).** Both snippets now carry the `NODE_ENV` guard,
-   with the reason stated; `/plugin` documented as Node-only.
+   with the reason stated. The stamper is `next-inspect-ui-debug`, Node-only.
 4. **Fresh dist + tests + typecheck (fixes F4)**, and the fixture routes
    re-checked in dev against the fresh build (stamps confirmed in served
    HTML).
@@ -130,8 +132,9 @@ Fixture: bare one-page Next 16.2.6 app, Turbopack production build.
 | case | client raw Δ | client gzip Δ | server raw Δ | sentinels anywhere | path leak |
 |---|---|---|---|---|---|
 | P1 gated (README) | **+0.2 KB** | **+0.2 KB** | +8.5 KB | none | no |
-| P2 ungated | +0.2 KB | +0.2 KB | +10.0 KB | none | **yes** (RSC prop — unfixable library-side) |
+| P2 ungated | +0.2 KB | +0.2 KB | +10.3 KB | none | **yes** (RSC prop — unfixable library-side) |
 | P3 gated + plugin | +0.2 KB | +0.2 KB | +8.5 KB | none | no |
+| P4 gated + `/lib` | +0.3 KB | +0.2 KB | +48.1 KB | `data-inspect-host` | no |
 
 The server delta is build-directory disk, not network transfer. The client
 delta is the shim: a component that renders null in production.
@@ -144,8 +147,8 @@ delta is the shim: a component that renders null in production.
   Production build passes. `next dev` without the babel peers surfaces the
   directed install error; with them, stamps appear in served dev HTML at
   exact `file:line:column`.
-- **P6**: `require("next-inspect-ui")`, `.../plugin`, `.../babel-stamp` all
-  load from plain Node.
+- **P6**: `require("next-inspect-ui")`, `require("next-inspect-ui-debug")`,
+  and `require("next-inspect-ui-debug/babel-stamp")` load from plain Node.
 - **Website**: production build green; zero library sentinels in any chunk
   referenced by a public page (the only chunks containing library code belong
   to the gated fixture routes, which serve 404 in production); no stamps and
@@ -166,19 +169,26 @@ delta is the shim: a component that renders null in production.
 
 `next-inspect-ui` is runtime-only. Compile-time tracing lives in a second
 published package, `next-inspect-ui-debug`. Users install the first as a
-dev dependency; exact mode / `verify` is `npm i -D next-inspect-ui-debug`,
-which pulls `@babel/core` and `babel-loader` with it. Keep both on the same
-minor version — the stamp attribute names are a shared contract.
+dev dependency. Exact hover needs `InspectUI` from
+`next-inspect-ui-debug/inspect`, plus `withInspectUI()`. Public `InspectUI`
+ignores stamp attributes. Keep both on the same minor version. The stamp
+attribute names are a shared contract.
 
-Publish `next-inspect-ui@0.3.0` first, then `next-inspect-ui-debug@0.3.0`.
+Publish `next-inspect-ui@0.3.0` first, then `next-inspect-ui-debug@0.3.0`
+with `pnpm publish` so `workspace:` is rewritten.
 
-## Before `npm publish` — the short list
+## Before publish. The short list
 
-1. `pnpm --filter prod-test measure` — P1 client delta must stay ≈ +0.2 KB
+1. `pnpm --filter prod-test measure`. P1 client delta must stay near +0.2 KB
    with zero sentinels.
 2. `pnpm --filter next-inspect-ui build && pnpm --filter next-inspect-ui test
    && pnpm --filter next-inspect-ui typecheck`.
-3. One manual dev walk of `/test/source-open/*` with `verify` on — the lazy
+3. `pnpm --filter next-inspect-ui-debug build && pnpm --filter
+   next-inspect-ui-debug test && pnpm --filter next-inspect-ui-debug typecheck`.
+4. One manual dev walk of `/test/source-open/*` with `verify` on. The lazy
    chunk load is the one thing this branch could not exercise headlessly.
-4. `npm publish` from `next-inspect-ui-npm/` (prepublishOnly rebuilds).
-5. Deploy the website; confirm `/test` 404s in production.
+5. `npm publish` from `next-inspect-ui-npm/` (`prepublishOnly` rebuilds).
+6. `pnpm publish` from `next-inspect-ui-debug/` after `node
+   scripts/check-debug-tarball.mjs` is green. Do not use `npm publish` for
+   debug while the dep is a workspace protocol.
+7. Deploy the website. Confirm `/test` 404s in production.
