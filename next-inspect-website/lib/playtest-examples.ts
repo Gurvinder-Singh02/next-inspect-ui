@@ -35,7 +35,8 @@ test.describe("playtest page", () => {
 `
 
 export const PLAYTEST_RUN_HINTS = [
-  "pnpm --filter next-inspector-test test:e2e",
-  "pnpm --filter next-inspector-test test:e2e:ui   # interactive UI mode",
-  "pnpm --filter next-inspector-test test:e2e:headed",
+  "pnpm test:e2e:install   # once — downloads Chromium",
+  "pnpm test:e2e",
+  "pnpm test:e2e:ui        # interactive UI mode",
+  "pnpm test:e2e:headed    # watch the browser",
 ]
