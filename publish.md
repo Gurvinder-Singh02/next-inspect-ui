@@ -162,6 +162,16 @@ delta is the shim: a component that renders null in production.
 - Log-line running percentage is computed before async recoveries are
   counted — cosmetic, maintainer-only.
 
+## Package split (follow-up)
+
+`next-inspect-ui` is runtime-only. The Babel stamper lives in a second
+published package, `next-inspect-ui-stamper` (~7 KB tarball). Users install
+the first; exact mode / `verify` installs the second plus `@babel/core` and
+`babel-loader`. Keep both on the same minor version — the stamp attribute
+names are a shared contract.
+
+Publish `next-inspect-ui@0.3.0` first, then `next-inspect-ui-stamper@0.3.0`.
+
 ## Before `npm publish` — the short list
 
 1. `pnpm --filter prod-test measure` — P1 client delta must stay ≈ +0.2 KB
