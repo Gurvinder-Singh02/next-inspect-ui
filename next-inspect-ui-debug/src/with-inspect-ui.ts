@@ -54,7 +54,7 @@ export const inspectUIProjectRoot = (): string => realpathSync(process.cwd())
 /**
  * Resolve Babel and this package's plugin from *our* install, not the
  * consumer's. `@babel/core` and `babel-loader` are dependencies of this
- * package, so `npm i -D next-inspect-ui-trace` is enough. Under pnpm they
+ * package, so `npm i -D next-inspect-ui-debug` is enough. Under pnpm they
  * live next to this package, not in the app's node_modules — resolving from
  * `process.cwd()` would miss them.
  *
@@ -62,25 +62,25 @@ export const inspectUIProjectRoot = (): string => realpathSync(process.cwd())
  * `next.config` may be ESM or CJS, so `import.meta` / `__dirname` are each
  * unavailable in one of those worlds).
  */
-const requireFromTrace = (): NodeRequire => {
+const requireFromDebug = (): NodeRequire => {
   const requireFromProject = createRequire(join(process.cwd(), "noop.js"))
   return createRequire(
-    requireFromProject.resolve("next-inspect-ui-trace/package.json")
+    requireFromProject.resolve("next-inspect-ui-debug/package.json")
   )
 }
 
-const resolveStampPluginPath = (requireTrace: NodeRequire): string =>
-  requireTrace.resolve("next-inspect-ui-trace/babel-stamp")
+const resolveStampPluginPath = (requireDebug: NodeRequire): string =>
+  requireDebug.resolve("next-inspect-ui-debug/babel-stamp")
 
-const assertBabelAvailable = (requireTrace: NodeRequire) => {
+const assertBabelAvailable = (requireDebug: NodeRequire) => {
   for (const dependency of ["@babel/core", "babel-loader"]) {
     try {
-      requireTrace.resolve(dependency)
+      requireDebug.resolve(dependency)
     } catch {
       throw new Error(
-        `[next-inspect-ui-trace] withInspectUI() needs \`${dependency}\`, which should have been installed with this package.\n` +
+        `[next-inspect-ui-debug] withInspectUI() needs \`${dependency}\`, which should have been installed with this package.\n` +
           `  Reinstall:\n\n` +
-          `    npm i -D next-inspect-ui-trace\n\n` +
+          `    npm i -D next-inspect-ui-debug\n\n` +
           `  Or drop withInspectUI() from next.config — next-inspect-ui still ` +
           `resolves at runtime with no build step.`
       )
@@ -95,7 +95,7 @@ export const withInspectUI = <T extends Record<string, any>>(
   // Not an error — `next build` legitimately calls this. Just a no-op.
   if (process.env.NODE_ENV === "production") return nextConfig
 
-  const requireTrace = requireFromTrace()
+  const requireTrace = requireFromDebug()
   assertBabelAvailable(requireTrace)
 
   const root = options.root ?? realpathSync(process.cwd())
