@@ -11,6 +11,13 @@ npm i next-inspect-ui
 **No dependencies.** Babel and Next are optional peers, so nothing is installed
 unless you opt into exact mode below.
 
+**Measured production cost: +0.2 KB gzipped.** The component you import is a
+tiny shim; the overlay itself loads through a development-only dynamic import,
+so a production build never creates the chunk. Keep the `NODE_ENV` guard shown
+below regardless — without it, React still serializes your `projectRoot` (an
+absolute path on your machine) into the page's payload, and no library code
+can prevent that.
+
 ```tsx
 // app/layout.tsx
 import { InspectUI } from "next-inspect-ui"
@@ -177,6 +184,11 @@ Settings — editor, colours, spotlight and tooltip styling — are configurable
 runtime through the overlay's own settings panel.
 
 Supported editors: Cursor, VS Code, VS Code Insiders, Windsurf, Zed.
+
+The main entry exports exactly one thing. The inspector's pure helpers —
+settings, stamp parsing, source resolution — live at `next-inspect-ui/lib` for
+tooling and test surfaces. Don't import that subpath from a public production
+page: whatever a `"use client"` module exports, your bundler ships.
 
 ---
 
