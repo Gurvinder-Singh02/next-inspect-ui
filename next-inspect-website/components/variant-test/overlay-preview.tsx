@@ -27,7 +27,7 @@ import {
   getOverlayPaint,
   getTooltipPosition,
   type InspectorSettings,
-} from "next-inspect-ui"
+} from "next-inspect-ui/lib"
 import { cn } from "@/lib/utils"
 
 type PreviewTargetDef = {

@@ -1,6 +1,7 @@
 packages:
   - next-inspect-ui-npm
   - next-inspect-website
+  - prod-test
 
 allowBuilds:
   sharp: true

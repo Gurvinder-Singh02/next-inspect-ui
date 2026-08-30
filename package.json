@@ -7,6 +7,10 @@
     "dev:all": "pnpm --parallel --filter next-inspect-ui --filter next-inspector-test run dev",
     "build": "pnpm --filter next-inspect-ui build",
     "build:web": "pnpm --filter next-inspector-test build",
-    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter next-inspector-test typecheck"
+    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter next-inspector-test typecheck",
+    "test:e2e": "pnpm --filter next-inspector-test test:e2e",
+    "test:e2e:ui": "pnpm --filter next-inspector-test test:e2e:ui",
+    "test:e2e:headed": "pnpm --filter next-inspector-test test:e2e:headed",
+    "test:e2e:install": "pnpm --filter next-inspector-test test:e2e:install"
   }
 }
