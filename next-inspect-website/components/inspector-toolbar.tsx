@@ -51,7 +51,7 @@ import {
   type InspectorStrokeStyle,
   type TooltipAlign,
   type TooltipSide,
-} from "next-inspect-ui"
+} from "next-inspect-ui/lib"
 import { cn } from "@/lib/utils"
 
 const normalizeHex = (value: string) => {
