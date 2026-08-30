@@ -8,6 +8,43 @@ importers:
 
   .: {}
 
+  next-inspect-ui-debug:
+    dependencies:
+      '@babel/core':
+        specifier: ^7.29.7
+        version: 7.29.7
+      babel-loader:
+        specifier: ^10.1.1
+        version: 10.1.1(@babel/core@7.29.7)
+      next:
+        specifier: '>=16'
+        version: 16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      next-inspect-ui:
+        specifier: workspace:*
+        version: link:../next-inspect-ui-npm
+      react:
+        specifier: '>=19'
+        version: 19.2.4
+      react-dom:
+        specifier: '>=19'
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@types/babel__core':
+        specifier: ^7.20.5
+        version: 7.20.5
+      '@types/node':
+        specifier: ^20.19.43
+        version: 20.19.43
+      '@types/react':
+        specifier: ^19
+        version: 19.2.18
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.25)(typescript@5.9.3)
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
   next-inspect-ui-npm:
     dependencies:
       react:
@@ -26,31 +63,6 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.2.4(@types/react@19.2.18)
-      tsup:
-        specifier: ^8.5.0
-        version: 8.5.1(jiti@2.7.0)(postcss@8.5.25)(typescript@5.9.3)
-      typescript:
-        specifier: ^5
-        version: 5.9.3
-
-  next-inspect-ui-trace:
-    dependencies:
-      '@babel/core':
-        specifier: ^7.29.7
-        version: 7.29.7
-      babel-loader:
-        specifier: ^10.1.1
-        version: 10.1.1(@babel/core@7.29.7)
-      next:
-        specifier: '>=16'
-        version: 16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-    devDependencies:
-      '@types/babel__core':
-        specifier: ^7.20.5
-        version: 7.20.5
-      '@types/node':
-        specifier: ^20.19.43
-        version: 20.19.43
       tsup:
         specifier: ^8.5.0
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.25)(typescript@5.9.3)
@@ -193,9 +205,9 @@ importers:
       next-inspect-ui:
         specifier: workspace:*
         version: link:../next-inspect-ui-npm
-      next-inspect-ui-trace:
+      next-inspect-ui-debug:
         specifier: workspace:*
-        version: link:../next-inspect-ui-trace
+        version: link:../next-inspect-ui-debug
       prettier:
         specifier: ^3.8.3
         version: 3.9.6
@@ -217,9 +229,9 @@ importers:
       next-inspect-ui:
         specifier: workspace:*
         version: link:../next-inspect-ui-npm
-      next-inspect-ui-trace:
+      next-inspect-ui-debug:
         specifier: workspace:*
-        version: link:../next-inspect-ui-trace
+        version: link:../next-inspect-ui-debug
       react:
         specifier: 19.2.4
         version: 19.2.4

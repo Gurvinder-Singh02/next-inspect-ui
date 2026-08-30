@@ -54,6 +54,7 @@ import {
   readHostStamp,
   readOwnerStamp,
 } from "./lib/inspector-stamp"
+import { getInspectDebugFlags } from "./debug-flags"
 
 type ServerDebugInfo = {
   name?: string
@@ -2339,26 +2340,9 @@ const resolveDebugInfoPair = async (
   return { renderedBy, source }
 }
 
-export const InspectUI = ({
-  projectRoot,
-  debug = false,
-  verify = false,
-}: {
-  projectRoot: string
-  /** Keep the bottom-left event log open for the session. Default: `false`. */
-  debug?: boolean
-  /**
-   * Score the runtime resolver against the build-time stamps and paint the
-   * hover outline green on agreement, red on disagreement.
-   *
-   * Development harness, not a consumer feature: it runs the runtime path a
-   * second time with stamp reads disabled so the two answers are independent.
-   * Off by default — consumers pay nothing and keep their configured colours.
-   * Requires `next-inspect-ui-trace` in `next.config`; without stamps there is
-   * nothing to score against.
-   */
-  verify?: boolean
-}) => {
+export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
+  const { debug, verify } = getInspectDebugFlags()
+
   // Safety net for consumers who render this without their own NODE_ENV
   // guard: a production bundle must never attach listeners or echo
   // `projectRoot` (an absolute path on the author's machine) into the page.
