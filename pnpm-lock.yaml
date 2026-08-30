@@ -202,6 +202,28 @@ importers:
         specifier: ^5
         version: 5.9.3
 
+  prod-test:
+    dependencies:
+      next:
+        specifier: 16.2.6
+        version: 16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      next-inspect-ui:
+        specifier: workspace:*
+        version: link:../next-inspect-ui-npm
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: 19.2.4
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@babel/core':
+        specifier: ^7.29.7
+        version: 7.29.7
+      babel-loader:
+        specifier: ^10.1.1
+        version: 10.1.1(@babel/core@7.29.7)
+
 packages:
 
   '@alloc/quick-lru@5.2.0':
