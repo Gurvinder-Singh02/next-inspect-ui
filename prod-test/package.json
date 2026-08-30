@@ -1,0 +1,19 @@
+{
+  "name": "prod-test",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "measure": "node measure.mjs"
+  },
+  "dependencies": {
+    "next": "16.2.6",
+    "next-inspect-ui": "workspace:*",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "babel-loader": "^10.1.1"
+  }
+}
