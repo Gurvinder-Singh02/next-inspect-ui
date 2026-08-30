@@ -27,14 +27,13 @@ import { join } from "node:path"
 
 const ROOT = new URL(".", import.meta.url).pathname
 
-// Strings that exist only inside the library. "data-inspect-host"/"-owner"
-// are the stamp attributes; the two phrases live in the overlay's body and
-// prove the component code itself, not just re-exported helpers, is present.
+// Stamp attrs live on next-inspect-ui/lib. "Could not resolve source" lives
+// in the overlay chunk. "inspect mode on" is debug-only and is not a public
+// production signal.
 const SENTINELS = [
   "data-inspect-host",
   "data-inspect-owner",
   "Could not resolve source",
-  "inspect mode on",
 ]
 
 const LAYOUTS = {
@@ -74,6 +73,23 @@ export default function RootLayout({ children }) {
   )
 }
 `,
+  lib: `import { InspectUI } from "next-inspect-ui"
+import { LibProbe } from "./lib-probe.jsx"
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <LibProbe />
+        {process.env.NODE_ENV === "development" && (
+          <InspectUI projectRoot={process.cwd()} />
+        )}
+      </body>
+    </html>
+  )
+}
+`,
 }
 
 const CONFIGS = {
@@ -92,6 +108,7 @@ const SCENARIOS = [
   { id: "P1", label: "README pattern (NODE_ENV-gated)", layout: "gated", config: "plain" },
   { id: "P2", label: "ungated <InspectUI/>", layout: "ungated", config: "plain" },
   { id: "P3", label: "gated + withInspectUI plugin", layout: "gated", config: "plugin" },
+  { id: "P4", label: "gated + next-inspect-ui/lib", layout: "lib", config: "plain" },
 ]
 
 const walk = (dir, out = []) => {
