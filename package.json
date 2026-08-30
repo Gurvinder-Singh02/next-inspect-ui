@@ -7,6 +7,8 @@
     "dev:all": "pnpm --parallel --filter next-inspect-ui --filter next-inspect-ui-debug --filter next-inspect-website run dev",
     "build": "pnpm --filter next-inspect-ui build && pnpm --filter next-inspect-ui-debug build",
     "build:web": "pnpm --filter next-inspect-website build",
-    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter next-inspect-ui-debug typecheck && pnpm --filter next-inspect-website typecheck"
+    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter next-inspect-ui-debug typecheck && pnpm --filter next-inspect-website typecheck",
+    "check:debug-tarball": "node scripts/check-debug-tarball.mjs",
+    "release:debug": "pnpm --filter next-inspect-ui-debug exec pnpm publish --access public"
   }
 }
