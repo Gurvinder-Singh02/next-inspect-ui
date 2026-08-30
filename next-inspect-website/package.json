@@ -50,11 +50,6 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "@playwright/test": "^1.62.1",
-=======
-    "@babel/core": "^7.29.7",
->>>>>>> 2338610 (remove playwrite)
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
