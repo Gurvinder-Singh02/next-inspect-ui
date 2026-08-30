@@ -15,6 +15,12 @@ const SUITES = [
     blurb:
       "Every source-resolution fixture. Hover with ⌥X; the debug panel scores each stamp against the compiler record.",
   },
+  {
+    href: "/playtest",
+    title: "Playwright playtest",
+    blurb:
+      "Learning playground: click, type, and hover fixtures with a real Playwright example you can run.",
+  },
 ]
 
 export default function TestIndexPage() {

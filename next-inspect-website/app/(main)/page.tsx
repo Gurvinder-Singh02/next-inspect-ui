@@ -90,6 +90,12 @@ export default function OverviewPage() {
             Test →
           </a>
           <a
+            href="/playtest"
+            className="transition-colors hover:text-foreground"
+          >
+            Playwright playtest →
+          </a>
+          <a
             href="/dashboard"
             className="transition-colors hover:text-foreground"
           >
