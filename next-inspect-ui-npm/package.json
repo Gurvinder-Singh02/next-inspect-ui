@@ -36,6 +36,11 @@
       "import": "./dist/lib.js",
       "require": "./dist/lib.cjs"
     },
+    "./overlay": {
+      "types": "./dist/overlay.d.ts",
+      "import": "./dist/overlay.js",
+      "require": "./dist/overlay.cjs"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.cjs",
