@@ -20,7 +20,7 @@ importers:
         specifier: '>=16'
         version: 16.2.6(@babel/core@7.29.7)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       next-inspect-ui:
-        specifier: workspace:*
+        specifier: workspace:^0.3.0
         version: link:../next-inspect-ui-npm
       react:
         specifier: '>=19'
