@@ -36,16 +36,6 @@
       "import": "./dist/lib.js",
       "require": "./dist/lib.cjs"
     },
-    "./plugin": {
-      "types": "./dist/plugin.d.ts",
-      "import": "./dist/plugin.js",
-      "require": "./dist/plugin.cjs"
-    },
-    "./babel-stamp": {
-      "types": "./dist/babel-stamp.d.ts",
-      "import": "./dist/babel-stamp.js",
-      "require": "./dist/babel-stamp.cjs"
-    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.cjs",
@@ -54,35 +44,18 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "node --experimental-strip-types --test \"src/**/*.test.ts\"",
+    "test": "node -e \"console.log('no runtime unit tests — stamp tests live in next-inspect-ui-trace')\"",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "@babel/core": "^7",
-    "babel-loader": ">=9",
-    "next": ">=16",
     "react": ">=19",
     "react-dom": ">=19"
   },
-  "peerDependenciesMeta": {
-    "@babel/core": {
-      "optional": true
-    },
-    "babel-loader": {
-      "optional": true
-    },
-    "next": {
-      "optional": true
-    }
-  },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
-    "@types/babel__core": "^7.20.5",
     "@types/node": "^20.19.43",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "babel-loader": "^10.1.1",
     "tsup": "^8.5.0",
     "typescript": "^5"
   },

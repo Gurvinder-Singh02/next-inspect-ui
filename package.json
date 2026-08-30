@@ -5,7 +5,7 @@
     "dev": "pnpm --filter next-inspector-test dev",
     "dev:lib": "pnpm --filter next-inspect-ui dev",
     "dev:all": "pnpm --parallel --filter next-inspect-ui --filter next-inspector-test run dev",
-    "build": "pnpm --filter next-inspect-ui build",
+    "build": "pnpm --filter next-inspect-ui build && pnpm --filter next-inspect-ui-trace build",
     "build:web": "pnpm --filter next-inspector-test build",
     "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter next-inspector-test typecheck",
     "test:e2e": "pnpm --filter next-inspector-test test:e2e",

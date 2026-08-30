@@ -162,6 +162,16 @@ delta is the shim: a component that renders null in production.
 - Log-line running percentage is computed before async recoveries are
   counted — cosmetic, maintainer-only.
 
+## Package split (follow-up)
+
+`next-inspect-ui` is runtime-only. Compile-time tracing lives in a second
+published package, `next-inspect-ui-trace`. Users install the first as a
+dev dependency; exact mode / `verify` is `npm i -D next-inspect-ui-trace`,
+which pulls `@babel/core` and `babel-loader` with it. Keep both on the same
+minor version — the stamp attribute names are a shared contract.
+
+Publish `next-inspect-ui@0.3.0` first, then `next-inspect-ui-trace@0.3.0`.
+
 ## Before `npm publish` — the short list
 
 1. `pnpm --filter prod-test measure` — P1 client delta must stay ≈ +0.2 KB
