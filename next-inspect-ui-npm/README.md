@@ -61,6 +61,20 @@ The event log, `verify` scoring, and compile-time stamps live in
 npm i -D next-inspect-ui-debug
 ```
 
+`withInspectUI()` writes `data-inspect-host` attributes. This package's
+`InspectUI` does not read them. Exact hover needs the debug overlay.
+
+```tsx
+import { inspectUIProjectRoot } from "next-inspect-ui-debug"
+import { InspectUI } from "next-inspect-ui-debug/inspect"
+
+{process.env.NODE_ENV === "development" && (
+  <InspectUI projectRoot={inspectUIProjectRoot()} />
+)}
+```
+
+Keep both packages on the same minor version.
+
 ## License
 
 MIT

@@ -5,6 +5,9 @@ Debug harness and compile-time stamps for [`next-inspect-ui`](https://www.npmjs.
 Use this package when you want the event log, `verify` scoring, or exact
 hover from build-time stamps. Regular apps only need `next-inspect-ui`.
 
+`withInspectUI()` alone does not change public `InspectUI`. Exact hover
+needs the import from `next-inspect-ui-debug/inspect` below.
+
 `@babel/core` and `babel-loader` install with this package.
 
 ```bash
