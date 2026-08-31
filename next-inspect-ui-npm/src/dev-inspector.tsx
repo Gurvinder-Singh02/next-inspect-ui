@@ -95,9 +95,6 @@ type OwnerChainStep = {
 }
 
 export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
-
-  if (process.env.NODE_ENV !== "development") return null
-
   useEffect(() => {
     initInspectorSettings()
 
