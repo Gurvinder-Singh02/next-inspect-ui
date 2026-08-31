@@ -1,8 +1,10 @@
 import { isInspectorChrome } from "../lib/inspector-nav"
 import { INSPECTOR_IDES, type InspectorIde } from "../lib/inspector-settings"
+import { readHostStamp } from "../lib/inspector-stamp"
 import {
   isBundledOrExternalPath,
   isLikelySourceFile,
+  normalizeSourceLocation,
   pickDefinedSource,
   pickOpenSource,
   pickPreferredStackSource,
@@ -277,10 +279,30 @@ export const finalizeHostAuthorSource = (
 ): SourceLocation | null =>
   candidate ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
 
+export const readStampedHostSource = (
+  fiber: ReactFiber,
+  projectRoot: string
+): SourceLocation | null => {
+  const node = fiber.stateNode
+  // Duck-type: Node tests and some hosts are not `instanceof Element`.
+  if (
+    typeof node !== "object" ||
+    node === null ||
+    typeof (node as Element).getAttribute !== "function"
+  ) {
+    return null
+  }
+  return normalizeSourceLocation(readHostStamp(node as Element, projectRoot))
+}
+
 export const getHostAuthorSource = (
   fiber: ReactFiber,
   projectRoot: string
 ): SourceLocation | null => {
+  // Presence of data-inspect-host is the switch. No session flag.
+  const stamped = readStampedHostSource(fiber, projectRoot)
+  if (stamped) return stamped
+
   const fromFiber = sourceFromFiberDebugSource(fiber._debugSource, projectRoot)
   const target = getNamedTarget(fiber)
   const bounded = target ? getDebugSourceUntil(fiber, target.fiber) : null
@@ -657,6 +679,9 @@ export const resolveHostAuthorSource = async (
   projectRoot: string,
   sourceMapCache: Map<string, Promise<SourceMap>>
 ): Promise<SourceLocation | null> => {
+  const stamped = readStampedHostSource(fiber, projectRoot)
+  if (stamped) return stamped
+
   const target = getNamedTarget(fiber)
   const fromFiberDebug = await resolveFiberDebugSource(
     fiber._debugSource,
