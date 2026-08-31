@@ -9,19 +9,20 @@ import { Button } from "@/components/ui/button"
  *
  * Every case states the bug it reproduces and what a correct hover looks like,
  * so a failure is readable without going back to the commit that fixed it.
- * `expected` is prose rather than an assertion on purpose — these routes are
- * hovered by hand, and the debug panel's green/red is the actual oracle.
  */
 export const CaseLayout = ({
   title,
   reproduces,
   expected,
   children,
+  autoCheck = true,
 }: {
   title: string
   reproduces: string
   expected: React.ReactNode
   children: React.ReactNode
+  /** Legacy page-wide stamp sweep. Prefer per-case AccuracyCase goldens. */
+  autoCheck?: boolean
 }) => (
   <main className="min-h-svh bg-background text-foreground">
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-10 sm:py-16">
@@ -51,7 +52,7 @@ export const CaseLayout = ({
         </header>
       </div>
 
-      <AutoRunner />
+      {autoCheck ? <AutoRunner /> : null}
 
       <section className="flex flex-col gap-6">{children}</section>
     </div>
@@ -69,6 +70,6 @@ export const Fixture = ({
     <div className="font-mono text-[12px] tracking-wide text-muted-foreground uppercase">
       {label}
     </div>
-    <div className="rounded-xl border border-border p-5">{children}</div>
+    {children}
   </div>
 )

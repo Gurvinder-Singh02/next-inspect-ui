@@ -111,6 +111,33 @@ export const isDistinctUsedSource = (
   definition: SourceLocation | null | undefined,
 ) => Boolean(usage && definition && usage.filePath !== definition.filePath);
 
+/**
+ * Stop the owner chain once a step answers "where was this used" in project
+ * source. Further owners are the functions that *contain* that JSX
+ * (`SectionCards` above `<CardHeader>`), not additional call sites.
+ *
+ * Same-file wrappers (Chip defined next to its caller) keep climbing — usage
+ * and definition share a file, so this returns false.
+ *
+ * `host` covers the sync gap where the component definition frame is not
+ * available yet: a usage file that differs from the hovered host's file is
+ * still a real call-site answer.
+ */
+export const isClimbUsageBoundary = ({
+  usage,
+  definition,
+  host,
+}: {
+  usage: SourceLocation | null | undefined
+  definition: SourceLocation | null | undefined
+  host?: SourceLocation | null | undefined
+}) => {
+  if (!usage || isBundledOrExternalPath(usage.filePath)) return false
+  if (definition && usage.filePath !== definition.filePath) return true
+  if (host && usage.filePath !== host.filePath) return true
+  return false
+}
+
 export type NamedSourceFrame = {
   methodName: string;
   source: SourceLocation;
