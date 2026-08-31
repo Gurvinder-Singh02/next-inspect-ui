@@ -291,7 +291,17 @@ export const InspectUI = ({
     const instantHostPathCache = new WeakMap<ReactFiber, string>()
     
     type ClimbSelection = { depth: number; step: OwnerChainStep }
+    type InfoTreeNode = {
+      name: string
+      isDom: boolean
+      source: SourceLocation | null
+      climbIndex: number
+    }
     let infoClimbSelection: ClimbSelection | null = null
+    let infoTreeMove: ((delta: number) => InfoTreeNode | null) | null = null
+    let infoTreeChain: OwnerChainStep[] = []
+    let infoTitleEl: HTMLDivElement | null = null
+    let infoSourceBox: HTMLDivElement | null = null
 
     const rememberAvailability = (
       fiber: ReactFiber,
@@ -858,13 +868,19 @@ export const InspectUI = ({
     
     const resolveOpenKind = (fiber: ReactFiber | null): OpenKind => {
       if (!fiber) return "defined"
+      if (infoVisible && infoClimbSelection) return "used"
       if (optionHeld && getActiveChainStep(fiber)) return "used"
       return "defined"
     }
 
     const paintTooltipForFiber = (fiber: ReactFiber) => {
       const kind = resolveOpenKind(fiber)
-      const step = kind === "used" ? getActiveChainStep(fiber) : null
+      const step =
+        kind === "used"
+          ? (infoVisible && infoClimbSelection
+              ? infoClimbSelection.step
+              : getActiveChainStep(fiber))
+          : null
       const prev = infoClimbSelection
       let infoNeedsRefresh = false
 
@@ -876,7 +892,7 @@ export const InspectUI = ({
           prev.step.name !== step.name ||
           prev.step.parentFiber !== step.parentFiber
         infoClimbSelection = nextSel
-      } else if (prev) {
+      } else if (prev && !infoVisible) {
         
         infoClimbSelection = null
         infoNeedsRefresh = true
@@ -1376,6 +1392,10 @@ export const InspectUI = ({
       infoVisible = false
       infoTarget = null
       infoClimbSelection = null
+      infoTreeMove = null
+      infoTreeChain = []
+      infoTitleEl = null
+      infoSourceBox = null
       info.style.display = "none"
       if (isActive) document.body.style.cursor = "crosshair"
     }
@@ -1384,12 +1404,94 @@ export const InspectUI = ({
       if (lastTargetRect) positionInfo(lastTargetRect)
     }
 
-    
+    const paintInfoSourceLink = (source: SourceLocation | null) => {
+      if (!infoSourceBox) return
+      infoSourceBox.textContent = ""
+      if (!source) {
+        const unavailable = document.createElement("span")
+        unavailable.textContent = "Source unavailable"
+        unavailable.style.cssText =
+          "font-size:12px;color:var(--muted-foreground,#8b949e);opacity:0.6;"
+        infoSourceBox.appendChild(unavailable)
+        return
+      }
+
+      const row = document.createElement("div")
+      row.style.cssText =
+        "display:flex;align-items:baseline;gap:8px;font-size:12px;line-height:1.5;"
+      const path = document.createElement("a")
+      path.style.cssText =
+        "display:inline-flex;align-items:center;gap:6px;color:var(--muted-foreground,#8b949e);cursor:pointer;font-weight:500;word-break:break-all;text-decoration:none;"
+      const pathText = document.createElement("span")
+      const relativePath = source.filePath.startsWith(projectRoot)
+        ? source.filePath.slice(projectRoot.length + 1)
+        : source.filePath
+      pathText.textContent = `${relativePath}:${source.line}:${source.column}`
+      const pathIcon = document.createElement("span")
+      pathIcon.style.cssText =
+        "display:inline-flex;flex:none;opacity:0.7;transform:translateX(0);transition:transform 160ms ease,opacity 160ms ease;"
+      pathIcon.innerHTML =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>'
+      path.append(pathText, pathIcon)
+      path.onclick = () => openInEditor(source, settings.ide)
+      path.onmouseenter = () => {
+        path.style.color = "var(--foreground,#e4e4e7)"
+        pathIcon.style.opacity = "1"
+        pathIcon.style.transform = "translateX(3px)"
+      }
+      path.onmouseleave = () => {
+        path.style.color = "var(--muted-foreground,#8b949e)"
+        pathIcon.style.opacity = "0.7"
+        pathIcon.style.transform = "translateX(0)"
+      }
+      row.appendChild(path)
+      infoSourceBox.appendChild(row)
+    }
+
+    const syncInfoTreeSelection = (node: InfoTreeNode) => {
+      if (infoTitleEl) {
+        infoTitleEl.textContent = node.isDom
+          ? formatDomTag(node.name)
+          : formatComponentTag(node.name)
+      }
+      paintInfoSourceLink(node.source)
+
+      if (node.isDom) {
+        infoClimbSelection = null
+      } else {
+        const step = infoTreeChain[node.climbIndex]
+        if (step) {
+          ownerChainDepth = node.climbIndex
+          infoClimbSelection = { depth: node.climbIndex, step }
+        }
+      }
+
+      const pageName = node.source
+        ? formatPageLabel(node.source, projectRoot)
+        : null
+      const baseLabel =
+        formatTooltipLabel({
+          title: node.name,
+          pageName,
+          tooltipProps: settings.tooltipProps,
+          tagStyle: node.isDom ? "dom" : "component",
+        }) ||
+        (node.isDom
+          ? formatDomTag(node.name)
+          : formatComponentTag(node.name))
+      setTooltipLabel(baseLabel)
+      syncUsedIcon(!node.isDom)
+      if (lastTargetRect) {
+        positionTooltip(lastTargetRect)
+        positionInfo(lastTargetRect)
+      }
+    }
+
     const createClimbTreeSection = (
       hostTag: string,
       hostSource: SourceLocation | null,
       chain: OwnerChainStep[],
-      activeDepth: number
+      initialClimbIndex: number
     ) => {
       type TreeNode = {
         name: string
@@ -1430,11 +1532,29 @@ export const InspectUI = ({
       section.appendChild(heading)
 
       const tree = document.createElement("div")
+      tree.setAttribute("role", "tree")
+      tree.setAttribute("aria-label", "Node tree")
       tree.style.cssText =
         'display:flex;flex-direction:column;gap:0;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;'
 
       
       const expanded = nodes.map(() => true)
+      const selection = { climbIndex: initialClimbIndex }
+
+      const visibleNodeIndices = () => {
+        const indices: number[] = []
+        for (let index = 0; index < nodes.length; index += 1) {
+          let shown = true
+          for (let ancestor = 0; ancestor < index; ancestor += 1) {
+            if (!expanded[ancestor]) {
+              shown = false
+              break
+            }
+          }
+          if (shown) indices.push(index)
+        }
+        return indices
+      }
 
       const paint = () => {
         tree.textContent = ""
@@ -1447,13 +1567,14 @@ export const InspectUI = ({
 
           const hasChildren = index < nodes.length - 1
           
-          const isActive = optionHeld
-            ? node.climbIndex === activeDepth
-            : node.climbIndex === -1
+          const isActive = node.climbIndex === selection.climbIndex
 
           const row = document.createElement("div")
+          row.setAttribute("role", "treeitem")
+          row.setAttribute("aria-selected", isActive ? "true" : "false")
+          row.setAttribute("aria-level", String(index + 1))
           row.style.cssText = [
-            "display:flex;align-items:center;gap:6px;min-width:0;padding:3px 2px;",
+            "display:flex;align-items:center;gap:6px;min-width:0;padding:3px 2px;cursor:pointer;",
             isActive
               ? "background:rgb(56 189 248 / 12%);color:var(--foreground,#e4e4e7);"
               : "color:var(--muted-foreground,#8b949e);",
@@ -1538,6 +1659,13 @@ export const InspectUI = ({
           }
 
           row.append(gutter, nameEl, pathEl)
+          row.onclick = (event) => {
+            if (pathEl.contains(event.target as Node)) return
+            event.preventDefault()
+            selection.climbIndex = node.climbIndex
+            paint()
+            syncInfoTreeSelection(node)
+          }
           tree.appendChild(row)
         })
       }
@@ -1547,6 +1675,24 @@ export const InspectUI = ({
 
       return {
         section,
+        moveSelection: (delta: number): InfoTreeNode | null => {
+          const visible = visibleNodeIndices()
+          if (visible.length === 0) return null
+          const current = visible.findIndex(
+            (index) => nodes[index]?.climbIndex === selection.climbIndex
+          )
+          const from = current === -1 ? visible.length - 1 : current
+          const next = from + delta
+          if (next < 0 || next >= visible.length) return null
+          const nodeIndex = visible[next]
+          if (nodeIndex === undefined) return null
+          const node = nodes[nodeIndex]
+          if (!node) return null
+          selection.climbIndex = node.climbIndex
+          paint()
+          syncInfoTreeSelection(node)
+          return node
+        },
         refinePaths: (refine: (step: OwnerChainStep) => Promise<void>) => {
           chain.forEach((step, index) => {
             void refine(step).then(() => {
@@ -1555,6 +1701,9 @@ export const InspectUI = ({
               const nodeIndex = chain.length - 1 - index
               if (nodeIndex >= 0 && nodeIndex < nodes.length) {
                 nodes[nodeIndex].source = getClimbStepDisplaySource(step)
+                if (nodes[nodeIndex].climbIndex === selection.climbIndex) {
+                  syncInfoTreeSelection(nodes[nodeIndex])
+                }
               }
               paint()
               reposition()
@@ -1568,6 +1717,9 @@ export const InspectUI = ({
           if (!hostNode?.isDom) return
           hostNode.source = source
           paint()
+          if (hostNode.climbIndex === selection.climbIndex) {
+            syncInfoTreeSelection(hostNode)
+          }
           reposition()
         },
         
@@ -1580,6 +1732,10 @@ export const InspectUI = ({
           if (nodeIndex < 0 || nodeIndex >= nodes.length) return
           nodes[nodeIndex].source = source
           paint()
+          const node = nodes[nodeIndex]
+          if (node && node.climbIndex === selection.climbIndex) {
+            syncInfoTreeSelection(node)
+          }
           reposition()
         },
       }
@@ -1609,6 +1765,7 @@ export const InspectUI = ({
       title.style.cssText =
         "font-weight:600;font-size:13px;margin-bottom:3px;color:var(--foreground,#ffffff);"
       info.appendChild(title)
+      infoTitleEl = title
 
       const sourceContainer = document.createElement("div")
       sourceContainer.style.cssText =
@@ -1619,18 +1776,21 @@ export const InspectUI = ({
         "font-size:12px;color:var(--muted-foreground,#8b949e);opacity:0.6;font-weight:500;"
       sourceContainer.appendChild(loading)
       info.appendChild(sourceContainer)
+      infoSourceBox = sourceContainer
 
       
       const treeHostSource = getHostAuthorSource(fiber, projectRoot)
+      infoTreeChain = chain
       const climbTree =
         chain.length > 0
           ? createClimbTreeSection(
               hostTag,
               treeHostSource,
               chain,
-              climbDepth
+              climbStep ? climbDepth : -1
             )
           : null
+      infoTreeMove = climbTree?.moveSelection ?? null
       if (climbTree) info.appendChild(climbTree.section)
 
       info.appendChild(createStylesSection(target, reposition))
@@ -2727,7 +2887,12 @@ export const InspectUI = ({
     const openSource = async (fiber: ReactFiber) => {
       try {
         const kind = resolveOpenKind(fiber)
-        const chainStep = kind === "used" ? getActiveChainStep(fiber) : null
+        const chainStep =
+          infoVisible && infoClimbSelection
+            ? infoClimbSelection.step
+            : kind === "used"
+              ? getActiveChainStep(fiber)
+              : null
 
         let openSourceLoc: SourceLocation | null = null
         let openName =
@@ -2789,7 +2954,7 @@ export const InspectUI = ({
             logTargetsMatch(lastHoverLog, opened) ? "ok" : "error"
           )
           openInEditor(openSourceLoc, settings.ide)
-          if (kind === "used") paintTooltipForFiber(fiber)
+          if (kind === "used" && !infoVisible) paintTooltipForFiber(fiber)
         } else {
           
           
@@ -3138,6 +3303,22 @@ export const InspectUI = ({
       const direction = event.key.replace("Arrow", "").toLowerCase()
       const isModArrow = event.metaKey || event.ctrlKey
       const pressLabel = isModArrow ? `⌘${direction}` : direction
+
+      if (
+        infoVisible &&
+        infoTreeMove &&
+        !isModArrow &&
+        (event.key === "ArrowUp" || event.key === "ArrowDown")
+      ) {
+        const node = infoTreeMove(event.key === "ArrowUp" ? -1 : 1)
+        if (!node) {
+          shakeOverlay()
+          logEvent(`press ${pressLabel} → overlay shook`)
+        } else {
+          logEvent(`press ${pressLabel} → node tree ${node.name}`)
+        }
+        return
+      }
 
       if (!hoveredElement) {
         shakeOverlay()
