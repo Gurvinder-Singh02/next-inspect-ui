@@ -53,7 +53,7 @@ export const svgParentNodes: AccuracyNode[] = [
 
 export const shadcnPlainNodes: AccuracyNode[] = [
   { name: "Button", file: TEST_PAGE, line: 117 },
-  { name: "button", file: BUTTON, line: 56 },
+  { name: "button", file: BUTTON, line: 52 },
 ]
 
 export const shadcnVariantTargets: AccuracyTarget[] = [
@@ -62,7 +62,7 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     label: "Secondary",
     nodes: [
       { name: "Button", file: TEST_PAGE, line: 128 },
-      { name: "button", file: BUTTON, line: 56 },
+      { name: "button", file: BUTTON, line: 52 },
     ],
   },
   {
@@ -70,7 +70,7 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     label: "Ghost",
     nodes: [
       { name: "Button", file: TEST_PAGE, line: 131 },
-      { name: "button", file: BUTTON, line: 56 },
+      { name: "button", file: BUTTON, line: 52 },
     ],
   },
   {
@@ -78,14 +78,14 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     label: "Destructive",
     nodes: [
       { name: "Button", file: TEST_PAGE, line: 134 },
-      { name: "button", file: BUTTON, line: 56 },
+      { name: "button", file: BUTTON, line: 52 },
     ],
   },
 ]
 
 export const shadcnNestedNodes: AccuracyNode[] = [
   { name: "Button", file: TEST_PAGE, line: 152 },
-  { name: "button", file: BUTTON, line: 56 },
+  { name: "button", file: BUTTON, line: 52 },
 ]
 
 export const baseuiBadgeTargets: AccuracyTarget[] = [
@@ -94,7 +94,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     label: "Default",
     nodes: [
       { name: "Badge", file: TEST_PAGE, line: 167 },
-      { name: "span", file: BADGE, line: 46 },
+      { name: "span", file: BADGE, line: 36 },
     ],
   },
   {
@@ -102,7 +102,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     label: "Secondary",
     nodes: [
       { name: "Badge", file: TEST_PAGE, line: 168 },
-      { name: "span", file: BADGE, line: 46 },
+      { name: "span", file: BADGE, line: 36 },
     ],
   },
   {
@@ -110,7 +110,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     label: "Destructive",
     nodes: [
       { name: "Badge", file: TEST_PAGE, line: 171 },
-      { name: "span", file: BADGE, line: 46 },
+      { name: "span", file: BADGE, line: 36 },
     ],
   },
 ]
