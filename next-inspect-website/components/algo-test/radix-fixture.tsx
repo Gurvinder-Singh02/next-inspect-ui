@@ -4,6 +4,8 @@ import Link from "next/link"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import { Slot } from "@radix-ui/react-slot"
 
+import { SuiteTarget } from "@/components/accuracy/suite-case"
+
 /**
  * Radix fixtures.
  *
@@ -34,17 +36,23 @@ const Clickable = ({
 
 export const SlotFixtures = () => (
   <div className="flex flex-wrap items-center gap-3">
-    <Clickable>Renders its own button</Clickable>
+    <SuiteTarget id="button">
+      <Clickable>Renders its own button</Clickable>
+    </SuiteTarget>
 
-    <Clickable asChild>
-      <a href="#slot" className="no-underline">
-        Slot renders this anchor
-      </a>
-    </Clickable>
+    <SuiteTarget id="anchor">
+      <Clickable asChild>
+        <a href="#slot" className="no-underline">
+          Slot renders this anchor
+        </a>
+      </Clickable>
+    </SuiteTarget>
 
-    <Clickable asChild>
-      <Link href="/test">Slot renders a next/link</Link>
-    </Clickable>
+    <SuiteTarget id="link">
+      <Clickable asChild>
+        <Link href="/test">Slot renders a next/link</Link>
+      </Clickable>
+    </SuiteTarget>
   </div>
 )
 

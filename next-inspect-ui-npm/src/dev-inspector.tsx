@@ -2038,6 +2038,81 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       passive: true,
     })
 
+    /**
+     * Same resolve path hover + info use: resolveInspectElement → fiber →
+     * resolveHostAuthorSource + buildOwnerChain (+ refine). Exposed so the
+     * accuracy suite (and other tests) can call it without scraping the DOM.
+     *
+     *   await window.__inspectUI.inspect(element)
+     *   await window.__inspectUI.inspect("#my-button")
+     *   await window.__inspectUI.inspect("[data-accuracy-target=default]")
+     */
+    const inspectProbe = async (input: Element | string) => {
+      const hit =
+        typeof input === "string" ? document.querySelector(input) : input
+      if (!(hit instanceof Element)) return null
+
+      const resolved = resolveInspectElement(hit)
+      if (isInspectorChrome(resolved)) return null
+
+      const fiber = getFiber(resolved)
+      if (!fiber) return null
+
+      const hostSource =
+        (await resolveHostAuthorSource(
+          fiber,
+          projectRoot,
+          sourceMapCache
+        )) ?? getHostAuthorSource(fiber, projectRoot)
+
+      const chain = buildOwnerChain(fiber)
+      await Promise.all(chain.map((step) => refineClimbStep(step)))
+
+      const hostTag =
+        getDomHoverName(fiber) ?? resolved.tagName.toLowerCase()
+
+      const labelOf = (source: SourceLocation | null) =>
+        source ? formatPageLabel(source, projectRoot) : null
+
+      const nodes = [
+        ...[...chain]
+          .map((step) => ({
+            name: step.name,
+            source: labelOf(getClimbStepDisplaySource(step)),
+          }))
+          .reverse(),
+        {
+          name: hostTag,
+          source: labelOf(hostSource),
+        },
+      ]
+
+      return {
+        element: resolved,
+        host: {
+          name: hostTag,
+          source: labelOf(hostSource),
+          filePath: hostSource?.filePath ?? null,
+          line: hostSource?.line ?? null,
+          column: hostSource?.column ?? null,
+        },
+        nodes,
+      }
+    }
+
+    const probeKey = "__inspectUI" as const
+    ;(
+      window as Window & {
+        __inspectUI?: {
+          projectRoot: string
+          inspect: typeof inspectProbe
+        }
+      }
+    )[probeKey] = {
+      projectRoot,
+      inspect: inspectProbe,
+    }
+
     return () => {
       unsubscribe()
       document.removeEventListener("pointermove", handlePointerMove, true)
@@ -2047,6 +2122,11 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       document.removeEventListener("keyup", handleKeyUp, true)
       window.removeEventListener("blur", deactivate)
       window.removeEventListener("scroll", handleScroll, { capture: true })
+      delete (
+        window as Window & {
+          __inspectUI?: unknown
+        }
+      )[probeKey]
       overlay.remove()
       tooltip.remove()
       info.remove()
