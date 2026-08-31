@@ -80,5 +80,7 @@ re-pin, re-run the case Test (or suite). Stop when the case shows **PASS**.
   last (Inspect NODE TREE order).
 - Paths are project-relative (`app/(dev)/test/page.tsx`, not absolute).
 - Nested HTML under another host does not climb; return-root hosts do.
+  `motion.*` is treated as the host it produces (`<div><motion.div/></div>`
+  does not climb; `const Box = () => <motion.div/>` climbs to `Box`).
 - Rebuild `next-inspect-ui` / `next-inspect-ui-debug` only when stamp or climb
   behavior itself changed — golden **pin** edits do not require a package build.

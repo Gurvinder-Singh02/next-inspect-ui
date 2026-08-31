@@ -138,6 +138,28 @@ export const CASE_SOURCE_EXAMPLES: Record<string, CaseSourceExample[]> = {
     },
   ],
 
+  "motion-simple": [
+    {
+      label: "Defined in",
+      file: MOTION,
+      code: `export const MotionSimple = () => (
+  <motion.div initial={{ opacity: 0.4 }} animate={{ opacity: 1 }} />
+)
+
+// nested — div → div → motion.div
+<div>
+  <div>
+    <motion.div initial={{ opacity: 0.4 }} animate={{ opacity: 1 }} />
+  </div>
+</div>`,
+    },
+    {
+      label: "Used in",
+      file: TEST_PAGE,
+      code: `<MotionSimplePair />`,
+    },
+  ],
+
   "motion-boxes": [
     {
       label: "Defined in",

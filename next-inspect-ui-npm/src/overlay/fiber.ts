@@ -177,19 +177,34 @@ export const getNamedTarget = (fiber: ReactFiber | null): NamedTarget | null => 
 
 const FRAGMENT_TAG = 7
 const MODE_TAG = 8
+const CONTEXT_CONSUMER_TAG = 9
+const CONTEXT_PROVIDER_TAG = 10
 const PROFILER_TAG = 12
 
 const isWrapperFiber = (fiber: ReactFiber) =>
   fiber.tag === FRAGMENT_TAG ||
   fiber.tag === MODE_TAG ||
+  fiber.tag === CONTEXT_CONSUMER_TAG ||
+  fiber.tag === CONTEXT_PROVIDER_TAG ||
   fiber.tag === PROFILER_TAG
+
+/** `motion.div` / `motion.rect` — a factory, not a user component. */
+export const isMotionFactoryName = (name: string) => name.startsWith("motion.")
+
+const isTransparentClimbFiber = (fiber: ReactFiber) => {
+  if (!isCompositeComponentFiber(fiber)) return false
+  const name = readComponentTypeName(fiber.type)
+  return !!name && isMotionFactoryName(name)
+}
+
+const skipClimbAncestor = (fiber: ReactFiber) =>
+  isWrapperFiber(fiber) || isTransparentClimbFiber(fiber)
 
 export const getOwningCompositeFiber = (hostFiber: ReactFiber): ReactFiber | null => {
   let current = hostFiber.return ?? null
 
   while (current) {
-
-    if (isWrapperFiber(current)) {
+    if (skipClimbAncestor(current)) {
       current = current.return ?? null
       continue
     }
@@ -212,12 +227,14 @@ export const getOwningCompositeFiber = (hostFiber: ReactFiber): ReactFiber | nul
 /**
  * Nested HTML under another host (`<div><p/></div>`) in a client fiber tree
  * — another host sits between this host and the nearest composite.
+ * `motion.*` is skipped like the host it produces, so
+ * `<div><motion.div/></div>` counts as nested.
  */
 export const isHostNestedUnderHost = (hostFiber: ReactFiber): boolean => {
   let current = hostFiber.return ?? null
 
   while (current) {
-    if (isWrapperFiber(current)) {
+    if (skipClimbAncestor(current)) {
       current = current.return ?? null
       continue
     }
@@ -268,7 +285,7 @@ export const isNestedDebugInfoHost = (hostFiber: ReactFiber): boolean => {
 
   let current = hostFiber.return ?? null
   while (current) {
-    if (isWrapperFiber(current)) {
+    if (skipClimbAncestor(current)) {
       current = current.return ?? null
       continue
     }
@@ -316,6 +333,10 @@ export const getDirectClimbOwner = (hostFiber: ReactFiber): ClimbOwner | null =>
   while (owner && hops < 12) {
     hops += 1
     const name = readComponentTypeName(owner.type)
+    if (name && isMotionFactoryName(name)) {
+      owner = owner._debugOwner ?? null
+      continue
+    }
     if (name && !isFrameworkInspectorName(name)) {
       return { name, fiber: owner, isSelfDebugOwner: false }
     }
@@ -396,7 +417,7 @@ export const isDirectFiberChildOf = (
   let current = child.return ?? null
 
   while (current) {
-    if (isWrapperFiber(current)) {
+    if (skipClimbAncestor(current)) {
       current = current.return ?? null
       continue
     }
@@ -426,7 +447,26 @@ export const getComponentName = (fiber: ReactFiber | null) => {
   return getNamedTarget(fiber)?.name ?? hostTag
 }
 
-export const getDomHoverName = (fiber: ReactFiber | null) => getHostTagName(fiber)
+export const getMotionFactoryName = (fiber: ReactFiber | null): string | null => {
+  let current = fiber?.return ?? null
+  while (current) {
+    if (isWrapperFiber(current)) {
+      current = current.return ?? null
+      continue
+    }
+    if (isHostComponentFiber(current)) return null
+    if (isCompositeComponentFiber(current)) {
+      const name = readComponentTypeName(current.type)
+      if (name && isMotionFactoryName(name)) return name
+      return null
+    }
+    current = current.return ?? null
+  }
+  return null
+}
+
+export const getDomHoverName = (fiber: ReactFiber | null) =>
+  getMotionFactoryName(fiber) ?? getHostTagName(fiber)
 
 export const getDebugSourceUntil = (
   start: ReactFiber | null,

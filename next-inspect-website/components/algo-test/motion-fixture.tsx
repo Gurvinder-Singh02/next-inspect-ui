@@ -18,6 +18,37 @@ import { SuiteTarget } from "@/components/accuracy/suite-case"
  * resolve into it.
  */
 
+const motionBoxClass = "size-12 rounded-lg bg-muted-foreground/20"
+
+/** Return-root motion.div — same climb as `return (<div/>)`. */
+export const MotionSimple = () => (
+  <motion.div
+    initial={{ opacity: 0.4 }}
+    animate={{ opacity: 1 }}
+    className={motionBoxClass}
+  />
+)
+
+/** Bare MotionSimple next to nested div→div→motion.div. */
+export const MotionSimplePair = () => (
+  <div className="flex items-start gap-6">
+    <SuiteTarget id="bare">
+      <MotionSimple />
+    </SuiteTarget>
+    <div className="rounded-lg border border-border p-2">
+      <div className="p-2">
+        <SuiteTarget id="nested">
+          <motion.div
+            initial={{ opacity: 0.4 }}
+            animate={{ opacity: 1 }}
+            className={motionBoxClass}
+          />
+        </SuiteTarget>
+      </div>
+    </div>
+  </div>
+)
+
 const MOTION_BOX_IDS = ["box-0", "box-1", "box-2"] as const
 
 export const MotionBoxes = () => (
@@ -37,23 +68,21 @@ export const MotionBoxes = () => (
 
 /** SVG primitives — the exact case that produced the original wrong file. */
 export const MotionSvg = () => (
-  <div className="inline-flex">
-    <svg width={140} height={40} role="img" aria-label="animated bars">
-      {[0, 1, 2, 3].map((index) => (
-        <motion.rect
-          key={index}
-          x={index * 34}
-          y={4}
-          width={28}
-          height={28}
-          rx={6}
-          className="fill-muted-foreground/30"
-          initial={{ scaleY: 0.6 }}
-          animate={{ scaleY: 1 }}
-        />
-      ))}
-    </svg>
-  </div>
+  <svg width={140} height={40} role="img" aria-label="animated bars">
+    {[0, 1, 2, 3].map((index) => (
+      <motion.rect
+        key={index}
+        x={index * 34}
+        y={4}
+        width={28}
+        height={28}
+        rx={6}
+        className="fill-muted-foreground/30"
+        initial={{ scaleY: 0.6 }}
+        animate={{ scaleY: 1 }}
+      />
+    ))}
+  </svg>
 )
 
 /** A motion element nested inside plain host JSX. */
@@ -101,7 +130,7 @@ export const MotionPresence = () => {
   )
 }
 
-/** A user component wrapping a motion element — two levels to climb. */
+/** A user component whose return root is motion.div. */
 const Chip = ({ label }: { label: string }) => (
   <motion.div
     whileHover={{ y: -2 }}
@@ -113,7 +142,11 @@ const Chip = ({ label }: { label: string }) => (
 
 export const MotionWrapped = () => (
   <div className="flex gap-2">
-    <Chip label="alpha" />
-    <Chip label="beta" />
+    <SuiteTarget id="alpha">
+      <Chip label="alpha" />
+    </SuiteTarget>
+    <SuiteTarget id="beta">
+      <Chip label="beta" />
+    </SuiteTarget>
   </div>
 )

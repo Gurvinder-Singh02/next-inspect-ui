@@ -110,6 +110,7 @@ export const pickCaseTestTarget = (
     "[role='button']",
     "[data-slot='button']",
     "h1",
+    "rect",
     "svg",
     "[data-slot='badge']",
     "[data-slot='card'] button",

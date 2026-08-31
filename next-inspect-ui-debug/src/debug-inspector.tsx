@@ -78,6 +78,7 @@ import {
   getDebugSourceUntil,
   getDirectClimbOwner,
   getDomHoverName,
+  getMotionFactoryName,
   getElementClassName,
   getFiber,
   getHostAuthorSource as getHostAuthorSourceRuntime,
@@ -658,7 +659,9 @@ export const InspectUI = ({
       if (isHostHover) {
         // HTML host → climb one step only when this host is the component
         // return root (`return (`). Nested HTML under another host does not
-        // climb — getDirectClimbOwner returns null for those.
+        // climb — getDirectClimbOwner returns null for those. `motion.*` is
+        // treated as the host it produces, so a return-root `motion.div`
+        // climbs to the user component and a nested one does not.
         const owner = getDirectClimbOwner(fiber)
         if (!owner) return []
 
@@ -675,7 +678,9 @@ export const InspectUI = ({
           fiber,
           owner.debugInfo
         )
-        const ownerStamp = stampedOwnerSource(fiber, projectRoot)
+        const ownerStamp = getMotionFactoryName(fiber)
+          ? null
+          : stampedOwnerSource(fiber, projectRoot)
         steps.push({
           name: owner.name,
           source: ownerStamp ?? resolved.source,
