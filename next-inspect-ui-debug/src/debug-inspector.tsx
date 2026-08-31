@@ -8,7 +8,6 @@ import {
   findEdgeSiblingInspectable,
   findParentInspectable,
   findSiblingInspectable,
-  getElementFiber,
   isInspectorChrome,
 } from "next-inspect-ui/lib"
 import {
@@ -405,12 +404,6 @@ export const InspectUI = ({
     }
 
     
-    const canShowTooltipStack = () => {
-      if (!optionHeld || !hoveredElement) return false
-      const fiber = getFiber(hoveredElement)
-      return Boolean(fiber && buildOwnerChain(fiber).length > 0)
-    }
-
     const pushTooltipUnder = (text: string) => {
       if (!optionHeld || !text) return
       const chip = document.createElement("div")
@@ -1959,6 +1952,7 @@ export const InspectUI = ({
 
     let logOptionPress: (() => void) | null = null
     let walkOwnerChain: ((delta: number) => void) | null = null
+    let moveToParentInspectable: (() => boolean) | null = null
     let shakeTooltip: (() => void) | null = null
 
     const syncOptionFromEvent = (
@@ -2517,56 +2511,48 @@ export const InspectUI = ({
     }
 
     walkOwnerChain = (delta: number) => {
-      if (!canShowTooltipStack()) return
-      const fiber = getFiber(hoveredElement!)
-      if (!fiber) return
-      const chain = buildOwnerChain(fiber)
-      if (chain.length === 0) {
-        shakeTooltip?.()
-        logEvent("⇧: can't climb")
-        return
-      }
+      if (!optionHeld || !hoveredElement || delta <= 0) return
+      const fiber = getFiber(hoveredElement)
+      if (fiber) {
+        const chain = buildOwnerChain(fiber)
+        if (chain.length > 0) {
+          const next = Math.min(chain.length - 1, ownerChainDepth + delta)
+          if (next !== ownerChainDepth) {
+            const currentLabel = tooltipLabel.textContent
+            if (currentLabel) pushTooltipUnder(currentLabel)
 
-      
-      if (delta <= 0) return
+            ownerChainDepth = next
+            paintTooltipForFiber(fiber)
+            const step = chain[ownerChainDepth]
+            const syncDisplay = climbDisplaySource(step)
+            const syncPath = syncDisplay
+              ? formatPageLabel(syncDisplay, projectRoot)
+              : null
 
-      const next = Math.min(chain.length - 1, ownerChainDepth + delta)
-      if (next === ownerChainDepth) {
-        shakeTooltip?.()
-        logEvent("⇧: top of tree")
-        return
-      }
+            lastHoverLog = { name: step.name, path: syncPath ?? "" }
+            logEvent(
+              `⇧ climb: ${formatComponentTag(step.name)} ; ${syncPath ?? "…"} · ${ownerChainDepth + 1}/${chain.length}`
+            )
+            updateOpenHint()
 
-      const currentLabel = tooltipLabel.textContent
-      if (currentLabel) pushTooltipUnder(currentLabel)
-
-      ownerChainDepth = next
-      paintTooltipForFiber(fiber)
-      const step = chain[ownerChainDepth]
-      const syncDisplay = climbDisplaySource(step)
-      const syncPath = syncDisplay
-        ? formatPageLabel(syncDisplay, projectRoot)
-        : null
-      
-      lastHoverLog = { name: step.name, path: syncPath ?? "" }
-      logEvent(
-        `⇧ climb: ${formatComponentTag(step.name)} ; ${syncPath ?? "…"} · ${ownerChainDepth + 1}/${chain.length}`
-      )
-      updateOpenHint()
-
-      
-      const depthAtRequest = ownerChainDepth
-      void refineClimbStep(step).then(() => {
-        const display = climbDisplaySource(step)
-        if (!optionHeld || ownerChainDepth !== depthAtRequest || !display) {
-          return
+            const depthAtRequest = ownerChainDepth
+            void refineClimbStep(step).then(() => {
+              const display = climbDisplaySource(step)
+              if (!optionHeld || ownerChainDepth !== depthAtRequest || !display) {
+                return
+              }
+              if (isBundledOrExternalPath(display.filePath)) return
+              const path = formatPageLabel(display, projectRoot)
+              lastHoverLog = { name: step.name, path }
+              paintTooltipForFiber(fiber)
+              logEvent(`⇧ path: ${formatComponentTag(step.name)} ; ${path}`)
+            })
+            return
+          }
         }
-        if (isBundledOrExternalPath(display.filePath)) return
-        const path = formatPageLabel(display, projectRoot)
-        lastHoverLog = { name: step.name, path }
-        paintTooltipForFiber(fiber)
-        logEvent(`⇧ path: ${formatComponentTag(step.name)} ; ${path}`)
-      })
+      }
+      logEvent("⇧: top of tree → parent inspectable")
+      moveToParentInspectable?.()
     }
 
     if (debug) {
@@ -2838,6 +2824,41 @@ export const InspectUI = ({
         pinnedPointerY = rect.top + rect.height / 2
       }
       return ok
+    }
+
+    moveToParentInspectable = () => {
+      if (!hoveredElement) {
+        shakeOverlay()
+        logEvent("press parent → overlay shook")
+        return false
+      }
+      const from = hoveredElement
+      const next = findParentInspectable(from)
+      if (!next || next === from) {
+        shakeOverlay()
+        logEvent("press parent → overlay shook")
+        return false
+      }
+      treeNavStack.push(from)
+      pointerPinned = true
+      const ok = revealAndHighlight(next, true)
+      if (ok && hoveredElement !== from) {
+        logEvent("press parent → overlay moved parent")
+        return true
+      }
+      if (treeNavStack[treeNavStack.length - 1] === from) {
+        treeNavStack.pop()
+      }
+      shakeOverlay()
+      if (ok) {
+        logEvent("press parent → overlay shook")
+      } else {
+        logEvent(
+          "press parent → mismatch: next found but overlay didn't move",
+          "error"
+        )
+      }
+      return false
     }
 
     onSettingsChanged = () => {
@@ -3197,8 +3218,8 @@ export const InspectUI = ({
         let next: Element | null = null
 
         if (isBracketLeft) {
-          next = findParentInspectable(from)
-          if (next) treeNavStack.push(from)
+          moveToParentInspectable?.()
+          return
         } else {
           while (treeNavStack.length > 0) {
             const candidate = treeNavStack[treeNavStack.length - 1]!
@@ -3306,14 +3327,20 @@ export const InspectUI = ({
 
       if (
         infoVisible &&
-        infoTreeMove &&
         !isModArrow &&
         (event.key === "ArrowUp" || event.key === "ArrowDown")
       ) {
-        const node = infoTreeMove(event.key === "ArrowUp" ? -1 : 1)
+        const node = infoTreeMove?.(
+          event.key === "ArrowUp" ? -1 : 1
+        )
         if (!node) {
-          shakeOverlay()
-          logEvent(`press ${pressLabel} → overlay shook`)
+          if (event.key === "ArrowUp") {
+            logEvent(`press ${pressLabel} → parent inspectable`)
+            moveToParentInspectable?.()
+          } else {
+            shakeOverlay()
+            logEvent(`press ${pressLabel} → overlay shook`)
+          }
         } else {
           logEvent(`press ${pressLabel} → node tree ${node.name}`)
         }

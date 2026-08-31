@@ -222,12 +222,6 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       })
     }
 
-    const canShowTooltipStack = () => {
-      if (!optionHeld || !hoveredElement) return false
-      const fiber = getFiber(hoveredElement)
-      return Boolean(fiber && buildOwnerChain(fiber).length > 0)
-    }
-
     const pushTooltipUnder = (text: string) => {
       if (!optionHeld || !text) return
       const chip = document.createElement("div")
@@ -1430,6 +1424,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
 
     let logOptionPress: (() => void) | null = null
     let walkOwnerChain: ((delta: number) => void) | null = null
+    let moveToParentInspectable: (() => boolean) | null = null
     let shakeTooltip: (() => void) | null = null
 
     const syncOptionFromEvent = (
@@ -1488,39 +1483,38 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     }
 
     walkOwnerChain = (delta: number) => {
-      if (!canShowTooltipStack()) return
-      const fiber = getFiber(hoveredElement!)
-      if (!fiber) return
-      const chain = buildOwnerChain(fiber)
-      if (chain.length === 0) {
-        shakeTooltip?.()
-        return
-      }
+      if (!optionHeld || !hoveredElement || delta <= 0) return
+      const fiber = getFiber(hoveredElement)
+      if (fiber) {
+        const chain = buildOwnerChain(fiber)
+        if (chain.length > 0) {
+          const next = Math.min(chain.length - 1, ownerChainDepth + delta)
+          if (next !== ownerChainDepth) {
+            const currentLabel = tooltipLabel.textContent
+            if (currentLabel) pushTooltipUnder(currentLabel)
 
-      if (delta <= 0) return
-
-      const next = Math.min(chain.length - 1, ownerChainDepth + delta)
-      if (next === ownerChainDepth) {
-        shakeTooltip?.()
-        return
-      }
-
-      const currentLabel = tooltipLabel.textContent
-      if (currentLabel) pushTooltipUnder(currentLabel)
-
-      ownerChainDepth = next
-      paintTooltipForFiber(fiber)
-      const step = chain[ownerChainDepth]
-      updateOpenHint()
-      const depthAtRequest = ownerChainDepth
-      void refineClimbStep(step).then(() => {
-        const display = climbDisplaySource(step)
-        if (!optionHeld || ownerChainDepth !== depthAtRequest || !display) {
-          return
+            ownerChainDepth = next
+            paintTooltipForFiber(fiber)
+            const step = chain[ownerChainDepth]
+            updateOpenHint()
+            const depthAtRequest = ownerChainDepth
+            void refineClimbStep(step).then(() => {
+              const display = climbDisplaySource(step)
+              if (
+                !optionHeld ||
+                ownerChainDepth !== depthAtRequest ||
+                !display
+              ) {
+                return
+              }
+              if (isBundledOrExternalPath(display.filePath)) return
+              paintTooltipForFiber(fiber)
+            })
+            return
+          }
         }
-        if (isBundledOrExternalPath(display.filePath)) return
-        paintTooltipForFiber(fiber)
-      })
+      }
+      moveToParentInspectable?.()
     }
 
     let shakeAnimation: Animation | null = null
@@ -1767,6 +1761,30 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
         pinnedPointerY = rect.top + rect.height / 2
       }
       return ok
+    }
+
+    moveToParentInspectable = () => {
+      if (!hoveredElement) {
+        shakeOverlay()
+        return false
+      }
+      const from = hoveredElement
+      const next = findParentInspectable(from)
+      if (!next || next === from) {
+        shakeOverlay()
+        return false
+      }
+      treeNavStack.push(from)
+      pointerPinned = true
+      const ok = revealAndHighlight(next, true)
+      if (!ok || hoveredElement === from) {
+        if (treeNavStack[treeNavStack.length - 1] === from) {
+          treeNavStack.pop()
+        }
+        shakeOverlay()
+        return false
+      }
+      return true
     }
 
     onSettingsChanged = () => {
@@ -2060,8 +2078,8 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
         let next: Element | null = null
 
         if (isBracketLeft) {
-          next = findParentInspectable(from)
-          if (next) treeNavStack.push(from)
+          moveToParentInspectable?.()
+          return
         } else {
           while (treeNavStack.length > 0) {
             const candidate = treeNavStack[treeNavStack.length - 1]!
@@ -2148,12 +2166,19 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
 
       if (
         infoVisible &&
-        infoTreeMove &&
         !isModArrow &&
         (event.key === "ArrowUp" || event.key === "ArrowDown")
       ) {
-        const node = infoTreeMove(event.key === "ArrowUp" ? -1 : 1)
-        if (!node) shakeOverlay()
+        const node = infoTreeMove?.(
+          event.key === "ArrowUp" ? -1 : 1
+        )
+        if (!node) {
+          if (event.key === "ArrowUp") {
+            moveToParentInspectable?.()
+          } else {
+            shakeOverlay()
+          }
+        }
         return
       }
 
