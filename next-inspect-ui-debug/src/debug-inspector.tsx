@@ -237,16 +237,6 @@ export const InspectUI = ({
   debug?: boolean
   verify?: boolean
 }) => {
-
-  
-  
-  
-  
-  
-  
-  if (process.env.NODE_ENV !== "development") return null
-
-  
   useEffect(() => {
     initInspectorSettings()
 
