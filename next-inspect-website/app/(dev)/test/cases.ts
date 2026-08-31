@@ -1,8 +1,7 @@
 /**
  * Manual expected NODE TREE goldens for /test.
- * Edit this file by hand — there is no Snapshot button.
- * Keep `file` project-relative and `line` pinned to the usage/host line
- * in the source (not whatever Inspect last returned).
+ * Edit by hand — pin from stamp ground truth
+ * (`.cursor/skills/pin-accuracy-goldens`).
  */
 import type { AccuracyNode, AccuracyTarget } from "@/components/accuracy/types"
 import type { SuiteCaseMeta } from "@/components/accuracy/suite-header"
