@@ -1425,6 +1425,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     let logOptionPress: (() => void) | null = null
     let walkOwnerChain: ((delta: number) => void) | null = null
     let moveToParentInspectable: (() => boolean) | null = null
+    let climbUpPastHosts: (() => boolean) | null = null
     let shakeTooltip: (() => void) | null = null
 
     const syncOptionFromEvent = (
@@ -1514,7 +1515,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
           }
         }
       }
-      moveToParentInspectable?.()
+      climbUpPastHosts?.()
     }
 
     let shakeAnimation: Animation | null = null
@@ -1785,6 +1786,20 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
         return false
       }
       return true
+    }
+
+    climbUpPastHosts = () => {
+      for (let hop = 0; hop < 32; hop += 1) {
+        if (!moveToParentInspectable?.()) return false
+        if (infoVisible) {
+          if (infoTreeMove?.(-1)) return true
+          continue
+        }
+        const fiber = hoveredElement ? getFiber(hoveredElement) : null
+        if (fiber && buildOwnerChain(fiber).length > 0) return true
+      }
+      shakeOverlay()
+      return false
     }
 
     onSettingsChanged = () => {
@@ -2174,7 +2189,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
         )
         if (!node) {
           if (event.key === "ArrowUp") {
-            moveToParentInspectable?.()
+            climbUpPastHosts?.()
           } else {
             shakeOverlay()
           }

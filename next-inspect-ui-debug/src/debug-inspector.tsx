@@ -1953,6 +1953,7 @@ export const InspectUI = ({
     let logOptionPress: (() => void) | null = null
     let walkOwnerChain: ((delta: number) => void) | null = null
     let moveToParentInspectable: (() => boolean) | null = null
+    let climbUpPastHosts: (() => boolean) | null = null
     let shakeTooltip: (() => void) | null = null
 
     const syncOptionFromEvent = (
@@ -2552,7 +2553,7 @@ export const InspectUI = ({
         }
       }
       logEvent("⇧: top of tree → parent inspectable")
-      moveToParentInspectable?.()
+      climbUpPastHosts?.()
     }
 
     if (debug) {
@@ -2858,6 +2859,30 @@ export const InspectUI = ({
           "error"
         )
       }
+      return false
+    }
+
+    climbUpPastHosts = () => {
+      for (let hop = 0; hop < 32; hop += 1) {
+        if (!moveToParentInspectable?.()) return false
+        if (infoVisible) {
+          const node = infoTreeMove?.(-1)
+          if (node) {
+            logEvent(`climb → node tree ${node.name}`)
+            return true
+          }
+          logEvent("climb → parent had no tree, hopping")
+          continue
+        }
+        const fiber = hoveredElement ? getFiber(hoveredElement) : null
+        if (fiber && buildOwnerChain(fiber).length > 0) {
+          logEvent("climb → owner chain on parent")
+          return true
+        }
+        logEvent("climb → parent had no chain, hopping")
+      }
+      shakeOverlay()
+      logEvent("climb → overlay shook")
       return false
     }
 
@@ -3336,7 +3361,7 @@ export const InspectUI = ({
         if (!node) {
           if (event.key === "ArrowUp") {
             logEvent(`press ${pressLabel} → parent inspectable`)
-            moveToParentInspectable?.()
+            climbUpPastHosts?.()
           } else {
             shakeOverlay()
             logEvent(`press ${pressLabel} → overlay shook`)

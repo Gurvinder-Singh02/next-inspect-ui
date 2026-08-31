@@ -43,7 +43,7 @@ const SHORTCUTS: KeyboardShortcut[] = [
     keys: [<Option key="opt-shift" />, "⇧"],
     type: "tree",
     description:
-      "While holding ⌥, press ⇧ to walk up the used-in owner chain. At the top, same as `[` — move to the parent inspectable.",
+      "While holding ⌥, press ⇧ to walk up the used-in owner chain. At the top, hop to the next parent that has a climb.",
   },
   {
     keys: [<Option key="opt-ctrl" />, "⌃"],
@@ -62,7 +62,7 @@ const SHORTCUTS: KeyboardShortcut[] = [
     join: "/",
     type: "panel",
     description:
-      "Info panel open: climb the Node tree. At the top, same as `[` — move to the parent inspectable. Closed: previous / next sibling.",
+      "Info panel open: climb the Node tree. At the top, hop to the next parent that has a climb and show it. Closed: previous / next sibling.",
   },
   {
     keys: ["⌘", "["],
