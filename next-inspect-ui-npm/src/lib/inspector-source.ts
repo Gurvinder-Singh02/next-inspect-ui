@@ -50,32 +50,34 @@ export const toAbsolutePath = (filePath: string, projectRoot: string) => {
 export const normalizeSourceLocation = (
   source: SourceLocation | null | undefined,
 ): SourceLocation | null => {
-  if (!source?.filePath) return null
+  if (!source?.filePath) return null;
 
   const filePath = source.filePath
     .replace(/\\/g, "/")
     .replace(/\/\.\//g, "/")
-    .replace(/([^:])\/{2,}/g, "$1/")
+    .replace(/([^:])\/{2,}/g, "$1/");
 
   return {
     filePath,
-    line: Number.isFinite(source.line) ? Math.max(1, Math.trunc(source.line)) : 1,
+    line: Number.isFinite(source.line)
+      ? Math.max(1, Math.trunc(source.line))
+      : 1,
     column: Number.isFinite(source.column)
       ? Math.max(1, Math.trunc(source.column))
       : 1,
-  }
-}
+  };
+};
 
 /** Same file and line — column differences are not a disagreement worth failing on. */
 export const isSameSourceLine = (
   a: SourceLocation | null | undefined,
   b: SourceLocation | null | undefined,
 ) => {
-  const left = normalizeSourceLocation(a)
-  const right = normalizeSourceLocation(b)
-  if (!left || !right) return false
-  return left.filePath === right.filePath && left.line === right.line
-}
+  const left = normalizeSourceLocation(a);
+  const right = normalizeSourceLocation(b);
+  if (!left || !right) return false;
+  return left.filePath === right.filePath && left.line === right.line;
+};
 
 export const formatPageLabel = (
   source: SourceLocation,
@@ -110,6 +112,34 @@ export const isDistinctUsedSource = (
   usage: SourceLocation | null | undefined,
   definition: SourceLocation | null | undefined,
 ) => Boolean(usage && definition && usage.filePath !== definition.filePath);
+
+/**
+ * Stop the owner chain once a step answers "where was this used" in project
+ * source. Further owners are the functions that *contain* that JSX
+ * (`SectionCards` above `<CardHeader>`), not additional call sites.
+ *
+ * Same-file wrappers (Chip defined next to its caller) keep climbing — usage
+ * and definition share a file, so this returns false.
+ *
+ * `host` covers the sync gap where the component definition frame is not
+ * available yet: a usage file that differs from the hovered host's file is
+ * still a real call-site answer (shadcn `card.tsx` host used from
+ * `section-cards.tsx`).
+ */
+export const isClimbUsageBoundary = ({
+  usage,
+  definition,
+  host,
+}: {
+  usage: SourceLocation | null | undefined;
+  definition: SourceLocation | null | undefined;
+  host?: SourceLocation | null | undefined;
+}) => {
+  if (!usage || isBundledOrExternalPath(usage.filePath)) return false;
+  if (definition && usage.filePath !== definition.filePath) return true;
+  if (host && usage.filePath !== host.filePath) return true;
+  return false;
+};
 
 export type NamedSourceFrame = {
   methodName: string;
@@ -157,9 +187,9 @@ export const pickOpenSource = (
  * - `definition` = component definition frame
  */
 export type ClimbSourcePair = {
-  source: SourceLocation | null
-  definition: SourceLocation | null
-}
+  source: SourceLocation | null;
+  definition: SourceLocation | null;
+};
 
 /**
  * NODE TREE climb row · top ⌥ tooltip · info “rendered by”.
@@ -171,21 +201,21 @@ export type ClimbSourcePair = {
  */
 export const getClimbStepDisplaySource = (
   step: ClimbSourcePair,
-): SourceLocation | null => step.source ?? step.definition
+): SourceLocation | null => step.source ?? step.definition;
 
 /**
  * Info “source” while climbed — host DOM author path (stacked tooltip / <div>).
  */
 export const getClimbInfoHostSource = (
   hostSource: SourceLocation | null | undefined,
-): SourceLocation | null => hostSource ?? null
+): SourceLocation | null => hostSource ?? null;
 
 /**
  * Click-open under ⌥ — same as climb display (definition preferred).
  */
 export const getClimbOpenSource = (
   step: ClimbSourcePair,
-): SourceLocation | null => getClimbStepDisplaySource(step)
+): SourceLocation | null => getClimbStepDisplaySource(step);
 
 /**
  * Keep label and open line aligned:

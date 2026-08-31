@@ -31,11 +31,13 @@ import {
   getClimbOpenSource,
   getClimbStepDisplaySource,
   isBundledOrExternalPath,
+  isClimbUsageBoundary,
   isDistinctUsedSource,
   sourceFromFiberDebugSource,
   underStackTransform,
   type SourceLocation,
 } from "./lib/inspector-source"
+import { readOwnerStamp } from "./lib/inspector-stamp"
 import {
   applyOverlayStyles,
   ARROW_UP_RIGHT_ICON,
@@ -386,6 +388,27 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
         getComponentName(componentFiber)
       )
 
+    const pickClimbUsageSource = (
+      ownerFiber: ReactFiber,
+      child: ReactFiber,
+      definition: SourceLocation | null,
+      preferred?: SourceLocation | null
+    ): SourceLocation | null => {
+      const used =
+        preferred ??
+        getInstantUsedSource(ownerFiber, projectRoot) ??
+        resolveUsageSourceInParent(child, ownerFiber)
+      const created = getComponentCreationSource(ownerFiber)
+
+      // Creation frames are often the definition file. Prefer a distinct call
+      // site so ⌥ / NODE TREE answer "where was this used", not "where is it
+      // defined" — and so the usage-boundary can stop before the enclosing
+      // parent (SectionCards above CardHeader).
+      if (isDistinctUsedSource(used, definition)) return used
+      if (isDistinctUsedSource(created, definition)) return created
+      return used ?? created
+    }
+
     const resolveClimbStepSync = (
       ownerFiber: ReactFiber,
       child: ReactFiber,
@@ -396,28 +419,33 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     > => {
       if (debugInfo) {
         const pair = resolveDebugInfoPairSync(debugInfo, projectRoot)
+        const definition =
+          pair.renderedBy ?? getInstantDefinedSource(ownerFiber, projectRoot)
         return {
-
-          source:
-            pair.source ??
-            getComponentCreationSource(ownerFiber) ??
-            getInstantUsedSource(ownerFiber, projectRoot) ??
-            resolveUsageSourceInParent(child, ownerFiber),
-          definition:
-            pair.renderedBy ?? getInstantDefinedSource(ownerFiber, projectRoot),
+          source: pickClimbUsageSource(
+            ownerFiber,
+            child,
+            definition,
+            pair.source
+          ),
+          definition,
           debugInfo,
           runtime: getComponentRuntime(ownerFiber, debugInfo),
         }
       }
 
+      const definition = getInstantDefinedSource(ownerFiber, projectRoot)
       return {
-        source:
-          getComponentCreationSource(ownerFiber) ??
-          getInstantUsedSource(ownerFiber, projectRoot) ??
-          resolveUsageSourceInParent(child, ownerFiber),
-        definition: getInstantDefinedSource(ownerFiber, projectRoot),
+        source: pickClimbUsageSource(ownerFiber, child, definition),
+        definition,
         runtime: getComponentRuntime(ownerFiber),
       }
+    }
+
+    const ownerStampFromFiber = (fiber: ReactFiber): SourceLocation | null => {
+      const node = fiber.stateNode
+      if (!(node instanceof Element)) return null
+      return readOwnerStamp(node, projectRoot)
     }
 
     const buildOwnerChain = (fiber: ReactFiber): OwnerChainStep[] => {
@@ -434,6 +462,8 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       let parent: ReactFiber | null = null
 
       if (isHostHover) {
+        // HTML host → one climb step only: the component that rendered it
+        // (`<Button>` @ page.tsx:39). Never walk into Card / page parents.
         const owner = getDirectClimbOwner(fiber)
         if (!owner) return []
 
@@ -450,34 +480,19 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
           fiber,
           owner.debugInfo
         )
+        const ownerStamp = ownerStampFromFiber(fiber)
         steps.push({
           name: owner.name,
-          source: resolved.source,
+          // Prefer the stamped call site when the component forwards props —
+          // that is the exact `<Button>` line, not a stack approximation.
+          source: ownerStamp ?? resolved.source,
           definition: resolved.definition,
           parentFiber: owner.fiber,
           debugInfo: resolved.debugInfo,
           runtime: resolved.runtime,
         })
-        seen.add(owner.fiber)
-        seenNames.add(owner.name)
-
-        if (
-          isRouteFileBoundary(resolved.source, owner.name) ||
-          isRouteFileBoundary(resolved.definition, owner.name)
-        ) {
-          ownerChainCache.set(fiber, steps)
-          return steps
-        }
-
-        child = owner.fiber
-        parent = findNextNamedOwner(owner.fiber)
-
-        while (
-          parent &&
-          (parent === owner.fiber || readFiberDisplayName(parent) === owner.name)
-        ) {
-          parent = findNextNamedOwner(parent)
-        }
+        ownerChainCache.set(fiber, steps)
+        return steps
       } else {
         const named = getNamedTarget(fiber)?.fiber ?? fiber
         parent = findNextNamedOwner(named)
@@ -521,7 +536,11 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
 
         if (
           isRouteFileBoundary(resolved.source, name) ||
-          isRouteFileBoundary(resolved.definition, name)
+          isRouteFileBoundary(resolved.definition, name) ||
+          isClimbUsageBoundary({
+            usage: resolved.source,
+            definition: resolved.definition,
+          })
         ) {
           break
         }
@@ -775,7 +794,8 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
           .map((step, index) => ({
             name: step.name,
             isDom: false,
-            source: step.definition ?? step.source,
+            // Usage site first — same as ⌥ tooltip / getClimbStepDisplaySource.
+            source: getClimbStepDisplaySource(step),
             climbIndex: index,
           }))
           .reverse(),
@@ -920,7 +940,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
 
               const nodeIndex = chain.length - 1 - index
               if (nodeIndex >= 0 && nodeIndex < nodes.length) {
-                nodes[nodeIndex].source = step.definition ?? step.source
+                nodes[nodeIndex].source = getClimbStepDisplaySource(step)
               }
               paint()
               reposition()
@@ -1157,6 +1177,18 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     }
 
     const refineClimbStep = async (step: OwnerChainStep) => {
+      // Keep a solid call site (owner stamp / distinct usage) — don't let
+      // async stack refine replace page.tsx:39 with button.tsx.
+      if (
+        step.source &&
+        !isBundledOrExternalPath(step.source.filePath) &&
+        isClimbUsageBoundary({
+          usage: step.source,
+          definition: step.definition,
+        })
+      ) {
+        return
+      }
 
       if (!step.debugInfo) {
 
