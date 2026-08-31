@@ -13,15 +13,15 @@ test("matches file and optional line", () => {
   )
   assert.equal(
     nodeMatches(
-      { name: "Button", source: "app/(dev)/test/source-open/shadcn-host/page.tsx:37" },
-      { name: "Button", file: "app/(dev)/test/source-open/shadcn-host/page.tsx" }
+      { name: "Button", source: "app/(dev)/test/page.tsx:48" },
+      { name: "Button", file: "app/(dev)/test/page.tsx" }
     ),
     true
   )
   assert.equal(
     nodeMatches(
-      { name: "Button", source: "app/(dev)/test/source-open/shadcn-host/page.tsx:37" },
-      { name: "Button", file: "app/(dev)/test/source-open/shadcn-host/page.tsx", line: 60 }
+      { name: "Button", source: "app/(dev)/test/page.tsx:48" },
+      { name: "Button", file: "app/(dev)/test/page.tsx", line: 99 }
     ),
     false
   )
@@ -30,11 +30,11 @@ test("matches file and optional line", () => {
 test("100% when both nodes match", () => {
   const report = scoreNodes(
     [
-      { name: "Button", file: "app/(dev)/test/source-open/shadcn-host/page.tsx", line: 37 },
+      { name: "Button", file: "app/(dev)/test/page.tsx" },
       { name: "button", file: "components/ui/button.tsx", line: 50 },
     ],
     [
-      { name: "Button", source: "app/(dev)/test/source-open/shadcn-host/page.tsx:37" },
+      { name: "Button", source: "app/(dev)/test/page.tsx:48" },
       { name: "button", source: "components/ui/button.tsx:50" },
     ]
   )
