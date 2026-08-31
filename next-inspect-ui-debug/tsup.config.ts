@@ -18,7 +18,13 @@ export default defineConfig([
     dts: true,
     clean: false,
     splitting: true,
-    external: ["react", "react-dom", "next-inspect-ui", "next-inspect-ui/lib"],
+    external: [
+      "react",
+      "react-dom",
+      "next-inspect-ui",
+      "next-inspect-ui/lib",
+      "next-inspect-ui/overlay",
+    ],
     banner: {
       js: '"use client";',
     },
