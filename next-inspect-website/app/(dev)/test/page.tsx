@@ -14,6 +14,7 @@ import {
 } from "@/components/algo-test/kinds-fixture"
 import {
   MotionBoxes,
+  MotionSimplePair,
   MotionSvg,
   MotionWrapped,
 } from "@/components/algo-test/motion-fixture"
@@ -31,8 +32,9 @@ import {
   kindsForwardRefTargets,
   libraryOwnHostTargets,
   motionBoxesTargets,
+  motionSimpleTargets,
   motionSvgNodes,
-  motionWrappedNodes,
+  motionWrappedTargets,
   radixSlotTargets,
   serverDirectNodes,
   serverNestedTargets,
@@ -139,6 +141,16 @@ export default async function TestSuitePage() {
 
       <SuiteGroup title="motion">
         <SuiteCase
+          id="motion-simple"
+          title="motion.div bare + nested"
+          group="motion"
+          description="Bare MotionSimple returns motion.div (climbs). Nested div→div→motion.div does not."
+          targets={motionSimpleTargets}
+        >
+          <MotionSimplePair />
+        </SuiteCase>
+
+        <SuiteCase
           id="motion-boxes"
           title="motion.div list"
           group="motion"
@@ -162,8 +174,8 @@ export default async function TestSuitePage() {
           id="motion-wrapped"
           title="wrapped motion climb"
           group="motion"
-          description="User component wrapping motion — same-file wrappers may need a second climb hop."
-          nodes={motionWrappedNodes}
+          description="Chip returns motion.div — climbs like Chip → div."
+          targets={motionWrappedTargets}
         >
           <MotionWrapped />
         </SuiteCase>

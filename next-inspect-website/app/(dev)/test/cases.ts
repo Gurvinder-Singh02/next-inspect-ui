@@ -22,6 +22,7 @@ export const TEST_CASE_META: SuiteCaseMeta[] = [
   { id: "shadcn-variants", title: "button variants", group: "shadcn" },
   { id: "shadcn-nested", title: "button inside card", group: "shadcn" },
   { id: "baseui-badge", title: "badge useRender host", group: "base-ui" },
+  { id: "motion-simple", title: "motion.div bare + nested", group: "motion" },
   { id: "motion-boxes", title: "motion.div list", group: "motion" },
   { id: "motion-svg", title: "motion.rect svg", group: "motion" },
   { id: "motion-wrapped", title: "wrapped motion climb", group: "motion" },
@@ -35,11 +36,11 @@ export const TEST_CASE_META: SuiteCaseMeta[] = [
 ]
 
 export const basicHtmlHeadingNodes: AccuracyNode[] = [
-  { name: "h1", file: TEST_PAGE, line: 63 },
+  { name: "h1", file: TEST_PAGE, line: 65 },
 ]
 
 export const shadcnPlainNodes: AccuracyNode[] = [
-  { name: "Button", file: TEST_PAGE, line: 75 },
+  { name: "Button", file: TEST_PAGE, line: 77 },
   { name: "button", file: BUTTON, line: 52 },
 ]
 
@@ -48,7 +49,7 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     id: "secondary",
     label: "Secondary",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 87 },
+      { name: "Button", file: TEST_PAGE, line: 89 },
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
@@ -56,7 +57,7 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     id: "ghost",
     label: "Ghost",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 90 },
+      { name: "Button", file: TEST_PAGE, line: 92 },
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
@@ -64,14 +65,14 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     id: "destructive",
     label: "Destructive",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 93 },
+      { name: "Button", file: TEST_PAGE, line: 95 },
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
 ]
 
 export const shadcnNestedNodes: AccuracyNode[] = [
-  { name: "Button", file: TEST_PAGE, line: 112 },
+  { name: "Button", file: TEST_PAGE, line: 114 },
   { name: "button", file: BUTTON, line: 52 },
 ]
 
@@ -80,7 +81,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     id: "default",
     label: "Default",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 128 },
+      { name: "Badge", file: TEST_PAGE, line: 130 },
       { name: "span", file: BADGE, line: 36 },
     ],
   },
@@ -88,7 +89,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     id: "secondary",
     label: "Secondary",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 131 },
+      { name: "Badge", file: TEST_PAGE, line: 133 },
       { name: "span", file: BADGE, line: 36 },
     ],
   },
@@ -96,48 +97,68 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     id: "destructive",
     label: "Destructive",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 134 },
+      { name: "Badge", file: TEST_PAGE, line: 136 },
       { name: "span", file: BADGE, line: 36 },
     ],
   },
 ]
 
-/** One target per motion.div — never the flex wrapper. */
+export const motionSimpleTargets: AccuracyTarget[] = [
+  {
+    id: "bare",
+    label: "Bare",
+    nodes: [
+      { name: "MotionSimple", file: MOTION, line: 36 },
+      { name: "motion.div", file: MOTION, line: 25 },
+    ],
+  },
+  {
+    id: "nested",
+    label: "Nested",
+    nodes: [{ name: "motion.div", file: MOTION, line: 41 }],
+  },
+]
+
+/** Nested in the flex wrapper — no climb, same as nested HTML. */
 export const motionBoxesTargets: AccuracyTarget[] = [
   {
     id: "box-0",
     label: "Box 0",
-    nodes: [
-      { name: "MotionBoxes", file: TEST_PAGE, line: 148 },
-      { name: "div", file: MOTION, line: 27 },
-    ],
+    nodes: [{ name: "motion.div", file: MOTION, line: 58 }],
   },
   {
     id: "box-1",
     label: "Box 1",
-    nodes: [
-      { name: "MotionBoxes", file: TEST_PAGE, line: 148 },
-      { name: "div", file: MOTION, line: 27 },
-    ],
+    nodes: [{ name: "motion.div", file: MOTION, line: 58 }],
   },
   {
     id: "box-2",
     label: "Box 2",
-    nodes: [
-      { name: "MotionBoxes", file: TEST_PAGE, line: 148 },
-      { name: "div", file: MOTION, line: 27 },
-    ],
+    nodes: [{ name: "motion.div", file: MOTION, line: 58 }],
   },
 ]
 
 export const motionSvgNodes: AccuracyNode[] = [
-  { name: "MotionSvg", file: TEST_PAGE, line: 158 },
-  { name: "rect", file: MOTION, line: 43 },
+  { name: "motion.rect", file: MOTION, line: 73 },
 ]
 
-export const motionWrappedNodes: AccuracyNode[] = [
-  { name: "MotionWrapped", file: TEST_PAGE, line: 168 },
-  { name: "div", file: MOTION, line: 106 },
+export const motionWrappedTargets: AccuracyTarget[] = [
+  {
+    id: "alpha",
+    label: "alpha",
+    nodes: [
+      { name: "Chip", file: MOTION, line: 146 },
+      { name: "motion.div", file: MOTION, line: 135 },
+    ],
+  },
+  {
+    id: "beta",
+    label: "beta",
+    nodes: [
+      { name: "Chip", file: MOTION, line: 149 },
+      { name: "motion.div", file: MOTION, line: 135 },
+    ],
+  },
 ]
 
 export const libraryOwnHostTargets: AccuracyTarget[] = [
@@ -145,7 +166,7 @@ export const libraryOwnHostTargets: AccuracyTarget[] = [
     id: "first",
     label: "First",
     nodes: [
-      { name: "RendersOwnHost", file: TEST_PAGE, line: 182 },
+      { name: "RendersOwnHost", file: TEST_PAGE, line: 194 },
       { name: "svg", file: LIBRARY, line: 23 },
     ],
   },
@@ -153,7 +174,7 @@ export const libraryOwnHostTargets: AccuracyTarget[] = [
     id: "second",
     label: "Second",
     nodes: [
-      { name: "RendersOwnHost", file: TEST_PAGE, line: 185 },
+      { name: "RendersOwnHost", file: TEST_PAGE, line: 197 },
       { name: "svg", file: LIBRARY, line: 23 },
     ],
   },
@@ -190,7 +211,7 @@ export const kindsForwardRefTargets: AccuracyTarget[] = [
     id: "forward-ref",
     label: "forwardRef",
     nodes: [
-      { name: "ForwardedInput", file: TEST_PAGE, line: 213 },
+      { name: "ForwardedInput", file: TEST_PAGE, line: 225 },
       { name: "input", file: KINDS, line: 58 },
     ],
   },
@@ -198,7 +219,7 @@ export const kindsForwardRefTargets: AccuracyTarget[] = [
     id: "memo",
     label: "memo",
     nodes: [
-      { name: "MemoPill", file: TEST_PAGE, line: 216 },
+      { name: "MemoPill", file: TEST_PAGE, line: 228 },
       { name: "span", file: KINDS, line: 69 },
     ],
   },
@@ -216,17 +237,17 @@ export const compositionMapTargets: AccuracyTarget[] = [
   {
     id: "alpha",
     label: "alpha",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 236 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 248 }],
   },
   {
     id: "beta",
     label: "beta",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 236 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 248 }],
   },
   {
     id: "gamma",
     label: "gamma",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 236 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 248 }],
   },
 ]
 
@@ -234,30 +255,30 @@ export const thirdPartyIconTargets: AccuracyTarget[] = [
   {
     id: "sparkles",
     label: "Sparkles",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 255 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 267 }],
   },
   {
     id: "circle",
     label: "Circle",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 258 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 270 }],
   },
   {
     id: "arrow",
     label: "Arrow",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 261 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 273 }],
   },
   {
     id: "docs",
     label: "Docs link",
     nodes: [
-      { name: "LinkComponent", file: TEST_PAGE, line: 264 },
-      { name: "a", file: TEST_PAGE, line: 264 },
+      { name: "LinkComponent", file: TEST_PAGE, line: 276 },
+      { name: "a", file: TEST_PAGE, line: 276 },
     ],
   },
 ]
 
 export const serverDirectNodes: AccuracyNode[] = [
-  { name: "ServerCard", file: TEST_PAGE, line: 284 },
+  { name: "ServerCard", file: TEST_PAGE, line: 296 },
   { name: "div", file: SERVER, line: 11 },
 ]
 
@@ -266,7 +287,7 @@ export const serverNestedTargets: AccuracyTarget[] = [
     id: "first",
     label: "First",
     nodes: [
-      { name: "ServerCard", file: TEST_PAGE, line: 301 },
+      { name: "ServerCard", file: TEST_PAGE, line: 313 },
       { name: "div", file: SERVER, line: 11 },
     ],
   },
@@ -274,7 +295,7 @@ export const serverNestedTargets: AccuracyTarget[] = [
     id: "second",
     label: "Second",
     nodes: [
-      { name: "ServerCard", file: TEST_PAGE, line: 304 },
+      { name: "ServerCard", file: TEST_PAGE, line: 316 },
       { name: "div", file: SERVER, line: 11 },
     ],
   },
