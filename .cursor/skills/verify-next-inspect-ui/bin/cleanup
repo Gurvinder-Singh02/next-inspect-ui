@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SKILL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+RUN_DIR="$SKILL_DIR/.run"
+
+if [[ ! -d "$RUN_DIR" ]]; then
+  echo "cleanup: nothing to do (no .run/)"
+  exit 0
+fi
+
+kill_tree() {
+  local root="$1"
+  local kids
+  kids="$(pgrep -P "$root" 2>/dev/null || true)"
+  local kid
+  for kid in $kids; do
+    kill_tree "$kid"
+  done
+  kill "$root" 2>/dev/null || true
+}
+
+if [[ -f "$RUN_DIR/pid" ]]; then
+  pid="$(cat "$RUN_DIR/pid")"
+  if kill -0 "$pid" 2>/dev/null; then
+    kill_tree "$pid"
+    for _ in $(seq 1 20); do
+      kill -0 "$pid" 2>/dev/null || break
+      sleep 0.1
+    done
+    if kill -0 "$pid" 2>/dev/null; then
+      kill -9 "$pid" 2>/dev/null || true
+      kids="$(pgrep -P "$pid" 2>/dev/null || true)"
+      for kid in $kids; do
+        kill -9 "$kid" 2>/dev/null || true
+      done
+    fi
+  fi
+fi
+
+if [[ -f "$RUN_DIR/port" ]]; then
+  port="$(cat "$RUN_DIR/port")"
+  leftover="$(lsof -nP -iTCP:"$port" -sTCP:LISTEN -t 2>/dev/null || true)"
+  if [[ -n "$leftover" ]]; then
+    echo "cleanup: port $port still listening (pids: $leftover). Not killing by port. Inspect leftover processes by hand." >&2
+  fi
+fi
+
+rm -rf "$RUN_DIR"
+echo "cleanup: removed $RUN_DIR (artifacts/ kept)"
