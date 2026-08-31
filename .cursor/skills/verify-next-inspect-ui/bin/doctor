@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Read-only: is this verification instance worth driving?
+source "$(cd "$(dirname "$0")" && pwd)/common"
+
+fail() {
+  echo "unhealthy: $*" >&2
+  exit 1
+}
+
+[[ -f "$PIDFILE" ]] || fail "no pidfile at $PIDFILE — run bin/launch"
+pid="$(cat "$PIDFILE")"
+kill -0 "$pid" 2>/dev/null || fail "pid $pid is not running"
+
+listener="$(port_listener_pid || true)"
+[[ -n "${listener:-}" ]] || fail "nothing listening on $PORT"
+[[ "$listener" == "$pid" ]] || fail "port $PORT is owned by pid $listener, not $pid"
+
+home="$(http_code /)"
+[[ "$home" == "200" ]] || fail "GET / returned $home"
+
+fixtures="$(http_code /test)"
+[[ "$fixtures" == "200" ]] || fail "GET /test returned $fixtures (production returns 404; this must be next dev)"
+
+shadcn="$(http_code /test/source-open/shadcn-host)"
+[[ "$shadcn" == "200" ]] || fail "GET /test/source-open/shadcn-host returned $shadcn"
+
+echo "url: $URL"
+echo "pid: $pid"
+echo "port: $PORT owned by $pid"
+echo "dev-fixtures: /test 200"
+echo "distDir: $DIST_DIR"
+echo "healthy"

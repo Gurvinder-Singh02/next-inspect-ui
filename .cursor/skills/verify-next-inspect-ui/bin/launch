@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Start next-inspect-website on 127.0.0.1:4173 with a private distDir.
+# Daemonizes with a double-fork so agent shell teardown cannot kill it.
+# Ready when this script exits 0 and prints the URL.
+source "$(cd "$(dirname "$0")" && pwd)/common"
+
+mkdir -p "$RUN_DIR" "$ARTIFACTS_DIR"
+
+if [[ -f "$PIDFILE" ]]; then
+  pid="$(cat "$PIDFILE")"
+  if kill -0 "$pid" 2>/dev/null && [[ "$(http_code /test)" == "200" ]]; then
+    echo "already running  pid=$pid  $URL"
+    exit 0
+  fi
+  rm -f "$PIDFILE"
+fi
+
+listener="$(port_listener_pid || true)"
+if [[ -n "${listener:-}" ]]; then
+  echo "port $PORT is already in use by pid $listener" >&2
+  echo "run bin/cleanup if that pid is a leftover verification server" >&2
+  exit 1
+fi
+
+if [[ -x "$WEBSITE_DIR/node_modules/.bin/next" ]]; then
+  NEXT_BIN="$WEBSITE_DIR/node_modules/.bin/next"
+elif [[ -x "$ROOT/node_modules/.bin/next" ]]; then
+  NEXT_BIN="$ROOT/node_modules/.bin/next"
+else
+  echo "next binary not found — run pnpm install from the repo root" >&2
+  exit 1
+fi
+
+: >"$LOGFILE"
+
+python3 - "$WEBSITE_DIR" "$NEXT_BIN" "$HOST" "$PORT" "$DIST_DIR" "$LOGFILE" "$RUN_DIR/launcher.pid" <<'PY'
+import os, sys
+
+website, next_bin, host, port, dist_dir, logfile, pidfile = sys.argv[1:]
+log = open(logfile, "ab", buffering=0)
+pid = os.fork()
+if pid > 0:
+    os.waitpid(pid, 0)
+    sys.exit(0)
+os.setsid()
+pid = os.fork()
+if pid > 0:
+    sys.exit(0)
+os.chdir(website)
+os.environ["INSPECT_VERIFY_DIST_DIR"] = dist_dir
+os.dup2(log.fileno(), 1)
+os.dup2(log.fileno(), 2)
+with open(pidfile, "w", encoding="utf-8") as handle:
+    handle.write(str(os.getpid()))
+os.execv(next_bin, [next_bin, "dev", "--hostname", host, "--port", port])
+PY
+
+deadline=$((SECONDS + 90))
+while ((SECONDS < deadline)); do
+  launcher=""
+  if [[ -f "$RUN_DIR/launcher.pid" ]]; then
+    launcher="$(cat "$RUN_DIR/launcher.pid")"
+  fi
+  if [[ -n "$launcher" ]] && ! kill -0 "$launcher" 2>/dev/null; then
+    echo "next dev exited before becoming ready" >&2
+    tail -n 40 "$LOGFILE" >&2
+    rm -f "$PIDFILE" "$RUN_DIR/launcher.pid"
+    exit 1
+  fi
+  if [[ "$(http_code /test)" == "200" ]]; then
+    listener="$(port_listener_pid)"
+    echo "$listener" >"$PIDFILE"
+    echo "ready  pid=$listener  $URL"
+    exit 0
+  fi
+  sleep 0.4
+done
+
+echo "timed out waiting for $URL/test" >&2
+tail -n 40 "$LOGFILE" >&2
+exit 1
