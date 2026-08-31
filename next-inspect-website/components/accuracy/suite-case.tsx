@@ -447,7 +447,7 @@ export const SuiteCase = ({
                 )}
                 title="Call window.__inspectUI.inspect — same resolve as hover/info"
               >
-                <PlayIcon className="size-3.5 fill-current" aria-hidden />
+                <PlayIcon className="size-2.5 fill-current" aria-hidden />
                 {testing ? "Testing…" : "Test"}
               </button>
             </div>
