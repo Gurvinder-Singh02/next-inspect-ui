@@ -17,35 +17,18 @@ see Findings.
 
 ## The Harness
 
-`prod-test/` — a bare one-page Next 16 fixture plus `measure.mjs`. It builds
-the fixture five ways and reports, per scenario:
-
-- client bytes: `.next/static`, raw + gzip, delta vs baseline
-- server bytes: `.next/server`, raw, delta vs baseline
-- sentinel grep: strings that exist only inside the library
-  (`data-inspect-host`, `data-inspect-owner`, `Could not resolve source`)
-  must not appear on the README path. P4 imports `/lib` and is allowed to
-  contain the stamp attribute names.
-- path leak: the `projectRoot` value (an absolute path on the author's
-  machine) must not appear in served HTML
-
-Run it with `pnpm --filter prod-test measure`.
-
-| # | scenario | layout | next.config |
-|---|---|---|---|
-| P0 | baseline | no library | plain |
-| P1 | README pattern | `NODE_ENV === "development" && <InspectUI/>` | plain |
-| P2 | worst case | ungated `<InspectUI/>` | plain |
-| P3 | gated + debug plugin | gated | `withInspectUI()` |
-| P4 | gated + `/lib` | gated + `LibProbe` | plain |
-
-Plus tarball-level cases run by hand (commands in Measured Results):
+The production-cost fixture that produced the numbers below has been removed.
+Keep the measured table as the last recorded baseline. Tarball-level checks
+are still run by hand:
 
 | # | case | what it proves |
 |---|---|---|
 | P5 | `npm pack` → install into a fresh app **outside** the workspace → build + dev | no `workspace:*` symlink blind spot; exports map works from a real install |
 | P6 | `require()` of `next-inspect-ui-debug`, `next-inspect-ui-debug/babel-stamp`, and `next-inspect-ui` from plain Node | the CJS `next.config.js` consumer path |
 | P7 | `npm pack --dry-run` audit | what users actually download |
+
+Former fixture scenarios (P0–P4) covered baseline, gated README, ungated
+worst case, gated + debug plugin, and gated + `/lib`.
 
 ## Findings
 
@@ -179,16 +162,14 @@ with `pnpm publish` so `workspace:` is rewritten.
 
 ## Before publish. The short list
 
-1. `pnpm --filter prod-test measure`. P1 client delta must stay near +0.2 KB
-   with zero sentinels.
-2. `pnpm --filter next-inspect-ui build && pnpm --filter next-inspect-ui test
+1. `pnpm --filter next-inspect-ui build && pnpm --filter next-inspect-ui test
    && pnpm --filter next-inspect-ui typecheck`.
-3. `pnpm --filter next-inspect-ui-debug build && pnpm --filter
+2. `pnpm --filter next-inspect-ui-debug build && pnpm --filter
    next-inspect-ui-debug test && pnpm --filter next-inspect-ui-debug typecheck`.
-4. One manual dev walk of `/test/source-open/*` with `verify` on. The lazy
+3. One manual dev walk of `/test/source-open/*` with `verify` on. The lazy
    chunk load is the one thing this branch could not exercise headlessly.
-5. `npm publish` from `next-inspect-ui-npm/` (`prepublishOnly` rebuilds).
-6. `pnpm publish` from `next-inspect-ui-debug/` after `node
+4. `npm publish` from `next-inspect-ui-npm/` (`prepublishOnly` rebuilds).
+5. `pnpm publish` from `next-inspect-ui-debug/` after `node
    scripts/check-debug-tarball.mjs` is green. Do not use `npm publish` for
    debug while the dep is a workspace protocol.
-7. Deploy the website. Confirm `/test` 404s in production.
+6. Deploy the website. Confirm `/test` 404s in production.

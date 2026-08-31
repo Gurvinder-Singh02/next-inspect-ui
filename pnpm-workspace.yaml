@@ -1,8 +1,8 @@
 packages:
+  - test-app-01
   - next-inspect-ui-npm
   - next-inspect-ui-debug
   - next-inspect-website
-  - prod-test
 
 allowBuilds:
   sharp: true
