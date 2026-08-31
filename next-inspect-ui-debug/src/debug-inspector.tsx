@@ -604,6 +604,10 @@ export const InspectUI = ({
         resolveUsageSourceInParent(child, ownerFiber)
       const created = getComponentCreationSource(ownerFiber)
 
+      // Creation frames are often the definition file. Prefer a distinct call
+      // site so ⌥ / NODE TREE answer "where was this used", not "where is it
+      // defined" — and so the usage-boundary can stop before the enclosing
+      // parent (SectionCards above CardHeader).
       if (isDistinctUsedSource(used, definition)) return used
       if (isDistinctUsedSource(created, definition)) return created
       return used ?? created
@@ -678,6 +682,10 @@ export const InspectUI = ({
           fiber,
           owner.debugInfo
         )
+        // Owner stamps on a motion host are the `motion.*` JSX site — that's
+        // the host node, not the user component that returned it. Otherwise
+        // prefer the stamped call site when the component forwards props —
+        // that is the exact `<Button>` line, not a stack approximation.
         const ownerStamp = getMotionFactoryName(fiber)
           ? null
           : stampedOwnerSource(fiber, projectRoot)
@@ -1398,6 +1406,7 @@ export const InspectUI = ({
           .map((step, index) => ({
             name: step.name,
             isDom: false,
+            // Usage site first — same as ⌥ tooltip / getClimbStepDisplaySource.
             source: getClimbStepDisplaySource(step),
             climbIndex: index,
           }))
@@ -2212,6 +2221,8 @@ export const InspectUI = ({
     }
 
     const refineClimbStep = async (step: OwnerChainStep) => {
+      // Keep a solid call site (owner stamp / distinct usage) — don't let
+      // async stack refine replace page.tsx:39 with button.tsx.
       if (
         step.source &&
         !isBundledOrExternalPath(step.source.filePath) &&

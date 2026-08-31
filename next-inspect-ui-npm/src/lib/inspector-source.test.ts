@@ -41,6 +41,13 @@ test("keeps climbing when usage is still inside node_modules", () => {
   assert.equal(
     isClimbUsageBoundary({
       usage: loc("/app/node_modules/motion/dist/index.js"),
+      definition: loc("/app/node_modules/motion/dist/index.js"),
+    }),
+    false
+  )
+  assert.equal(
+    isClimbUsageBoundary({
+      usage: loc("/app/node_modules/motion/dist/index.js"),
       definition: loc("/app/components/ui/card.tsx"),
     }),
     false
