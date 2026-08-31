@@ -5,8 +5,8 @@
  * Requires a running dev server and `agent-browser`.
  *
  * Usage:
- *   pnpm accuracy:capture -- /test/source-open/shadcn-host
- *   pnpm accuracy:capture -- /test/source-open/shadcn-host --base http://localhost:3000
+ *   pnpm accuracy:capture -- /test
+ *   pnpm accuracy:capture -- /test --base http://localhost:3000
  *
  * Prints TypeScript `cases` you can paste into `expected.ts`.
  * Does not import next-inspect-ui-debug — it drives the public overlay only.
@@ -17,7 +17,7 @@ import { existsSync } from "node:fs"
 import { resolve } from "node:path"
 
 const args = process.argv.slice(2).filter((a) => a !== "--")
-const route = args.find((a) => a.startsWith("/")) ?? "/test/source-open/shadcn-host"
+const route = args.find((a) => a.startsWith("/")) ?? "/test"
 const baseIdx = args.indexOf("--base")
 const base =
   baseIdx >= 0 && args[baseIdx + 1]
@@ -176,5 +176,5 @@ export const capturedExpected = ${JSON.stringify(printed, null, 2)} satisfies Ac
 `)
 
 console.error(
-  `\nPaste into ${resolve("app/(dev)/test/source-open")}${route}/expected.ts`
+  `\nPaste into ${resolve("app/(dev)/test/cases.ts")}`
 )
