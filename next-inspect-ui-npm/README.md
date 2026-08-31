@@ -36,6 +36,7 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 | ⌥ ⇧ | climb another level |
 | `[` `]` | move to the parent / child element |
 | `I` | open the info panel — used / defined, tree, CSS |
+| `↑` `↓` | while info is open, move the Node tree selection |
 | `Esc` | exit |
 
 ## Props

@@ -58,6 +58,13 @@ const SHORTCUTS: KeyboardShortcut[] = [
       "Toggle the info panel — source links, owner tree (└─ parents), and styles.",
   },
   {
+    keys: ["↑", "↓"],
+    join: "/",
+    type: "panel",
+    description:
+      "Info panel open: move the Node tree selection (parents ↔ host). Closed: previous / next sibling.",
+  },
+  {
     keys: ["⌘", "["],
     type: "nav",
     description: "Move the spotlight to the parent inspectable element.",
@@ -68,14 +75,12 @@ const SHORTCUTS: KeyboardShortcut[] = [
     description: "Move the spotlight to the first child inspectable element.",
   },
   {
-    keys: ["←", "↑"],
-    join: "/",
+    keys: ["←"],
     type: "nav",
     description: "Move to the previous sibling inspectable element.",
   },
   {
-    keys: ["→", "↓"],
-    join: "/",
+    keys: ["→"],
     type: "nav",
     description: "Move to the next sibling inspectable element.",
   },
