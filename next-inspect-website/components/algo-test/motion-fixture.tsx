@@ -3,8 +3,6 @@
 import { useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 
-import { SuiteTarget } from "@/components/accuracy/suite-case"
-
 /**
  * Motion fixtures.
  *
@@ -21,29 +19,27 @@ import { SuiteTarget } from "@/components/accuracy/suite-case"
 const motionBoxClass = "size-12 rounded-lg bg-muted-foreground/20"
 
 /** Return-root motion.div — same climb as `return (<div/>)`. */
-export const MotionSimple = () => (
+export const MotionSimple = (props: { "data-accuracy-target"?: string }) => (
   <motion.div
     initial={{ opacity: 0.4 }}
     animate={{ opacity: 1 }}
     className={motionBoxClass}
+    {...props}
   />
 )
 
 /** Bare MotionSimple next to nested div→div→motion.div. */
 export const MotionSimplePair = () => (
   <div className="flex items-start gap-6">
-    <SuiteTarget id="bare">
-      <MotionSimple />
-    </SuiteTarget>
+    <MotionSimple data-accuracy-target="bare" />
     <div className="rounded-lg border border-border p-2">
       <div className="p-2">
-        <SuiteTarget id="nested">
-          <motion.div
-            initial={{ opacity: 0.4 }}
-            animate={{ opacity: 1 }}
-            className={motionBoxClass}
-          />
-        </SuiteTarget>
+        <motion.div
+          data-accuracy-target="nested"
+          initial={{ opacity: 0.4 }}
+          animate={{ opacity: 1 }}
+          className={motionBoxClass}
+        />
       </div>
     </div>
   </div>
@@ -54,14 +50,14 @@ const MOTION_BOX_IDS = ["box-0", "box-1", "box-2"] as const
 export const MotionBoxes = () => (
   <div className="flex gap-3">
     {MOTION_BOX_IDS.map((id, index) => (
-      <SuiteTarget key={id} id={id}>
-        <motion.div
-          initial={{ opacity: 0.4 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: index * 0.1 }}
-          className="size-12 rounded-lg bg-muted-foreground/20"
-        />
-      </SuiteTarget>
+      <motion.div
+        key={id}
+        data-accuracy-target={id}
+        initial={{ opacity: 0.4 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: index * 0.1 }}
+        className="size-12 rounded-lg bg-muted-foreground/20"
+      />
     ))}
   </div>
 )
@@ -131,10 +127,17 @@ export const MotionPresence = () => {
 }
 
 /** A user component whose return root is motion.div. */
-const Chip = ({ label }: { label: string }) => (
+const Chip = ({
+  label,
+  ...props
+}: {
+  label: string
+  "data-accuracy-target"?: string
+}) => (
   <motion.div
     whileHover={{ y: -2 }}
     className="rounded-full border border-border px-3 py-1 font-mono text-[12px]"
+    {...props}
   >
     {label}
   </motion.div>
@@ -142,11 +145,7 @@ const Chip = ({ label }: { label: string }) => (
 
 export const MotionWrapped = () => (
   <div className="flex gap-2">
-    <SuiteTarget id="alpha">
-      <Chip label="alpha" />
-    </SuiteTarget>
-    <SuiteTarget id="beta">
-      <Chip label="beta" />
-    </SuiteTarget>
+    <Chip label="alpha" data-accuracy-target="alpha" />
+    <Chip label="beta" data-accuracy-target="beta" />
   </div>
 )

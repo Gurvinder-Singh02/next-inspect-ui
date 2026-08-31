@@ -4,8 +4,6 @@ import Link from "next/link"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import { Slot } from "@radix-ui/react-slot"
 
-import { SuiteTarget } from "@/components/accuracy/suite-case"
-
 /**
  * Radix fixtures.
  *
@@ -22,13 +20,18 @@ import { SuiteTarget } from "@/components/accuracy/suite-case"
 const Clickable = ({
   asChild,
   children,
+  ...props
 }: {
   asChild?: boolean
   children: React.ReactNode
+  "data-accuracy-target"?: string
 }) => {
   const Comp = asChild ? Slot : "button"
   return (
-    <Comp className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]">
+    <Comp
+      className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
+      {...props}
+    >
       {children}
     </Comp>
   )
@@ -36,23 +39,17 @@ const Clickable = ({
 
 export const SlotFixtures = () => (
   <div className="flex flex-wrap items-center gap-3">
-    <SuiteTarget id="button">
-      <Clickable>Renders its own button</Clickable>
-    </SuiteTarget>
+    <Clickable data-accuracy-target="button">Renders its own button</Clickable>
 
-    <SuiteTarget id="anchor">
-      <Clickable asChild>
-        <a href="#slot" className="no-underline">
-          Slot renders this anchor
-        </a>
-      </Clickable>
-    </SuiteTarget>
+    <Clickable asChild data-accuracy-target="anchor">
+      <a href="#slot" className="no-underline">
+        Slot renders this anchor
+      </a>
+    </Clickable>
 
-    <SuiteTarget id="link">
-      <Clickable asChild>
-        <Link href="/test">Slot renders a next/link</Link>
-      </Clickable>
-    </SuiteTarget>
+    <Clickable asChild data-accuracy-target="link">
+      <Link href="/test">Slot renders a next/link</Link>
+    </Clickable>
   </div>
 )
 

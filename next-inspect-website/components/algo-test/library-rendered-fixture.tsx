@@ -6,7 +6,13 @@ import { createElement } from "react"
  * Stands in for framer-motion / recharts: builds host DOM via createElement
  * instead of returning JSX the caller wrote.
  */
-export const RendersOwnHost = ({ label }: { label: string }) => {
+export const RendersOwnHost = ({
+  label,
+  ...props
+}: {
+  label: string
+  "data-accuracy-target"?: string
+}) => {
   const children = [0, 1, 2].map((index) =>
     createElement("rect", {
       key: index,
@@ -27,6 +33,7 @@ export const RendersOwnHost = ({ label }: { label: string }) => {
       role: "img",
       "aria-label": label,
       className: "overflow-visible",
+      ...props,
     },
     children
   )
