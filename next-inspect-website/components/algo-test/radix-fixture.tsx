@@ -20,13 +20,18 @@ import { Slot } from "@radix-ui/react-slot"
 const Clickable = ({
   asChild,
   children,
+  ...props
 }: {
   asChild?: boolean
   children: React.ReactNode
+  "data-accuracy-target"?: string
 }) => {
   const Comp = asChild ? Slot : "button"
   return (
-    <Comp className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]">
+    <Comp
+      className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
+      {...props}
+    >
       {children}
     </Comp>
   )
@@ -34,16 +39,16 @@ const Clickable = ({
 
 export const SlotFixtures = () => (
   <div className="flex flex-wrap items-center gap-3">
-    <Clickable>Renders its own button</Clickable>
+    <Clickable data-accuracy-target="button">Renders its own button</Clickable>
 
-    <Clickable asChild>
+    <Clickable asChild data-accuracy-target="anchor">
       <a href="#slot" className="no-underline">
         Slot renders this anchor
       </a>
     </Clickable>
 
-    <Clickable asChild>
-      <Link href="/test/source-open">Slot renders a next/link</Link>
+    <Clickable asChild data-accuracy-target="link">
+      <Link href="/test">Slot renders a next/link</Link>
     </Clickable>
   </div>
 )

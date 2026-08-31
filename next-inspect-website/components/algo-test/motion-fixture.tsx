@@ -16,11 +16,43 @@ import { AnimatePresence, motion } from "motion/react"
  * resolve into it.
  */
 
+const motionBoxClass = "size-12 rounded-lg bg-muted-foreground/20"
+
+/** Return-root motion.div — same climb as `return (<div/>)`. */
+export const MotionSimple = (props: { "data-accuracy-target"?: string }) => (
+  <motion.div
+    initial={{ opacity: 0.4 }}
+    animate={{ opacity: 1 }}
+    className={motionBoxClass}
+    {...props}
+  />
+)
+
+/** Bare MotionSimple next to nested div→div→motion.div. */
+export const MotionSimplePair = () => (
+  <div className="flex items-start gap-6">
+    <MotionSimple data-accuracy-target="bare" />
+    <div className="rounded-lg border border-border p-2">
+      <div className="p-2">
+        <motion.div
+          data-accuracy-target="nested"
+          initial={{ opacity: 0.4 }}
+          animate={{ opacity: 1 }}
+          className={motionBoxClass}
+        />
+      </div>
+    </div>
+  </div>
+)
+
+const MOTION_BOX_IDS = ["box-0", "box-1", "box-2"] as const
+
 export const MotionBoxes = () => (
   <div className="flex gap-3">
-    {[0, 1, 2].map((index) => (
+    {MOTION_BOX_IDS.map((id, index) => (
       <motion.div
-        key={index}
+        key={id}
+        data-accuracy-target={id}
         initial={{ opacity: 0.4 }}
         animate={{ opacity: 1 }}
         transition={{ delay: index * 0.1 }}
@@ -94,11 +126,18 @@ export const MotionPresence = () => {
   )
 }
 
-/** A user component wrapping a motion element — two levels to climb. */
-const Chip = ({ label }: { label: string }) => (
+/** A user component whose return root is motion.div. */
+const Chip = ({
+  label,
+  ...props
+}: {
+  label: string
+  "data-accuracy-target"?: string
+}) => (
   <motion.div
     whileHover={{ y: -2 }}
     className="rounded-full border border-border px-3 py-1 font-mono text-[12px]"
+    {...props}
   >
     {label}
   </motion.div>
@@ -106,7 +145,7 @@ const Chip = ({ label }: { label: string }) => (
 
 export const MotionWrapped = () => (
   <div className="flex gap-2">
-    <Chip label="alpha" />
-    <Chip label="beta" />
+    <Chip label="alpha" data-accuracy-target="alpha" />
+    <Chip label="beta" data-accuracy-target="beta" />
   </div>
 )

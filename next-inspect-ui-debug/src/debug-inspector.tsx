@@ -78,6 +78,7 @@ import {
   getDebugSourceUntil,
   getDirectClimbOwner,
   getDomHoverName,
+  getMotionFactoryName,
   getElementClassName,
   getFiber,
   getHostAuthorSource as getHostAuthorSourceRuntime,
@@ -660,8 +661,11 @@ export const InspectUI = ({
       let parent: ReactFiber | null = null
 
       if (isHostHover) {
-        // HTML host → one climb step only: the component that rendered it
-        // (`<Button>` @ page.tsx:39). Never walk into Card / page parents.
+        // HTML host → climb one step only when this host is the component
+        // return root (`return (`). Nested HTML under another host does not
+        // climb — getDirectClimbOwner returns null for those. `motion.*` is
+        // treated as the host it produces, so a return-root `motion.div`
+        // climbs to the user component and a nested one does not.
         const owner = getDirectClimbOwner(fiber)
         if (!owner) return []
 
@@ -678,11 +682,15 @@ export const InspectUI = ({
           fiber,
           owner.debugInfo
         )
-        const ownerStamp = stampedOwnerSource(fiber, projectRoot)
+        // Owner stamps on a motion host are the `motion.*` JSX site — that's
+        // the host node, not the user component that returned it. Otherwise
+        // prefer the stamped call site when the component forwards props —
+        // that is the exact `<Button>` line, not a stack approximation.
+        const ownerStamp = getMotionFactoryName(fiber)
+          ? null
+          : stampedOwnerSource(fiber, projectRoot)
         steps.push({
           name: owner.name,
-          // Prefer the stamped call site when the component forwards props —
-          // that is the exact `<Button>` line, not a stack approximation.
           source: ownerStamp ?? resolved.source,
           definition: resolved.definition,
           parentFiber: owner.fiber,

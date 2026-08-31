@@ -52,21 +52,32 @@ export class Boundary extends Component<
   }
 }
 
-export const ForwardedInput = forwardRef<HTMLInputElement, { hint: string }>(
-  function ForwardedInput({ hint }, ref) {
-    return (
-      <input
-        ref={ref}
-        placeholder={hint}
-        className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
-      />
-    )
-  }
-)
-
-export const MemoPill = memo(function MemoPill({ label }: { label: string }) {
+export const ForwardedInput = forwardRef<
+  HTMLInputElement,
+  { hint: string; "data-accuracy-target"?: string }
+>(function ForwardedInput({ hint, ...props }, ref) {
   return (
-    <span className="rounded-full border border-border px-3 py-1 font-mono text-[12px]">
+    <input
+      ref={ref}
+      placeholder={hint}
+      className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
+      {...props}
+    />
+  )
+})
+
+export const MemoPill = memo(function MemoPill({
+  label,
+  ...props
+}: {
+  label: string
+  "data-accuracy-target"?: string
+}) {
+  return (
+    <span
+      className="rounded-full border border-border px-3 py-1 font-mono text-[12px]"
+      {...props}
+    >
       {label}
     </span>
   )
@@ -92,8 +103,16 @@ const PlainNote = ({ text }: { text: string }) => (
 export const BorderedNote = withBorder(PlainNote)
 
 /** Compound component — dot notation, a JSXMemberExpression at the call site. */
-export const Panel = ({ children }: { children: ReactNode }) => (
-  <div className="rounded-lg border border-border">{children}</div>
+export const Panel = ({
+  children,
+  ...props
+}: {
+  children: ReactNode
+  "data-accuracy-target"?: string
+}) => (
+  <div className="rounded-lg border border-border" {...props}>
+    {children}
+  </div>
 )
 
 Panel.Header = function PanelHeader({ children }: { children: ReactNode }) {
@@ -114,8 +133,8 @@ Panel.Body = function PanelBody({ children }: { children: ReactNode }) {
  * access on a proxy yields undefined — so a Server Component writing
  * `<Panel.Header>` renders nothing and React throws "Element type is invalid".
  */
-export const CompoundDemo = () => (
-  <Panel>
+export const CompoundDemo = (props: { "data-accuracy-target"?: string }) => (
+  <Panel {...props}>
     <Panel.Header>Header</Panel.Header>
     <Panel.Body>Body</Panel.Body>
   </Panel>
