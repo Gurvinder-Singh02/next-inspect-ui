@@ -22,4 +22,11 @@ export default defineConfig([
     entry: { lib: "src/lib.ts" },
     clean: false,
   },
+  {
+    ...shared,
+    // Overlay engine for the debug package. No `"use client"` banner — the
+    // barrel is functions and types.
+    entry: { overlay: "src/overlay.ts" },
+    clean: false,
+  },
 ])
