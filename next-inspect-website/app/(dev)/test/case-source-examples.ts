@@ -23,9 +23,7 @@ export const CASE_SOURCE_EXAMPLES: Record<string, CaseSourceExample[]> = {
     {
       label: "Defined & used in",
       file: TEST_PAGE,
-      code: `<div>
-  <h1 className="text-xl font-medium tracking-tight">title</h1>
-</div>`,
+      code: `<h1 className="text-xl font-medium tracking-tight">title</h1>`,
     },
   ],
 
