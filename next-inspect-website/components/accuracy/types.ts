@@ -8,6 +8,14 @@ export type AccuracyNode = {
   line?: number
 }
 
+/** One hover target inside a multi-fixture case (e.g. Default / Secondary badge). */
+export type AccuracyTarget = {
+  /** Stable key — also used as `data-accuracy-target`. */
+  id: string
+  label: string
+  nodes?: AccuracyNode[]
+}
+
 export type AccuracyCaseExpected = {
   /** Stable id — also used as `data-accuracy-case`. */
   id: string
@@ -25,4 +33,16 @@ export type AccuracyRouteExpected = {
 export type FoundNode = {
   name: string
   source: string | null
+}
+
+/** One short example shown in the case “Show source” panel. */
+export type SuiteSourceFile = {
+  /** e.g. `Defined in` / `Used in` */
+  label: string
+  /** Project-relative path (for the title only) */
+  file: string
+  /** Short example snippet */
+  code: string
+  /** Shiki HTML for the colored code block */
+  html: string
 }

@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 
+import { SuiteTarget } from "@/components/accuracy/suite-case"
+
 /**
  * Motion fixtures.
  *
@@ -16,37 +18,42 @@ import { AnimatePresence, motion } from "motion/react"
  * resolve into it.
  */
 
+const MOTION_BOX_IDS = ["box-0", "box-1", "box-2"] as const
+
 export const MotionBoxes = () => (
   <div className="flex gap-3">
-    {[0, 1, 2].map((index) => (
-      <motion.div
-        key={index}
-        initial={{ opacity: 0.4 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: index * 0.1 }}
-        className="size-12 rounded-lg bg-muted-foreground/20"
-      />
+    {MOTION_BOX_IDS.map((id, index) => (
+      <SuiteTarget key={id} id={id}>
+        <motion.div
+          initial={{ opacity: 0.4 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: index * 0.1 }}
+          className="size-12 rounded-lg bg-muted-foreground/20"
+        />
+      </SuiteTarget>
     ))}
   </div>
 )
 
 /** SVG primitives — the exact case that produced the original wrong file. */
 export const MotionSvg = () => (
-  <svg width={140} height={40} role="img" aria-label="animated bars">
-    {[0, 1, 2, 3].map((index) => (
-      <motion.rect
-        key={index}
-        x={index * 34}
-        y={4}
-        width={28}
-        height={28}
-        rx={6}
-        className="fill-muted-foreground/30"
-        initial={{ scaleY: 0.6 }}
-        animate={{ scaleY: 1 }}
-      />
-    ))}
-  </svg>
+  <div className="inline-flex">
+    <svg width={140} height={40} role="img" aria-label="animated bars">
+      {[0, 1, 2, 3].map((index) => (
+        <motion.rect
+          key={index}
+          x={index * 34}
+          y={4}
+          width={28}
+          height={28}
+          rx={6}
+          className="fill-muted-foreground/30"
+          initial={{ scaleY: 0.6 }}
+          animate={{ scaleY: 1 }}
+        />
+      ))}
+    </svg>
+  </div>
 )
 
 /** A motion element nested inside plain host JSX. */

@@ -51,8 +51,7 @@ export const readOwnerTreeFromOverlay = (): FoundNode[] | null => {
   return found.length > 0 ? found : null
 }
 
-/** Which accuracy case (if any) is under the Inspect overlay spotlight. */
-export const caseIdUnderOverlay = (): string | null => {
+const elementUnderOverlay = (): Element | null => {
   const overlay = document.querySelector(
     "[data-dev-inspector-overlay]"
   ) as HTMLElement | null
@@ -62,10 +61,30 @@ export const caseIdUnderOverlay = (): string | null => {
   const rect = overlay.getBoundingClientRect()
   if (rect.width < 1 || rect.height < 1) return null
 
-  const el = document.elementFromPoint(
+  return document.elementFromPoint(
     rect.left + rect.width / 2,
     rect.top + rect.height / 2
   )
+}
+
+/** Which accuracy case (if any) is under the Inspect overlay spotlight. */
+export const caseIdUnderOverlay = (): string | null => {
+  const el = elementUnderOverlay()
   const root = el?.closest("[data-accuracy-case]") as HTMLElement | null
   return root?.getAttribute("data-accuracy-case") ?? null
+}
+
+/** Which multi-fixture target (if any) is under the Inspect overlay spotlight. */
+export const targetIdUnderOverlay = (): string | null => {
+  const el = elementUnderOverlay()
+  const target = el?.closest("[data-accuracy-target]") as HTMLElement | null
+  return target?.getAttribute("data-accuracy-target") ?? null
+}
+
+/** Format map duration for the status bar — e.g. `0.04ms`. */
+export const formatMapMs = (ms: number) => {
+  if (!Number.isFinite(ms) || ms < 0) return null
+  if (ms < 10) return `${ms.toFixed(2)}ms`
+  if (ms < 100) return `${ms.toFixed(1)}ms`
+  return `${Math.round(ms)}ms`
 }
