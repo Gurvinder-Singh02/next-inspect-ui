@@ -95,6 +95,7 @@ export {
   getClimbOpenSource,
   getClimbStepDisplaySource,
   isBundledOrExternalPath,
+  isClimbUsageBoundary,
   isDistinctUsedSource,
   isSameSourceLine,
   isLikelySourceFile,
