@@ -4,5 +4,5 @@ node_modules/
 *.tgz
 .npm/
 .pnpm-store/
-.cursor/skills/verify-next-inspect-ui/.run/
-.cursor/skills/verify-next-inspect-ui/artifacts/
+.cursor/skills/verify-next-inspect-website/.run/
+.cursor/skills/verify-next-inspect-website/artifacts/
