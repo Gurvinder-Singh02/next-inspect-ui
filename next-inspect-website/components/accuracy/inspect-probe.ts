@@ -55,7 +55,8 @@ export const listCaseTestTargets = (
   const listed: Array<{ id: string; element: Element }> = []
 
   for (const element of marked) {
-    if (!(element instanceof HTMLElement)) continue
+    // SVG hosts are SVGElement, not HTMLElement — still valid fixtures.
+    if (!(element instanceof Element)) continue
     const id = element.getAttribute("data-accuracy-target")
     if (!id) continue
     listed.push({ id, element })
@@ -79,7 +80,15 @@ export const pickCaseTestTarget = (
         rect.left + rect.width / 2,
         rect.top + rect.height / 2
       )
-      if (hit instanceof Element && caseRoot.contains(hit)) return hit
+      if (hit instanceof Element && caseRoot.contains(hit)) {
+        // Inner SVG shapes (rect, path) sit on top of the marked host.
+        // Test the `[data-accuracy-target]` fixture, not the nested hit.
+        const marked = hit.closest("[data-accuracy-target]")
+        if (marked instanceof Element && caseRoot.contains(marked)) {
+          return marked
+        }
+        return hit
+      }
     }
   }
 
