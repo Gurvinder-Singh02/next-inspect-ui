@@ -50,6 +50,7 @@ import {
   getComponentRuntime,
   getDirectClimbOwner,
   getDomHoverName,
+  getMotionFactoryName,
   getFiber,
   getNamedTarget,
   getOwnStackFrames,
@@ -462,8 +463,11 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       let parent: ReactFiber | null = null
 
       if (isHostHover) {
-        // HTML host → one climb step only: the component that rendered it
-        // (`<Button>` @ page.tsx:39). Never walk into Card / page parents.
+        // HTML host → climb one step only when this host is the component
+        // return root (`return (`). Nested HTML under another host does not
+        // climb — getDirectClimbOwner returns null for those. `motion.*` is
+        // treated as the host it produces, so a return-root `motion.div`
+        // climbs to the user component and a nested one does not.
         const owner = getDirectClimbOwner(fiber)
         if (!owner) return []
 
@@ -480,11 +484,15 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
           fiber,
           owner.debugInfo
         )
-        const ownerStamp = ownerStampFromFiber(fiber)
+        // Owner stamps on a motion host are the `motion.*` JSX site — that's
+        // the host node, not the user component that returned it. Otherwise
+        // prefer the stamped call site when the component forwards props —
+        // that is the exact `<Button>` line, not a stack approximation.
+        const ownerStamp = getMotionFactoryName(fiber)
+          ? null
+          : ownerStampFromFiber(fiber)
         steps.push({
           name: owner.name,
-          // Prefer the stamped call site when the component forwards props —
-          // that is the exact `<Button>` line, not a stack approximation.
           source: ownerStamp ?? resolved.source,
           definition: resolved.definition,
           parentFiber: owner.fiber,
@@ -2048,6 +2056,81 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       passive: true,
     })
 
+    /**
+     * Same resolve path hover + info use: resolveInspectElement → fiber →
+     * resolveHostAuthorSource + buildOwnerChain (+ refine). Exposed so the
+     * accuracy suite (and other tests) can call it without scraping the DOM.
+     *
+     *   await window.__inspectUI.inspect(element)
+     *   await window.__inspectUI.inspect("#my-button")
+     *   await window.__inspectUI.inspect("[data-accuracy-target=default]")
+     */
+    const inspectProbe = async (input: Element | string) => {
+      const hit =
+        typeof input === "string" ? document.querySelector(input) : input
+      if (!(hit instanceof Element)) return null
+
+      const resolved = resolveInspectElement(hit)
+      if (isInspectorChrome(resolved)) return null
+
+      const fiber = getFiber(resolved)
+      if (!fiber) return null
+
+      const hostSource =
+        (await resolveHostAuthorSource(
+          fiber,
+          projectRoot,
+          sourceMapCache
+        )) ?? getHostAuthorSource(fiber, projectRoot)
+
+      const chain = buildOwnerChain(fiber)
+      await Promise.all(chain.map((step) => refineClimbStep(step)))
+
+      const hostTag =
+        getDomHoverName(fiber) ?? resolved.tagName.toLowerCase()
+
+      const labelOf = (source: SourceLocation | null) =>
+        source ? formatPageLabel(source, projectRoot) : null
+
+      const nodes = [
+        ...[...chain]
+          .map((step) => ({
+            name: step.name,
+            source: labelOf(getClimbStepDisplaySource(step)),
+          }))
+          .reverse(),
+        {
+          name: hostTag,
+          source: labelOf(hostSource),
+        },
+      ]
+
+      return {
+        element: resolved,
+        host: {
+          name: hostTag,
+          source: labelOf(hostSource),
+          filePath: hostSource?.filePath ?? null,
+          line: hostSource?.line ?? null,
+          column: hostSource?.column ?? null,
+        },
+        nodes,
+      }
+    }
+
+    const probeKey = "__inspectUI" as const
+    ;(
+      window as Window & {
+        __inspectUI?: {
+          projectRoot: string
+          inspect: typeof inspectProbe
+        }
+      }
+    )[probeKey] = {
+      projectRoot,
+      inspect: inspectProbe,
+    }
+
     return () => {
       unsubscribe()
       document.removeEventListener("pointermove", handlePointerMove, true)
@@ -2057,6 +2140,11 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       document.removeEventListener("keyup", handleKeyUp, true)
       window.removeEventListener("blur", deactivate)
       window.removeEventListener("scroll", handleScroll, { capture: true })
+      delete (
+        window as Window & {
+          __inspectUI?: unknown
+        }
+      )[probeKey]
       overlay.remove()
       tooltip.remove()
       info.remove()

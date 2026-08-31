@@ -177,19 +177,34 @@ export const getNamedTarget = (fiber: ReactFiber | null): NamedTarget | null => 
 
 const FRAGMENT_TAG = 7
 const MODE_TAG = 8
+const CONTEXT_CONSUMER_TAG = 9
+const CONTEXT_PROVIDER_TAG = 10
 const PROFILER_TAG = 12
 
 const isWrapperFiber = (fiber: ReactFiber) =>
   fiber.tag === FRAGMENT_TAG ||
   fiber.tag === MODE_TAG ||
+  fiber.tag === CONTEXT_CONSUMER_TAG ||
+  fiber.tag === CONTEXT_PROVIDER_TAG ||
   fiber.tag === PROFILER_TAG
+
+/** `motion.div` / `motion.rect` — a factory, not a user component. */
+export const isMotionFactoryName = (name: string) => name.startsWith("motion.")
+
+const isTransparentClimbFiber = (fiber: ReactFiber) => {
+  if (!isCompositeComponentFiber(fiber)) return false
+  const name = readComponentTypeName(fiber.type)
+  return !!name && isMotionFactoryName(name)
+}
+
+const skipClimbAncestor = (fiber: ReactFiber) =>
+  isWrapperFiber(fiber) || isTransparentClimbFiber(fiber)
 
 export const getOwningCompositeFiber = (hostFiber: ReactFiber): ReactFiber | null => {
   let current = hostFiber.return ?? null
 
   while (current) {
-
-    if (isWrapperFiber(current)) {
+    if (skipClimbAncestor(current)) {
       current = current.return ?? null
       continue
     }
@@ -207,6 +222,30 @@ export const getOwningCompositeFiber = (hostFiber: ReactFiber): ReactFiber | nul
   }
 
   return null
+}
+
+/**
+ * Nested HTML under another host (`<div><p/></div>`) in a client fiber tree
+ * — another host sits between this host and the nearest composite.
+ * `motion.*` is skipped like the host it produces, so
+ * `<div><motion.div/></div>` counts as nested.
+ */
+export const isHostNestedUnderHost = (hostFiber: ReactFiber): boolean => {
+  let current = hostFiber.return ?? null
+
+  while (current) {
+    if (skipClimbAncestor(current)) {
+      current = current.return ?? null
+      continue
+    }
+
+    if (isHostComponentFiber(current)) return true
+    if (isCompositeComponentFiber(current)) return false
+
+    current = current.return ?? null
+  }
+
+  return false
 }
 
 export type ClimbOwner = {
@@ -233,10 +272,46 @@ export const readDebugInfoOwner = (fiber: ReactFiber): ClimbOwner | null => {
   return null
 }
 
-export const getLabelOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
+/**
+ * RSC stamps `_debugInfo` on every host in a component's return. A host is
+ * nested (should not climb) when an ancestor host shares the same debug
+ * component name — e.g. `<p>` under ServerCard's root `<div>`. A return-root
+ * host whose parent host belongs to a *different* component (SuiteCase stage
+ * wrapping `<ServerCard/>`) still climbs.
+ */
+export const isNestedDebugInfoHost = (hostFiber: ReactFiber): boolean => {
+  const self = readDebugInfoOwner(hostFiber)
+  if (!self) return false
 
+  let current = hostFiber.return ?? null
+  while (current) {
+    if (skipClimbAncestor(current)) {
+      current = current.return ?? null
+      continue
+    }
+
+    if (isHostComponentFiber(current)) {
+      const parentOwner = readDebugInfoOwner(current)
+      return parentOwner?.name === self.name
+    }
+
+    if (isCompositeComponentFiber(current)) return false
+
+    current = current.return ?? null
+  }
+
+  return false
+}
+
+export const getLabelOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
   const fromDebug = readDebugInfoOwner(hostFiber)
-  if (fromDebug) return fromDebug
+  if (fromDebug) {
+    // Same-component nested HTML (`return (<div><p/></div>)`) must not climb.
+    // Return-root hosts still do — including RSC roots placed under a parent
+    // host from a different component.
+    if (isNestedDebugInfoHost(hostFiber)) return null
+    return fromDebug
+  }
 
   const composite = getOwningCompositeFiber(hostFiber)
   if (!composite) return null
@@ -249,11 +324,19 @@ export const getDirectClimbOwner = (hostFiber: ReactFiber): ClimbOwner | null =>
   const strict = getLabelOwner(hostFiber)
   if (strict) return strict
 
+  // `_debugOwner` points at the creating component even for nested HTML —
+  // only allow that fallback for return-root hosts.
+  if (isHostNestedUnderHost(hostFiber)) return null
+
   let owner: ReactFiber | null = hostFiber._debugOwner ?? null
   let hops = 0
   while (owner && hops < 12) {
     hops += 1
     const name = readComponentTypeName(owner.type)
+    if (name && isMotionFactoryName(name)) {
+      owner = owner._debugOwner ?? null
+      continue
+    }
     if (name && !isFrameworkInspectorName(name)) {
       return { name, fiber: owner, isSelfDebugOwner: false }
     }
@@ -334,7 +417,7 @@ export const isDirectFiberChildOf = (
   let current = child.return ?? null
 
   while (current) {
-    if (isWrapperFiber(current)) {
+    if (skipClimbAncestor(current)) {
       current = current.return ?? null
       continue
     }
@@ -364,7 +447,26 @@ export const getComponentName = (fiber: ReactFiber | null) => {
   return getNamedTarget(fiber)?.name ?? hostTag
 }
 
-export const getDomHoverName = (fiber: ReactFiber | null) => getHostTagName(fiber)
+export const getMotionFactoryName = (fiber: ReactFiber | null): string | null => {
+  let current = fiber?.return ?? null
+  while (current) {
+    if (isWrapperFiber(current)) {
+      current = current.return ?? null
+      continue
+    }
+    if (isHostComponentFiber(current)) return null
+    if (isCompositeComponentFiber(current)) {
+      const name = readComponentTypeName(current.type)
+      if (name && isMotionFactoryName(name)) return name
+      return null
+    }
+    current = current.return ?? null
+  }
+  return null
+}
+
+export const getDomHoverName = (fiber: ReactFiber | null) =>
+  getMotionFactoryName(fiber) ?? getHostTagName(fiber)
 
 export const getDebugSourceUntil = (
   start: ReactFiber | null,
