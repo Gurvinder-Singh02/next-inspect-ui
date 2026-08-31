@@ -11,6 +11,7 @@ const LIBRARY = "components/algo-test/library-rendered-fixture.tsx"
 const RADIX = "components/algo-test/radix-fixture.tsx"
 const KINDS = "components/algo-test/kinds-fixture.tsx"
 const SERVER = "components/algo-test/server-fixture.tsx"
+const SVG = "components/algo-test/svg-fixture.tsx"
 
 export type CaseSourceExample = {
   label: string
@@ -24,6 +25,33 @@ export const CASE_SOURCE_EXAMPLES: Record<string, CaseSourceExample[]> = {
       label: "Defined & used in",
       file: TEST_PAGE,
       code: `<h1 className="text-xl font-medium tracking-tight">title</h1>`,
+    },
+  ],
+
+  "svg-plain": [
+    {
+      label: "Defined & used in",
+      file: TEST_PAGE,
+      code: `<svg width={140} height={40} className="overflow-visible">
+  <rect x={4} y={4} width={28} height={28} rx={6} />
+</svg>`,
+    },
+  ],
+
+  "svg-parent": [
+    {
+      label: "Defined in",
+      file: SVG,
+      code: `export const SvgBars = () => (
+  <svg width={140} height={40} className="overflow-visible">
+    <rect x={4} y={4} width={28} height={28} rx={6} />
+  </svg>
+)`,
+    },
+    {
+      label: "Used in",
+      file: TEST_PAGE,
+      code: `<SvgBars />`,
     },
   ],
 

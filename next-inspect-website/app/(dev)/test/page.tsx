@@ -3,10 +3,11 @@ import Link from "next/link"
 import { SparklesIcon, CircleIcon, ArrowRightIcon } from "lucide-react"
 import { inspectUIProjectRoot } from "next-inspect-ui-debug"
 
-import { SuiteCase, SuiteTarget } from "@/components/accuracy/suite-case"
+import { SuiteCase } from "@/components/accuracy/suite-case"
 import { SuiteGroup } from "@/components/accuracy/suite-group"
 import { TestSuiteShell } from "@/components/accuracy/test-suite-shell"
 import { RendersOwnHost } from "@/components/algo-test/library-rendered-fixture"
+import { SvgBars } from "@/components/algo-test/svg-fixture"
 import {
   CompoundDemo,
   ForwardedInput,
@@ -39,6 +40,8 @@ import {
   serverDirectNodes,
   serverNestedTargets,
   shadcnNestedNodes,
+  svgParentNodes,
+  svgPlainNodes,
   shadcnPlainNodes,
   shadcnVariantTargets,
   thirdPartyIconTargets,
@@ -66,6 +69,43 @@ export default async function TestSuitePage() {
         </SuiteCase>
       </SuiteGroup>
 
+      <SuiteGroup title="svg">
+        <SuiteCase
+          id="svg-plain"
+          title="plain svg"
+          group="svg"
+          description="Native SVG authored on this page. Hover the rect → this file. NODE TREE is one node: rect."
+          nodes={svgPlainNodes}
+        >
+          <svg
+            width={140}
+            height={40}
+            role="img"
+            aria-label="plain bar"
+            className="overflow-visible"
+          >
+            <rect
+              x={4}
+              y={4}
+              width={28}
+              height={28}
+              rx={6}
+              className="fill-muted-foreground/30"
+            />
+          </svg>
+        </SuiteCase>
+
+        <SuiteCase
+          id="svg-parent"
+          title="svg parent climb"
+          group="svg"
+          description="SvgBars returns svg as its root. Hover the svg → climb to SvgBars. Inner rect stays put — nested host, no climb."
+          nodes={svgParentNodes}
+        >
+          <SvgBars data-accuracy-target="root" />
+        </SuiteCase>
+      </SuiteGroup>
+
       <SuiteGroup title="shadcn">
         <SuiteCase
           id="shadcn-plain"
@@ -85,17 +125,15 @@ export default async function TestSuitePage() {
           targets={shadcnVariantTargets}
         >
           <div className="flex flex-wrap justify-center gap-3">
-            <SuiteTarget id="secondary">
-              <Button variant="secondary">Secondary</Button>
-            </SuiteTarget>
-            <SuiteTarget id="ghost">
-              <Button variant="ghost">Ghost</Button>
-            </SuiteTarget>
-            <SuiteTarget id="destructive">
-              <Button variant="destructive" size="sm">
-                Destructive
-              </Button>
-            </SuiteTarget>
+            <Button data-accuracy-target="secondary" variant="secondary">
+              Secondary
+            </Button>
+            <Button data-accuracy-target="ghost" variant="ghost">
+              Ghost
+            </Button>
+            <Button data-accuracy-target="destructive" variant="destructive" size="sm">
+              Destructive
+            </Button>
           </div>
         </SuiteCase>
 
@@ -126,15 +164,13 @@ export default async function TestSuitePage() {
           targets={baseuiBadgeTargets}
         >
           <div className="flex flex-wrap justify-center gap-3">
-            <SuiteTarget id="default">
-              <Badge>Default</Badge>
-            </SuiteTarget>
-            <SuiteTarget id="secondary">
-              <Badge variant="secondary">Secondary</Badge>
-            </SuiteTarget>
-            <SuiteTarget id="destructive">
-              <Badge variant="destructive">Destructive</Badge>
-            </SuiteTarget>
+            <Badge data-accuracy-target="default">Default</Badge>
+            <Badge data-accuracy-target="secondary" variant="secondary">
+              Secondary
+            </Badge>
+            <Badge data-accuracy-target="destructive" variant="destructive">
+              Destructive
+            </Badge>
           </div>
         </SuiteCase>
       </SuiteGroup>
@@ -190,12 +226,8 @@ export default async function TestSuitePage() {
           targets={libraryOwnHostTargets}
         >
           <div className="flex justify-center gap-6">
-            <SuiteTarget id="first">
-              <RendersOwnHost label="first" />
-            </SuiteTarget>
-            <SuiteTarget id="second">
-              <RendersOwnHost label="second" />
-            </SuiteTarget>
+            <RendersOwnHost data-accuracy-target="first" label="first" />
+            <RendersOwnHost data-accuracy-target="second" label="second" />
           </div>
         </SuiteCase>
       </SuiteGroup>
@@ -221,15 +253,9 @@ export default async function TestSuitePage() {
           targets={kindsForwardRefTargets}
         >
           <div className="flex flex-col items-center gap-3">
-            <SuiteTarget id="forward-ref">
-              <ForwardedInput hint="forwardRef" />
-            </SuiteTarget>
-            <SuiteTarget id="memo">
-              <MemoPill label="memo" />
-            </SuiteTarget>
-            <SuiteTarget id="compound">
-              <CompoundDemo />
-            </SuiteTarget>
+            <ForwardedInput data-accuracy-target="forward-ref" hint="forwardRef" />
+            <MemoPill data-accuracy-target="memo" label="memo" />
+            <CompoundDemo data-accuracy-target="compound" />
           </div>
         </SuiteCase>
       </SuiteGroup>
@@ -244,11 +270,13 @@ export default async function TestSuitePage() {
         >
           <div className="flex flex-wrap justify-center gap-2">
             {["alpha", "beta", "gamma"].map((item) => (
-              <SuiteTarget key={item} id={item}>
-                <span className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]">
-                  {item}
-                </span>
-              </SuiteTarget>
+              <span
+                key={item}
+                data-accuracy-target={item}
+                className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
+              >
+                {item}
+              </span>
             ))}
           </div>
         </SuiteCase>
@@ -263,24 +291,17 @@ export default async function TestSuitePage() {
           targets={thirdPartyIconTargets}
         >
           <div className="flex items-center justify-center gap-4">
-            <SuiteTarget id="sparkles">
-              <SparklesIcon className="size-5" />
-            </SuiteTarget>
-            <SuiteTarget id="circle">
-              <CircleIcon className="size-5" />
-            </SuiteTarget>
-            <SuiteTarget id="arrow">
-              <ArrowRightIcon className="size-5" />
-            </SuiteTarget>
-            <SuiteTarget id="docs">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 font-inter text-[14px] underline underline-offset-4"
-              >
-                Docs
-                <ArrowRightIcon className="size-4" />
-              </Link>
-            </SuiteTarget>
+            <SparklesIcon data-accuracy-target="sparkles" className="size-5" />
+            <CircleIcon data-accuracy-target="circle" className="size-5" />
+            <ArrowRightIcon data-accuracy-target="arrow" className="size-5" />
+            <Link
+              data-accuracy-target="docs"
+              href="/"
+              className="inline-flex items-center gap-2 font-inter text-[14px] underline underline-offset-4"
+            >
+              Docs
+              <ArrowRightIcon className="size-4" />
+            </Link>
           </div>
         </SuiteCase>
       </SuiteGroup>
@@ -309,12 +330,8 @@ export default async function TestSuitePage() {
             }
           >
             <div className="flex flex-col gap-3">
-              <SuiteTarget id="first">
-                <ServerCard title="First" />
-              </SuiteTarget>
-              <SuiteTarget id="second">
-                <ServerCard title="Second" />
-              </SuiteTarget>
+              <ServerCard data-accuracy-target="first" title="First" />
+              <ServerCard data-accuracy-target="second" title="Second" />
             </div>
           </Suspense>
         </SuiteCase>

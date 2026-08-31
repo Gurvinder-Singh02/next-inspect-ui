@@ -7,8 +7,14 @@
  * element's own line.
  */
 
-export const ServerCard = ({ title }: { title: string }) => (
-  <div className="rounded-lg border border-border p-4">
+export const ServerCard = ({
+  title,
+  ...props
+}: {
+  title: string
+  "data-accuracy-target"?: string
+}) => (
+  <div className="rounded-lg border border-border p-4" {...props}>
     <h3 className="font-inter text-[15px] font-medium">{title}</h3>
     <p className="mt-1 font-inter text-[14px] text-muted-foreground">
       Rendered on the server. Every element here should resolve into this file.

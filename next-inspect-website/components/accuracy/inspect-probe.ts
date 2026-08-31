@@ -51,14 +51,13 @@ export const inspectWithProbe = async (target: Element | string) => {
 export const listCaseTestTargets = (
   caseRoot: HTMLElement
 ): Array<{ id: string; element: Element }> => {
-  const wraps = caseRoot.querySelectorAll("[data-accuracy-target]")
+  const marked = caseRoot.querySelectorAll("[data-accuracy-target]")
   const listed: Array<{ id: string; element: Element }> = []
 
-  for (const wrap of wraps) {
-    if (!(wrap instanceof HTMLElement)) continue
-    const id = wrap.getAttribute("data-accuracy-target")
-    const element = wrap.firstElementChild
-    if (!id || !element) continue
+  for (const element of marked) {
+    if (!(element instanceof HTMLElement)) continue
+    const id = element.getAttribute("data-accuracy-target")
+    if (!id) continue
     listed.push({ id, element })
   }
 
@@ -85,11 +84,10 @@ export const pickCaseTestTarget = (
   }
 
   if (preferredTargetId) {
-    const wrap = caseRoot.querySelector(
+    const marked = caseRoot.querySelector(
       `[data-accuracy-target="${preferredTargetId}"]`
     )
-    const child = wrap?.firstElementChild
-    if (child) return child
+    if (marked) return marked
   }
 
   const listed = listCaseTestTargets(caseRoot)

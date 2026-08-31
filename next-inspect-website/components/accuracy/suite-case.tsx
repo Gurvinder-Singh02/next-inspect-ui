@@ -518,22 +518,6 @@ export const SuiteCase = ({
     </section>
   )
 }
-
-/** Wrap a fixture so multi-target scoring can tell which one is hovered. */
-export const SuiteTarget = ({
-  id,
-  children,
-  className,
-}: {
-  id: string
-  children: React.ReactNode
-  className?: string
-}) => (
-  <span data-accuracy-target={id} className={cn("inline-flex", className)}>
-    {children}
-  </span>
-)
-
 const StatusPill = ({
   tone,
   children,

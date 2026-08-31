@@ -2,7 +2,7 @@
 name: pin-accuracy-goldens
 description: >-
   Pin /test accuracy goldens in cases.ts to stamp ground truth. Use when
-  re-pinning expected NODE TREE lines, editing SuiteCase / SuiteTarget fixtures
+  re-pinning expected NODE TREE lines, editing SuiteCase fixtures
   on app/(dev)/test/page.tsx, syncing TEST_CASE_META or case-source-examples,
   or when a suite case fails on line mismatch.
 ---
@@ -28,6 +28,9 @@ Manual goldens for `/test`. There is no Snapshot button — **pin** by hand from
 Open `page.tsx` (and any fixture file the case imports). Note every usage site
 and every host site the golden should name.
 
+Mark multi-target hosts with `data-accuracy-target={id}` on the element itself
+(the button, svg, span, …), not a wrapper.
+
 Done when every target’s JSX site is identified by file + line.
 
 ### 2. Pin from stamps
@@ -42,10 +45,6 @@ Exact line match — no tolerance.
 3. Host / DOM node (`button`, `span`, `div`, `h1`, …) → **pin** to
    `data-inspect-host`, else the host JSX line in the defining file
    (e.g. `components/ui/button.tsx` return).
-
-**SuiteTarget trap.** Wrapping a fixture in `<SuiteTarget>` often makes the
-owner stamp land on the `SuiteTarget` line, not the inner `<Button>` line.
-Pin the stamp line, not the inner JSX line you wish were stamped.
 
 Done when every `AccuracyNode.line` in `cases.ts` equals the stamp/inspect
 line for that node.
@@ -67,7 +66,7 @@ Re-pin **every** `file: TEST_PAGE` line that moved — not only the case you
 touched.
 
 Done when a full read of `page.tsx` usage sites matches all `TEST_PAGE`
-goldens (and stamps, for SuiteTarget-wrapped targets).
+goldens.
 
 ### 5. Verify failures
 
