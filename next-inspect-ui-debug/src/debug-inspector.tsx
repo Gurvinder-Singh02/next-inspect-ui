@@ -656,7 +656,9 @@ export const InspectUI = ({
       let parent: ReactFiber | null = null
 
       if (isHostHover) {
-        // HTML host → one climb step only: the component that rendered it.
+        // HTML host → climb one step only when this host is the component
+        // return root (`return (`). Nested HTML under another host does not
+        // climb — getDirectClimbOwner returns null for those.
         const owner = getDirectClimbOwner(fiber)
         if (!owner) return []
 

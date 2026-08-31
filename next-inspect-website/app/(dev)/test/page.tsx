@@ -60,9 +60,7 @@ export default async function TestSuitePage() {
           description="Native HTML authored on this page. Hover the heading → this file. NODE TREE is one node: h1."
           nodes={basicHtmlHeadingNodes}
         >
-          <div>
-            <h1 className="text-xl font-medium tracking-tight">title</h1>
-          </div>
+          <h1 className="text-xl font-medium tracking-tight">title</h1>
         </SuiteCase>
       </SuiteGroup>
 
@@ -71,7 +69,7 @@ export default async function TestSuitePage() {
           id="shadcn-plain"
           title="plain button"
           group="shadcn"
-          description='Hover the button → components/ui/button.tsx. ⌥ climb → this page. NODE TREE stops at <Button/> (2 nodes).'
+          description="Hover the button → components/ui/button.tsx. ⌥ climb → this page. NODE TREE stops at <Button/> (2 nodes)."
           nodes={shadcnPlainNodes}
         >
           <Button>Send code</Button>

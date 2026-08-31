@@ -209,6 +209,28 @@ export const getOwningCompositeFiber = (hostFiber: ReactFiber): ReactFiber | nul
   return null
 }
 
+/**
+ * Nested HTML under another host (`<div><p/></div>`) in a client fiber tree
+ * — another host sits between this host and the nearest composite.
+ */
+export const isHostNestedUnderHost = (hostFiber: ReactFiber): boolean => {
+  let current = hostFiber.return ?? null
+
+  while (current) {
+    if (isWrapperFiber(current)) {
+      current = current.return ?? null
+      continue
+    }
+
+    if (isHostComponentFiber(current)) return true
+    if (isCompositeComponentFiber(current)) return false
+
+    current = current.return ?? null
+  }
+
+  return false
+}
+
 export type ClimbOwner = {
   name: string
   fiber: ReactFiber
@@ -233,10 +255,46 @@ export const readDebugInfoOwner = (fiber: ReactFiber): ClimbOwner | null => {
   return null
 }
 
-export const getLabelOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
+/**
+ * RSC stamps `_debugInfo` on every host in a component's return. A host is
+ * nested (should not climb) when an ancestor host shares the same debug
+ * component name — e.g. `<p>` under ServerCard's root `<div>`. A return-root
+ * host whose parent host belongs to a *different* component (SuiteCase stage
+ * wrapping `<ServerCard/>`) still climbs.
+ */
+export const isNestedDebugInfoHost = (hostFiber: ReactFiber): boolean => {
+  const self = readDebugInfoOwner(hostFiber)
+  if (!self) return false
 
+  let current = hostFiber.return ?? null
+  while (current) {
+    if (isWrapperFiber(current)) {
+      current = current.return ?? null
+      continue
+    }
+
+    if (isHostComponentFiber(current)) {
+      const parentOwner = readDebugInfoOwner(current)
+      return parentOwner?.name === self.name
+    }
+
+    if (isCompositeComponentFiber(current)) return false
+
+    current = current.return ?? null
+  }
+
+  return false
+}
+
+export const getLabelOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
   const fromDebug = readDebugInfoOwner(hostFiber)
-  if (fromDebug) return fromDebug
+  if (fromDebug) {
+    // Same-component nested HTML (`return (<div><p/></div>)`) must not climb.
+    // Return-root hosts still do — including RSC roots placed under a parent
+    // host from a different component.
+    if (isNestedDebugInfoHost(hostFiber)) return null
+    return fromDebug
+  }
 
   const composite = getOwningCompositeFiber(hostFiber)
   if (!composite) return null
@@ -248,6 +306,10 @@ export const getLabelOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
 export const getDirectClimbOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
   const strict = getLabelOwner(hostFiber)
   if (strict) return strict
+
+  // `_debugOwner` points at the creating component even for nested HTML —
+  // only allow that fallback for return-root hosts.
+  if (isHostNestedUnderHost(hostFiber)) return null
 
   let owner: ReactFiber | null = hostFiber._debugOwner ?? null
   let hops = 0
