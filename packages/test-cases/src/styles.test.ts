@@ -45,6 +45,30 @@ test("used icon is a real svg node, not innerHTML", () => {
   assert.equal(icon.outerHTML.includes("innerHTML"), false)
 })
 
+test("builds a tooltip with a text-only under chip", async () => {
+  const { createInspectTooltip, underStackTransform } = await import(
+    "../../next-inspect-ui/src/tooltip.ts"
+  )
+  const tooltip = createInspectTooltip()
+  tooltip.setLabel("<Button/>")
+  tooltip.pushUnder("<Card/>")
+  tooltip.showUsedIcon(true)
+  const under = tooltip.root.querySelector("[data-dev-inspector-tooltip-under]")
+  assert.equal(tooltip.label, "<Button/>")
+  assert.equal(under?.textContent, "<Card/>")
+  assert.equal(under?.querySelector("svg"), null)
+  assert.equal(
+    (under as HTMLElement | null)?.style.transform,
+    underStackTransform(1)
+  )
+  assert.equal(
+    tooltip.root
+      .querySelector("[data-dev-inspector-tooltip-icon]")
+      ?.hasAttribute("data-open"),
+    true
+  )
+})
+
 test("under chips stay text-only so the used icon never stacks twice", () => {
   const under = document.createElement("div")
   under.setAttribute("data-dev-inspector-tooltip-under", "")

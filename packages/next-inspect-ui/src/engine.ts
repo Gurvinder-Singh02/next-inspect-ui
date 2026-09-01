@@ -240,9 +240,6 @@ const pickDefinedSource = ({
 }: { host: SourceLocation | null | undefined; componentDefinition: SourceLocation | null | undefined; labelIsComponent: boolean }) =>
   labelIsComponent ? (componentDefinition ?? host ?? null) : (host ?? componentDefinition ?? null)
 
-export const underStackTransform = (depth: number) =>
-  `translate(${29 * depth}px, calc(100% * ${depth} + ${5 * depth}px))`
-
 export type ServerDebugInfo = {
   name?: string; env?: string; key?: string; stack?: unknown; debugStack?: unknown
   debugLocation?: unknown; owner?: ServerDebugInfo | null

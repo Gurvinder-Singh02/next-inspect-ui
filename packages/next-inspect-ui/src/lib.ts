@@ -331,203 +331,21 @@ const normalizeSettings = (
   devSpotlightProps: normalizeDevSpotlightProps(raw.devSpotlightProps),
 })
 
-export const toRgbChannels = (hex: string) => {
-  const value = hex.replace("#", "")
-  if (value.length < 6) return null
-  const r = Number.parseInt(value.slice(0, 2), 16)
-  const g = Number.parseInt(value.slice(2, 4), 16)
-  const b = Number.parseInt(value.slice(4, 6), 16)
-  if ([r, g, b].some((channel) => Number.isNaN(channel))) return null
-  return `${r} ${g} ${b}`
-}
+export {
+  toRgbChannels,
+  toRgba,
+  getOverlayPaint,
+} from "./styles.ts"
 
-export const toRgba = (hex: string, alpha: number) => {
-  const channels = toRgbChannels(hex)
-  if (!channels) return hex
-  return `rgba(${channels} / ${alpha})`
-}
-
-const OVERLAY_HOVER_TRANSITION =
-  "left 75ms ease, top 75ms ease, width 75ms ease, height 75ms ease, background-color 75ms ease, border-color 75ms ease"
-
-const TOOLTIP_HOVER_TRANSITION =
-  "left 75ms ease, top 75ms ease, opacity 75ms ease"
-
-export const getOverlayPaint = (settings: InspectorSettings) => {
-  const spotlight = settings.devSpotlightProps
-  const tooltip = settings.tooltipProps
-  const channels =
-    toRgbChannels(spotlight.background) ?? INSPECTOR_COLORS.orange.fill
-  const stroke = toRgba(spotlight.border, spotlight.strokeOpacity)
-  const fill = `rgb(${channels} / ${spotlight.bgOpacity})`
-
-  return {
-    stroke,
-    fill,
-    border:
-      spotlight.strokeWidth <= 0
-        ? "0px none transparent"
-        : `${spotlight.strokeWidth}px ${spotlight.strokeStyle} ${stroke}`,
-    borderRadius: `${spotlight.borderRadius}px`,
-    paddingX: spotlight.paddingX,
-    paddingY: spotlight.paddingY,
-    transition: spotlight.animated ? OVERLAY_HOVER_TRANSITION : "none",
-    tooltipTransition: spotlight.animated ? TOOLTIP_HOVER_TRANSITION : "none",
-    tooltipBackground: tooltip.background,
-    tooltipBorder: tooltip.border,
-    tooltipText: tooltip.text,
-    tooltipPadding: `${tooltip.paddingY}px ${tooltip.paddingX}px`,
-    tooltipBorderRadius: `${tooltip.borderRadius}px`,
-  }
-}
-
-const alignAlongAxis = (
-  start: number,
-  size: number,
-  tooltipSize: number,
-  align: TooltipAlign,
-  alignOffset: number
-) => {
-  if (align === "start") return start + alignOffset
-  if (align === "end") return start + size - tooltipSize + alignOffset
-  return start + (size - tooltipSize) / 2 + alignOffset
-}
-
-export const getTooltipPosition = ({
-  target,
-  tooltipWidth,
-  tooltipHeight,
-  side,
-  align,
-  sideOffset,
-  alignOffset,
-  viewport,
-}: {
-  target: { left: number; top: number; width: number; height: number }
-  tooltipWidth: number
-  tooltipHeight: number
-  side: TooltipSide
-  align: TooltipAlign
-  sideOffset: number
-  alignOffset: number
-  /** When set, if the outside placement would clip the viewport, flip inside the spotlight. */
-  viewport?: { width: number; height: number }
-}) => {
-  const INSIDE_SIDE_EXTRA = 10
-  const INSIDE_ALIGN_EXTRA = 15
-
-  const alongX = (offset: number) =>
-    alignAlongAxis(target.left, target.width, tooltipWidth, align, offset)
-  const alongY = (offset: number) =>
-    alignAlongAxis(target.top, target.height, tooltipHeight, align, offset)
-
-  let left = alongX(alignOffset)
-  let top = alongY(alignOffset)
-  let inside = false
-
-  if (side === "top") {
-    top = target.top - tooltipHeight - sideOffset
-    if (viewport && top < 0) {
-      inside = true
-      top = target.top + sideOffset + INSIDE_SIDE_EXTRA
-    }
-  } else if (side === "bottom") {
-    top = target.top + target.height + sideOffset
-    if (viewport && top + tooltipHeight > viewport.height) {
-      inside = true
-      top =
-        target.top +
-        target.height -
-        tooltipHeight -
-        sideOffset -
-        INSIDE_SIDE_EXTRA
-    }
-  } else if (side === "left") {
-    left = target.left - tooltipWidth - sideOffset
-    if (viewport && left < 0) {
-      inside = true
-      left = target.left + sideOffset + INSIDE_SIDE_EXTRA
-    }
-  } else {
-    left = target.left + target.width + sideOffset
-    if (viewport && left + tooltipWidth > viewport.width) {
-      inside = true
-      left =
-        target.left +
-        target.width -
-        tooltipWidth -
-        sideOffset -
-        INSIDE_SIDE_EXTRA
-    }
-  }
-
-  if (inside) {
-    const innerAlign = alignOffset + INSIDE_ALIGN_EXTRA
-    if (side === "top" || side === "bottom") {
-      left = alongX(innerAlign)
-    } else {
-      top = alongY(innerAlign)
-    }
-  }
-
-  if (viewport) {
-    left = Math.max(
-      0,
-      Math.min(left, Math.max(0, viewport.width - tooltipWidth))
-    )
-    top = Math.max(
-      0,
-      Math.min(top, Math.max(0, viewport.height - tooltipHeight))
-    )
-  }
-
-  return { left, top }
-}
-
-export const expandRectWithPadding = (
-  rect: { left: number; top: number; width: number; height: number },
-  padding:
-    { left?: number; right?: number; top?: number; bottom?: number } | number
-) => {
-  const left = typeof padding === "number" ? padding : (padding.left ?? 0)
-  const right = typeof padding === "number" ? padding : (padding.right ?? 0)
-  const top = typeof padding === "number" ? padding : (padding.top ?? 0)
-  const bottom = typeof padding === "number" ? padding : (padding.bottom ?? 0)
-
-  return {
-    left: rect.left - left,
-    top: rect.top - top,
-    width: rect.width + left + right,
-    height: rect.height + top + bottom,
-  }
-}
-
-export const formatComponentTag = (name: string) => `<${name}/>`
-
-/** Host / DOM tag — no self-close (`<button>`). */
-export const formatDomTag = (name: string) => `<${name}>`
-
-export const formatTooltipLabel = ({
-  title,
-  pageName,
-  tooltipProps,
-  tagStyle = "component",
-}: {
-  title?: string | null
-  pageName?: string | null
-  tooltipProps: TooltipProps
-  /** `dom` → `<button>` · `component` → `<Button/>` */
-  tagStyle?: "dom" | "component"
-}) => {
-  const parts: string[] = []
-  if (tooltipProps.showTitle && title) {
-    parts.push(
-      tagStyle === "dom" ? formatDomTag(title) : formatComponentTag(title)
-    )
-  }
-  if (tooltipProps.showPageName && pageName) parts.push(pageName)
-  return parts.join(" · ")
-}
+export {
+  expandRectWithPadding,
+  formatComponentTag,
+  formatDomTag,
+  formatTooltipLabel,
+  getInfoPanelPosition,
+  getTooltipPosition,
+  underStackTransform,
+} from "./tooltip.ts"
 
 export const matchesInspectorShortcut = (
   event: KeyboardEvent,
