@@ -1,4 +1,4 @@
-import { HOST_STAMP_ATTR, OWNER_STAMP_ATTR } from "next-inspect-ui/lib"
+import { HOST_STAMP_ATTR, OWNER_STAMP_ATTR } from "next-inspect-ui-deprecated/lib"
 
 /**
  * Build-time JSX stamping — the ground truth the inspector reads on hover.
