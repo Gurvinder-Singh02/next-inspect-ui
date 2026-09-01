@@ -2,7 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { CuelumeBind } from "@/components/cuelume-bind"
-import { inspectUIProjectRoot } from "next-inspect-ui-debug"
 import { InspectUI } from "next-inspect-ui"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
@@ -41,7 +40,7 @@ export default function RootLayout({
             {children}
             <Toaster />
             {process.env.NODE_ENV === "development" && (
-              <InspectUI projectRoot={inspectUIProjectRoot()} />
+              <InspectUI projectRoot={process.cwd()} />
             )}
           </TooltipProvider>
         </ThemeProvider>

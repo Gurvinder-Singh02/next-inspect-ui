@@ -1,10 +1,25 @@
-/**
- * Main entry — exactly one component.
- *
- * Everything else (settings, stamp parsing, source resolution, DOM
- * navigation helpers) lives at `next-inspect-ui/lib`. Bundlers retain every
- * export of a `"use client"` entry in the client bundle, so anything
- * exported from here is a per-page production cost for every consumer.
- */
+"use client"
 
-export { InspectUI, type InspectUIProps } from "./inspect-ui"
+import { Suspense, createElement, lazy, type ComponentType } from "react"
+
+export type InspectUIProps = {
+  projectRoot: string
+}
+
+const LazyDevInspector =
+  process.env.NODE_ENV === "development"
+    ? lazy(() =>
+        import("./inspector.tsx").then((module) => ({
+          default: module.InspectUI as ComponentType<InspectUIProps>,
+        }))
+      )
+    : null
+
+export const InspectUI = (props: InspectUIProps) => {
+  if (!LazyDevInspector) return null
+  return createElement(
+    Suspense,
+    { fallback: null },
+    createElement(LazyDevInspector, props)
+  )
+}

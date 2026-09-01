@@ -53,7 +53,7 @@
   "dependencies": {
     "@babel/core": "^7.29.7",
     "babel-loader": "^10.1.1",
-    "next-inspect-ui": "workspace:^0.3.0"
+    "next-inspect-ui-deprecated": "workspace:*"
   },
   "peerDependencies": {
     "next": ">=16",

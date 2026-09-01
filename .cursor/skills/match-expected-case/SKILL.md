@@ -1,16 +1,15 @@
 ---
-name: pin-accuracy-goldens
+name: match-expected-case
 description: >-
-  Pin /test accuracy goldens in cases.ts to stamp ground truth. Use when
-  re-pinning expected NODE TREE lines, editing SuiteCase fixtures
-  on app/(dev)/test/page.tsx, syncing TEST_CASE_META or case-source-examples,
-  or when a suite case fails on line mismatch.
+  Match /test SuiteCase expected NODE TREE lines in cases.ts to live inspect.
+  Use when editing fixtures on app/(dev)/test/page.tsx, a case fails on line
+  mismatch, or syncing TEST_CASE_META / case-source-examples.
 ---
 
-# Pin accuracy goldens
+# Match expected case
 
-Manual goldens for `/test`. There is no Snapshot button — **pin** by hand from
-**stamp** ground truth, then keep meta/source in lockstep.
+Hand-edit goldens for `/test`. No capture script. Open the case, inspect the
+fixture, pin `cases.ts` to the RESULT `file:line`.
 
 ## Files
 
@@ -33,21 +32,20 @@ Mark multi-target hosts with `data-accuracy-target={id}` on the element itself
 
 Done when every target’s JSX site is identified by file + line.
 
-### 2. Pin from stamps
+### 2. Pin from inspect
 
-Stamps are build-time ground truth (`data-inspect-owner` / `data-inspect-host`).
-Exact line match — no tolerance.
+Exact line match. No tolerance.
 
-1. Prefer the live stamp on the probed host (DevTools attribute, or
-   `window.__inspectUI.inspect(el)` → `nodes[].source`).
-2. Climb / composite node (`Button`, `Badge`, `ServerCard`, …) → **pin** to the
-   `data-inspect-owner` line (file:line before the column).
-3. Host / DOM node (`button`, `span`, `div`, `h1`, …) → **pin** to
-   `data-inspect-host`, else the host JSX line in the defining file
+1. Probe the host (`window.__inspectUI.inspect(el)` → `nodes[].source`, or the
+   case Test RESULT lines).
+2. Climb / composite node (`Button`, `Badge`, `ServerCard`, …) → **pin** to that
+   node’s inspect `file:line`.
+3. Host / DOM node (`button`, `span`, `div`, `h1`, …) → **pin** to the host
+   inspect line, else the host JSX line in the defining file
    (e.g. `components/ui/button.tsx` return).
 
-Done when every `AccuracyNode.line` in `cases.ts` equals the stamp/inspect
-line for that node.
+Done when every `AccuracyNode.line` in `cases.ts` equals the inspect line for
+that node.
 
 ### 3. Sync companions
 
@@ -81,5 +79,5 @@ re-pin, re-run the case Test (or suite). Stop when the case shows **PASS**.
 - Nested HTML under another host does not climb; return-root hosts do.
   `motion.*` is treated as the host it produces (`<div><motion.div/></div>`
   does not climb; `const Box = () => <motion.div/>` climbs to `Box`).
-- Rebuild `next-inspect-ui` / `next-inspect-ui-debug` only when stamp or climb
-  behavior itself changed — golden **pin** edits do not require a package build.
+- Rebuild `next-inspect-ui` only when climb behavior itself changed. Matching
+  expected lines does not need a package build.
