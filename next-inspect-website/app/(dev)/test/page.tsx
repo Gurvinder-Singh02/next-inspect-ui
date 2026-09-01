@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import Link from "next/link"
-import { SparklesIcon, CircleIcon, ArrowRightIcon } from "lucide-react"
+import { SparklesIcon, CircleIcon, ArrowRightIcon, TrendingUpIcon } from "lucide-react"
 import { inspectUIProjectRoot } from "next-inspect-ui-debug"
 
 import { SuiteCase } from "@/components/accuracy/suite-case"
@@ -23,7 +23,7 @@ import { SlotFixtures } from "@/components/algo-test/radix-fixture"
 import { ServerCard } from "@/components/algo-test/server-fixture"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 import {
   TEST_CASE_META,
@@ -44,7 +44,7 @@ import {
   svgPlainNodes,
   shadcnPlainNodes,
   shadcnVariantTargets,
-  thirdPartyIconTargets,
+  thirdPartyIconTargets, parentInspectableCardTargets,
 } from "./cases"
 import { loadCaseSources } from "./load-case-sources"
 
@@ -334,6 +334,50 @@ export default async function TestSuitePage() {
               <ServerCard data-accuracy-target="second" title="Second" />
             </div>
           </Suspense>
+        </SuiteCase>
+      </SuiteGroup>
+
+      <SuiteGroup title="parent inspectable">
+        <SuiteCase
+          id="parent-inspectable-card"
+          title="card parent / child"
+          group="parent inspectable"
+          description="Full Card. Hover the badge, then press [ to walk parent inspectables: Badge → CardAction → CardHeader → Card. ] walks back down."
+          targets={parentInspectableCardTargets}
+        >
+          <Card className="w-full max-w-sm" data-accuracy-target="card">
+            <CardHeader data-accuracy-target="header">
+              <CardDescription data-accuracy-target="description">
+                Total Revenue
+              </CardDescription>
+              <CardTitle
+                data-accuracy-target="title"
+                className="text-2xl font-semibold tabular-nums"
+              >
+                $1,250.00
+              </CardTitle>
+              <CardAction data-accuracy-target="action">
+                <Badge data-accuracy-target="badge" variant="outline">
+                  <TrendingUpIcon />
+                  +12.5%
+                </Badge>
+              </CardAction>
+            </CardHeader>
+            <CardContent data-accuracy-target="content">
+              <Button data-accuracy-target="button" variant="outline">
+                View
+              </Button>
+            </CardContent>
+            <CardFooter
+              data-accuracy-target="footer"
+              className="flex-col items-start gap-1.5 text-sm"
+            >
+              <div className="flex gap-2 font-medium">
+                Trending up this month
+                <TrendingUpIcon className="size-4" />
+              </div>
+            </CardFooter>
+          </Card>
         </SuiteCase>
       </SuiteGroup>
     </TestSuiteShell>

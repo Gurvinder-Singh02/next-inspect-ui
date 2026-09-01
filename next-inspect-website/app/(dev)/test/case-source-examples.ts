@@ -6,6 +6,7 @@
 const TEST_PAGE = "app/(dev)/test/page.tsx"
 const BUTTON = "components/ui/button.tsx"
 const BADGE = "components/ui/badge.tsx"
+const CARD = "components/ui/card.tsx"
 const MOTION = "components/algo-test/motion-fixture.tsx"
 const LIBRARY = "components/algo-test/library-rendered-fixture.tsx"
 const RADIX = "components/algo-test/radix-fixture.tsx"
@@ -412,6 +413,37 @@ export const CompoundDemo = () => (
   <ServerCard title="First" />
   <ServerCard title="Second" />
 </>`,
+    },
+  ],
+
+  "parent-inspectable-card": [
+    {
+      label: "Defined in",
+      file: CARD,
+      code: `function Card({ className, ...props }) {
+  return <div data-slot="card" className={cn("flex flex-col", className)} {...props} />
+}
+
+function CardHeader({ className, ...props }) {
+  return <div data-slot="card-header" {...props} />
+}`,
+    },
+    {
+      label: "Used in",
+      file: TEST_PAGE,
+      code: `<Card>
+  <CardHeader>
+    <CardDescription>Total Revenue</CardDescription>
+    <CardTitle>$1,250.00</CardTitle>
+    <CardAction>
+      <Badge variant="outline">+12.5%</Badge>
+    </CardAction>
+  </CardHeader>
+  <CardContent>
+    <Button variant="outline">View</Button>
+  </CardContent>
+  <CardFooter>Trending up this month</CardFooter>
+</Card>`,
     },
   ],
 }
