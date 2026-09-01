@@ -1,120 +1,39 @@
 # Accuracy Test Suite
 
-A comprehensive test page at `/test` that displays various component patterns and edge cases to verify the InspectUI overlay's source resolution accuracy.
+`/test` on the **example** app (`pnpm dev:example`). Pins InspectUI source resolution. This is the product accuracy check — not hover-and-eyeball.
 
 ## Sub-features
 
-- Test suite shell with title and navigation
-- Multiple test groups (basic html, svg, shadcn, motion, server components, etc.)
-- Individual test cases with:
-  - Title and description
-  - Target component to hover/inspect
-  - Expected NODE TREE or targets metadata
-- Visual pass/fail indicators (when overlay is active and hovering)
+- Shell with **Run all**, per-case **Test**, `[data-suite-group]`
+- Groups include: basic html snippet, svg, shadcn, base-ui, motion, library, radix, kinds, composition, third-party, server, parent inspectable
+- Each case has expected NODE TREE / targets; probe is `window.__inspectUI.inspect`
+- Pass = header `N pass` / `0 fail`, cards **Pass** / 100%
 
 ## How to get to it (user POV)
 
-1. Visit `http://localhost:3000` (dev mode)
-2. Scroll to footer
-3. Click "Test →" link (only visible in development mode)
-4. Or navigate directly to `http://localhost:3000/test`
+1. `pnpm dev:example`
+2. `http://localhost:<example-port>/test` (or `/`, which 307s to `/test`)
+3. Site footer **Test →** is a dead `/test` href on the marketing origin
 
 ## Driving it with Playwright
 
 ```javascript
-const { chromium } = require('playwright');
-
-async function verifyTestSuite() {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-  
-  try {
-    console.log('Navigating to test suite...');
-    await page.goto('http://localhost:3000/test');
-    await page.waitForLoadState('networkidle');
-    
-    // Capture entry screenshot
-    await page.screenshot({
-      path: '/tmp/verify-evidence/test-suite-loaded.png',
-      fullPage: true
-    });
-    
-    // Verify test suite shell exists
-    const hasSuiteGroups = await page.locator('[data-suite-group]').count() > 0;
-    if (!hasSuiteGroups) {
-      // Try alternative: look for known test group titles
-      const hasGroups = await page.getByText('basic html snippet').count() > 0;
-      if (!hasGroups) throw new Error('Test suite groups not found');
-    }
-    
-    // Verify known test groups exist
-    const knownGroups = [
-      'basic html snippet',
-      'svg',
-      'shadcn',
-      'motion',
-      'server'
-    ];
-    
-    for (const groupName of knownGroups) {
-      const found = await page.getByText(groupName, { exact: false }).count() > 0;
-      console.log(`Test group "${groupName}": ${found ? '✓' : '✗'}`);
-    }
-    
-    // Verify individual test cases exist
-    const knownCases = [
-      'plain heading',
-      'plain button',
-      'button variants',
-      'server component host'
-    ];
-    
-    for (const caseName of knownCases) {
-      const found = await page.getByText(caseName, { exact: false }).count() > 0;
-      console.log(`Test case "${caseName}": ${found ? '✓' : '✗'}`);
-    }
-    
-    // Scroll to capture more content
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
-    await page.screenshot({
-      path: '/tmp/verify-evidence/test-suite-mid-scroll.png',
-      fullPage: false
-    });
-    
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.screenshot({
-      path: '/tmp/verify-evidence/test-suite-bottom.png',
-      fullPage: false
-    });
-    
-    // Full page screenshot for complete evidence
-    await page.screenshot({
-      path: '/tmp/verify-evidence/test-suite-verified.png',
-      fullPage: true
-    });
-    
-    console.log('✓ Test suite page verified');
-    return true;
-    
-  } catch (error) {
-    console.error('✗ Test suite verification failed:', error);
-    await page.screenshot({
-      path: '/tmp/verify-evidence/test-suite-error.png',
-      fullPage: true
-    });
-    throw error;
-  } finally {
-    await browser.close();
-  }
-}
-
-verifyTestSuite();
+await page.goto(`${exampleUrl}/test`)
+await page.waitForLoadState("networkidle")
+await page.locator("[data-suite-group]").first().waitFor()
+await page.getByRole("button", { name: /^Run all$/ }).click()
+await page.getByRole("button", { name: "Running…" }).waitFor({ timeout: 15000 })
+await page.getByRole("button", { name: /^Run all$/ }).waitFor({ timeout: 180000 })
+const failText = await page.getByText(/\d+ fail/).first().innerText()
+if (Number(failText.replace(/\D/g, "")) !== 0) throw new Error(failText)
+await page.screenshot({ path: "/tmp/verify-evidence/test-suite-verified.png", fullPage: true })
 ```
+
+Known case titles still valid: plain heading, plain button, button variants, server component host, lucide icons.
 
 ## Gotchas
 
-- This is a dev-only route. It won't be accessible in production builds.
-- The page is very long with many test cases. Use `fullPage: true` for complete screenshots or scroll and capture sections.
-- Test cases use `data-accuracy-target` attributes for programmatic testing, but these may not be visible in the DOM without inspecting.
-- Some test cases involve server components which have SSR-specific behavior.
-- The test suite may import fixtures from other files, so build must be complete before this page works correctly.
+- Hover only highlights. Scoring is **Test** / **Run all**.
+- `(dev)` in `app/(dev)/test` is a route-group name, not a production gate. Example always redirects `/` → `/test`.
+- Site `/test` 404 is the correct site doctor result, not a missing suite.
+- Count of cases is `TEST_CASE_META` in `apps/next-js-example/test-cases/cases.ts` (19 as of this map).
