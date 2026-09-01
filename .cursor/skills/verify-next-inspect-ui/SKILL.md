@@ -5,7 +5,13 @@ description: Launch next-inspect-ui demo website, verify InspectUI overlay inter
 
 # verify-next-inspect-ui
 
-Verification skill for the next-inspect-ui demo website. This is a Next.js site that showcases the InspectUI dev overlay — a tool that lets developers hover any element to see its source file, click to open it, and hold ⌥ to climb to the component that rendered it.
+Verification skill for next-inspect-ui surfaces. The overlay lets developers hover any element to see its source file, click to open it, and hold ⌥ to climb to the component that rendered it.
+
+Surfaces:
+
+- `pnpm dev` — `site` marketing (port 3000)
+- `pnpm dev:example` — `apps/nextjs-example` dashboard and `/components`
+- `pnpm dev:test` — `apps/next-js-test` accuracy suite at `/test`
 
 ## When to use this skill
 
@@ -33,11 +39,11 @@ cd /workspace
 pnpm run dev
 ```
 
-This runs `pnpm --filter site dev`, starting the Next.js site on port 3000.
+This runs `pnpm --filter site dev`, starting the marketing site on port 3000.
 
-**Ready signal**: Look for `✓ Ready in` followed by the local URL `http://localhost:3000`.
+Use `pnpm dev:example` for the dashboard and `pnpm dev:test` for `/test`. Assign other ports with `PORT=3001` when more than one app is running.
 
-**Ports**: Default port 3000. To run multiple instances, set `PORT=3001` etc.
+**Ready signal**: Look for `✓ Ready in` followed by the local URL.
 
 **No auth required**. No seed data needed.
 
@@ -71,21 +77,14 @@ curl -s http://localhost:3000 | grep -q "next-inspect-ui"
 
 Should contain the package name in the title or header.
 
-### 3. Components demo page accessible
+### 3. Site does not host /test or /components
 
 ```bash
-curl -I http://localhost:3000/components
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/test
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/components
 ```
 
-Expect `200 OK`.
-
-### 4. Test suite page loads (dev routes)
-
-```bash
-curl -I http://localhost:3000/test
-```
-
-Expect `200 OK` (this is a dev-only route, should work in dev mode).
+Expect `404` on the site. Those routes live on `next-js-test` and `nextjs-example`.
 
 **If any check fails**, do not proceed to Drive. Fix or report the issue.
 
