@@ -1,11 +1,11 @@
-import overlayCss from "./overlay-css.ts"
-
 import {
   INSPECTOR_COLORS,
   type InspectorSettings,
 } from "./lib.ts"
 
 const STYLE_ATTR = "data-dev-inspector-style"
+const HOOK_PREFIX = "data-dev-inspector-"
+const CLASS_PREFIX = "next-inspect-ui-"
 
 const OVERLAY_HOVER_TRANSITION =
   "left 75ms ease, top 75ms ease, width 75ms ease, height 75ms ease, background-color 75ms ease, border-color 75ms ease"
@@ -13,12 +13,49 @@ const OVERLAY_HOVER_TRANSITION =
 const TOOLTIP_HOVER_TRANSITION =
   "left 75ms ease, top 75ms ease, opacity 75ms ease"
 
-export const ensureInspectorStyles = (doc = document) => {
+export const inspectClass = (hook: string) =>
+  hook.startsWith(HOOK_PREFIX)
+    ? `${CLASS_PREFIX}${hook.slice(HOOK_PREFIX.length)}`
+    : hook
+
+export const markInspectNode = <T extends HTMLElement>(el: T, hook: string) => {
+  el.setAttribute(hook, "")
+  el.className = inspectClass(hook)
+  return el
+}
+
+export const ensureInspectorStyles = (css: string, doc = document) => {
   if (doc.querySelector(`style[${STYLE_ATTR}]`)) return
   const style = doc.createElement("style")
   style.setAttribute(STYLE_ATTR, "")
-  style.textContent = overlayCss
+  style.textContent = css
   doc.head.append(style)
+}
+
+export const paintUsedIcon = (el: HTMLElement, open: boolean) => {
+  el.style.width = open ? "12px" : "0"
+  el.style.marginRight = open ? "3px" : "0"
+}
+
+export const paintTreeRow = (el: HTMLElement, active: boolean) => {
+  el.style.background = active ? "rgb(56 189 248 / 12%)" : ""
+  el.style.color = active
+    ? "var(--inspect-fg, var(--foreground, #e4e4e7))"
+    : ""
+}
+
+export const paintTwisty = (el: HTMLElement, open: boolean) => {
+  el.style.cursor = open ? "pointer" : ""
+  el.style.opacity = open ? "0.65" : ""
+}
+
+export const paintTreePath = (el: HTMLElement, state: "open" | "empty") => {
+  el.style.cursor = state === "open" ? "pointer" : ""
+  el.style.opacity = state === "empty" ? "0.4" : ""
+}
+
+export const paintStyleTab = (el: HTMLElement, active: boolean) => {
+  el.style.opacity = active ? "1" : ""
 }
 
 export const toRgbChannels = (hex: string) => {

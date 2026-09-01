@@ -5,7 +5,14 @@ import { useEffect } from "react"
 import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, subscribeInspectorSettings } from "./lib.ts"
 import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./engine.ts"
 import { createOpenSourceIcon } from "./icons.ts"
-import { ensureInspectorStyles } from "./styles.ts"
+import overlayCss from "./overlay.css"
+import {
+  ensureInspectorStyles,
+  markInspectNode,
+  paintTreePath,
+  paintTreeRow,
+  paintTwisty,
+} from "./styles.ts"
 import { createInspectTooltip, expandRectWithPadding, getInfoPanelPosition } from "./tooltip.ts"
 
 type OpenKind = "used" | "defined"
@@ -21,7 +28,7 @@ type OwnerChainStep = {
 export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
   useEffect(() => {
     initInspectorSettings()
-    ensureInspectorStyles()
+    ensureInspectorStyles(overlayCss)
 
     const sourceMapCache = new Map<string, Promise<SourceMap>>()
     const sourceCache = new WeakMap<ReactFiber, Promise<SourceLocation | null>>()
@@ -78,7 +85,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       text?: string
     ) => {
       const n = document.createElement(tag) as T
-      if (name) n.setAttribute(name, "")
+      if (name) markInspectNode(n, name)
       if (text != null) n.textContent = text
       return n
     }
@@ -108,7 +115,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     }
 
     overlay.setAttribute("aria-hidden", "true")
-    overlay.setAttribute("data-dev-inspector-overlay", "")
+    markInspectNode(overlay, "data-dev-inspector-overlay")
 
     const clearTooltipStack = () => inspectTooltip.clearStack()
     const pushTooltipUnder = (text: string) => {
@@ -377,7 +384,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     }
 
     info.setAttribute("aria-hidden", "true")
-    info.setAttribute("data-dev-inspector-info", "")
+    markInspectNode(info, "data-dev-inspector-info")
     const paintTooltipChrome = () => {
       applyOverlayStyles(overlay, tooltip, settings)
     }
@@ -494,7 +501,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
           const hasChildren = index < nodes.length - 1
           const active = node.climbIndex === selection.climbIndex
           const row = mk("div", "data-dev-inspector-tree-row")
-          row.toggleAttribute("data-active", active)
+          paintTreeRow(row, active)
           row.setAttribute("role", "treeitem")
           row.setAttribute("aria-selected", active ? "true" : "false")
           row.setAttribute("aria-level", String(index + 1))
@@ -505,7 +512,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
           const twisty = mk<HTMLButtonElement>("button", "data-dev-inspector-tree-twisty")
           twisty.type = "button"
           if (hasChildren) {
-            twisty.toggleAttribute("data-open", true)
+            paintTwisty(twisty, true)
             twisty.textContent = expanded[index] ? "▾" : "▸"
             twisty.onclick = (e) => { e.preventDefault(); e.stopPropagation(); expanded[index] = !expanded[index]; paint(); reposition() }
           }
@@ -517,11 +524,11 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
             const label = formatPageLabel(node.source, projectRoot)
             pathEl.textContent = label
             pathEl.title = label
-            pathEl.toggleAttribute("data-open", true)
+            paintTreePath(pathEl, "open")
             pathEl.onclick = (e) => { e.preventDefault(); e.stopPropagation(); openInEditor(node.source!, settings.ide) }
           } else {
             pathEl.textContent = "…"
-            pathEl.toggleAttribute("data-empty", true)
+            paintTreePath(pathEl, "empty")
           }
           row.append(gutter, nameEl, pathEl)
           row.onclick = (e) => {

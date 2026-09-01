@@ -8,20 +8,36 @@ registerDom()
 const { DEFAULT_INSPECTOR_SETTINGS } = await import(
   "../../next-inspect-ui/src/lib.ts"
 )
-const { applyOverlayPaint, ensureInspectorStyles } = await import(
-  "../../next-inspect-ui/src/styles.ts"
-)
+const {
+  applyOverlayPaint,
+  ensureInspectorStyles,
+  inspectClass,
+  markInspectNode,
+  paintUsedIcon,
+} = await import("../../next-inspect-ui/src/styles.ts")
 const { createUsedIcon } = await import("../../next-inspect-ui/src/icons.ts")
 
-test("injects overlay.css once", () => {
+test("maps inspect hooks to class names", () => {
+  assert.equal(
+    inspectClass("data-dev-inspector-overlay"),
+    "next-inspect-ui-overlay"
+  )
+  assert.equal(
+    inspectClass("data-dev-inspector-tooltip"),
+    "next-inspect-ui-tooltip"
+  )
+})
+
+test("injects the overlay sheet once", () => {
   document.head.querySelectorAll("style[data-dev-inspector-style]").forEach((node) => {
     node.remove()
   })
-  ensureInspectorStyles(document)
-  ensureInspectorStyles(document)
+  const css = ".next-inspect-ui-overlay { --inspect-fill: orange; }"
+  ensureInspectorStyles(css, document)
+  ensureInspectorStyles(css, document)
   const sheets = document.head.querySelectorAll("style[data-dev-inspector-style]")
   assert.equal(sheets.length, 1)
-  assert.match(sheets[0]?.textContent ?? "", /\[data-dev-inspector-overlay\]/)
+  assert.match(sheets[0]?.textContent ?? "", /\.next-inspect-ui-overlay/)
   assert.match(sheets[0]?.textContent ?? "", /--inspect-fill/)
 })
 
@@ -54,24 +70,39 @@ test("builds a tooltip with a text-only under chip", async () => {
   tooltip.pushUnder("<Card/>")
   tooltip.showUsedIcon(true)
   const under = tooltip.root.querySelector("[data-dev-inspector-tooltip-under]")
+  const icon = tooltip.root.querySelector(
+    "[data-dev-inspector-tooltip-icon]"
+  ) as HTMLElement | null
+  assert.equal(tooltip.root.className, "next-inspect-ui-tooltip")
   assert.equal(tooltip.label, "<Button/>")
   assert.equal(under?.textContent, "<Card/>")
+  assert.equal(under?.className, "next-inspect-ui-tooltip-under")
   assert.equal(under?.querySelector("svg"), null)
   assert.equal(
     (under as HTMLElement | null)?.style.transform,
     underStackTransform(1)
   )
-  assert.equal(
-    tooltip.root
-      .querySelector("[data-dev-inspector-tooltip-icon]")
-      ?.hasAttribute("data-open"),
-    true
+  assert.equal(icon?.style.width, "12px")
+  assert.equal(icon?.hasAttribute("data-open"), false)
+})
+
+test("opens the used icon with inline styles, not a data-open rule", () => {
+  const icon = markInspectNode(
+    document.createElement("span"),
+    "data-dev-inspector-tooltip-icon"
   )
+  paintUsedIcon(icon, true)
+  assert.equal(icon.style.width, "12px")
+  assert.equal(icon.style.marginRight, "3px")
+  paintUsedIcon(icon, false)
+  assert.equal(icon.style.width, "0")
 })
 
 test("under chips stay text-only so the used icon never stacks twice", () => {
-  const under = document.createElement("div")
-  under.setAttribute("data-dev-inspector-tooltip-under", "")
+  const under = markInspectNode(
+    document.createElement("div"),
+    "data-dev-inspector-tooltip-under"
+  )
   under.textContent = "<Button/>"
   assert.equal(under.querySelector("svg"), null)
   assert.equal(under.childElementCount, 0)
