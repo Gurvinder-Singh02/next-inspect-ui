@@ -1,24 +1,25 @@
 ---
 name: match-expected-case
 description: >-
-  Match /test SuiteCase expected NODE TREE lines in cases.ts to live inspect.
-  Use when editing fixtures on app/(dev)/test/page.tsx, a case fails on line
+  Match /test SuiteCase expected NODE TREE lines in packages/test-cases to live
+  inspect. Use when editing fixtures on apps/next-js-test, a case fails on line
   mismatch, or syncing TEST_CASE_META / case-source-examples.
 ---
 
 # Match expected case
 
-Hand-edit goldens for `/test`. No capture script. Open the case, inspect the
-fixture, pin `cases.ts` to the RESULT `file:line`.
+Hand-edit goldens for `apps/next-js-test`. No capture script. Open the case,
+inspect the fixture, pin `packages/test-cases/src/cases.ts` to the RESULT
+`file:line`.
 
 ## Files
 
 | Role | Path |
 |---|---|
-| Fixtures | `next-inspect-website/app/(dev)/test/page.tsx` |
-| Goldens | `next-inspect-website/app/(dev)/test/cases.ts` |
+| Fixtures | `apps/next-js-test/app/(dev)/test/page.tsx` |
+| Goldens | `packages/test-cases/src/cases.ts` |
 | Sticky meta | `TEST_CASE_META` in `cases.ts` |
-| Show source | `next-inspect-website/app/(dev)/test/case-source-examples.ts` |
+| Show source | `packages/test-cases/src/case-source-examples.ts` |
 
 ## Steps
 

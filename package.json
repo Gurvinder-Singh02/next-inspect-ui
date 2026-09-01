@@ -2,16 +2,15 @@
   "name": "next-inspect-ui-monorepo",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter next-inspect-website dev",
-    "dev:react-test": "pnpm --filter react-test dev",
-    "dev:next-src-test": "pnpm --filter next-src-test dev",
+    "dev": "pnpm --filter site dev",
+    "dev:example": "pnpm --filter nextjs-example dev",
+    "dev:test": "pnpm --filter next-js-test dev",
     "dev:lib": "pnpm --filter next-inspect-ui dev",
-    "dev:all": "pnpm --parallel --filter next-inspect-ui --filter next-inspect-ui-deprecated --filter next-inspect-ui-debug --filter next-inspect-website run dev",
-    "build": "pnpm --filter next-inspect-ui build && pnpm --filter next-inspect-ui-deprecated build && pnpm --filter next-inspect-ui-debug build",
-    "build:web": "pnpm --filter next-inspect-website build",
-    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter next-inspect-ui-deprecated typecheck && pnpm --filter next-inspect-ui-debug typecheck && pnpm --filter next-inspect-website typecheck",
-    "check:debug-tarball": "node scripts/check-debug-tarball.mjs",
-    "release:debug": "pnpm --filter next-inspect-ui-debug exec pnpm publish --access public"
+    "build": "pnpm --filter next-inspect-ui build",
+    "build:site": "pnpm --filter site build",
+    "build:example": "pnpm --filter nextjs-example build",
+    "build:test": "pnpm --filter next-js-test build",
+    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter site typecheck && pnpm --filter nextjs-example typecheck && pnpm --filter next-js-test typecheck"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

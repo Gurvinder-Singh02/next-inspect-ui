@@ -23,7 +23,7 @@ First ensure the npm packages are built:
 ```bash
 cd /workspace
 pnpm install
-pnpm run build  # builds next-inspect-ui and next-inspect-ui-debug packages
+pnpm run build  # builds next-inspect-ui
 ```
 
 ### Start dev server
@@ -33,7 +33,7 @@ cd /workspace
 pnpm run dev
 ```
 
-This runs `pnpm --filter next-inspect-website dev`, starting the Next.js dev server on port 3000.
+This runs `pnpm --filter site dev`, starting the Next.js site on port 3000.
 
 **Ready signal**: Look for `✓ Ready in` followed by the local URL `http://localhost:3000`.
 
