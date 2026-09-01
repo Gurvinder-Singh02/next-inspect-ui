@@ -18,15 +18,7 @@ export default defineConfig([
   },
   {
     ...shared,
-    // tsup runs this array in parallel, so a second clean would wipe index.
     entry: { lib: "src/lib.ts" },
-    clean: false,
-  },
-  {
-    ...shared,
-    // Overlay engine for the debug package. No `"use client"` banner — the
-    // barrel is functions and types.
-    entry: { overlay: "src/overlay.ts" },
     clean: false,
   },
 ])

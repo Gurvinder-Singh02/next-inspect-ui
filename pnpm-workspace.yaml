@@ -1,6 +1,7 @@
 packages:
   - test-app-01
   - next-inspect-ui-npm
+  - next-inspect-ui-npm-deprecated
   - next-inspect-ui-debug
   - next-inspect-website
   - first-priciple

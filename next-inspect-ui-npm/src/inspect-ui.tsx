@@ -9,7 +9,7 @@ export type InspectUIProps = {
 const LazyDevInspector =
   process.env.NODE_ENV === "development"
     ? lazy(() =>
-        import("./dev-inspector").then((module) => ({
+        import("./inspector").then((module) => ({
           default: module.InspectUI as ComponentType<InspectUIProps>,
         }))
       )

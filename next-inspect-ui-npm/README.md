@@ -35,8 +35,8 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 | ⌥ hold | climb to the component that rendered it |
 | ⌥ ⇧ | climb another level |
 | `[` `]` | move to the parent / child element |
-| `I` | open the info panel — used / defined, tree, CSS |
-| `↑` `↓` | while info is open, climb the Node tree; at the top, hop to the next parent that has a climb |
+| `I` | open the info panel — node tree, CSS |
+| `↑` `↓` | while info is open, climb the node tree |
 | `Esc` | exit |
 
 ## Props
@@ -52,29 +52,6 @@ Supported editors: Cursor, VS Code, VS Code Insiders, Windsurf, Zed.
 
 **Measured production cost: +0.2 KB gzipped** when gated on `NODE_ENV`. Keep
 that guard — without it, React serializes `projectRoot` into the page payload.
-
-## Debug and exact stamps
-
-The event log, `verify` scoring, and compile-time stamps live in
-[`next-inspect-ui-debug`](https://www.npmjs.com/package/next-inspect-ui-debug).
-
-```bash
-npm i -D next-inspect-ui-debug
-```
-
-`withInspectUI()` writes `data-inspect-host` attributes. This package's
-`InspectUI` does not read them. Exact hover needs the debug overlay.
-
-```tsx
-import { inspectUIProjectRoot } from "next-inspect-ui-debug"
-import { InspectUI } from "next-inspect-ui-debug/inspect"
-
-{process.env.NODE_ENV === "development" && (
-  <InspectUI projectRoot={inspectUIProjectRoot()} />
-)}
-```
-
-Keep both packages on the same minor version.
 
 ## License
 
