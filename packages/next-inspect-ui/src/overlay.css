@@ -1,3 +1,9 @@
+.next-inspect-ui-overlay,
+.next-inspect-ui-tooltip {
+  --inspect-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --inspect-follow: 160ms;
+}
+
 .next-inspect-ui-overlay {
   position: fixed;
   z-index: 2147483646;
@@ -9,7 +15,13 @@
   animation: none;
   border: var(--inspect-border);
   border-radius: var(--inspect-radius, 4px);
-  transition: var(--inspect-transition, none);
+  transition:
+    left var(--inspect-follow) var(--inspect-ease),
+    top var(--inspect-follow) var(--inspect-ease),
+    width var(--inspect-follow) var(--inspect-ease),
+    height var(--inspect-follow) var(--inspect-ease),
+    background-color 140ms ease,
+    border-color 140ms ease;
 }
 
 .next-inspect-ui-tooltip {
@@ -26,7 +38,15 @@
   box-shadow: none;
   font: 12px / 1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  transition: var(--inspect-tooltip-transition, none);
+  transition:
+    left var(--inspect-follow) var(--inspect-ease),
+    top var(--inspect-follow) var(--inspect-ease),
+    opacity 120ms ease;
+}
+
+.next-inspect-ui-overlay.next-inspect-ui-instant,
+.next-inspect-ui-tooltip.next-inspect-ui-instant {
+  transition: none;
 }
 
 .next-inspect-ui-tooltip-front,
@@ -71,6 +91,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .next-inspect-ui-overlay,
+  .next-inspect-ui-tooltip,
   .next-inspect-ui-tooltip-icon {
     transition: none;
   }

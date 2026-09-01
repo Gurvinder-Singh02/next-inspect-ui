@@ -12,6 +12,7 @@ import {
   paintTreePath,
   paintTreeRow,
   paintTwisty,
+  setInspectMotion,
 } from "./styles.ts"
 import { createInspectTooltip, expandRectWithPadding, getInfoPanelPosition } from "./tooltip.ts"
 
@@ -849,10 +850,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       })
       lastTargetRect = rect
       const wasHidden = overlay.style.display === "none"
-      if (wasHidden) {
-        overlay.style.setProperty("--inspect-transition", "none")
-        tooltip.style.setProperty("--inspect-tooltip-transition", "none")
-      }
+      if (wasHidden) setInspectMotion(overlay, tooltip, false)
       overlay.style.display = "block"
       overlay.style.left = `${rect.left}px`
       overlay.style.top = `${rect.top}px`

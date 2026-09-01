@@ -5,12 +5,13 @@ import { registerDom } from "./register-dom.ts"
 
 registerDom()
 
-const { DEFAULT_INSPECTOR_SETTINGS } = await import(
+const { DEFAULT_DEV_SPOTLIGHT_PROPS, DEFAULT_INSPECTOR_SETTINGS } = await import(
   "../../next-inspect-ui/src/lib.ts"
 )
 const {
   applyOverlayPaint,
   ensureInspectorStyles,
+  INSTANT_CLASS,
   inspectClass,
   markInspectNode,
   paintUsedIcon,
@@ -51,6 +52,19 @@ test("paints overlay and tooltip through CSS variables", () => {
     "1px dashed rgba(249 115 22 / 1)"
   )
   assert.equal(tooltip.style.getPropertyValue("--inspect-tooltip-bg"), "#FF6100")
+  assert.equal(overlay.classList.contains(INSTANT_CLASS), false)
+})
+
+test("turns motion off with a class, not a transition string", () => {
+  const overlay = document.createElement("div")
+  const tooltip = document.createElement("div")
+  applyOverlayPaint(overlay, tooltip, {
+    ...DEFAULT_INSPECTOR_SETTINGS,
+    devSpotlightProps: { ...DEFAULT_DEV_SPOTLIGHT_PROPS, animated: false },
+  })
+  assert.equal(overlay.classList.contains(INSTANT_CLASS), true)
+  assert.equal(tooltip.classList.contains(INSTANT_CLASS), true)
+  assert.equal(overlay.style.getPropertyValue("--inspect-transition"), "")
 })
 
 test("used icon is a real svg node, not innerHTML", () => {
