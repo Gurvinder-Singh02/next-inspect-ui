@@ -140,7 +140,6 @@ export const CompoundDemo = (props: { "data-accuracy-target"?: string }) => (
   </Panel>
 )
 
-/** Context — the stamper deliberately skips `*Provider`, so this checks that. */
 const ToneContext = createContext("muted")
 
 export const ToneProvider = ({ children }: { children: ReactNode }) => (
