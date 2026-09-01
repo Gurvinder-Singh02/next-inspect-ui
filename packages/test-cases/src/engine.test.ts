@@ -8,6 +8,7 @@ import {
   isClimbUsageBoundary,
   isFrameworkInspectorName,
   isPointInRect,
+  isReactServerStackFile,
   resolveSourceMapSourcePath,
   sourceFromFiberDebugSource,
 } from "../../next-inspect-ui/src/lib/engine.ts"
@@ -94,6 +95,20 @@ test("treats bundler and node_modules paths as external", () => {
   assert.equal(isBundledOrExternalPath("/app/.next/static/chunk.js"), true)
   assert.equal(isBundledOrExternalPath("webpack-internal:///src/button.tsx"), true)
   assert.equal(isBundledOrExternalPath("/app/components/button.tsx"), false)
+})
+
+test("treats turbopack RSC chunk paths as server frames", () => {
+  assert.equal(
+    isReactServerStackFile(
+      "/app/.next/dev/server/chunks/ssr/[root-of-the-server]__09lvfbo._.js"
+    ),
+    true
+  )
+  assert.equal(
+    isReactServerStackFile("about://React/Server/file:///app/.next/server/app.js"),
+    true
+  )
+  assert.equal(isReactServerStackFile("/app/components/button.tsx"), false)
 })
 
 test("drops framework frames from the inspect tree", () => {
