@@ -1,5 +1,5 @@
 /**
- * Manual expected NODE TREE goldens for apps/next-js-example.
+ * Manual expected NODE TREE cases for apps/next-js-example.
  * Edit by hand — pin from live inspect
  * (`window.__inspectUI.inspect` → `nodes[].source`;
  * `.cursor/skills/match-expected-case`).

@@ -1,6 +1,6 @@
 # next-js-example
 
-Accuracy suite for next-inspect-ui. Goldens live in `test-cases/`.
+Accuracy suite for next-inspect-ui. Expected cases live in `test-cases/`.
 
 ```bash
 pnpm --filter next-js-example dev

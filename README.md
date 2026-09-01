@@ -5,7 +5,7 @@ Dev-only overlay for Next.js. Hover any element to see its source, click to open
 ```
 packages/next-inspect-ui              published library
 packages/test-cases                   library unit tests
-apps/next-js-example                  /test suite and goldens
+apps/next-js-example                  /test suite and cases
 apps/shadcn-dashboard-001-example     dashboard with InspectUI installed
 site                                  marketing
 ```

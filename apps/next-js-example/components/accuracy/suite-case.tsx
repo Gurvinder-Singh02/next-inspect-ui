@@ -476,7 +476,7 @@ export const SuiteCase = ({
                                 : "Fail"
                               : target.nodes?.length
                                 ? "Idle"
-                                : "No golden"}
+                                : "No expected"}
                             {state?.mapMs != null
                               ? ` · ${formatMapMs(state.mapMs)}`
                               : ""}
@@ -611,7 +611,7 @@ const ExpectedList = ({ nodes }: { nodes?: AccuracyNode[] }) => {
         </ul>
       ) : (
         <p className="whitespace-nowrap text-muted-foreground/70">
-          No golden yet — add nodes in cases.ts
+          No expected tree yet. Add nodes in cases.ts
         </p>
       )}
     </ListPane>
