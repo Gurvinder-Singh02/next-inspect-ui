@@ -3,6 +3,7 @@ packages:
   - next-inspect-ui-npm
   - next-inspect-ui-debug
   - next-inspect-website
+  - first-priciple
 
 allowBuilds:
   sharp: true
