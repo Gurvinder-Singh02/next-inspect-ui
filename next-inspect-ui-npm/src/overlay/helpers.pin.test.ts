@@ -58,7 +58,7 @@ const EXPECTED = {
   getSourceMapSection: "f3e595c4fb912cc8",
   resolveServerStackFrame: "e10acc1032d8c6c6",
   resolveFiberDebugSource: "641cff17ca421275",
-  resolveStackFrame: "f1fdb3c303af5318",
+  resolveStackFrame: "3e56eb56a4dfdcb0",
   resolveHostAuthorSource: "cd3373b130a692be",
   resolveSource: "4da4d29c953323bb",
   resolveInstanceSource: "916f17352baf2d46",

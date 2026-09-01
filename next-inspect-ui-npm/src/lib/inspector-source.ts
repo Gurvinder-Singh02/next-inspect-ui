@@ -39,6 +39,88 @@ export const toAbsolutePath = (filePath: string, projectRoot: string) => {
   return `${projectRoot.replace(/\/$/, "")}/${filePath.replace(/^\.\//, "")}`;
 };
 
+/** Absolute filesystem paths (not Vite/Next URL pathnames like `/src/App.tsx`). */
+export const isFilesystemAbsolutePath = (filePath: string) => {
+  const file = filePath.replace(/\\/g, "/")
+  return (
+    file.startsWith("/Users/") ||
+    file.startsWith("/home/") ||
+    file.startsWith("/private/") ||
+    file.startsWith("/Volumes/") ||
+    /^\/[a-zA-Z]:\//.test(file) ||
+    /^[a-zA-Z]:\//.test(file)
+  )
+}
+
+/**
+ * Turn a sourcemap `sources[]` entry into a filesystem path.
+ *
+ * Vite emits basename-only sources (`App.tsx`) with the map living at
+ * `/src/App.tsx.map`. Per the source-map spec those are relative to the map
+ * URL directory — join with `projectRoot` alone would open `project/App.tsx`
+ * instead of `project/src/App.tsx`.
+ */
+export const resolveSourceMapSourcePath = ({
+  source,
+  sourceRoot,
+  sourceMapUrl,
+  projectRoot,
+}: {
+  source: string
+  sourceRoot?: string
+  sourceMapUrl: URL
+  projectRoot: string
+}) => {
+  const withRoot = sourceRoot
+    ? `${sourceRoot.replace(/\/$/, "")}/${source.replace(/^\.\//, "")}`
+    : source
+
+  if (withRoot.startsWith("file://")) {
+    return toAbsolutePath(withRoot, projectRoot)
+  }
+
+  if (
+    withRoot.startsWith(projectRoot) ||
+    isFilesystemAbsolutePath(withRoot)
+  ) {
+    return toAbsolutePath(withRoot, projectRoot)
+  }
+
+  const mapPathname = sourceMapUrl.pathname.endsWith(".map")
+    ? sourceMapUrl.pathname.slice(0, -4)
+    : sourceMapUrl.pathname
+  const mapDir = mapPathname.replace(/[^/]+$/, "") || "/"
+
+  let urlPathname: string
+  try {
+    if (withRoot.startsWith("http://") || withRoot.startsWith("https://")) {
+      urlPathname = new URL(withRoot).pathname
+    } else if (withRoot.startsWith("/")) {
+      urlPathname = withRoot
+    } else {
+      urlPathname = new URL(withRoot, `http://vite.local${mapDir}`).pathname
+    }
+  } catch {
+    return toAbsolutePath(withRoot, projectRoot)
+  }
+
+  const isHttpMap =
+    sourceMapUrl.protocol === "http:" || sourceMapUrl.protocol === "https:"
+
+  if (
+    isHttpMap &&
+    urlPathname.startsWith("/") &&
+    isLikelySourceFile(urlPathname) &&
+    !urlPathname.includes("/node_modules/") &&
+    !urlPathname.includes("/_next/") &&
+    !isFilesystemAbsolutePath(urlPathname)
+  ) {
+    return `${projectRoot.replace(/\/$/, "")}${urlPathname}`
+  }
+
+  return toAbsolutePath(urlPathname.startsWith("/") ? urlPathname : withRoot, projectRoot)
+}
+
 /**
  * The single exit point every strategy passes through.
  *
