@@ -87,10 +87,10 @@ export const InspectOverlay = () => {
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === "I") {
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && e.key.toLowerCase() === "x") {
         e.preventDefault()
+        hide()
         setActive((prev) => !prev)
-        if (!active) hide()
       }
 
       if (!active) return
