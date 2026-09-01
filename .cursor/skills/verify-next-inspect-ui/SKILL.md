@@ -1,346 +1,146 @@
 ---
 name: verify-next-inspect-ui
-description: Launch next-inspect-ui demo website, verify InspectUI overlay interactions, capture evidence, and clean up
+description: Launch next-inspect-ui demo surfaces, verify InspectUI overlay interactions, capture evidence, and clean up
 ---
 
 # verify-next-inspect-ui
 
 Verification skill for next-inspect-ui surfaces. The overlay lets developers hover any element to see its source file, click to open it, and hold ⌥ to climb to the component that rendered it.
 
-Surfaces:
+This is a **three-app** repo. Routes are **not** interchangeable on one port.
 
-- `pnpm dev` — `site` marketing (port 3000)
-- `pnpm dev:example` — `apps/next-js-example` accuracy suite at `/test`
-- `pnpm dev:dashboard` — `apps/shadcn-dashboard-001-example` dashboard and `/components`
+| Script | App | What it hosts |
+| --- | --- | --- |
+| `pnpm dev` | `site` | Marketing/docs (`/`, `/shortcuts`, `/usage`, `/source`, `/api-reference`) |
+| `pnpm dev:example` | `apps/next-js-example` | Accuracy suite (`/` redirects to `/test`) |
+| `pnpm dev:dashboard` | `apps/shadcn-dashboard-001-example` | Dashboard `/` and the component gallery `/components` |
+
+Site `/test` and `/components` **404**. Footer links on the site that point at those paths are same-origin and dead; do not treat a 404 as a failed doctor on `site`.
 
 ## When to use this skill
 
 Use when you need to:
-- Verify changes to the InspectUI overlay functionality
-- Test user-facing features like hover inspection, keyboard shortcuts, or component climbing
-- Capture proof that demo pages render correctly
-- Validate that the test suite accuracy cases work as expected
+
+- Verify InspectUI overlay toggle, hover tooltip, and Esc
+- Prove marketing/docs pages render
+- Prove the dashboard `/components` gallery renders
+- Prove `/test` Run all accuracy (the product check for source resolution)
 
 ## Launch
 
-### Build dependencies
-First ensure the npm packages are built:
+Repo root is three directories above this file (`.cursor/skills/verify-next-inspect-ui` → repo).
+
+### Build the library
 
 ```bash
-cd /workspace
+cd "$(git rev-parse --show-toplevel)"
 pnpm install
-pnpm run build  # builds next-inspect-ui
+pnpm run build
 ```
 
-### Start dev server
+### Start only the apps you will drive
+
+Default port is 3000. When more than one app is up, assign `PORT`.
+
+Leave each helper **running** (background the command). It waits on `pnpm` after printing ready so the server is not reaped when the launcher would otherwise exit.
 
 ```bash
-cd /workspace
-pnpm run dev
+# site (landing + shortcuts + overlay on docs) — APP=site PORT=3000 is the default
+bash .cursor/skills/verify-next-inspect-ui/launch-server.sh
+
+# accuracy suite
+APP=example PORT=3001 bash .cursor/skills/verify-next-inspect-ui/launch-server.sh
+
+# component gallery
+APP=dashboard PORT=3002 bash .cursor/skills/verify-next-inspect-ui/launch-server.sh
 ```
 
-This runs `pnpm --filter site dev`, starting the marketing site on port 3000.
+**Ready signal**: stdout `Server ready on http://localhost:<port>` and log line `Ready in`. Then `curl` the doctor URL.
 
-Use `pnpm dev:example` for `/test` and `pnpm dev:dashboard` for the dashboard. Assign other ports with `PORT=3001` when more than one app is running.
+**No auth**. No seed data.
 
-**Ready signal**: Look for `✓ Ready in` followed by the local URL.
-
-**No auth required**. No seed data needed.
+If Playwright complains that Chromium is missing, the environment likely set `PLAYWRIGHT_BROWSERS_PATH` to an empty cache. `unset PLAYWRIGHT_BROWSERS_PATH` (user cache) or `pnpm exec playwright install chromium`.
 
 ### Teardown
 
-Kill the process started by `pnpm run dev`. If launched via PID:
+Kill **only** PIDs this run started (PID files `/tmp/dev-server-<app>.pid`). Do not `pkill -f "next dev"` — that murders unrelated Next apps on the machine.
 
 ```bash
-kill <PID>
+APP=site PORT=3000 bash .cursor/skills/verify-next-inspect-ui/cleanup-server.sh
+APP=example PORT=3001 bash .cursor/skills/verify-next-inspect-ui/cleanup-server.sh
+APP=dashboard PORT=3002 bash .cursor/skills/verify-next-inspect-ui/cleanup-server.sh
 ```
-
-If running in a named tmux session, kill that session. Always verify the port is freed before declaring cleanup complete.
 
 ## Doctor
 
-Health check after launch, before driving any features. All checks are read-only.
+Health check after launch, before driving. All checks are read-only. Doctor the **app you are about to drive**, not “whatever is on 3000”.
 
-### 1. Server responding
+### Site (`pnpm dev`)
 
 ```bash
 curl -I http://localhost:3000
-```
-
-Expect `200 OK` or `304 Not Modified`.
-
-### 2. Home page loads
-
-```bash
 curl -s http://localhost:3000 | grep -q "next-inspect-ui"
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/shortcuts   # 200
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/test        # 404
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/components  # 404
 ```
 
-Should contain the package name in the title or header.
+Home must be **200** (not a 307 to `/test`). A 307 means you are on the example app.
 
-### 3. Site does not host /test or /components
+### Example (`pnpm dev:example`)
 
 ```bash
-curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/test
-curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/components
+curl -sI http://localhost:3001 | grep -i location   # /test
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3001/test   # 200
+curl -s http://localhost:3001/test | grep -q "Run all"
 ```
 
-Expect `404` on the site. Those routes live on `next-js-example` and `shadcn-dashboard-001-example`.
+### Dashboard (`pnpm dev:dashboard`)
 
-**If any check fails**, do not proceed to Drive. Fix or report the issue.
+```bash
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3002/components   # 200
+curl -s http://localhost:3002/components | grep -q "Inspect Components"
+```
+
+**If the check for that app fails**, do not drive it. Fix or report. A site 404 on `/components` is healthy.
 
 ## Drive
 
-Use Playwright to drive real browser interactions. Install if needed:
+Playwright from the repo root. Prefer `data-slot`, visible text, and overlay attrs below — not `data-inspect-active` (that attribute does not exist).
+
+Overlay markers (present after mount, hidden until hover while active):
+
+- `[data-dev-inspector-overlay]`
+- `[data-dev-inspector-tooltip]`
+- `[data-dev-inspector-tooltip-label]`
+
+Activation is a JS flag: `document.body.style.cursor === "crosshair"`. Overlay `display` stays `none` until hover. `window.__inspectUI` is an inspect **probe** (`inspect(el)`), not a toggle API. Toggle by dispatching Alt+X (`key: "x"`, `code: "KeyX"`, `altKey: true`) — headless `keyboard.press` is flaky.
+
+Full pass (adjust URLs to the ports you launched):
 
 ```bash
-cd /workspace
-pnpm add -D -w playwright @playwright/test
-pnpm exec playwright install chromium
+SITE_URL=http://localhost:3000 \
+EXAMPLE_URL=http://localhost:3001 \
+DASHBOARD_URL=http://localhost:3002 \
+node .cursor/skills/verify-next-inspect-ui/verify-surfaces.cjs
 ```
 
-### Driving conventions
+Landing-only:
 
-- **Selectors**: Prefer `data-testid`, ARIA roles/labels, or visible text. Avoid brittle CSS selectors.
-- **Wait for navigation**: Use `page.waitForLoadState('networkidle')` or specific element visibility.
-- **Screenshots**: Capture before/after states for evidence.
-- **Console logs**: Listen to `page.on('console')` to catch errors.
-
-### Example: Navigate to components demo
-
-```javascript
-const { chromium } = require('playwright');
-
-(async () => {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-  
-  await page.goto('http://localhost:3000/components');
-  await page.waitForLoadState('networkidle');
-  
-  // Take screenshot as proof
-  await page.screenshot({ path: '/tmp/verify-evidence/components-loaded.png', fullPage: true });
-  
-  await browser.close();
-})();
-```
-
-### Example: Verify InspectUI overlay toggles
-
-The InspectUI overlay is toggled with `⌥ + X`. In Playwright, simulate this:
-
-```javascript
-await page.keyboard.down('Alt');
-await page.keyboard.press('KeyX');
-await page.keyboard.up('Alt');
-
-// Wait for overlay to appear (check for specific class or element)
-await page.waitForSelector('[data-inspect-active="true"]', { timeout: 3000 });
-```
-
-**Note**: Keyboard shortcuts can be finicky in headless browsers. If the overlay doesn't toggle, consider using browser context with `--headed` mode or programmatically triggering the overlay state if there's a JS hook.
-
-### Example: Hover and inspect an element
-
-```javascript
-// Assuming overlay is active
-const button = page.locator('button', { hasText: 'Send code' }).first();
-await button.hover();
-
-// The InspectUI tooltip should appear showing source file info
-// Capture screenshot
-await page.screenshot({ path: '/tmp/verify-evidence/hover-inspect.png' });
+```bash
+SITE_URL=http://localhost:3000 node .cursor/skills/verify-next-inspect-ui/verify-landing-page.js
 ```
 
 ## Evidence
 
-All evidence must survive cleanup. Store artifacts in:
+Store artifacts in `/tmp/verify-evidence/` (survives cleanup). Do not delete that directory.
 
-```
-/tmp/verify-evidence/
-```
-
-Or under the skill directory:
-
-```
-/workspace/.cursor/skills/verify-next-inspect-ui/artifacts/
-```
-
-### What to capture
-
-1. **Screenshots**: Before/after states for UI changes. Use descriptive names like `components-page-loaded.png`, `overlay-activated.png`.
-2. **Console logs**: Save to `.log` files if errors or warnings occur.
-3. **Network captures**: If testing API routes or data fetching, save HAR files or response bodies.
-4. **DOM snapshots**: For complex interactions, save HTML snapshots with `page.content()`.
-
-### Proof standards
-
-- **Real user path**: Navigate like a human, don't use internal setters or test hooks to cheat state.
-- **Action + resulting state**: Show the action taken (e.g., "pressed ⌥X") and the resulting state (overlay visible).
-- **Observable proof**: Screenshots or logs that clearly show the feature working.
-- **No implementation internals**: Evidence should be about what the user sees, not internal variables or logs that agents wouldn't see.
+Proof: user path + resulting state (screenshot or log). Overlay proof is cursor + overlay/tooltip `display !== none` after hover, not a class on `html`.
 
 ## Cleanup
 
-**Must never delete proof artifacts**.
-
-### Kill dev server
-
-If PID was captured:
-
-```bash
-kill <PID>
-wait <PID> 2>/dev/null || true
-```
-
-If running in tmux:
-
-```bash
-tmux kill-session -t dev-server
-```
-
-### Verify port is free
-
-```bash
-! lsof -i :3000
-```
-
-### Leave evidence intact
-
-Do NOT run:
-
-```bash
-rm -rf /tmp/verify-evidence  # WRONG
-```
-
-Evidence must persist for review.
+Kill PIDs from `/tmp/dev-server-<app>.pid` and their children. Verify that app’s port is free. **Never** delete `/tmp/verify-evidence`.
 
 ## Helpers
 
-### `launch-server.sh`
-
-```bash
-#!/usr/bin/env bash
-# Launch dev server and wait for ready signal
-
-cd /workspace
-pnpm run dev > /tmp/dev-server.log 2>&1 &
-PID=$!
-echo $PID > /tmp/dev-server.pid
-
-# Wait for ready signal
-timeout 30 bash -c '
-  while ! grep -q "Ready in" /tmp/dev-server.log 2>/dev/null; do
-    sleep 0.5
-  done
-'
-
-if grep -q "Ready in" /tmp/dev-server.log; then
-  echo "Server ready on http://localhost:3000 (PID $PID)"
-  exit 0
-else
-  echo "Server failed to start"
-  cat /tmp/dev-server.log
-  exit 1
-fi
-```
-
-**Invocation**:
-
-```bash
-bash /workspace/.cursor/skills/verify-next-inspect-ui/launch-server.sh
-```
-
-### `cleanup-server.sh`
-
-```bash
-#!/usr/bin/env bash
-# Kill dev server and verify port is free
-
-if [ -f /tmp/dev-server.pid ]; then
-  PID=$(cat /tmp/dev-server.pid)
-  if kill -0 $PID 2>/dev/null; then
-    kill $PID
-    wait $PID 2>/dev/null || true
-    echo "Killed PID $PID"
-  fi
-  rm /tmp/dev-server.pid
-fi
-
-# Verify port is free
-if lsof -i :3000 >/dev/null 2>&1; then
-  echo "WARNING: Port 3000 still in use"
-  exit 1
-else
-  echo "Port 3000 is free"
-fi
-```
-
-**Invocation**:
-
-```bash
-bash /workspace/.cursor/skills/verify-next-inspect-ui/cleanup-server.sh
-```
-
-### `verify-feature.js`
-
-Playwright script template for feature verification:
-
-```javascript
-const { chromium } = require('playwright');
-const fs = require('fs');
-const path = require('path');
-
-const EVIDENCE_DIR = '/tmp/verify-evidence';
-
-async function main() {
-  // Ensure evidence directory exists
-  if (!fs.existsSync(EVIDENCE_DIR)) {
-    fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
-  }
-
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-
-  try {
-    console.log('Navigating to feature page...');
-    // Replace with actual feature URL
-    await page.goto('http://localhost:3000/components');
-    await page.waitForLoadState('networkidle');
-
-    console.log('Feature loaded, capturing screenshot...');
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, 'feature-loaded.png'),
-      fullPage: true
-    });
-
-    console.log('Performing feature interaction...');
-    // Add feature-specific interactions here
-
-    console.log('Capturing final state...');
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, 'feature-complete.png'),
-      fullPage: true
-    });
-
-    console.log('✓ Feature verification complete');
-    console.log(`Evidence saved to ${EVIDENCE_DIR}`);
-  } catch (error) {
-    console.error('✗ Feature verification failed:', error);
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, 'error.png'),
-      fullPage: true
-    });
-    throw error;
-  } finally {
-    await browser.close();
-  }
-}
-
-main();
-```
-
-**Invocation**:
-
-```bash
-node /workspace/.cursor/skills/verify-next-inspect-ui/verify-feature.js
-```
+All scripts live next to this file. Invocation is above. `launch-server.sh` and `cleanup-server.sh` take `APP=site|example|dashboard` and `PORT`.

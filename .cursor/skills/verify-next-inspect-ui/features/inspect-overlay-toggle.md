@@ -1,131 +1,57 @@
 # InspectUI Overlay Toggle
 
-The core functionality of the InspectUI: activating the overlay with the keyboard shortcut ⌥ + X to enable hover inspection of components.
+Activate inspect mode with ⌥/Alt+X, hover to see source, Esc to leave. Works on **site**, **example**, and **dashboard** — each mounts `<InspectUI />` in development.
 
 ## Sub-features
 
-- Keyboard shortcut ⌥ + X toggles the overlay on/off
-- When active, overlay state is indicated visually (possibly with a border or indicator)
-- Overlay may add `data-inspect-active="true"` or similar attribute to the DOM
-- When active, hovering elements shows tooltips with source file information
-- Pressing Esc or ⌥ + X again deactivates the overlay
+- Default shortcut Alt+X (`code: "KeyX"`, `altKey`)
+- Active = `document.body.style.cursor === "crosshair"` (no `data-inspect-active`, no `inspect` class on `html`/`body`)
+- Overlay and tooltip nodes exist after mount with `display: none` until hover while active
+- Markers: `[data-dev-inspector-overlay]`, `[data-dev-inspector-tooltip]`
+- Esc or Alt+X again deactivates
+- `window.__inspectUI.inspect` probes a node; it does **not** toggle mode
 
 ## How to get to it (user POV)
 
-1. Navigate to any page in the app (e.g., `/components` or `/`)
-2. Press ⌥ + X on the keyboard
-3. Overlay activates (visual indicator appears)
-4. Hover any element to see source info
-5. Press Esc or ⌥ + X to deactivate
+1. Open any page on site, example `/test`, or dashboard `/components`
+2. Press ⌥+X
+3. Hover an element — spotlight + tooltip
+4. Esc to leave
 
 ## Driving it with Playwright
 
-**Important**: Keyboard shortcuts in headless browsers can be unreliable. The InspectUI overlay responds to `Alt + X`. Test in headed mode if headless fails.
+Headless Alt chord is unreliable. Dispatch the event. Prefer dashboard `/components` or site `/` after that app’s doctor.
 
 ```javascript
-const { chromium } = require('playwright');
-
-async function verifyOverlayToggle() {
-  const browser = await chromium.launch({ 
-    headless: true,
-    // Use headed mode if headless fails: headless: false
-  });
-  const page = await browser.newPage();
-  
-  try {
-    console.log('Navigating to components page...');
-    await page.goto('http://localhost:3000/components');
-    await page.waitForLoadState('networkidle');
-    
-    // Capture before activation
-    await page.screenshot({
-      path: '/tmp/verify-evidence/overlay-before-activation.png',
-      fullPage: true
-    });
-    
-    console.log('Pressing Alt+X to activate overlay...');
-    await page.keyboard.down('Alt');
-    await page.keyboard.press('KeyX');
-    await page.keyboard.up('Alt');
-    
-    // Wait for overlay state change
-    // This may vary depending on implementation
-    // Check for data attribute, class change, or visual indicator
-    await page.waitForTimeout(500); // Small delay for state change
-    
-    // Try to detect overlay activation
-    // Option 1: Check for data attribute
-    const hasDataAttr = await page.locator('[data-inspect-active="true"]').count() > 0;
-    
-    // Option 2: Check for overlay-specific class or element
-    const hasOverlayClass = await page.locator('[class*="inspect"]').count() > 0;
-    
-    // Option 3: Check body or html for state class
-    const htmlClasses = await page.locator('html').getAttribute('class') || '';
-    const bodyClasses = await page.locator('body').getAttribute('class') || '';
-    const hasStateClass = htmlClasses.includes('inspect') || bodyClasses.includes('inspect');
-    
-    console.log('Overlay activation detection:');
-    console.log('  data-inspect-active:', hasDataAttr);
-    console.log('  overlay class:', hasOverlayClass);
-    console.log('  state class:', hasStateClass);
-    
-    // Capture after activation attempt
-    await page.screenshot({
-      path: '/tmp/verify-evidence/overlay-after-activation.png',
-      fullPage: true
-    });
-    
-    // Try hovering an element to trigger tooltip
-    console.log('Hovering button element...');
-    const button = page.locator('button').first();
-    await button.hover();
-    await page.waitForTimeout(300); // Wait for tooltip
-    
-    await page.screenshot({
-      path: '/tmp/verify-evidence/overlay-hover-tooltip.png',
-      fullPage: true
-    });
-    
-    // Deactivate overlay
-    console.log('Pressing Alt+X to deactivate overlay...');
-    await page.keyboard.down('Alt');
-    await page.keyboard.press('KeyX');
-    await page.keyboard.up('Alt');
-    await page.waitForTimeout(500);
-    
-    await page.screenshot({
-      path: '/tmp/verify-evidence/overlay-after-deactivation.png',
-      fullPage: true
-    });
-    
-    console.log('✓ Overlay toggle sequence completed');
-    console.log('Review screenshots to confirm activation/deactivation');
-    return true;
-    
-  } catch (error) {
-    console.error('✗ Overlay toggle verification failed:', error);
-    await page.screenshot({
-      path: '/tmp/verify-evidence/overlay-toggle-error.png',
-      fullPage: true
-    });
-    throw error;
-  } finally {
-    await browser.close();
-  }
-}
-
-verifyOverlayToggle();
+await page.waitForFunction(
+  () => !!document.querySelector("[data-dev-inspector-overlay]") && !!window.__inspectUI
+)
+await page.evaluate(() =>
+  document.dispatchEvent(
+    new KeyboardEvent("keydown", {
+      key: "x",
+      code: "KeyX",
+      altKey: true,
+      bubbles: true,
+      cancelable: true,
+    })
+  )
+)
+await page.waitForFunction(() => document.body.style.cursor === "crosshair")
+await page.locator("h1, main button, [data-slot='card']").first().hover()
+await page.waitForFunction(() => {
+  const o = document.querySelector("[data-dev-inspector-overlay]")
+  const t = document.querySelector("[data-dev-inspector-tooltip]")
+  return o && t && getComputedStyle(o).display !== "none" && getComputedStyle(t).display !== "none"
+})
+await page.keyboard.press("Escape")
+await page.waitForFunction(() => document.body.style.cursor !== "crosshair")
 ```
+
+`[class*="inspect"]` is a false positive (`next-inspect-ui-overlay` is always on the node).
 
 ## Gotchas
 
-- **Keyboard shortcuts are unreliable in headless browsers**. Alt+X may not fire correctly. Consider:
-  - Running in headed mode (`headless: false`)
-  - Using `page.evaluate()` to trigger the toggle programmatically if there's a JS API
-  - Checking if the InspectUI component exposes a test hook or data attribute for programmatic activation
-- The overlay state may not have an obvious DOM marker. Check the InspectUI source code for `data-inspect-active` or similar.
-- The tooltip may require both overlay activation AND hovering, so test both states.
-- Timing is critical: wait after keyboard press before checking state or capturing screenshots.
-- If activation fails silently, check browser console logs for errors with `page.on('console')`.
-- The overlay is only active in development mode. Ensure `NODE_ENV=development`.
+- Overlay visible ≠ mode on. Mode on ≠ overlay visible. Need both cursor and hover.
+- Dev only (`NODE_ENV=development`).
+- Do not drive this on site `/components` — that URL 404s.

@@ -1,27 +1,30 @@
 #!/usr/bin/env bash
-# Kill dev server and verify port is free
+# Kill the app started by launch-server.sh for this APP. Does not pkill unrelated Next servers.
+set -u
 
-if [ -f /tmp/dev-server.pid ]; then
-  PID=$(cat /tmp/dev-server.pid)
-  if kill -0 $PID 2>/dev/null; then
-    kill $PID
-    wait $PID 2>/dev/null || true
-    echo "Killed PID $PID"
+APP="${APP:-site}"
+PORT="${PORT:-3000}"
+PIDFILE="/tmp/dev-server-${APP}.pid"
+
+if [ -f "$PIDFILE" ]; then
+  PID="$(cat "$PIDFILE")"
+  if kill -0 "$PID" 2>/dev/null; then
+    pkill -P "$PID" 2>/dev/null || true
+    kill "$PID" 2>/dev/null || true
+    wait "$PID" 2>/dev/null || true
+    echo "Killed $APP PID $PID"
+  else
+    echo "PID $PID from $PIDFILE is not running"
   fi
-  rm /tmp/dev-server.pid
-fi
-
-# Also kill any remaining next dev processes
-pkill -f "next dev" || true
-
-# Wait a moment for processes to die
-sleep 1
-
-# Verify port is free
-if lsof -i :3000 >/dev/null 2>&1; then
-  echo "WARNING: Port 3000 still in use"
-  lsof -i :3000
-  exit 1
+  rm -f "$PIDFILE"
 else
-  echo "Port 3000 is free"
+  echo "No $PIDFILE — nothing to kill for APP=$APP"
 fi
+
+if lsof -i ":$PORT" >/dev/null 2>&1; then
+  echo "WARNING: Port $PORT still in use"
+  lsof -i ":$PORT" || true
+  exit 1
+fi
+
+echo "Port $PORT is free"

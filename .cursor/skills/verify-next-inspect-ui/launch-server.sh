@@ -1,23 +1,58 @@
 #!/usr/bin/env bash
-# Launch dev server and wait for ready signal
+# Launch one demo app and wait for Ready in.
+# APP=site|example|dashboard  PORT=3000
+set -euo pipefail
 
-cd /workspace
-pnpm run dev > /tmp/dev-server.log 2>&1 &
+ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+APP="${APP:-site}"
+PORT="${PORT:-3000}"
+LOG="/tmp/dev-server-${APP}.log"
+PIDFILE="/tmp/dev-server-${APP}.pid"
+
+case "$APP" in
+  site) FILTER="site" ;;
+  example) FILTER="next-js-example" ;;
+  dashboard) FILTER="shadcn-dashboard-001-example" ;;
+  *)
+    echo "APP must be site, example, or dashboard (got: $APP)"
+    exit 1
+    ;;
+esac
+
+if [ -f "$PIDFILE" ]; then
+  OLD="$(cat "$PIDFILE")"
+  if kill -0 "$OLD" 2>/dev/null; then
+    echo "Already running $APP as PID $OLD (remove $PIDFILE if stale)"
+    exit 1
+  fi
+  rm -f "$PIDFILE"
+fi
+
+cd "$ROOT"
+: > "$LOG"
+# Stay in the foreground after ready so process-group-killing runners
+# (and `bash launch-server.sh &`) keep pnpm alive. Do not detach.
+PORT="$PORT" pnpm --filter "$FILTER" dev >> "$LOG" 2>&1 &
 PID=$!
-echo $PID > /tmp/dev-server.pid
+echo "$PID" > "$PIDFILE"
 
-# Wait for ready signal
-timeout 30 bash -c '
-  while ! grep -q "Ready in" /tmp/dev-server.log 2>/dev/null; do
-    sleep 0.5
-  done
-'
+ready=0
+for _ in $(seq 1 120); do
+  if grep -q "Ready in" "$LOG" 2>/dev/null; then
+    ready=1
+    break
+  fi
+  if ! kill -0 "$PID" 2>/dev/null; then
+    break
+  fi
+  sleep 0.5
+done
 
-if grep -q "Ready in" /tmp/dev-server.log; then
-  echo "Server ready on http://localhost:3000 (PID $PID)"
-  exit 0
-else
-  echo "Server failed to start"
-  cat /tmp/dev-server.log
+if [ "$ready" -ne 1 ]; then
+  echo "Server failed to start ($APP on :$PORT)"
+  cat "$LOG"
   exit 1
 fi
+
+echo "Server ready on http://localhost:${PORT} (APP=$APP PID $PID)"
+wait "$PID"

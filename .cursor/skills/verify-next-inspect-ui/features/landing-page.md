@@ -1,98 +1,45 @@
 # Landing Page
 
-The home page that explains what next-inspect-ui is, how to install it, and how to use it.
+Docs home on the **site** app (`pnpm dev`). Explains what next-inspect-ui is, how to install it (shadcn registry), and the inspect comments.
 
 ## Sub-features
 
-- Package name and version display
-- "What it does" section with feature list
-- Installation instructions with npm/pnpm commands
-- Usage code examples
-- Link to live demo (`/components`)
-- Navigation sidebar with links to other sections (shortcuts, source, usage, API reference)
+- h1 `next-inspect-ui` plus `v{semver} · react`
+- “What it does” section
+- Installation: shadcn `add` commands (npm / pnpm / yarn / bun), not `npm install next-inspect-ui`
+- Usage: Activate / Inspect / Open comment tabs
+- Left nav: Overview, Usage, Source Code, API Reference, Shortcuts (always visible; Overview is home — there is no logo)
+- Footer “Try the live demo →” href `/components` — **404 on site**. Same for dev-only `/test`, `/dashboard`, `/variant-test`
 
 ## How to get to it (user POV)
 
-1. Visit `http://localhost:3000` (root URL)
-2. Or click the logo/home link from any other page
+1. `pnpm dev` → `http://localhost:<site-port>/`
+2. Or click **Overview** in the left nav from another site docs page
 
 ## Driving it with Playwright
 
+Use `SITE_URL` (default `http://localhost:3000`). Doctor first: `/` must be 200, not a 307 to `/test`.
+
 ```javascript
-const { chromium } = require('playwright');
+await page.goto(process.env.SITE_URL || "http://localhost:3000")
+await page.waitForLoadState("networkidle")
+await page.locator("h1", { hasText: "next-inspect-ui" }).waitFor()
+await page.getByText(/v\d+\.\d+\.\d+/).first().waitFor()
+await page.locator("h2", { hasText: "What it does" }).waitFor()
+await page.locator("h2", { hasText: "Installation" }).waitFor()
+await page.locator("h2", { hasText: "Usage" }).waitFor()
+await page.getByRole("link", { name: /live demo/i }).waitFor()
+await page.screenshot({ path: "/tmp/verify-evidence/landing-page-loaded.png", fullPage: true })
 
-async function verifyLandingPage() {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-  
-  try {
-    console.log('Navigating to landing page...');
-    await page.goto('http://localhost:3000');
-    await page.waitForLoadState('networkidle');
-    
-    // Verify title
-    const title = await page.locator('h1', { hasText: 'next-inspect-ui' }).count();
-    if (title === 0) throw new Error('Page title not found');
-    
-    // Verify version display
-    const version = await page.getByText(/v\d+\.\d+\.\d+/).count() > 0;
-    if (!version) throw new Error('Version not displayed');
-    
-    // Capture entry screenshot
-    await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-loaded.png',
-      fullPage: true
-    });
-    
-    // Verify "What it does" section
-    const whatItDoes = await page.locator('h2', { hasText: 'What it does' }).count() > 0;
-    if (!whatItDoes) throw new Error('"What it does" section not found');
-    
-    // Verify Installation section
-    const installation = await page.locator('h2', { hasText: 'Installation' }).count() > 0;
-    if (!installation) throw new Error('Installation section not found');
-    
-    // Verify Usage section
-    const usage = await page.locator('h2', { hasText: 'Usage' }).count() > 0;
-    if (!usage) throw new Error('Usage section not found');
-    
-    // Verify demo link exists
-    const demoLink = await page.getByRole('link', { name: /live demo/i }).count() > 0;
-    if (!demoLink) throw new Error('Demo link not found');
-    
-    console.log('✓ Landing page sections verified');
-    
-    // Test navigation to demo
-    await page.getByRole('link', { name: /live demo/i }).first().click();
-    await page.waitForURL('**/components');
-    await page.waitForLoadState('networkidle');
-    
-    await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-demo-navigation.png',
-      fullPage: true
-    });
-    
-    console.log('✓ Navigation to demo works');
-    return true;
-    
-  } catch (error) {
-    console.error('✗ Landing page verification failed:', error);
-    await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-error.png',
-      fullPage: true
-    });
-    throw error;
-  } finally {
-    await browser.close();
-  }
-}
-
-verifyLandingPage();
+await page.getByRole("link", { name: /live demo/i }).first().click()
+await page.waitForLoadState("networkidle")
+// Site has no /components. URL should still be this origin + /components, page is 404.
 ```
+
+Or: `SITE_URL=… node .cursor/skills/verify-next-inspect-ui/verify-landing-page.js`
 
 ## Gotchas
 
-- The page includes code blocks with syntax highlighting which may take time to render. Wait for `networkidle`.
-- Navigation sidebar is visible on larger screens but may be hidden on mobile viewports.
-- Demo link text might vary slightly, use case-insensitive matching with `/live demo/i`.
-- The version number is dynamic (from package.json), so don't assert specific version values.
+- Do not `waitForURL('**/components')` as success — that route is the **dashboard** app.
+- Version comes from `packages/next-inspect-ui/package.json`; do not pin a number.
+- `/usage` is a video placeholder; `/source` is “Coming soon”. They are sibling pages, not this feature.
