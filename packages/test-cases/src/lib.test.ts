@@ -18,7 +18,7 @@ import {
   toAbsolutePath,
   toRgbChannels,
   toRgba,
-} from "../../next-inspect-ui/src/lib.ts"
+} from "../../next-inspect-ui/src/lib/index.ts"
 
 const keyEvent = (partial: {
   altKey?: boolean

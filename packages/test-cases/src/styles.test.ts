@@ -6,7 +6,7 @@ import { registerDom } from "./register-dom.ts"
 registerDom()
 
 const { DEFAULT_DEV_SPOTLIGHT_PROPS, DEFAULT_INSPECTOR_SETTINGS } = await import(
-  "../../next-inspect-ui/src/lib.ts"
+  "../../next-inspect-ui/src/lib/index.ts"
 )
 const {
   applyOverlayPaint,
@@ -15,8 +15,8 @@ const {
   inspectClass,
   markInspectNode,
   paintUsedIcon,
-} = await import("../../next-inspect-ui/src/styles.ts")
-const { createUsedIcon } = await import("../../next-inspect-ui/src/icons.ts")
+} = await import("../../next-inspect-ui/src/styles/styles.ts")
+const { createUsedIcon } = await import("../../next-inspect-ui/src/lib/icons.ts")
 
 test("maps inspect hooks to class names", () => {
   assert.equal(
@@ -77,7 +77,7 @@ test("used icon is a real svg node, not innerHTML", () => {
 
 test("builds a tooltip with a text-only under chip", async () => {
   const { createInspectTooltip, underStackTransform } = await import(
-    "../../next-inspect-ui/src/tooltip.ts"
+    "../../next-inspect-ui/src/lib/tooltip.ts"
   )
   const tooltip = createInspectTooltip()
   tooltip.setLabel("<Button/>")

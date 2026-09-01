@@ -2,10 +2,10 @@
 
 import { useEffect } from "react"
 
-import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, subscribeInspectorSettings } from "./lib.ts"
-import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./engine.ts"
-import { createOpenSourceIcon } from "./icons.ts"
-import overlayCss from "./overlay.css"
+import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, subscribeInspectorSettings } from "./lib/index.ts"
+import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
+import { createOpenSourceIcon } from "./lib/icons.ts"
+import overlayCss from "./styles/overlay.css"
 import {
   ensureInspectorStyles,
   markInspectNode,
@@ -13,8 +13,8 @@ import {
   paintTreeRow,
   paintTwisty,
   setInspectMotion,
-} from "./styles.ts"
-import { createInspectTooltip, expandRectWithPadding, getInfoPanelPosition } from "./tooltip.ts"
+} from "./styles/styles.ts"
+import { createInspectTooltip, expandRectWithPadding, getInfoPanelPosition } from "./lib/tooltip.ts"
 
 type OpenKind = "used" | "defined"
 

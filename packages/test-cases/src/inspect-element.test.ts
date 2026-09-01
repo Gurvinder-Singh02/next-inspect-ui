@@ -8,7 +8,7 @@ registerDom()
 const {
   isInspectorChrome,
   resolveInspectElement,
-} = await import("../../next-inspect-ui/src/engine.ts")
+} = await import("../../next-inspect-ui/src/lib/engine.ts")
 
 const attachFiber = (element: Element, className?: string) => {
   Object.assign(element, {

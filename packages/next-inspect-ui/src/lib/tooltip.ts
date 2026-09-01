@@ -1,6 +1,6 @@
 import { createUsedIcon } from "./icons.ts"
-import type { TooltipAlign, TooltipProps, TooltipSide } from "./lib.ts"
-import { markInspectNode, paintUsedIcon } from "./styles.ts"
+import type { TooltipAlign, TooltipProps, TooltipSide } from "./index.ts"
+import { markInspectNode, paintUsedIcon } from "../styles/styles.ts"
 
 export type OverlayRect = {
   left: number
