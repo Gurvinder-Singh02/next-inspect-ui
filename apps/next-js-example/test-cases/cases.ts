@@ -122,14 +122,14 @@ export const motionSimpleTargets: AccuracyTarget[] = [
     id: "bare",
     label: "Bare",
     nodes: [
-      { name: "MotionSimple", file: MOTION, line: 34 },
-      { name: "motion.div", file: MOTION, line: 23 },
+      { name: "MotionSimple", file: MOTION, line: 33 },
+      { name: "motion.div", file: MOTION, line: 22 },
     ],
   },
   {
     id: "nested",
     label: "Nested",
-    nodes: [{ name: "motion.div", file: MOTION, line: 37 }],
+    nodes: [{ name: "motion.div", file: MOTION, line: 36 }],
   },
 ]
 
@@ -138,22 +138,22 @@ export const motionBoxesTargets: AccuracyTarget[] = [
   {
     id: "box-0",
     label: "Box 0",
-    nodes: [{ name: "motion.div", file: MOTION, line: 53 }],
+    nodes: [{ name: "motion.div", file: MOTION, line: 52 }],
   },
   {
     id: "box-1",
     label: "Box 1",
-    nodes: [{ name: "motion.div", file: MOTION, line: 53 }],
+    nodes: [{ name: "motion.div", file: MOTION, line: 52 }],
   },
   {
     id: "box-2",
     label: "Box 2",
-    nodes: [{ name: "motion.div", file: MOTION, line: 53 }],
+    nodes: [{ name: "motion.div", file: MOTION, line: 52 }],
   },
 ]
 
 export const motionSvgNodes: AccuracyNode[] = [
-  { name: "motion.rect", file: MOTION, line: 69 },
+  { name: "motion.rect", file: MOTION, line: 68 },
 ]
 
 export const motionWrappedTargets: AccuracyTarget[] = [
@@ -161,16 +161,16 @@ export const motionWrappedTargets: AccuracyTarget[] = [
     id: "alpha",
     label: "alpha",
     nodes: [
-      { name: "Chip", file: MOTION, line: 148 },
-      { name: "motion.div", file: MOTION, line: 137 },
+      { name: "Chip", file: MOTION, line: 147 },
+      { name: "motion.div", file: MOTION, line: 136 },
     ],
   },
   {
     id: "beta",
     label: "beta",
     nodes: [
-      { name: "Chip", file: MOTION, line: 149 },
-      { name: "motion.div", file: MOTION, line: 137 },
+      { name: "Chip", file: MOTION, line: 148 },
+      { name: "motion.div", file: MOTION, line: 136 },
     ],
   },
 ]
