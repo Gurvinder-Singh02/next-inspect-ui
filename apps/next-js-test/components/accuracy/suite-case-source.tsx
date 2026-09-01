@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react"
 import { ChevronDownIcon, ChevronsUpDown, CodeIcon } from "lucide-react"
 
-import { CodeBlock } from "@/components/landing/code-block"
+import { CodeBlock } from "@/components/accuracy/code-block"
 import type { SuiteSourceFile } from "@/components/accuracy/types"
 import { cn } from "@/lib/utils"
 
