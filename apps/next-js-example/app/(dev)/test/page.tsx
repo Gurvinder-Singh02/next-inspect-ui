@@ -43,7 +43,7 @@ import {
   shadcnPlainNodes,
   shadcnVariantTargets,
   thirdPartyIconTargets, parentInspectableCardTargets,
-} from "@next-inspect-ui/test-cases"
+} from "@/test-cases"
 import { loadCaseSources } from "./load-case-sources"
 
 export default async function TestSuitePage() {

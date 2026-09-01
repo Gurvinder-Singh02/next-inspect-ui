@@ -1,4 +1,4 @@
-import { CASE_SOURCE_EXAMPLES, type SuiteSourceFile } from "@next-inspect-ui/test-cases"
+import { CASE_SOURCE_EXAMPLES, type SuiteSourceFile } from "@/test-cases"
 import { highlightCode } from "@/lib/highlight-code"
 
 /** Highlight short example snippets for every case’s Show source panel. */
