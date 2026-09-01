@@ -10,7 +10,7 @@ export default defineConfig([
     dts: true,
     clean: false,
     platform: "node",
-    external: ["@babel/core", "babel-loader", "next-inspect-ui"],
+    external: ["@babel/core", "babel-loader", "next-inspect-ui-deprecated"],
   },
   {
     entry: { inspect: "src/inspect-ui.tsx" },
@@ -21,9 +21,9 @@ export default defineConfig([
     external: [
       "react",
       "react-dom",
-      "next-inspect-ui",
-      "next-inspect-ui/lib",
-      "next-inspect-ui/overlay",
+      "next-inspect-ui-deprecated",
+      "next-inspect-ui-deprecated/lib",
+      "next-inspect-ui-deprecated/overlay",
     ],
     banner: {
       js: '"use client";',

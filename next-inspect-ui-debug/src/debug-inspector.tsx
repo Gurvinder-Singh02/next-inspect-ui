@@ -9,7 +9,7 @@ import {
   findParentInspectable,
   findSiblingInspectable,
   isInspectorChrome,
-} from "next-inspect-ui/lib"
+} from "next-inspect-ui-deprecated/lib"
 import {
   DEFAULT_DEV_SPOTLIGHT_PROPS,
   formatTooltipLabel,
@@ -28,7 +28,7 @@ import {
   subscribeInspectorSettings,
   type InspectorIde,
   type InspectorSettings,
-} from "next-inspect-ui/lib"
+} from "next-inspect-ui-deprecated/lib"
 import {
   formatPageLabel,
   getClimbOpenSource,
@@ -48,12 +48,12 @@ import {
   type FiberDebugSource,
   type NamedSourceFrame,
   type SourceLocation,
-} from "next-inspect-ui/lib"
+} from "next-inspect-ui-deprecated/lib"
 import {
   documentHasStamps,
   readHostStamp,
   readOwnerStamp,
-} from "next-inspect-ui/lib"
+} from "next-inspect-ui-deprecated/lib"
 
 import {
   applyOverlayStyles,
@@ -131,7 +131,7 @@ import {
   type SourceMapData,
   type SourceMapSection,
   type StackFrame,
-} from "next-inspect-ui/overlay"
+} from "next-inspect-ui-deprecated/overlay"
 
 const isSameSource = (
   a: SourceLocation | null | undefined,

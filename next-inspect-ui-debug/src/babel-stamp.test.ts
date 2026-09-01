@@ -9,11 +9,11 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { transformSync } from "@babel/core"
-import { HOST_STAMP_ATTR, OWNER_STAMP_ATTR } from "next-inspect-ui/lib"
+import { HOST_STAMP_ATTR, OWNER_STAMP_ATTR } from "next-inspect-ui-deprecated/lib"
 
 import stampPlugin from "./babel-stamp.ts"
 
-test("stamp attribute names come from next-inspect-ui/lib", () => {
+test("stamp attribute names come from next-inspect-ui-deprecated/lib", () => {
   assert.equal(HOST_STAMP_ATTR, "data-inspect-host")
   assert.equal(OWNER_STAMP_ATTR, "data-inspect-owner")
 })
