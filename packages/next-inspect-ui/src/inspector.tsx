@@ -2,10 +2,11 @@
 
 import { useEffect } from "react"
 
-import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, expandRectWithPadding, formatComponentTag, formatDomTag, getInspectorSettings, getTooltipPosition, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, subscribeInspectorSettings } from "./lib.ts"
-import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, underStackTransform, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./engine.ts"
-import { createOpenSourceIcon, createUsedIcon } from "./icons.ts"
+import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, subscribeInspectorSettings } from "./lib.ts"
+import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./engine.ts"
+import { createOpenSourceIcon } from "./icons.ts"
 import { ensureInspectorStyles } from "./styles.ts"
+import { createInspectTooltip, expandRectWithPadding, getInfoPanelPosition } from "./tooltip.ts"
 
 type OpenKind = "used" | "defined"
 
@@ -30,7 +31,8 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     const instantDefinedPathCache = new WeakMap<ReactFiber, string>()
     const instantUsedPathCache = new WeakMap<ReactFiber, string>()
     const overlay = document.createElement("div")
-    const tooltip = document.createElement("div")
+    const inspectTooltip = createInspectTooltip()
+    const tooltip = inspectTooltip.root
     const info = document.createElement("div")
     const previousCursor = document.body.style.cursor
     let hoveredElement: Element | null = null
@@ -107,52 +109,16 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
 
     overlay.setAttribute("aria-hidden", "true")
     overlay.setAttribute("data-dev-inspector-overlay", "")
-    tooltip.setAttribute("aria-hidden", "true")
-    tooltip.setAttribute("data-dev-inspector-tooltip", "")
-    const tooltipFront = document.createElement("div")
-    tooltipFront.setAttribute("data-dev-inspector-tooltip-front", "")
 
-    const tooltipIconWrap = document.createElement("span")
-    tooltipIconWrap.setAttribute("data-dev-inspector-tooltip-icon", "")
-    tooltipIconWrap.setAttribute("aria-hidden", "true")
-    tooltipIconWrap.append(createUsedIcon())
-    const tooltipLabel = document.createElement("span")
-    tooltipLabel.setAttribute("data-dev-inspector-tooltip-label", "")
-    tooltipFront.append(tooltipIconWrap, tooltipLabel)
-    tooltip.append(tooltipFront)
-
-    const tooltipUnderLayers: HTMLDivElement[] = []
-
-    const clearTooltipStack = () => {
-      tooltipUnderLayers.splice(0).forEach((layer) => layer.remove())
-      tooltip.querySelectorAll("[data-dev-inspector-tooltip-under]").forEach((el) => el.remove())
-    }
-    const layoutTooltipStack = () => {
-      const total = tooltipUnderLayers.length
-      tooltipUnderLayers.forEach((layer, index) => {
-        const n = total - index
-        layer.style.left = "0"
-        layer.style.bottom = "0"
-        layer.style.zIndex = String(2 - n)
-        layer.style.transform = underStackTransform(n)
-        layer.style.opacity = "0.92"
-      })
-    }
+    const clearTooltipStack = () => inspectTooltip.clearStack()
     const pushTooltipUnder = (text: string) => {
       if (!optionHeld || !text) return
-      const chip = mk<HTMLDivElement>("div", "data-dev-inspector-tooltip-under")
-      chip.textContent = text
-      tooltip.append(chip)
-      tooltipUnderLayers.push(chip)
-      layoutTooltipStack()
+      inspectTooltip.pushUnder(text)
     }
-
-    const setTooltipLabel = (text: string) => {
-      tooltipLabel.textContent = text
-    }
-
-    const syncUsedIcon = (show: boolean) => {
-      tooltipIconWrap.toggleAttribute("data-open", show)
+    const setTooltipLabel = (text: string) => inspectTooltip.setLabel(text)
+    const syncUsedIcon = (show: boolean) => inspectTooltip.showUsedIcon(show)
+    const positionTooltip = (targetRect: { left: number; top: number; width: number; height: number }) => {
+      inspectTooltip.place(targetRect, settings.tooltipProps)
     }
 
     const toPascalCaseName = (raw: string) =>
@@ -427,40 +393,15 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       onSettingsChanged?.()
     })
 
-    const positionTooltip = (targetRect: { left: number; top: number; width: number; height: number }) => {
-      const { tooltipProps } = settings
-      const pos = getTooltipPosition({
-        target: targetRect,
-        tooltipWidth: tooltipFront.offsetWidth,
-        tooltipHeight: tooltipFront.offsetHeight,
-        side: tooltipProps.side,
-        align: tooltipProps.align,
-        sideOffset: tooltipProps.sideOffset,
-        alignOffset: tooltipProps.alignOffset,
-        viewport: {
-          width: window.innerWidth,
-          height: window.innerHeight,
-        },
-      })
-      tooltip.style.left = `${pos.left}px`
-      tooltip.style.top = `${pos.top}px`
-    }
-
     const positionInfo = (targetRect: { left: number; top: number; width: number; height: number }) => {
-      const margin = 8
-      const width = info.offsetWidth
-      const height = info.offsetHeight
-      const left = Math.max(
-        margin,
-        Math.min(targetRect.left, window.innerWidth - width - margin)
-      )
-      const below = targetRect.top + targetRect.height + margin
-      const top =
-        below + height + margin > window.innerHeight && targetRect.top > height
-          ? targetRect.top - height - margin
-          : below
-      info.style.left = `${left}px`
-      info.style.top = `${top}px`
+      const pos = getInfoPanelPosition({
+        target: targetRect,
+        panelWidth: info.offsetWidth,
+        panelHeight: info.offsetHeight,
+        viewport: { width: window.innerWidth, height: window.innerHeight },
+      })
+      info.style.left = `${pos.left}px`
+      info.style.top = `${pos.top}px`
     }
 
     const hideInfo = () => {
@@ -742,13 +683,13 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     const syncOptionFromEvent = (event: KeyboardEvent | MouseEvent | PointerEvent) => {
       const next = event.altKey
       if (next === optionHeld) return
-      const previousLabel = tooltipLabel.textContent ?? ""
+      const previousLabel = inspectTooltip.label
       optionHeld = next; ownerChainDepth = 0; bustOwnerChainCache()
       if (next) {
         const fiber = hoveredElement ? getFiber(hoveredElement) : null
         const chainLen = fiber ? buildOwnerChain(fiber).length : 0
         if (chainLen > 0 && previousLabel) pushTooltipUnder(previousLabel)
-        else if (tooltip.style.display !== "none") shakeTooltip?.()
+        else if (inspectTooltip.isOpen()) shakeTooltip?.()
       } else clearTooltipStack()
       updateOpenHint()
       if (next) logOptionPress?.()
@@ -764,7 +705,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     const updateOpenHint = () => {
       const fiber = hoveredElement ? getFiber(hoveredElement) : null
       paintChrome?.()
-      if (hoveredElement && tooltip.style.display !== "none" && fiber) {
+      if (hoveredElement && inspectTooltip.isOpen() && fiber) {
         paintTooltipForFiber(fiber)
       }
     }
@@ -793,7 +734,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       if (chain.length > 0) {
         const next = Math.min(chain.length - 1, ownerChainDepth + delta)
         if (next !== ownerChainDepth) {
-          const currentLabel = tooltipLabel.textContent
+          const currentLabel = inspectTooltip.label
           if (currentLabel) pushTooltipUnder(currentLabel)
           ownerChainDepth = next
           paintTooltipForFiber(fiber!)
@@ -837,7 +778,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       pointerPinned = false
       treeNavStack = []
       overlay.style.display = "none"
-      tooltip.style.display = "none"
+      inspectTooltip.hide()
       hideInfo()
       document.body.style.cursor = isActive ? "crosshair" : previousCursor
     }
@@ -910,7 +851,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       overlay.style.top = `${rect.top}px`
       overlay.style.width = `${rect.width}px`
       overlay.style.height = `${rect.height}px`
-      tooltip.style.display = "flex"
+      inspectTooltip.show()
       if (hasTargetChanged) {
         ownerChainDepth = 0; bustOwnerChainCache(); clearTooltipStack(); infoClimbSelection = null
         paintTooltipForFiber(fiber)
@@ -1066,11 +1007,11 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
         const nearest = hostElement ? await resolveNearestAncestorSource(hostElement, projectRoot, sourceMapCache) : null
         if (nearest) openInEditor(nearest.source, settings.ide)
         else {
-          tooltip.style.display = "flex"
+          inspectTooltip.show()
           setTooltipLabel(chainStep ? `No accurate source for ${formatComponentTag(chainStep.name)}` : "Could not resolve source")
         }
       } catch {
-        tooltip.style.display = "flex"
+        inspectTooltip.show()
         setTooltipLabel("Could not resolve source")
       }
     }
@@ -1123,7 +1064,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       settings = getInspectorSettings()
       if (!hoveredElement) return
       highlightTarget(hoveredElement)
-      tooltip.style.display = "flex"
+      inspectTooltip.show()
       setTooltipLabel(delta === "reset" ? `padding reset ${nextX} · ${nextY}` : `padding ${nextX} · ${nextY}`)
       if (lastTargetRect) positionTooltip(lastTargetRect)
     }

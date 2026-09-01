@@ -10,6 +10,7 @@ import {
   formatDomTag,
   formatShortcutParts,
   formatTooltipLabel,
+  getInfoPanelPosition,
   getOverlayPaint,
   getTooltipPosition,
   INSPECTOR_IDES,
@@ -109,6 +110,30 @@ test("clamps a right tooltip that would overflow the viewport", () => {
   })
   assert.ok(pos.left + 80 <= 400)
   assert.ok(pos.left >= 0)
+})
+
+test("sits the info panel below the target when there is room", () => {
+  assert.deepEqual(
+    getInfoPanelPosition({
+      target: { left: 40, top: 20, width: 80, height: 30 },
+      panelWidth: 200,
+      panelHeight: 80,
+      viewport: { width: 400, height: 300 },
+    }),
+    { left: 40, top: 58 }
+  )
+})
+
+test("flips the info panel above the target when it would clip the bottom", () => {
+  assert.deepEqual(
+    getInfoPanelPosition({
+      target: { left: 40, top: 220, width: 80, height: 30 },
+      panelWidth: 200,
+      panelHeight: 80,
+      viewport: { width: 400, height: 300 },
+    }),
+    { left: 40, top: 132 }
+  )
 })
 
 test("expands a rect with uniform or per-side padding", () => {
