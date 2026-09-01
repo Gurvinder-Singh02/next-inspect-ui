@@ -3,6 +3,7 @@ import {
   toAbsolutePath,
   type InspectorIde,
 } from "./lib.ts"
+import { markInspectNode, paintStyleTab } from "./styles.ts"
 
 const getElementFiber = <T = unknown>(element: Element): T | null => {
   const fiberKey = Object.keys(element).find((key) => key.startsWith("__reactFiber$"))
@@ -1188,8 +1189,7 @@ const cssSpan = (text: string, color?: string) => {
 }
 
 const createCodeSurface = () => {
-  const wrap = document.createElement("div")
-  wrap.setAttribute("data-dev-inspector-code", "")
+  const wrap = markInspectNode(document.createElement("div"), "data-dev-inspector-code")
   const pre = document.createElement("pre")
   wrap.appendChild(pre)
   return { wrap, pre }
@@ -1301,17 +1301,14 @@ const createTailwindBlock = (element: Element) => {
 }
 
 export const createStylesSection = (element: Element, onLayout: () => void) => {
-  const root = document.createElement("div")
-  root.setAttribute("data-dev-inspector-styles", "")
-  const tabs = document.createElement("div")
-  tabs.setAttribute("data-dev-inspector-style-tabs", "")
+  const root = markInspectNode(document.createElement("div"), "data-dev-inspector-styles")
+  const tabs = markInspectNode(document.createElement("div"), "data-dev-inspector-style-tabs")
   const body = document.createElement("div")
   let mode: "tailwind" | "css" = "tailwind"
   const mkTab = (next: typeof mode, label: string) => {
-    const btn = document.createElement("button")
+    const btn = markInspectNode(document.createElement("button"), "data-dev-inspector-style-tab")
     btn.type = "button"
     btn.textContent = label
-    btn.setAttribute("data-dev-inspector-style-tab", "")
     btn.onclick = (event) => {
       event.preventDefault()
       event.stopPropagation()
@@ -1325,8 +1322,8 @@ export const createStylesSection = (element: Element, onLayout: () => void) => {
   const cssTab = mkTab("css", "CSS")
   tabs.append(twTab, cssTab)
   const paint = () => {
-    twTab.toggleAttribute("data-active", mode === "tailwind")
-    cssTab.toggleAttribute("data-active", mode === "css")
+    paintStyleTab(twTab, mode === "tailwind")
+    paintStyleTab(cssTab, mode === "css")
     body.replaceChildren(mode === "tailwind" ? createTailwindBlock(element) : createCssBlock(element))
     onLayout()
   }

@@ -1,5 +1,6 @@
 import { createUsedIcon } from "./icons.ts"
 import type { TooltipAlign, TooltipProps, TooltipSide } from "./lib.ts"
+import { markInspectNode, paintUsedIcon } from "./styles.ts"
 
 export type OverlayRect = {
   left: number
@@ -187,10 +188,7 @@ export const formatTooltipLabel = ({
   return parts.join(" · ")
 }
 
-const attr = (el: HTMLElement, name: string) => {
-  el.setAttribute(name, "")
-  return el
-}
+const attr = (el: HTMLElement, name: string) => markInspectNode(el, name)
 
 export const createInspectTooltip = () => {
   const root = attr(document.createElement("div"), "data-dev-inspector-tooltip")
@@ -232,7 +230,7 @@ export const createInspectTooltip = () => {
   }
 
   const showUsedIcon = (show: boolean) => {
-    iconWrap.toggleAttribute("data-open", show)
+    paintUsedIcon(iconWrap, show)
   }
 
   const clearStack = () => {
