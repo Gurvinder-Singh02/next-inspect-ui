@@ -4,6 +4,8 @@ packages:
   - next-inspect-ui-debug
   - next-inspect-website
   - first-priciple
+  - react-test
+  - next-src-test
 
 allowBuilds:
   sharp: true
