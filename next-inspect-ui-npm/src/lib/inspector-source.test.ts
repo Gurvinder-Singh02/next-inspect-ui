@@ -1,7 +1,10 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 
-import { isClimbUsageBoundary } from "./inspector-source.ts"
+import {
+  isClimbUsageBoundary,
+  resolveSourceMapSourcePath,
+} from "./inspector-source.ts"
 
 const loc = (filePath: string) => ({ filePath, line: 1, column: 1 })
 
@@ -61,5 +64,35 @@ test("requires a project usage site", () => {
       definition: loc("/app/a.tsx"),
     }),
     false
+  )
+})
+
+test("resolves Vite basename sources against the map URL directory", () => {
+  assert.equal(
+    resolveSourceMapSourcePath({
+      source: "App.tsx",
+      sourceMapUrl: new URL("http://localhost:5173/src/App.tsx.map"),
+      projectRoot: "/repo/react-test",
+    }),
+    "/repo/react-test/src/App.tsx"
+  )
+  assert.equal(
+    resolveSourceMapSourcePath({
+      source: "test-card.tsx",
+      sourceMapUrl: new URL("http://localhost:5173/src/test-card.tsx.map"),
+      projectRoot: "/repo/react-test",
+    }),
+    "/repo/react-test/src/test-card.tsx"
+  )
+})
+
+test("keeps absolute filesystem sourcemap sources", () => {
+  assert.equal(
+    resolveSourceMapSourcePath({
+      source: "/Users/gxuri/project/app/page.tsx",
+      sourceMapUrl: new URL("http://localhost:3000/_next/static/chunks/app.js.map"),
+      projectRoot: "/Users/gxuri/project",
+    }),
+    "/Users/gxuri/project/app/page.tsx"
   )
 })

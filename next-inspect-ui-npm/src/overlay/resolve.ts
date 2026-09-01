@@ -8,6 +8,7 @@ import {
   pickDefinedSource,
   pickOpenSource,
   pickPreferredStackSource,
+  resolveSourceMapSourcePath,
   sourceFromFiberDebugSource,
   toAbsolutePath,
   type FiberDebugSource,
@@ -660,11 +661,12 @@ export const resolveStackFrame = async (
 
   if (!source || isBundledOrExternalPath(source)) return null
 
-  const sourceWithRoot = map.sourceRoot
-    ? `${map.sourceRoot.replace(/\/$/, "")}/${source}`
-    : source
-
-  const filePath = toAbsolutePath(sourceWithRoot, projectRoot)
+  const filePath = resolveSourceMapSourcePath({
+    source,
+    sourceRoot: map.sourceRoot,
+    sourceMapUrl,
+    projectRoot,
+  })
   if (isBundledOrExternalPath(filePath)) return null
 
   return {

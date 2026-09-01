@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter next-inspect-website dev",
+    "dev:react-test": "pnpm --filter react-test dev",
+    "dev:next-src-test": "pnpm --filter next-src-test dev",
     "dev:lib": "pnpm --filter next-inspect-ui dev",
     "dev:all": "pnpm --parallel --filter next-inspect-ui --filter next-inspect-ui-debug --filter next-inspect-website run dev",
     "build": "pnpm --filter next-inspect-ui build && pnpm --filter next-inspect-ui-debug build",
