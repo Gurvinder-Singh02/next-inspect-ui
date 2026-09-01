@@ -58,7 +58,7 @@ test("paints the default orange dashed spotlight", () => {
   assert.equal(paint.border, "1px dashed rgba(249 115 22 / 1)")
   assert.equal(paint.tooltipBackground, "#FF6100")
   assert.equal(paint.tooltipPadding, "2px 8px")
-  assert.match(paint.transition, /75ms/)
+  assert.equal(paint.animated, true)
 })
 
 test("drops the spotlight border when stroke width is 0", () => {

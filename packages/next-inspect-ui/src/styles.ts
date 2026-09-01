@@ -7,11 +7,7 @@ const STYLE_ATTR = "data-dev-inspector-style"
 const HOOK_PREFIX = "data-dev-inspector-"
 const CLASS_PREFIX = "next-inspect-ui-"
 
-const OVERLAY_HOVER_TRANSITION =
-  "left 75ms ease, top 75ms ease, width 75ms ease, height 75ms ease, background-color 75ms ease, border-color 75ms ease"
-
-const TOOLTIP_HOVER_TRANSITION =
-  "left 75ms ease, top 75ms ease, opacity 75ms ease"
+export const INSTANT_CLASS = "next-inspect-ui-instant"
 
 export const inspectClass = (hook: string) =>
   hook.startsWith(HOOK_PREFIX)
@@ -92,14 +88,22 @@ export const getOverlayPaint = (settings: InspectorSettings) => {
     borderRadius: `${spotlight.borderRadius}px`,
     paddingX: spotlight.paddingX,
     paddingY: spotlight.paddingY,
-    transition: spotlight.animated ? OVERLAY_HOVER_TRANSITION : "none",
-    tooltipTransition: spotlight.animated ? TOOLTIP_HOVER_TRANSITION : "none",
+    animated: spotlight.animated,
     tooltipBackground: tooltip.background,
     tooltipBorder: tooltip.border,
     tooltipText: tooltip.text,
     tooltipPadding: `${tooltip.paddingY}px ${tooltip.paddingX}px`,
     tooltipBorderRadius: `${tooltip.borderRadius}px`,
   }
+}
+
+export const setInspectMotion = (
+  overlay: HTMLElement,
+  tooltip: HTMLElement,
+  enabled: boolean
+) => {
+  overlay.classList.toggle(INSTANT_CLASS, !enabled)
+  tooltip.classList.toggle(INSTANT_CLASS, !enabled)
 }
 
 export const applyOverlayPaint = (
@@ -111,11 +115,10 @@ export const applyOverlayPaint = (
   overlay.style.setProperty("--inspect-fill", paint.fill)
   overlay.style.setProperty("--inspect-border", paint.border)
   overlay.style.setProperty("--inspect-radius", paint.borderRadius)
-  overlay.style.setProperty("--inspect-transition", paint.transition)
   tooltip.style.setProperty("--inspect-tooltip-bg", paint.tooltipBackground)
   tooltip.style.setProperty("--inspect-tooltip-border", paint.tooltipBorder)
   tooltip.style.setProperty("--inspect-tooltip-text", paint.tooltipText)
   tooltip.style.setProperty("--inspect-tooltip-padding", paint.tooltipPadding)
   tooltip.style.setProperty("--inspect-tooltip-radius", paint.tooltipBorderRadius)
-  tooltip.style.setProperty("--inspect-tooltip-transition", paint.tooltipTransition)
+  setInspectMotion(overlay, tooltip, paint.animated)
 }

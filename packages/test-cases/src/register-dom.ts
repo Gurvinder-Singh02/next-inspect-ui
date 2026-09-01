@@ -19,6 +19,20 @@ const createNode = (tag: string, namespaceURI: string | null = null) => {
       },
     },
     textContent: "",
+    className: "",
+    classList: {
+      toggle(name: string, force?: boolean) {
+        const parts = new Set(node.className.split(/\s+/).filter(Boolean))
+        const on = force ?? !parts.has(name)
+        if (on) parts.add(name)
+        else parts.delete(name)
+        node.className = [...parts].join(" ")
+        return on
+      },
+      contains(name: string) {
+        return node.className.split(/\s+/).filter(Boolean).includes(name)
+      },
+    },
     get outerHTML() {
       return `<${tag}></${tag}>`
     },
