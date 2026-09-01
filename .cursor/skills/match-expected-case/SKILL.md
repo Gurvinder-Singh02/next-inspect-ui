@@ -8,16 +8,16 @@ description: >-
 
 # Match expected case
 
-Hand-edit goldens for `apps/next-js-example`. No capture script. Open the case,
-inspect the fixture, pin `apps/next-js-example/test-cases/cases.ts` to the RESULT
-`file:line`.
+Hand-edit expected cases for `apps/next-js-example`. No capture script. Open the
+case, inspect the fixture, pin `apps/next-js-example/test-cases/cases.ts` to the
+RESULT `file:line`.
 
 ## Files
 
 | Role | Path |
 |---|---|
 | Fixtures | `apps/next-js-example/app/(dev)/test/page.tsx` |
-| Goldens | `apps/next-js-example/test-cases/cases.ts` |
+| Expected | `apps/next-js-example/test-cases/cases.ts` |
 | Sticky meta | `TEST_CASE_META` in `cases.ts` |
 | Show source | `apps/next-js-example/test-cases/case-source-examples.ts` |
 
@@ -26,7 +26,7 @@ inspect the fixture, pin `apps/next-js-example/test-cases/cases.ts` to the RESUL
 ### 1. Read the fixture
 
 Open `page.tsx` (and any fixture file the case imports). Note every usage site
-and every host site the golden should name.
+and every host site the case should name.
 
 Mark multi-target hosts with `data-accuracy-target={id}` on the element itself
 (the button, svg, span, …), not a wrapper.
@@ -60,12 +60,12 @@ source panel has an examples entry.
 
 ### 4. Shift after page edits
 
-Inserting/removing lines in `page.tsx` shifts every later `TEST_PAGE` golden.
-Re-pin **every** `file: TEST_PAGE` line that moved — not only the case you
+Inserting/removing lines in `page.tsx` shifts every later `TEST_PAGE` expected
+line. Re-pin **every** `file: TEST_PAGE` line that moved — not only the case you
 touched.
 
 Done when a full read of `page.tsx` usage sites matches all `TEST_PAGE`
-goldens.
+expected lines.
 
 ### 5. Verify failures
 
@@ -74,7 +74,7 @@ re-pin, re-run the case Test (or suite). Stop when the case shows **PASS**.
 
 ## Reference
 
-- Goldens are `AccuracyNode[]` / `AccuracyTarget[]` — climb parents first, host
+- Expected trees are `AccuracyNode[]` / `AccuracyTarget[]` — climb parents first, host
   last (Inspect NODE TREE order).
 - Paths are project-relative (`app/(dev)/test/page.tsx`, not absolute).
 - Nested HTML under another host does not climb; return-root hosts do.
