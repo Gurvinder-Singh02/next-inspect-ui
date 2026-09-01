@@ -1,7 +1,7 @@
 import {
   INSPECTOR_COLORS,
   type InspectorSettings,
-} from "./lib.ts"
+} from "../lib/index.ts"
 
 const STYLE_ATTR = "data-dev-inspector-style"
 const HOOK_PREFIX = "data-dev-inspector-"

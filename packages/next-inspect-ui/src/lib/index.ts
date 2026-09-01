@@ -335,7 +335,7 @@ export {
   toRgbChannels,
   toRgba,
   getOverlayPaint,
-} from "./styles.ts"
+} from "../styles/styles.ts"
 
 export {
   expandRectWithPadding,

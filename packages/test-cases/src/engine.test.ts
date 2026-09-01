@@ -10,8 +10,8 @@ import {
   isPointInRect,
   resolveSourceMapSourcePath,
   sourceFromFiberDebugSource,
-} from "../../next-inspect-ui/src/engine.ts"
-import { underStackTransform } from "../../next-inspect-ui/src/tooltip.ts"
+} from "../../next-inspect-ui/src/lib/engine.ts"
+import { underStackTransform } from "../../next-inspect-ui/src/lib/tooltip.ts"
 
 const loc = (filePath: string) => ({ filePath, line: 1, column: 1 })
 

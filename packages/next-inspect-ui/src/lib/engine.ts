@@ -2,8 +2,8 @@ import {
   INSPECTOR_IDES,
   toAbsolutePath,
   type InspectorIde,
-} from "./lib.ts"
-import { markInspectNode, paintStyleTab } from "./styles.ts"
+} from "./index.ts"
+import { markInspectNode, paintStyleTab } from "../styles/styles.ts"
 
 const getElementFiber = <T = unknown>(element: Element): T | null => {
   const fiberKey = Object.keys(element).find((key) => key.startsWith("__reactFiber$"))
@@ -1332,4 +1332,4 @@ export const createStylesSection = (element: Element, onLayout: () => void) => {
   return root
 }
 
-export { applyOverlayPaint as applyOverlayStyles } from "./styles.ts"
+export { applyOverlayPaint as applyOverlayStyles } from "../styles/styles.ts"

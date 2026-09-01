@@ -18,7 +18,7 @@ export default defineConfig([
   },
   {
     ...shared,
-    entry: { lib: "src/lib.ts" },
+    entry: { lib: "src/lib/index.ts" },
     clean: false,
   },
 ])
