@@ -11,7 +11,7 @@
     "build:example": "pnpm --filter next-js-example build",
     "build:dashboard": "pnpm --filter shadcn-dashboard-001-example build",
     "test": "pnpm --filter @next-inspect-ui/test-cases test",
-    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter site typecheck && pnpm --filter next-js-example typecheck && pnpm --filter shadcn-dashboard-001-example typecheck"
+    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter @next-inspect-ui/test-cases typecheck && pnpm --filter site typecheck && pnpm --filter next-js-example typecheck && pnpm --filter shadcn-dashboard-001-example typecheck"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

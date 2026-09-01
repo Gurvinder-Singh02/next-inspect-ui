@@ -114,6 +114,18 @@ export const isBundledOrExternalPath = (filePath: string) => {
   return /(?:^|\/)node_modules\/|\/(?:\.next|_next)\/|^\.next\/|webpack-internal:|webpack:\/\/|turbopack:\/\/|about:\/\/React\//.test(file)
 }
 
+/** RSC / Next server chunks — including Turbopack `.next/dev/server`. */
+export const isReactServerStackFile = (filePath: string) => {
+  const file = filePath.replace(/\\/g, "/")
+  return (
+    file.startsWith("about://React/Server/") ||
+    file.includes("/_next/") ||
+    file.includes(".next/server") ||
+    file.includes(".next/dev/server") ||
+    file.includes("/ssr/")
+  )
+}
+
 const isFilesystemAbsolutePath = (filePath: string) => {
   const file = filePath.replace(/\\/g, "/")
   return (
@@ -676,7 +688,7 @@ const framesFromUnknownStack = (stack: unknown): StackFrame[] => {
         arguments: [],
         line1: entry[2],
         column1: stackNum(entry[3]) ? entry[3] : 1,
-        isServer: stackServer(entry[1]),
+        isServer: stackServer(entry[1]) || isReactServerStackFile(entry[1]),
       })
       continue
     }
@@ -785,6 +797,20 @@ const findNearestAuthorCallSiteSync = (fiber: ReactFiber, projectRoot: string): 
   return stackFallback ?? debugInfoFallback
 }
 
+const mappedDebugInfoSource = async (
+  node: ReactFiber,
+  projectRoot: string,
+  sourceMapCache: Map<string, Promise<SourceMap>>
+) => {
+  if (!node._debugInfo?.length) return null
+  for (let i = node._debugInfo.length - 1; i >= 0; i -= 1) {
+    const pair = await resolveDebugInfoPair(node._debugInfo[i]!, projectRoot, sourceMapCache)
+    const candidate = pair.source ?? pair.renderedBy
+    if (candidate && !isBundledOrExternalPath(candidate.filePath)) return candidate
+  }
+  return null
+}
+
 const findNearestAuthorCallSite = async (
   fiber: ReactFiber,
   projectRoot: string,
@@ -804,6 +830,8 @@ const findNearestAuthorCallSite = async (
       null
     )
     if (mapped) return mapped
+    const fromDebugInfo = await mappedDebugInfoSource(owner, projectRoot, sourceMapCache)
+    if (fromDebugInfo) return fromDebugInfo
     owner = owner._debugOwner ?? null
   }
   return null
