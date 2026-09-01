@@ -10,5 +10,9 @@
     "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter next-inspect-ui-debug typecheck && pnpm --filter next-inspect-website typecheck",
     "check:debug-tarball": "node scripts/check-debug-tarball.mjs",
     "release:debug": "pnpm --filter next-inspect-ui-debug exec pnpm publish --access public"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "playwright": "^1.62.1"
   }
 }
