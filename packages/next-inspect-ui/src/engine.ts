@@ -1,9 +1,7 @@
 import {
-  getOverlayPaint,
   INSPECTOR_IDES,
   toAbsolutePath,
   type InspectorIde,
-  type InspectorSettings,
 } from "./lib.ts"
 
 const getElementFiber = <T = unknown>(element: Element): T | null => {
@@ -14,7 +12,7 @@ const getElementFiber = <T = unknown>(element: Element): T | null => {
 export const isInspectorChrome = (element: Element) =>
   Boolean(
     element.closest(
-      "[data-dev-inspector-overlay], [data-dev-inspector-tooltip], [data-dev-inspector-log], [data-dev-inspector-debug-toggle]"
+      "[data-dev-inspector-overlay], [data-dev-inspector-tooltip], [data-dev-inspector-info], [data-dev-inspector-log], [data-dev-inspector-debug-toggle]"
     )
   )
 
@@ -1194,11 +1192,8 @@ const cssSpan = (text: string, color?: string) => {
 
 const createCodeSurface = () => {
   const wrap = document.createElement("div")
-  wrap.style.cssText =
-    "margin-top:12px;overflow:auto;border-radius:8px;background:#0b0b0c;padding:10px 12px;"
+  wrap.setAttribute("data-dev-inspector-code", "")
   const pre = document.createElement("pre")
-  pre.style.cssText =
-    "margin:0;white-space:pre-wrap;word-break:break-word;font:11px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;"
   wrap.appendChild(pre)
   return { wrap, pre }
 }
@@ -1279,7 +1274,6 @@ export const isPointInRect = (
 const createCssBlock = (element: Element) => {
   const { tag, entries } = getCssDeclarations(element)
   const { wrap, pre } = createCodeSurface()
-  wrap.style.marginTop = "0"
   pre.append(cssSpan(tag, "#7ee787"), cssSpan(" {\n", "#8b949e"))
   for (const { prop, value } of entries) {
     pre.append(
@@ -1295,7 +1289,6 @@ const createCssBlock = (element: Element) => {
 
 const createTailwindBlock = (element: Element) => {
   const { wrap, pre } = createCodeSurface()
-  wrap.style.marginTop = "0"
   const classes = getElementClassName(element)
   const tag = element.tagName.toLowerCase()
   pre.append(
@@ -1312,17 +1305,16 @@ const createTailwindBlock = (element: Element) => {
 
 export const createStylesSection = (element: Element, onLayout: () => void) => {
   const root = document.createElement("div")
-  root.style.cssText = "margin-top:14px;display:flex;flex-direction:column;gap:8px;"
+  root.setAttribute("data-dev-inspector-styles", "")
   const tabs = document.createElement("div")
-  tabs.style.cssText = "display:flex;gap:6px;"
+  tabs.setAttribute("data-dev-inspector-style-tabs", "")
   const body = document.createElement("div")
   let mode: "tailwind" | "css" = "tailwind"
   const mkTab = (next: typeof mode, label: string) => {
     const btn = document.createElement("button")
     btn.type = "button"
     btn.textContent = label
-    btn.style.cssText =
-      "all:unset;cursor:pointer;font-size:10px;padding:2px 7px;border-radius:4px;text-transform:uppercase;"
+    btn.setAttribute("data-dev-inspector-style-tab", "")
     btn.onclick = (event) => {
       event.preventDefault()
       event.stopPropagation()
@@ -1336,8 +1328,8 @@ export const createStylesSection = (element: Element, onLayout: () => void) => {
   const cssTab = mkTab("css", "CSS")
   tabs.append(twTab, cssTab)
   const paint = () => {
-    twTab.style.opacity = mode === "tailwind" ? "1" : "0.55"
-    cssTab.style.opacity = mode === "css" ? "1" : "0.55"
+    twTab.toggleAttribute("data-active", mode === "tailwind")
+    cssTab.toggleAttribute("data-active", mode === "css")
     body.replaceChildren(mode === "tailwind" ? createTailwindBlock(element) : createCssBlock(element))
     onLayout()
   }
@@ -1346,21 +1338,4 @@ export const createStylesSection = (element: Element, onLayout: () => void) => {
   return root
 }
 
-export const applyOverlayStyles = (overlay: HTMLDivElement, tooltip: HTMLDivElement, settings: InspectorSettings) => {
-  const paint = getOverlayPaint(settings)
-  overlay.style.backgroundColor = paint.fill
-  overlay.style.backgroundImage = "none"
-  overlay.style.animation = "none"
-  overlay.style.border = paint.border
-  overlay.style.borderRadius = paint.borderRadius
-  overlay.style.transition = paint.transition
-  tooltip.style.background = paint.tooltipBackground
-  tooltip.style.border = `1px solid ${paint.tooltipBorder}`
-  tooltip.style.color = paint.tooltipText
-  tooltip.style.padding = paint.tooltipPadding
-  tooltip.style.borderRadius = paint.tooltipBorderRadius
-  tooltip.style.transition = paint.tooltipTransition
-}
-
-export const ARROW_UP_RIGHT_ICON =
-  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>'
+export { applyOverlayPaint as applyOverlayStyles } from "./styles.ts"

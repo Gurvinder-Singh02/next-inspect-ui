@@ -2,8 +2,10 @@
 
 import { useEffect } from "react"
 
-import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, expandRectWithPadding, formatComponentTag, formatDomTag, getInspectorSettings, getOverlayPaint, getTooltipPosition, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, subscribeInspectorSettings } from "./lib.ts"
-import { applyOverlayStyles, ARROW_UP_RIGHT_ICON, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, underStackTransform, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./engine.ts"
+import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, expandRectWithPadding, formatComponentTag, formatDomTag, getInspectorSettings, getTooltipPosition, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, subscribeInspectorSettings } from "./lib.ts"
+import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, underStackTransform, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./engine.ts"
+import { createOpenSourceIcon, createUsedIcon } from "./icons.ts"
+import { ensureInspectorStyles } from "./styles.ts"
 
 type OpenKind = "used" | "defined"
 
@@ -18,6 +20,7 @@ type OwnerChainStep = {
 export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
   useEffect(() => {
     initInspectorSettings()
+    ensureInspectorStyles()
 
     const sourceMapCache = new Map<string, Promise<SourceMap>>()
     const sourceCache = new WeakMap<ReactFiber, Promise<SourceLocation | null>>()
@@ -67,12 +70,13 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     let settings = getInspectorSettings()
     let lastTargetRect: { left: number; top: number; width: number; height: number } | null = null
 
-    const M = "var(--muted-foreground,#8b949e)"
-    const F = "var(--foreground,#e4e4e7)"
-    const EDITOR_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>'
-    const mk = <T extends HTMLElement = HTMLElement>(tag: string, css = "", text?: string) => {
+    const mk = <T extends HTMLElement = HTMLElement>(
+      tag: string,
+      name?: string,
+      text?: string
+    ) => {
       const n = document.createElement(tag) as T
-      if (css) n.style.cssText = css
+      if (name) n.setAttribute(name, "")
       if (text != null) n.textContent = text
       return n
     }
@@ -87,18 +91,16 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     ) => {
       box.textContent = ""
       if (!source) {
-        box.append(mk("span", `font-size:12px;color:${M};opacity:0.6;`, "Source unavailable"))
+        box.append(mk("span", "data-dev-inspector-source-empty", "Source unavailable"))
         return
       }
-      const row = mk("div", "display:flex;align-items:baseline;gap:8px;font-size:12px;line-height:1.5;")
-      if (label) row.append(mk("span", `flex:none;min-width:88px;color:${M};opacity:0.6;font-weight:500;`, label))
-      const path = mk("a", `display:inline-flex;align-items:center;gap:6px;color:${M};cursor:pointer;font-weight:500;word-break:break-all;text-decoration:none;`)
-      const pathIcon = mk("span", "display:inline-flex;flex:none;opacity:0.7;transform:translateX(0);transition:transform 160ms ease,opacity 160ms ease;")
-      pathIcon.innerHTML = EDITOR_SVG
-      path.append(mk("span", "", `${relSourcePath(source)}:${source.line}:${source.column}`), pathIcon)
+      const row = mk("div", "data-dev-inspector-source-row")
+      if (label) row.append(mk("span", "data-dev-inspector-source-label", label))
+      const path = mk("a", "data-dev-inspector-source-path")
+      const pathIcon = mk("span", "data-dev-inspector-source-icon")
+      pathIcon.append(createOpenSourceIcon())
+      path.append(mk("span", undefined, `${relSourcePath(source)}:${source.line}:${source.column}`), pathIcon)
       path.onclick = () => openInEditor(source, settings.ide)
-      path.onmouseenter = () => { path.style.color = F; pathIcon.style.opacity = "1"; pathIcon.style.transform = "translateX(3px)" }
-      path.onmouseleave = () => { path.style.color = M; pathIcon.style.opacity = "0.7"; pathIcon.style.transform = "translateX(0)" }
       row.append(path)
       box.append(row)
     }
@@ -107,37 +109,19 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     overlay.setAttribute("data-dev-inspector-overlay", "")
     tooltip.setAttribute("aria-hidden", "true")
     tooltip.setAttribute("data-dev-inspector-tooltip", "")
-    overlay.style.cssText =
-      "position:fixed;z-index:2147483646;display:none;pointer-events:none;box-sizing:border-box;border-radius:4px;"
-
-    tooltip.style.cssText =
-      'position:fixed;z-index:2147483647;display:none;pointer-events:none;max-width:min(36rem,calc(100vw - 16px));overflow:visible;box-sizing:border-box;font:12px/1.4 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;'
     const tooltipFront = document.createElement("div")
     tooltipFront.setAttribute("data-dev-inspector-tooltip-front", "")
-    tooltipFront.style.cssText =
-      "position:relative;z-index:2;display:flex;align-items:center;box-sizing:border-box;max-width:min(36rem,calc(100vw - 16px));overflow:hidden;box-shadow:0 4px 12px rgb(0 0 0 / 30%);"
 
     const tooltipIconWrap = document.createElement("span")
+    tooltipIconWrap.setAttribute("data-dev-inspector-tooltip-icon", "")
     tooltipIconWrap.setAttribute("aria-hidden", "true")
-    tooltipIconWrap.style.cssText =
-      "display:inline-flex;flex:none;align-items:center;justify-content:center;overflow:hidden;width:0;margin-right:0;transition:width 160ms ease,margin-right 160ms ease;"
-    tooltipIconWrap.innerHTML = ARROW_UP_RIGHT_ICON
+    tooltipIconWrap.append(createUsedIcon())
     const tooltipLabel = document.createElement("span")
-    tooltipLabel.style.cssText =
-      "min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+    tooltipLabel.setAttribute("data-dev-inspector-tooltip-label", "")
     tooltipFront.append(tooltipIconWrap, tooltipLabel)
     tooltip.append(tooltipFront)
 
     const tooltipUnderLayers: HTMLDivElement[] = []
-
-    const paintTooltipChip = (chip: HTMLElement) => {
-      const paint = getOverlayPaint(settings)
-      chip.style.background = paint.tooltipBackground
-      chip.style.border = `1px solid ${paint.tooltipBorder}`
-      chip.style.color = paint.tooltipText
-      chip.style.borderRadius = paint.tooltipBorderRadius
-      chip.style.padding = paint.tooltipPadding
-    }
 
     const clearTooltipStack = () => {
       tooltipUnderLayers.splice(0).forEach((layer) => layer.remove())
@@ -156,9 +140,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     }
     const pushTooltipUnder = (text: string) => {
       if (!optionHeld || !text) return
-      const chip = mk<HTMLDivElement>("div", "position:absolute;left:0;bottom:0;display:flex;align-items:center;box-sizing:border-box;max-width:min(36rem,calc(100vw - 16px));overflow:hidden;white-space:nowrap;text-overflow:ellipsis;box-shadow:0 4px 12px rgb(0 0 0 / 30%);pointer-events:none;")
-      chip.setAttribute("data-dev-inspector-tooltip-under", "")
-      paintTooltipChip(chip)
+      const chip = mk<HTMLDivElement>("div", "data-dev-inspector-tooltip-under")
       chip.textContent = text
       tooltip.append(chip)
       tooltipUnderLayers.push(chip)
@@ -170,10 +152,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     }
 
     const syncUsedIcon = (show: boolean) => {
-      const rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      tooltipIconWrap.style.transition = rm ? "none" : "width 160ms ease,margin-right 160ms ease"
-      tooltipIconWrap.style.width = show ? "12px" : "0"
-      tooltipIconWrap.style.marginRight = show ? "3px" : "0"
+      tooltipIconWrap.toggleAttribute("data-open", show)
     }
 
     const toPascalCaseName = (raw: string) =>
@@ -432,18 +411,9 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
     }
 
     info.setAttribute("aria-hidden", "true")
-    info.setAttribute("data-dev-inspector-tooltip", "")
-    info.style.cssText =
-      'position:fixed;z-index:2147483647;display:none;pointer-events:none;max-width:min(26rem,calc(100vw - 16px));box-sizing:border-box;background:var(--card,#18181b);border:1px solid var(--border,rgb(255 255 255 / 12%));color:var(--card-foreground,#e4e4e7);padding:12px 14px;border-radius:12px;font:12px/1.5 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 12px 32px rgb(0 0 0 / 45%);cursor:default;'
+    info.setAttribute("data-dev-inspector-info", "")
     const paintTooltipChrome = () => {
       applyOverlayStyles(overlay, tooltip, settings)
-
-      tooltip.style.background = "transparent"
-      tooltip.style.border = "none"
-      tooltip.style.padding = "0"
-      tooltip.style.boxShadow = "none"
-      paintTooltipChip(tooltipFront)
-      for (const layer of tooltipUnderLayers) paintTooltipChip(layer)
     }
 
     paintTooltipChrome()
@@ -553,10 +523,9 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
         })).reverse(),
         { name: hostTag, isDom: true, source: hostSource, climbIndex: -1 },
       ]
-      const section = mk("div", "margin-top:10px;")
-      section.setAttribute("data-dev-inspector-owner-tree", "")
-      section.append(mk("div", `font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:${M};opacity:0.7;margin-bottom:6px;`, "Node tree"))
-      const tree = mk("div", "display:flex;flex-direction:column;gap:0;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;")
+      const section = mk("div", "data-dev-inspector-owner-tree")
+      section.append(mk("div", "data-dev-inspector-tree-heading", "Node tree"))
+      const tree = mk("div", "data-dev-inspector-tree")
       tree.setAttribute("role", "tree")
       tree.setAttribute("aria-label", "Node tree")
       const expanded = nodes.map(() => true)
@@ -583,31 +552,35 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
           if (!expanded.slice(0, index).every(Boolean)) return
           const hasChildren = index < nodes.length - 1
           const active = node.climbIndex === selection.climbIndex
-          const row = mk("div", `display:flex;align-items:center;gap:6px;min-width:0;padding:3px 2px;cursor:pointer;${active ? "background:rgb(56 189 248 / 12%);color:" + F : "color:" + M}`)
+          const row = mk("div", "data-dev-inspector-tree-row")
+          row.toggleAttribute("data-active", active)
           row.setAttribute("role", "treeitem")
           row.setAttribute("aria-selected", active ? "true" : "false")
           row.setAttribute("aria-level", String(index + 1))
-          const gutter = mk("div", "display:flex;align-items:center;flex:none;user-select:none;")
-          gutter.append(mk("span", `display:inline-block;white-space:pre;width:${index * 12}px;`))
-          const twisty = mk<HTMLButtonElement>("button", "appearance:none;border:0;background:transparent;padding:0;margin:0;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;color:inherit;font:inherit;line-height:1;" + (hasChildren ? "cursor:pointer;opacity:0.65;" : "opacity:0;"))
+          const gutter = mk("div", "data-dev-inspector-tree-gutter")
+          const indent = mk("span", "data-dev-inspector-tree-indent")
+          indent.style.setProperty("--inspect-tree-depth", String(index))
+          gutter.append(indent)
+          const twisty = mk<HTMLButtonElement>("button", "data-dev-inspector-tree-twisty")
           twisty.type = "button"
           if (hasChildren) {
+            twisty.toggleAttribute("data-open", true)
             twisty.textContent = expanded[index] ? "▾" : "▸"
             twisty.onclick = (e) => { e.preventDefault(); e.stopPropagation(); expanded[index] = !expanded[index]; paint(); reposition() }
           }
           gutter.append(twisty)
-          const nameEl = mk("span", `flex:none;font-weight:600;color:${F};opacity:0.9;`, node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name))
-          const pathEl = mk<HTMLButtonElement>("button", `appearance:none;border:0;background:transparent;padding:0;margin:0 0 0 auto;min-width:0;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:${M};opacity:0.7;font:inherit;text-align:right;`)
+          const nameEl = mk("span", "data-dev-inspector-tree-name", node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name))
+          const pathEl = mk<HTMLButtonElement>("button", "data-dev-inspector-tree-path")
           pathEl.type = "button"
           if (node.source) {
             const label = formatPageLabel(node.source, projectRoot)
             pathEl.textContent = label
             pathEl.title = label
-            pathEl.style.cursor = "pointer"
+            pathEl.toggleAttribute("data-open", true)
             pathEl.onclick = (e) => { e.preventDefault(); e.stopPropagation(); openInEditor(node.source!, settings.ide) }
           } else {
             pathEl.textContent = "…"
-            pathEl.style.opacity = "0.4"
+            pathEl.toggleAttribute("data-empty", true)
           }
           row.append(gutter, nameEl, pathEl)
           row.onclick = (e) => {
@@ -689,11 +662,11 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       const chain = buildOwnerChain(fiber)
       info.textContent = ""
       info.append(
-        mk("div", `font-weight:600;font-size:13px;margin-bottom:3px;color:${F};`, climbStep ? formatComponentTag(climbStep.name) : formatDomTag(hostTag)),
+        mk("div", "data-dev-inspector-info-title", climbStep ? formatComponentTag(climbStep.name) : formatDomTag(hostTag)),
       )
       infoTitleEl = info.firstElementChild as HTMLDivElement
-      const sourceContainer = mk<HTMLDivElement>("div", "display:flex;flex-direction:column;gap:2px;")
-      sourceContainer.append(mk("span", `font-size:12px;color:${M};opacity:0.6;font-weight:500;`, "Resolving…"))
+      const sourceContainer = mk<HTMLDivElement>("div", "data-dev-inspector-source-box")
+      sourceContainer.append(mk("span", "data-dev-inspector-source-pending", "Resolving…"))
       info.append(sourceContainer)
       infoSourceBox = sourceContainer
       infoTreeChain = chain
@@ -928,8 +901,10 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       })
       lastTargetRect = rect
       const wasHidden = overlay.style.display === "none"
-      const paint = getOverlayPaint(settings)
-      if (wasHidden) { overlay.style.transition = "none"; tooltip.style.transition = "none" }
+      if (wasHidden) {
+        overlay.style.setProperty("--inspect-transition", "none")
+        tooltip.style.setProperty("--inspect-tooltip-transition", "none")
+      }
       overlay.style.display = "block"
       overlay.style.left = `${rect.left}px`
       overlay.style.top = `${rect.top}px`
@@ -946,8 +921,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       if (infoVisible && !hasTargetChanged && lastTargetRect) positionInfo(lastTargetRect)
       if (wasHidden && settings.devSpotlightProps.animated) {
         void overlay.offsetWidth
-        overlay.style.transition = paint.transition
-        tooltip.style.transition = paint.tooltipTransition
+        applyOverlayStyles(overlay, tooltip, settings)
       }
       return true
     }
