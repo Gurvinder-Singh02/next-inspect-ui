@@ -177,7 +177,7 @@ export const SuiteHeader = ({
           </div>
 
           <div
-            className="flex max-w-64 flex-wrap justify-end gap-1"
+            className="flex max-w-34 flex-wrap justify-start gap-1"
             aria-label="Case status dots"
           >
             {visibleCases.map((entry) => {

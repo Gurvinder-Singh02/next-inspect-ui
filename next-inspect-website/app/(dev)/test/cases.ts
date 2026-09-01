@@ -2,7 +2,7 @@
  * Manual expected NODE TREE goldens for /test.
  * Edit by hand — pin from live inspect
  * (`window.__inspectUI.inspect` → `nodes[].source`;
- * `.cursor/skills/pin-accuracy-goldens`).
+ * `.cursor/skills/match-expected-case`).
  */
 import type { AccuracyNode, AccuracyTarget } from "@/components/accuracy/types"
 import type { SuiteCaseMeta } from "@/components/accuracy/suite-header"
