@@ -3,14 +3,6 @@
 import { useEffect } from "react"
 
 import {
-  findChildInspectable,
-  findChildInspectableWhere,
-  findEdgeSiblingInspectable,
-  findParentInspectable,
-  findSiblingInspectable,
-  isInspectorChrome,
-} from "./nav"
-import {
   DEFAULT_DEV_SPOTLIGHT_PROPS,
   formatTooltipLabel,
   expandRectWithPadding,
@@ -25,56 +17,56 @@ import {
   PADDING_MIN,
   setDevSpotlightProps,
   subscribeInspectorSettings,
-} from "./settings"
-import {
-  formatPageLabel,
-  getClimbStepDisplaySource,
-  isBundledOrExternalPath,
-  isClimbUsageBoundary,
-  isDistinctUsedSource,
-  sourceFromFiberDebugSource,
-  underStackTransform,
-  type SourceLocation,
-} from "./source"
+} from "./lib.ts"
 import {
   applyOverlayStyles,
   ARROW_UP_RIGHT_ICON,
   createStylesSection,
-  isPointInRect,
-  resolveInspectElement,
-} from "./chrome"
-import {
+  findChildInspectable,
+  findChildInspectableWhere,
+  findEdgeSiblingInspectable,
+  findParentInspectable,
+  findSiblingInspectable,
+  formatPageLabel,
+  getClimbStepDisplaySource,
   getComponentName,
   getDirectClimbOwner,
   getDomHoverName,
   getFiber,
-  getNamedTarget,
-  getOwnStackFrames,
-  isCompositeComponentFiber,
-  isDirectFiberChildOf,
-  isFrameworkInspectorName,
-  isHostComponentFiber,
-  isOwnerAncestorOf,
-  readComponentTypeName,
-  type ReactFiber,
-  type ServerDebugInfo,
-} from "./fiber"
-import {
   getHostAuthorSource,
   getInstantDefinedSource,
   getInstantUsedSource,
+  getNamedTarget,
+  getOwnStackFrames,
+  isBundledOrExternalPath,
+  isClimbUsageBoundary,
+  isCompositeComponentFiber,
+  isDirectFiberChildOf,
+  isDistinctUsedSource,
+  isFrameworkInspectorName,
+  isHostComponentFiber,
+  isInspectorChrome,
+  isOwnerAncestorOf,
+  isPointInRect,
   openInEditor,
   preferredSourceFromFrames,
+  readComponentTypeName,
   resolveDebugInfoPair,
   resolveDebugInfoPairSync,
   resolveFirstMappedFrame,
   resolveHostAuthorSource,
+  resolveInspectElement,
   resolveInstanceSource,
   resolveNearestAncestorSource,
   resolveSource,
+  sourceFromFiberDebugSource,
   sourceFromStackFrame,
+  underStackTransform,
+  type ReactFiber,
+  type ServerDebugInfo,
+  type SourceLocation,
   type SourceMap,
-} from "./resolve"
+} from "./engine.ts"
 
 type OpenKind = "used" | "defined"
 
