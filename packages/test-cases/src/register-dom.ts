@@ -63,6 +63,13 @@ const createNode = (tag: string, namespaceURI: string | null = null) => {
     replaceChildren() {
       children.length = 0
     },
+    remove() {
+      const parent = node.parentElement
+      if (!parent) return
+      const index = parent.children.indexOf(node)
+      if (index >= 0) parent.children.splice(index, 1)
+      node.parentElement = null
+    },
   }
   return node
 }

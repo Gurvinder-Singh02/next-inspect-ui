@@ -13,16 +13,16 @@ const { applyOverlayPaint, ensureInspectorStyles } = await import(
 )
 const { createUsedIcon } = await import("../../next-inspect-ui/src/icons.ts")
 
-test("injects the overlay stylesheet once", () => {
+test("injects overlay.css once", () => {
   document.head.querySelectorAll("style[data-dev-inspector-style]").forEach((node) => {
     node.remove()
   })
   ensureInspectorStyles(document)
   ensureInspectorStyles(document)
-  assert.equal(
-    document.head.querySelectorAll("style[data-dev-inspector-style]").length,
-    1
-  )
+  const sheets = document.head.querySelectorAll("style[data-dev-inspector-style]")
+  assert.equal(sheets.length, 1)
+  assert.match(sheets[0]?.textContent ?? "", /\[data-dev-inspector-overlay\]/)
+  assert.match(sheets[0]?.textContent ?? "", /--inspect-fill/)
 })
 
 test("paints overlay and tooltip through CSS variables", () => {
