@@ -1,8 +1,6 @@
 import { Suspense } from "react"
 import Link from "next/link"
 import { SparklesIcon, CircleIcon, ArrowRightIcon, TrendingUpIcon } from "lucide-react"
-import { inspectUIProjectRoot } from "next-inspect-ui-debug"
-
 import { SuiteCase } from "@/components/accuracy/suite-case"
 import { SuiteGroup } from "@/components/accuracy/suite-group"
 import { TestSuiteShell } from "@/components/accuracy/test-suite-shell"
@@ -54,7 +52,7 @@ export default async function TestSuitePage() {
   return (
     <TestSuiteShell
       cases={TEST_CASE_META}
-      projectRoot={inspectUIProjectRoot()}
+      projectRoot={process.cwd()}
       sourcesByCase={sourcesByCase}
     >
       <SuiteGroup title="basic html snippet">

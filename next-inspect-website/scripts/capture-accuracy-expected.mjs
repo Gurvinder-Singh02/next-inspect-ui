@@ -92,7 +92,7 @@ for (const id of caseIds) {
 (() => {
   const root = document.querySelector('[data-accuracy-case="${id}"]');
   if (!root) return null;
-  const target = root.querySelector("[data-slot=button], [data-inspect-host], button, a, input");
+  const target = root.querySelector("[data-slot=button], button, a, input");
   if (!target) return null;
   target.scrollIntoView({ block: "center" });
   const r = target.getBoundingClientRect();

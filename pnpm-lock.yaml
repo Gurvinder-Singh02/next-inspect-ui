@@ -295,9 +295,6 @@ importers:
       next-inspect-ui:
         specifier: workspace:*
         version: link:../next-inspect-ui-npm
-      next-inspect-ui-debug:
-        specifier: workspace:*
-        version: link:../next-inspect-ui-debug
       prettier:
         specifier: ^3.8.3
         version: 3.9.6
