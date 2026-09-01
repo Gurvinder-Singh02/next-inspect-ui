@@ -3,17 +3,18 @@
 Dev-only overlay for Next.js. Hover any element to see its source, click to open it.
 
 ```
-packages/next-inspect-ui   published library
-packages/test-cases        accuracy goldens
-apps/nextjs-example        dashboard with InspectUI installed
-apps/next-js-test          /test suite
-site                       marketing
+packages/next-inspect-ui              published library
+packages/test-cases                   library unit tests
+apps/next-js-example                  /test suite and goldens
+apps/shadcn-dashboard-001-example     dashboard with InspectUI installed
+site                                  marketing
 ```
 
 ```bash
 pnpm install
 pnpm --filter next-inspect-ui build
+pnpm test           # library unit tests
 pnpm dev            # site
-pnpm dev:example    # dashboard
-pnpm dev:test       # accuracy suite
+pnpm dev:example    # /test suite
+pnpm dev:dashboard  # dashboard
 ```

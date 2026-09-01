@@ -1,5 +1,7 @@
 # @next-inspect-ui/test-cases
 
-Expected NODE TREE goldens for `apps/next-js-test`.
+Unit tests for `packages/next-inspect-ui`.
 
-Pin by hand with `/match-expected-case`.
+```bash
+pnpm --filter @next-inspect-ui/test-cases test
+```

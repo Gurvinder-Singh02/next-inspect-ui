@@ -6,7 +6,12 @@ import { fileURLToPath } from "node:url"
 import {
   isClimbUsageBoundary,
   resolveSourceMapSourcePath,
-} from "./engine.ts"
+} from "../../next-inspect-ui/src/engine.ts"
+
+const ENGINE_SOURCE = new URL(
+  "../../next-inspect-ui/src/engine.ts",
+  import.meta.url
+)
 
 const loc = (filePath: string) => ({ filePath, line: 1, column: 1 })
 
@@ -76,10 +81,7 @@ test("keeps absolute filesystem sourcemap sources", () => {
   )
 })
 
-const resolveSource = readFileSync(
-  fileURLToPath(new URL("./engine.ts", import.meta.url)),
-  "utf8"
-)
+const resolveSource = readFileSync(fileURLToPath(ENGINE_SOURCE), "utf8")
 const alphabet = /(?:export )?const BASE64_CHARS =\s*"([^"]+)"/.exec(
   resolveSource
 )

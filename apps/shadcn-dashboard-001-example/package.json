@@ -1,5 +1,5 @@
 {
-  "name": "next-js-test",
+  "name": "shadcn-dashboard-001-example",
   "version": "0.0.1",
   "type": "module",
   "private": true,
@@ -57,7 +57,6 @@
     "agentation": "^3.0.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "@next-inspect-ui/test-cases": "workspace:*",
     "next-inspect-ui": "workspace:*",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",

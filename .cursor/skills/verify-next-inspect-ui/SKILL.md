@@ -10,8 +10,8 @@ Verification skill for next-inspect-ui surfaces. The overlay lets developers hov
 Surfaces:
 
 - `pnpm dev` — `site` marketing (port 3000)
-- `pnpm dev:example` — `apps/nextjs-example` dashboard and `/components`
-- `pnpm dev:test` — `apps/next-js-test` accuracy suite at `/test`
+- `pnpm dev:example` — `apps/next-js-example` accuracy suite at `/test`
+- `pnpm dev:dashboard` — `apps/shadcn-dashboard-001-example` dashboard and `/components`
 
 ## When to use this skill
 
@@ -41,7 +41,7 @@ pnpm run dev
 
 This runs `pnpm --filter site dev`, starting the marketing site on port 3000.
 
-Use `pnpm dev:example` for the dashboard and `pnpm dev:test` for `/test`. Assign other ports with `PORT=3001` when more than one app is running.
+Use `pnpm dev:example` for `/test` and `pnpm dev:dashboard` for the dashboard. Assign other ports with `PORT=3001` when more than one app is running.
 
 **Ready signal**: Look for `✓ Ready in` followed by the local URL.
 
@@ -84,7 +84,7 @@ curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/test
 curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/components
 ```
 
-Expect `404` on the site. Those routes live on `next-js-test` and `nextjs-example`.
+Expect `404` on the site. Those routes live on `next-js-example` and `shadcn-dashboard-001-example`.
 
 **If any check fails**, do not proceed to Drive. Fix or report the issue.
 
