@@ -5,8 +5,8 @@ The core functionality of the InspectUI: activating the overlay with the keyboar
 ## Sub-features
 
 - Keyboard shortcut ⌥ + X toggles the overlay on/off
-- When active, overlay state is indicated visually (possibly with a border or indicator)
-- Overlay may add `data-inspect-active="true"` or similar attribute to the DOM
+- When active, overlay element (`[data-dev-inspector-overlay]`) is displayed with `display: block`
+- When inactive, overlay element has `display: none`
 - When active, hovering elements shows tooltips with source file information
 - Pressing Esc or ⌥ + X again deactivates the overlay
 
@@ -49,26 +49,18 @@ async function verifyOverlayToggle() {
     await page.keyboard.up('Alt');
     
     // Wait for overlay state change
-    // This may vary depending on implementation
-    // Check for data attribute, class change, or visual indicator
-    await page.waitForTimeout(500); // Small delay for state change
+    await page.waitForTimeout(500);
     
-    // Try to detect overlay activation
-    // Option 1: Check for data attribute
-    const hasDataAttr = await page.locator('[data-inspect-active="true"]').count() > 0;
-    
-    // Option 2: Check for overlay-specific class or element
-    const hasOverlayClass = await page.locator('[class*="inspect"]').count() > 0;
-    
-    // Option 3: Check body or html for state class
-    const htmlClasses = await page.locator('html').getAttribute('class') || '';
-    const bodyClasses = await page.locator('body').getAttribute('class') || '';
-    const hasStateClass = htmlClasses.includes('inspect') || bodyClasses.includes('inspect');
+    // Check for overlay activation by inspecting the overlay element
+    const overlay = page.locator('[data-dev-inspector-overlay]');
+    const overlayCount = await overlay.count();
+    const overlayDisplay = overlayCount > 0 ? await overlay.evaluate(el => window.getComputedStyle(el).display) : 'none';
+    const isActive = overlayDisplay === 'block';
     
     console.log('Overlay activation detection:');
-    console.log('  data-inspect-active:', hasDataAttr);
-    console.log('  overlay class:', hasOverlayClass);
-    console.log('  state class:', hasStateClass);
+    console.log('  overlay element exists:', overlayCount > 0);
+    console.log('  overlay display style:', overlayDisplay);
+    console.log('  overlay is active:', isActive);
     
     // Capture after activation attempt
     await page.screenshot({
@@ -123,8 +115,8 @@ verifyOverlayToggle();
 - **Keyboard shortcuts are unreliable in headless browsers**. Alt+X may not fire correctly. Consider:
   - Running in headed mode (`headless: false`)
   - Using `page.evaluate()` to trigger the toggle programmatically if there's a JS API
-  - Checking if the InspectUI component exposes a test hook or data attribute for programmatic activation
-- The overlay state may not have an obvious DOM marker. Check the InspectUI source code for `data-inspect-active` or similar.
+- The overlay element (`[data-dev-inspector-overlay]`) is always present in the DOM but hidden (`display: none`) when inactive.
+- Check activation by verifying the overlay's `display` style is `block`, not by looking for a data attribute.
 - The tooltip may require both overlay activation AND hovering, so test both states.
 - Timing is critical: wait after keyboard press before checking state or capturing screenshots.
 - If activation fails silently, check browser console logs for errors with `page.on('console')`.
