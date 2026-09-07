@@ -1,0 +1,309 @@
+.next-inspect-ui-overlay,
+.next-inspect-ui-tooltip {
+  --inspect-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --inspect-follow: 160ms;
+}
+
+.next-inspect-ui-overlay {
+  position: fixed;
+  z-index: 2147483646;
+  display: none;
+  pointer-events: none;
+  box-sizing: border-box;
+  background-color: var(--inspect-fill);
+  background-image: none;
+  animation: none;
+  border: var(--inspect-border);
+  border-radius: var(--inspect-radius, 4px);
+  transition:
+    left var(--inspect-follow) var(--inspect-ease),
+    top var(--inspect-follow) var(--inspect-ease),
+    width var(--inspect-follow) var(--inspect-ease),
+    height var(--inspect-follow) var(--inspect-ease),
+    background-color 140ms ease,
+    border-color 140ms ease;
+}
+
+.next-inspect-ui-tooltip {
+  position: fixed;
+  z-index: 2147483647;
+  display: none;
+  pointer-events: none;
+  max-width: min(36rem, calc(100vw - 16px));
+  overflow: visible;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  font: 12px / 1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  transition:
+    left var(--inspect-follow) var(--inspect-ease),
+    top var(--inspect-follow) var(--inspect-ease),
+    opacity 120ms ease;
+}
+
+.next-inspect-ui-overlay.next-inspect-ui-instant,
+.next-inspect-ui-tooltip.next-inspect-ui-instant {
+  transition: none;
+}
+
+.next-inspect-ui-tooltip-front,
+.next-inspect-ui-tooltip-under {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: min(36rem, calc(100vw - 16px));
+  overflow: hidden;
+  background: var(--inspect-tooltip-bg);
+  border: 1px solid var(--inspect-tooltip-border);
+  color: var(--inspect-tooltip-text);
+  border-radius: var(--inspect-tooltip-radius);
+  padding: var(--inspect-tooltip-padding);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+}
+
+.next-inspect-ui-tooltip-front {
+  position: relative;
+  z-index: 2;
+}
+
+.next-inspect-ui-tooltip-under {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.next-inspect-ui-tooltip-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 0;
+  margin-right: 0;
+  transition: width 160ms ease, margin-right 160ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .next-inspect-ui-overlay,
+  .next-inspect-ui-tooltip,
+  .next-inspect-ui-tooltip-icon {
+    transition: none;
+  }
+}
+
+.next-inspect-ui-tooltip-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.next-inspect-ui-info {
+  position: fixed;
+  z-index: 2147483647;
+  display: none;
+  pointer-events: none;
+  max-width: min(26rem, calc(100vw - 16px));
+  box-sizing: border-box;
+  background: var(--card, #18181b);
+  border: 1px solid var(--border, rgb(255 255 255 / 12%));
+  color: var(--card-foreground, #e4e4e7);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font: 12px / 1.5 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 45%);
+  cursor: default;
+}
+
+.next-inspect-ui-info-title {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 3px;
+  color: var(--inspect-fg, var(--foreground, #e4e4e7));
+}
+
+.next-inspect-ui-source-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.next-inspect-ui-source-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.next-inspect-ui-source-label,
+.next-inspect-ui-source-pending,
+.next-inspect-ui-source-empty {
+  color: var(--inspect-muted, var(--muted-foreground, #8b949e));
+  opacity: 0.6;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.next-inspect-ui-source-label {
+  flex: none;
+  min-width: 88px;
+}
+
+.next-inspect-ui-source-path {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--inspect-muted, var(--muted-foreground, #8b949e));
+  cursor: pointer;
+  font-weight: 500;
+  word-break: break-all;
+  text-decoration: none;
+}
+
+.next-inspect-ui-source-path:hover {
+  color: var(--inspect-fg, var(--foreground, #e4e4e7));
+}
+
+.next-inspect-ui-source-icon {
+  display: inline-flex;
+  flex: none;
+  opacity: 0.7;
+  transform: translateX(0);
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.next-inspect-ui-source-path:hover .next-inspect-ui-source-icon {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+.next-inspect-ui-owner-tree {
+  margin-top: 10px;
+}
+
+.next-inspect-ui-tree-heading {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--inspect-muted, var(--muted-foreground, #8b949e));
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.next-inspect-ui-tree {
+  display: flex;
+  flex-direction: column;
+  font: 11px / 1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+}
+
+.next-inspect-ui-tree-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 3px 2px;
+  cursor: pointer;
+  color: var(--inspect-muted, var(--muted-foreground, #8b949e));
+}
+
+.next-inspect-ui-tree-gutter {
+  display: flex;
+  align-items: center;
+  flex: none;
+  user-select: none;
+}
+
+.next-inspect-ui-tree-indent {
+  display: inline-block;
+  white-space: pre;
+  width: calc(var(--inspect-tree-depth, 0) * 12px);
+}
+
+.next-inspect-ui-tree-twisty {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  opacity: 0;
+}
+
+.next-inspect-ui-tree-name {
+  flex: none;
+  font-weight: 600;
+  color: var(--inspect-fg, var(--foreground, #e4e4e7));
+  opacity: 0.9;
+}
+
+.next-inspect-ui-tree-path {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0 0 0 auto;
+  min-width: 0;
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--inspect-muted, var(--muted-foreground, #8b949e));
+  opacity: 0.7;
+  font: inherit;
+  text-align: right;
+}
+
+.next-inspect-ui-styles {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.next-inspect-ui-style-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.next-inspect-ui-style-tab {
+  all: unset;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.next-inspect-ui-code {
+  margin-top: 0;
+  overflow: auto;
+  border-radius: 8px;
+  background: #0b0b0c;
+  padding: 10px 12px;
+}
+
+.next-inspect-ui-code pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: 11px / 1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
