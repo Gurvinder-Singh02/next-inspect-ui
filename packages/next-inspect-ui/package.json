@@ -1,0 +1,64 @@
+{
+  "name": "next-inspect-ui",
+  "version": "0.3.0",
+  "description": "Dev-only overlay for Next.js — hover any component to see its source, click to open it in your editor.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gurvinder-Singh02/next-inspect-ui.git",
+    "directory": "packages/next-inspect-ui"
+  },
+  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui#readme",
+  "bugs": {
+    "url": "https://github.com/Gurvinder-Singh02/next-inspect-ui/issues"
+  },
+  "keywords": [
+    "next",
+    "nextjs",
+    "react",
+    "inspector",
+    "devtools",
+    "open-in-editor"
+  ],
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./lib": {
+      "types": "./dist/lib.d.ts",
+      "import": "./dist/lib.js",
+      "require": "./dist/lib.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tsup": "^8.5.0",
+    "typescript": "^5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
