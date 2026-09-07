@@ -27,8 +27,7 @@ export const InstallCommand = ({
 
   if (!active) return null
 
-  // Runner prefix changes per tab; `shadcn@…` stays put.
-  const mark = "shadcn@"
+  const mark = "next-inspect-ui"
   const markIndex = active.code.indexOf(mark)
   const morphPrefix =
     markIndex > 0 ? active.code.slice(0, markIndex) : undefined

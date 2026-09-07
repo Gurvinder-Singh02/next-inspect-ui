@@ -2,9 +2,14 @@
 
 import { Suspense, createElement, lazy, type ComponentType } from "react"
 
-export type InspectUIProps = {
-  projectRoot: string
-}
+import type { InspectUIProps } from "./lib/index.ts"
+
+export type {
+  DevSpotlightProps,
+  InspectUIProps,
+  InspectorIde,
+  TooltipProps,
+} from "./lib/index.ts"
 
 const LazyDevInspector =
   process.env.NODE_ENV === "development"

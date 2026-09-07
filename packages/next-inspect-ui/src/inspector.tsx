@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 
-import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, subscribeInspectorSettings } from "./lib/index.ts"
+import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, setInspectorSettings, subscribeInspectorSettings, type InspectUIProps } from "./lib/index.ts"
 import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
 import { createOpenSourceIcon } from "./lib/icons.ts"
 import overlayCss from "./styles/overlay.css"
@@ -26,9 +26,26 @@ type OwnerChainStep = {
   debugInfo?: ServerDebugInfo
 }
 
-export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
+export const InspectUI = ({
+  projectRoot,
+  shortcut,
+  ide,
+  tooltipProps,
+  devSpotlightProps,
+}: InspectUIProps) => {
+  const tooltipKey = JSON.stringify(tooltipProps ?? null)
+  const spotlightKey = JSON.stringify(devSpotlightProps ?? null)
+
   useEffect(() => {
     initInspectorSettings()
+    if (shortcut || ide || tooltipProps || devSpotlightProps) {
+      setInspectorSettings({
+        ...(shortcut ? { shortcut } : {}),
+        ...(ide ? { ide } : {}),
+        tooltipProps,
+        devSpotlightProps,
+      })
+    }
     ensureInspectorStyles(overlayCss)
 
     const sourceMapCache = new Map<string, Promise<SourceMap>>()
@@ -1261,7 +1278,7 @@ export const InspectUI = ({ projectRoot }: { projectRoot: string }) => {
       info.remove()
       document.body.style.cursor = previousCursor
     }
-  }, [projectRoot])
+  }, [projectRoot, shortcut, ide, tooltipKey, spotlightKey])
 
   return null
 }

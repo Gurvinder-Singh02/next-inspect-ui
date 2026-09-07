@@ -7,16 +7,14 @@ import {
 } from "@/components/landing/install-command"
 import { highlightCode } from "@/lib/highlight-code"
 
-const REGISTRY_URL = "https://next-inspect-ui.dev/r/next-inspect-ui"
-
 const INSTALL_COMMANDS: Record<PackageManager, string> = {
-  npm: `npx shadcn@latest add ${REGISTRY_URL}`,
-  pnpm: `pnpm dlx shadcn@latest add ${REGISTRY_URL}`,
-  yarn: `yarn dlx shadcn@latest add ${REGISTRY_URL}`,
-  bun: `bunx --bun shadcn@latest add ${REGISTRY_URL}`,
+  npm: "npm i next-inspect-ui",
+  pnpm: "pnpm add next-inspect-ui",
+  yarn: "yarn add next-inspect-ui",
+  bun: "bun add next-inspect-ui",
 }
 
-const AGENT_PROMPT = `Install next-inspect-ui (npx shadcn@latest add ${REGISTRY_URL}). Add <InspectUI projectRoot={process.cwd()} /> as a sibling alongside {children} in the root layout (not wrapping it), only in development.`
+const AGENT_PROMPT = `Install next-inspect-ui (npm i next-inspect-ui). Add <InspectUI projectRoot={process.cwd()} /> as a sibling alongside {children} in the root layout (not wrapping it), only in development.`
 
 const LAYOUT_CODE = `import { InspectUI } from "next-inspect-ui"
 
@@ -61,7 +59,7 @@ export const InstallSection = async () => {
     <div className="flex flex-col gap-12">
       <div className="flex flex-col gap-3">
         <p className="font-inter text-[14px] leading-relaxed text-muted-foreground">
-          Install next-inspect-ui via shadcn:
+          Install next-inspect-ui with npm:
         </p>
         <InstallCommand tabs={installTabs} />
       </div>
