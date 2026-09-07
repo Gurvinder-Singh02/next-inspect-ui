@@ -18,30 +18,32 @@ export const SiteNav = ({ className }: { className?: string }) => {
 
   return (
     <nav className={cn("sticky top-24 z-40 h-fit", className)}>
-      <div className="mx-auto flex h-12 flex-col gap-0 px-6">
+      <div className="absolute top-0 -left-20">
+      <div className="mx-auto  flex h-12 whitespace-nowrap flex-col gap-0 px-6">
         {NAV_ITEMS.map((item) => {
           const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname === item.href || pathname.startsWith(`${item.href}/`)
-
+          item.href === "/"
+          ? pathname === "/"
+          : pathname === item.href || pathname.startsWith(`${item.href}/`)
+          
           return (
             <Link
-              key={item.href}
-              href={item.href}
-              data-cuelume-press="tick"
-              className={cn(
-                "rounded-md px-2.5 py-1.5 font-inter text-sm transition-colors",
-                isActive
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
+            key={item.href}
+            href={item.href}
+            data-cuelume-press="tick"
+            className={cn(
+              "rounded-md px-2.5 py-1.5 font-inter text-sm transition-colors",
+              isActive
+              ? "text-foreground"
+              : "text-muted-foreground hover:text-foreground"
+            )}
             >
               {item.label}
             </Link>
           )
         })}
       </div>
+        </div>
     </nav>
   )
 }

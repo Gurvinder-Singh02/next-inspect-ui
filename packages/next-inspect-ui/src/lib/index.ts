@@ -81,6 +81,14 @@ export type InspectorSettings = {
   devSpotlightProps: DevSpotlightProps
 }
 
+export type InspectUIProps = {
+  projectRoot: string
+  shortcut?: string
+  ide?: InspectorIde
+  tooltipProps?: Partial<TooltipProps>
+  devSpotlightProps?: Partial<DevSpotlightProps>
+}
+
 export const INSPECTOR_COLORS: Record<
   InspectorColor,
   { stroke: string; fill: string; tooltip: string; label: string }

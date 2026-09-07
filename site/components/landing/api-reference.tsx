@@ -24,6 +24,28 @@ const API_SECTIONS: ApiSection[] = [
         description:
           "Absolute path to the project root. Used to resolve component source files.",
       },
+      {
+        name: "shortcut",
+        type: "string",
+        description: 'Keyboard shortcut that toggles inspect mode. Default `"Alt+X"`.',
+      },
+      {
+        name: "ide",
+        type: '"cursor" | "vscode" | "vscode-insiders" | "windsurf" | "zed"',
+        description: 'Editor used for open-in-source links. Default `"cursor"`.',
+      },
+      {
+        name: "tooltipProps",
+        type: "Partial<TooltipProps>",
+        description:
+          "Initial tooltip appearance. Session toolbar edits override these until remount.",
+      },
+      {
+        name: "devSpotlightProps",
+        type: "Partial<DevSpotlightProps>",
+        description:
+          "Initial spotlight appearance. Session toolbar edits override these until remount.",
+      },
     ],
   },
   {

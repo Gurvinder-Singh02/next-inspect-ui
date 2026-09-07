@@ -9,7 +9,7 @@ import { Kbd } from "@/components/ui/kbd"
 export default function OverviewPage() {
   return (
     <>
-      <header className="flex flex-col gap-5">
+      <header className="flex flex-col gap-6">
         <div className="flex items-center gap-2.5">
           <h1 className="font-inter text-2xl leading-tight font-semibold tracking-tight">
             next-inspect-ui
@@ -82,10 +82,10 @@ export default function OverviewPage() {
           {process.env.NODE_ENV === "development" && (
             <>
               <a
-                href="/variant-test"
+                href="/lab"
                 className="transition-colors hover:text-foreground"
               >
-                Overlay variant test →
+                Lab →
               </a>
               <a
                 href="/test"
