@@ -5,8 +5,8 @@ The core functionality of the InspectUI: activating the overlay with the keyboar
 ## Sub-features
 
 - Keyboard shortcut ⌥ + X toggles the overlay on/off
-- When active, overlay state is indicated visually (possibly with a border or indicator)
-- Overlay may add `data-inspect-active="true"` or similar attribute to the DOM
+- When active, overlay state is indicated by `document.body.style.cursor === "crosshair"`
+- Overlay adds `data-dev-inspector-overlay` attribute to the overlay element and `data-dev-inspector-tooltip` to the tooltip
 - When active, hovering elements shows tooltips with source file information
 - Pressing Esc or ⌥ + X again deactivates the overlay
 
@@ -53,22 +53,20 @@ async function verifyOverlayToggle() {
     // Check for data attribute, class change, or visual indicator
     await page.waitForTimeout(500); // Small delay for state change
     
-    // Try to detect overlay activation
-    // Option 1: Check for data attribute
-    const hasDataAttr = await page.locator('[data-inspect-active="true"]').count() > 0;
+    // Detect overlay activation
+    // Check for crosshair cursor (primary activation indicator)
+    const hasCrosshairCursor = await page.evaluate(() => document.body.style.cursor === 'crosshair');
     
-    // Option 2: Check for overlay-specific class or element
-    const hasOverlayClass = await page.locator('[class*="inspect"]').count() > 0;
+    // Check for overlay element with correct attribute
+    const hasOverlayElement = await page.locator('[data-dev-inspector-overlay]').count() > 0;
     
-    // Option 3: Check body or html for state class
-    const htmlClasses = await page.locator('html').getAttribute('class') || '';
-    const bodyClasses = await page.locator('body').getAttribute('class') || '';
-    const hasStateClass = htmlClasses.includes('inspect') || bodyClasses.includes('inspect');
+    // Check for tooltip element
+    const hasTooltipElement = await page.locator('[data-dev-inspector-tooltip]').count() > 0;
     
     console.log('Overlay activation detection:');
-    console.log('  data-inspect-active:', hasDataAttr);
-    console.log('  overlay class:', hasOverlayClass);
-    console.log('  state class:', hasStateClass);
+    console.log('  body cursor === crosshair:', hasCrosshairCursor);
+    console.log('  data-dev-inspector-overlay:', hasOverlayElement);
+    console.log('  data-dev-inspector-tooltip:', hasTooltipElement);
     
     // Capture after activation attempt
     await page.screenshot({

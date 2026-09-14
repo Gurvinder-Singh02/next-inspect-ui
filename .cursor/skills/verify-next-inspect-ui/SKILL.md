@@ -133,8 +133,11 @@ await page.keyboard.down('Alt');
 await page.keyboard.press('KeyX');
 await page.keyboard.up('Alt');
 
-// Wait for overlay to appear (check for specific class or element)
-await page.waitForSelector('[data-inspect-active="true"]', { timeout: 3000 });
+// Wait for overlay to activate (check for crosshair cursor)
+await page.waitForFunction(() => document.body.style.cursor === 'crosshair', { timeout: 3000 });
+
+// Verify overlay element is present
+const overlayPresent = await page.locator('[data-dev-inspector-overlay]').count() > 0;
 ```
 
 **Note**: Keyboard shortcuts can be finicky in headless browsers. If the overlay doesn't toggle, consider using browser context with `--headed` mode or programmatically triggering the overlay state if there's a JS hook.

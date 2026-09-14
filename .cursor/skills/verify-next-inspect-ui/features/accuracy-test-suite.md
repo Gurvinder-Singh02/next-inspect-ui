@@ -14,10 +14,10 @@ A comprehensive test page at `/test` that displays various component patterns an
 
 ## How to get to it (user POV)
 
-1. Visit `http://localhost:3000` (dev mode)
-2. Scroll to footer
-3. Click "Test →" link (only visible in development mode)
-4. Or navigate directly to `http://localhost:3000/test`
+1. This page lives on the **example app** (not the site)
+2. Start the example with `PORT=3001 pnpm run dev:example`
+3. Navigate directly to `http://localhost:3001/test`
+4. (This is a dev-only route)
 
 ## Driving it with Playwright
 
@@ -30,7 +30,7 @@ async function verifyTestSuite() {
   
   try {
     console.log('Navigating to test suite...');
-    await page.goto('http://localhost:3000/test');
+    await page.goto('http://localhost:3001/test');
     await page.waitForLoadState('networkidle');
     
     // Capture entry screenshot

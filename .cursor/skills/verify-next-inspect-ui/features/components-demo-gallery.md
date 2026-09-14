@@ -11,9 +11,9 @@ The main showcase page displaying interactive example components that demonstrat
 
 ## How to get to it (user POV)
 
-1. Visit home page at `http://localhost:3000`
-2. Click "Try the live demo →" link in the footer
-3. Or navigate directly to `http://localhost:3000/components`
+1. This page lives on the **dashboard app** (not the site)
+2. Start the dashboard with `PORT=3002 pnpm run dev:dashboard`
+3. Navigate directly to `http://localhost:3002/components`
 
 ## Driving it with Playwright
 
@@ -27,7 +27,7 @@ async function verifyComponentsGallery() {
   
   try {
     console.log('Navigating to components gallery...');
-    await page.goto('http://localhost:3000/components');
+    await page.goto('http://localhost:3002/components');
     await page.waitForLoadState('networkidle');
     
     // Verify header exists
