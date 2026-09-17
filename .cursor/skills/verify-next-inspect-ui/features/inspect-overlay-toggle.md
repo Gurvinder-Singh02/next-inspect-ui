@@ -5,14 +5,17 @@ The core functionality of the InspectUI: activating the overlay with the keyboar
 ## Sub-features
 
 - Keyboard shortcut ⌥ + X toggles the overlay on/off
-- When active, overlay state is indicated visually (possibly with a border or indicator)
-- Overlay may add `data-inspect-active="true"` or similar attribute to the DOM
+- When active, overlay element has `[data-dev-inspector-overlay]` attribute
+- Tooltip element appears with `[data-dev-inspector-tooltip]` attribute when hovering
+- Info panel available with `[data-dev-inspector-info]` attribute
 - When active, hovering elements shows tooltips with source file information
 - Pressing Esc or ⌥ + X again deactivates the overlay
 
 ## How to get to it (user POV)
 
-1. Navigate to any page in the app (e.g., `/components` or `/`)
+**App**: Any app (test on `dashboard:3002/components` or `example:3001`)
+
+1. Navigate to any page in the app (e.g., `/components` on port 3002)
 2. Press ⌥ + X on the keyboard
 3. Overlay activates (visual indicator appears)
 4. Hover any element to see source info
@@ -34,7 +37,8 @@ async function verifyOverlayToggle() {
   
   try {
     console.log('Navigating to components page...');
-    await page.goto('http://localhost:3000/components');
+    // Test on dashboard app (port 3002)
+    await page.goto('http://localhost:3002/components');
     await page.waitForLoadState('networkidle');
     
     // Capture before activation
@@ -49,26 +53,17 @@ async function verifyOverlayToggle() {
     await page.keyboard.up('Alt');
     
     // Wait for overlay state change
-    // This may vary depending on implementation
-    // Check for data attribute, class change, or visual indicator
-    await page.waitForTimeout(500); // Small delay for state change
+    await page.waitForTimeout(500);
     
-    // Try to detect overlay activation
-    // Option 1: Check for data attribute
-    const hasDataAttr = await page.locator('[data-inspect-active="true"]').count() > 0;
+    // Check for overlay element with data-dev-inspector-overlay attribute
+    const hasOverlay = await page.locator('[data-dev-inspector-overlay]').count() > 0;
     
-    // Option 2: Check for overlay-specific class or element
-    const hasOverlayClass = await page.locator('[class*="inspect"]').count() > 0;
-    
-    // Option 3: Check body or html for state class
-    const htmlClasses = await page.locator('html').getAttribute('class') || '';
-    const bodyClasses = await page.locator('body').getAttribute('class') || '';
-    const hasStateClass = htmlClasses.includes('inspect') || bodyClasses.includes('inspect');
+    // Check for tooltip element
+    const hasTooltip = await page.locator('[data-dev-inspector-tooltip]').count() > 0;
     
     console.log('Overlay activation detection:');
-    console.log('  data-inspect-active:', hasDataAttr);
-    console.log('  overlay class:', hasOverlayClass);
-    console.log('  state class:', hasStateClass);
+    console.log('  data-dev-inspector-overlay:', hasOverlay);
+    console.log('  data-dev-inspector-tooltip:', hasTooltip);
     
     // Capture after activation attempt
     await page.screenshot({
@@ -124,8 +119,9 @@ verifyOverlayToggle();
   - Running in headed mode (`headless: false`)
   - Using `page.evaluate()` to trigger the toggle programmatically if there's a JS API
   - Checking if the InspectUI component exposes a test hook or data attribute for programmatic activation
-- The overlay state may not have an obvious DOM marker. Check the InspectUI source code for `data-inspect-active` or similar.
-- The tooltip may require both overlay activation AND hovering, so test both states.
-- Timing is critical: wait after keyboard press before checking state or capturing screenshots.
-- If activation fails silently, check browser console logs for errors with `page.on('console')`.
-- The overlay is only active in development mode. Ensure `NODE_ENV=development`.
+- The overlay element has `[data-dev-inspector-overlay]` attribute when active
+- The tooltip element has `[data-dev-inspector-tooltip]` attribute
+- The tooltip may require both overlay activation AND hovering, so test both states
+- Timing is critical: wait after keyboard press before checking state or capturing screenshots
+- If activation fails silently, check browser console logs for errors with `page.on('console')`
+- The overlay is only active in development mode. Ensure `NODE_ENV=development`

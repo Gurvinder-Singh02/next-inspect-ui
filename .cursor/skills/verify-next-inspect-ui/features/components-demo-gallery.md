@@ -11,9 +11,10 @@ The main showcase page displaying interactive example components that demonstrat
 
 ## How to get to it (user POV)
 
-1. Visit home page at `http://localhost:3000`
-2. Click "Try the live demo →" link in the footer
-3. Or navigate directly to `http://localhost:3000/components`
+**App**: `shadcn-dashboard-001-example` (port 3002)
+
+1. Visit `http://localhost:3002/components` directly
+2. Or from home page, navigate to components showcase
 
 ## Driving it with Playwright
 
@@ -27,7 +28,8 @@ async function verifyComponentsGallery() {
   
   try {
     console.log('Navigating to components gallery...');
-    await page.goto('http://localhost:3000/components');
+    // Components demo is on dashboard app (port 3002)
+    await page.goto('http://localhost:3002/components');
     await page.waitForLoadState('networkidle');
     
     // Verify header exists

@@ -13,6 +13,8 @@ A documentation page listing all keyboard and pointer controls available when th
 
 ## How to get to it (user POV)
 
+**App**: `site` (port 3000)
+
 1. Visit home page at `http://localhost:3000`
 2. Click "Shortcuts" link in the sidebar navigation
 3. Or navigate directly to `http://localhost:3000/shortcuts`

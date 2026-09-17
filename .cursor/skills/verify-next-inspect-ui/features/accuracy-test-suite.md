@@ -14,10 +14,10 @@ A comprehensive test page at `/test` that displays various component patterns an
 
 ## How to get to it (user POV)
 
-1. Visit `http://localhost:3000` (dev mode)
-2. Scroll to footer
-3. Click "Test →" link (only visible in development mode)
-4. Or navigate directly to `http://localhost:3000/test`
+**App**: `next-js-example` (port 3001)
+
+1. Navigate directly to `http://localhost:3001/test`
+2. This is a dev-only route (only visible in development mode)
 
 ## Driving it with Playwright
 
@@ -30,7 +30,8 @@ async function verifyTestSuite() {
   
   try {
     console.log('Navigating to test suite...');
-    await page.goto('http://localhost:3000/test');
+    // Test suite is on next-js-example app (port 3001)
+    await page.goto('http://localhost:3001/test');
     await page.waitForLoadState('networkidle');
     
     // Capture entry screenshot

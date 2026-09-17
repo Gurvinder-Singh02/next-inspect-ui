@@ -2,12 +2,20 @@
 
 User-facing features for the next-inspect-ui demo website. Each feature file describes what the user sees and how to drive it with Playwright.
 
+## Three-App Architecture
+
+This monorepo has three demo apps:
+- **site** (port 3000): Marketing site with docs, shortcuts page
+- **next-js-example** (port 3001): Accuracy test suite at `/test`
+- **shadcn-dashboard-001-example** (port 3002): Components gallery at `/components`
+
+Launch with `pnpm dev`, `pnpm dev:example`, `pnpm dev:dashboard`. Assign custom ports with `PORT=3001` env var.
+
 ## Baseline Preconditions
 
-- Dev server running on `http://localhost:3000`
+- Dev servers running (see app/port mapping above)
 - Playwright installed and chromium browser available
 - Evidence directory exists: `/tmp/verify-evidence/`
-- Server passed doctor checks (home page loads, components page accessible)
 
 ## Driving Conventions
 

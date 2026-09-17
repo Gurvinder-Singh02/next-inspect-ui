@@ -13,6 +13,8 @@ The home page that explains what next-inspect-ui is, how to install it, and how 
 
 ## How to get to it (user POV)
 
+**App**: `site` (port 3000)
+
 1. Visit `http://localhost:3000` (root URL)
 2. Or click the logo/home link from any other page
 
