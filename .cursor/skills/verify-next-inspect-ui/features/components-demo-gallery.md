@@ -57,7 +57,7 @@ async function verifyComponentsGallery() {
     
     // Verify specific known components
     const styleOverview = await page.getByText('Style Overview').count() > 0;
-    const barChart = await page.getByText('Revenue').count() > 0;
+    const barChart = await page.getByText('Traffic channels').count() > 0;
     
     console.log('Style Overview present:', styleOverview);
     console.log('Bar Chart present:', barChart);

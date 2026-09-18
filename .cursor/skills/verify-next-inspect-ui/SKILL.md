@@ -41,7 +41,7 @@ pnpm run dev
 
 This runs `pnpm --filter site dev`, starting the marketing site on port 3000.
 
-Use `pnpm dev:example` for `/test` and `pnpm dev:dashboard` for the dashboard. Assign other ports with `PORT=3001` when more than one app is running.
+Use `PORT=3001 pnpm dev:example` for the test suite at `/test` and `PORT=3002 pnpm dev:dashboard` for the components gallery. The three-app architecture requires explicit port assignment when running multiple apps simultaneously.
 
 **Ready signal**: Look for `✓ Ready in` followed by the local URL.
 

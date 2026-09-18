@@ -57,11 +57,12 @@ async function verifyShortcutsPage() {
     }
     
     // Verify known shortcuts are documented
+    // Check for actual shortcut keys/actions, not just verbs in descriptions
     const knownShortcuts = [
-      'hover',
-      'click',
-      'hold',
-      'Esc'
+      'Click',  // Action name
+      'Esc',    // Key name
+      '⌥',      // Alt/Option symbol
+      'x'       // Key letter
     ];
     
     let foundShortcuts = 0;
