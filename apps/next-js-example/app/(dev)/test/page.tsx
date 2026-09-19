@@ -1,6 +1,11 @@
 import { Suspense } from "react"
 import Link from "next/link"
-import { SparklesIcon, CircleIcon, ArrowRightIcon, TrendingUpIcon } from "lucide-react"
+import {
+  SparklesIcon,
+  CircleIcon,
+  ArrowRightIcon,
+  TrendingUpIcon,
+} from "lucide-react"
 import { SuiteCase } from "@/components/accuracy/suite-case"
 import { SuiteGroup } from "@/components/accuracy/suite-group"
 import { TestSuiteShell } from "@/components/accuracy/test-suite-shell"
@@ -22,7 +27,15 @@ import { ServerButtonCard } from "@/components/algo-test/server-button-fixture"
 import { ServerCard } from "@/components/algo-test/server-fixture"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 import {
   TEST_CASE_META,
@@ -44,7 +57,8 @@ import {
   svgPlainNodes,
   shadcnPlainNodes,
   shadcnVariantTargets,
-  thirdPartyIconTargets, parentInspectableCardTargets,
+  thirdPartyIconTargets,
+  parentInspectableCardTargets,
 } from "@/test-cases"
 import { loadCaseSources } from "./load-case-sources"
 
@@ -131,7 +145,11 @@ export default async function TestSuitePage() {
             <Button data-accuracy-target="ghost" variant="ghost">
               Ghost
             </Button>
-            <Button data-accuracy-target="destructive" variant="destructive" size="sm">
+            <Button
+              data-accuracy-target="destructive"
+              variant="destructive"
+              size="sm"
+            >
               Destructive
             </Button>
           </div>
@@ -253,7 +271,10 @@ export default async function TestSuitePage() {
           targets={kindsForwardRefTargets}
         >
           <div className="flex flex-col items-center gap-3">
-            <ForwardedInput data-accuracy-target="forward-ref" hint="forwardRef" />
+            <ForwardedInput
+              data-accuracy-target="forward-ref"
+              hint="forwardRef"
+            />
             <MemoPill data-accuracy-target="memo" label="memo" />
             <CompoundDemo data-accuracy-target="compound" />
           </div>
