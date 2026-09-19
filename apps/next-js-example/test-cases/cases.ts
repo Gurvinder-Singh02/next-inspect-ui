@@ -15,6 +15,7 @@ const LIBRARY = "components/algo-test/library-rendered-fixture.tsx"
 const RADIX = "components/algo-test/radix-fixture.tsx"
 const KINDS = "components/algo-test/kinds-fixture.tsx"
 const SERVER = "components/algo-test/server-fixture.tsx"
+const SERVER_BUTTON = "components/algo-test/server-button-fixture.tsx"
 const SVG = "components/algo-test/svg-fixture.tsx"
 
 /** Sticky-header meta — keep in sync with cases rendered on /test. */
@@ -37,6 +38,7 @@ export const TEST_CASE_META: SuiteCaseMeta[] = [
   { id: "third-party-icons", title: "lucide icons", group: "third-party" },
   { id: "server-direct", title: "server component host", group: "server" },
   { id: "server-nested", title: "nested server cards", group: "server" },
+  { id: "server-client-button", title: "server-wrapped client button", group: "server" },
   { id: "parent-inspectable-card", title: "card parent / child", group: "parent inspectable" },
 ]
 
@@ -316,13 +318,18 @@ export const serverNestedTargets: AccuracyTarget[] = [
   },
 ]
 
+export const serverClientButtonNodes: AccuracyNode[] = [
+  { name: "Button", file: SERVER_BUTTON, line: 15 },
+  { name: "button", file: BUTTON, line: 52 },
+]
+
 /** `[` / `]` hops on a full Card — each target is one inspectable. */
 export const parentInspectableCardTargets: AccuracyTarget[] = [
   {
     id: "badge",
     label: "Badge",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 358 },
+      { name: "Badge", file: TEST_PAGE, line: 370 },
       { name: "span", file: BADGE, line: 36 },
     ],
   },
@@ -330,7 +337,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "action",
     label: "CardAction",
     nodes: [
-      { name: "CardAction", file: TEST_PAGE, line: 357 },
+      { name: "CardAction", file: TEST_PAGE, line: 369 },
       { name: "div", file: CARD, line: 61 },
     ],
   },
@@ -338,7 +345,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "header",
     label: "CardHeader",
     nodes: [
-      { name: "CardHeader", file: TEST_PAGE, line: 347 },
+      { name: "CardHeader", file: TEST_PAGE, line: 359 },
       { name: "div", file: CARD, line: 25 },
     ],
   },
@@ -346,7 +353,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "card",
     label: "Card",
     nodes: [
-      { name: "Card", file: TEST_PAGE, line: 346 },
+      { name: "Card", file: TEST_PAGE, line: 358 },
       { name: "div", file: CARD, line: 11 },
     ],
   },
@@ -354,7 +361,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "title",
     label: "CardTitle",
     nodes: [
-      { name: "CardTitle", file: TEST_PAGE, line: 351 },
+      { name: "CardTitle", file: TEST_PAGE, line: 363 },
       { name: "div", file: CARD, line: 38 },
     ],
   },
@@ -362,7 +369,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "description",
     label: "CardDescription",
     nodes: [
-      { name: "CardDescription", file: TEST_PAGE, line: 348 },
+      { name: "CardDescription", file: TEST_PAGE, line: 360 },
       { name: "div", file: CARD, line: 51 },
     ],
   },
@@ -370,7 +377,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "button",
     label: "Button",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 365 },
+      { name: "Button", file: TEST_PAGE, line: 377 },
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
@@ -378,7 +385,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "content",
     label: "CardContent",
     nodes: [
-      { name: "CardContent", file: TEST_PAGE, line: 364 },
+      { name: "CardContent", file: TEST_PAGE, line: 376 },
       { name: "div", file: CARD, line: 74 },
     ],
   },
@@ -386,7 +393,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "footer",
     label: "CardFooter",
     nodes: [
-      { name: "CardFooter", file: TEST_PAGE, line: 369 },
+      { name: "CardFooter", file: TEST_PAGE, line: 381 },
       { name: "div", file: CARD, line: 84 },
     ],
   },

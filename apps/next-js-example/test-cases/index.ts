@@ -11,6 +11,7 @@ export {
   motionWrappedTargets,
   parentInspectableCardTargets,
   radixSlotTargets,
+  serverClientButtonNodes,
   serverDirectNodes,
   serverNestedTargets,
   shadcnNestedNodes,

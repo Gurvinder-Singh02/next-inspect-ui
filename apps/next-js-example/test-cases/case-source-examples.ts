@@ -14,6 +14,7 @@ const LIBRARY = "components/algo-test/library-rendered-fixture.tsx"
 const RADIX = "components/algo-test/radix-fixture.tsx"
 const KINDS = "components/algo-test/kinds-fixture.tsx"
 const SERVER = "components/algo-test/server-fixture.tsx"
+const SERVER_BUTTON = "components/algo-test/server-button-fixture.tsx"
 const SVG = "components/algo-test/svg-fixture.tsx"
 
 export const CASE_SOURCE_EXAMPLES: Record<string, CaseSourceExample[]> = {
@@ -405,10 +406,40 @@ export const CompoundDemo = () => (
     {
       label: "Used in",
       file: TEST_PAGE,
-      code: `<>
-  <ServerCard title="First" />
-  <ServerCard title="Second" />
-</>`,
+      code: `<ServerCard title="First" />
+<ServerCard title="Second" />`,
+    },
+  ],
+
+  "server-client-button": [
+    {
+      label: "Defined in",
+      file: BUTTON,
+      code: `function Button({
+  className,
+  variant = "default",
+  size = "default",
+  ...props
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  return (
+    <ButtonPrimitive
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}`,
+    },
+    {
+      label: "Used in",
+      file: SERVER_BUTTON,
+      code: `const MinistryCard = ({ label, ...props }) => (
+  <div className="rounded-lg border p-3">
+    <Button data-accuracy-target={props["data-accuracy-target"]} size="sm">
+      {label}
+    </Button>
+  </div>
+)`,
     },
   ],
 

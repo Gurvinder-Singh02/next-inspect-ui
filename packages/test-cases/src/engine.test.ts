@@ -4,13 +4,17 @@ import { test } from "node:test"
 import {
   decodeVlq,
   formatPageLabel,
+  getDirectClimbOwner,
   isBundledOrExternalPath,
   isClimbUsageBoundary,
+  isDirectFiberChildOf,
   isFrameworkInspectorName,
   isPointInRect,
   isReactServerStackFile,
+  isVendorModulePath,
   resolveSourceMapSourcePath,
   sourceFromFiberDebugSource,
+  type ReactFiber,
 } from "../../next-inspect-ui/src/lib/engine.ts"
 import { underStackTransform } from "../../next-inspect-ui/src/lib/tooltip.ts"
 
@@ -95,6 +99,90 @@ test("treats bundler and node_modules paths as external", () => {
   assert.equal(isBundledOrExternalPath("/app/.next/static/chunk.js"), true)
   assert.equal(isBundledOrExternalPath("webpack-internal:///src/button.tsx"), true)
   assert.equal(isBundledOrExternalPath("/app/components/button.tsx"), false)
+})
+
+test("detects turbopack vendor chunks without treating project chunks as vendor", () => {
+  assert.equal(
+    isVendorModulePath(
+      "http://localhost:3000/_next/static/chunks/7725c_@base-ui_react_esm_544358c1._.js"
+    ),
+    true
+  )
+  assert.equal(
+    isVendorModulePath(
+      "http://localhost:3001/_next/static/chunks/0lhj_%40base-ui_react_0dg_2l2._.js"
+    ),
+    true
+  )
+  assert.equal(
+    isVendorModulePath(
+      "http://localhost:3000/_next/static/chunks/node_modules__pnpm_adae432c._.js"
+    ),
+    true
+  )
+  assert.equal(
+    isVendorModulePath("http://localhost:3000/_next/static/chunks/_b8e932eb._.js"),
+    false
+  )
+  assert.equal(isVendorModulePath("/app/components/ui/button.tsx"), false)
+})
+
+const BASE_UI_HOST_STACK = `Error: react-stack-top-frame
+    at exports.createElement (http://localhost:3000/_next/static/chunks/1629d_next_dist_compiled_00b523c4._.js:1614:162)
+    at renderTag (http://localhost:3000/_next/static/chunks/7725c_@base-ui_react_esm_544358c1._.js:344:370)
+    at Button (http://localhost:3000/_next/static/chunks/7725c_@base-ui_react_esm_544358c1._.js:5658:387)`
+
+const link = (partial: Partial<ReactFiber> & { tag: number }): ReactFiber =>
+  partial as ReactFiber
+
+test("climbs past a vendor Button primitive to the project Button wrapper", () => {
+  const host = link({
+    tag: 5,
+    _debugStack: BASE_UI_HOST_STACK,
+  })
+  const vendorButton = link({
+    tag: 11,
+    type: { name: "Button", displayName: "Button" },
+  })
+  const projectButton = link({
+    tag: 0,
+    type: { name: "Button" },
+  })
+
+  host.return = vendorButton
+  host._debugOwner = vendorButton
+  vendorButton.child = host
+  vendorButton.return = projectButton
+  vendorButton._debugOwner = projectButton
+  projectButton.child = vendorButton
+
+  const owner = getDirectClimbOwner(host)
+  assert.equal(owner?.name, "Button")
+  assert.equal(owner?.fiber, projectButton)
+  assert.equal(isDirectFiberChildOf(host, projectButton), true)
+})
+
+test("keeps a vendor Button as the owner when nothing wraps it", () => {
+  const host = link({
+    tag: 5,
+    _debugStack: BASE_UI_HOST_STACK,
+  })
+  const vendorButton = link({
+    tag: 11,
+    type: { name: "Button", displayName: "Button" },
+  })
+  const suiteCase = link({
+    tag: 5,
+  })
+
+  host.return = vendorButton
+  host._debugOwner = vendorButton
+  vendorButton.child = host
+  vendorButton.return = suiteCase
+
+  const owner = getDirectClimbOwner(host)
+  assert.equal(owner?.name, "Button")
+  assert.equal(owner?.fiber, vendorButton)
 })
 
 test("treats turbopack RSC chunk paths as server frames", () => {
