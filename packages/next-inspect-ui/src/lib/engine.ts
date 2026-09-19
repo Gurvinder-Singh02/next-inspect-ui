@@ -367,10 +367,77 @@ const isWrapperFiber = (fiber: ReactFiber) =>
 
 const isMotionFactoryName = (name: string) => name.startsWith("motion.")
 
+/** Turbopack/webpack vendor chunks and node_modules paths — not project sources. */
+export const isVendorModulePath = (filePath: string) => {
+  const file = filePath.replace(/\\/g, "/")
+  return /node_modules|(?:^|[/_])(?:@|%40)[a-z0-9.-]+[_/]|next[_-]dist/i.test(file)
+}
+
+const readStackText = (fiber: ReactFiber) => {
+  const stack = fiber._debugStack instanceof Error ? fiber._debugStack.stack : fiber._debugStack
+  return typeof stack === "string" ? stack : ""
+}
+
+const firstNonWrapperChild = (fiber: ReactFiber): ReactFiber | null => {
+  let child = fiber.child ?? null
+  while (child && isWrapperFiber(child)) child = child.child ?? null
+  return child
+}
+
+const hostStackBuiltByVendor = (host: ReactFiber, componentName: string) => {
+  const stack = readStackText(host)
+  if (!stack) return false
+  for (const line of stack.split("\n")) {
+    const match = line.match(/at\s+(?:Object\.)?(\S+)\s+\((.+)\)$/)
+    if (!match) continue
+    if (!frameMatchesComponent(match[1], componentName)) continue
+    const file = match[2].replace(/:\d+:\d+$/, "")
+    if (isVendorModulePath(file)) return true
+  }
+  return false
+}
+
+const isVendorHostBuilder = (fiber: ReactFiber) => {
+  if (!isCompositeComponentFiber(fiber)) return false
+  const name = readComponentTypeName(fiber.type)
+  if (!name) return false
+  const child = firstNonWrapperChild(fiber)
+  if (!child || !isHostComponentFiber(child)) return false
+  return hostStackBuiltByVendor(child, name)
+}
+
 const isTransparentClimbFiber = (fiber: ReactFiber) => {
   if (!isCompositeComponentFiber(fiber)) return false
   const name = readComponentTypeName(fiber.type)
-  return !!name && isMotionFactoryName(name)
+  if (name && isMotionFactoryName(name)) return true
+  if (!name || !isVendorHostBuilder(fiber)) return false
+
+  let current = fiber.return ?? null
+  while (current) {
+    if (isWrapperFiber(current)) {
+      current = current.return ?? null
+      continue
+    }
+    const currentName = readComponentTypeName(current.type)
+    if (currentName && isMotionFactoryName(currentName)) {
+      current = current.return ?? null
+      continue
+    }
+    if (isHostComponentFiber(current)) return false
+    if (isCompositeComponentFiber(current)) {
+      if (
+        currentName &&
+        currentName === name &&
+        !isFrameworkInspectorName(currentName) &&
+        !isVendorHostBuilder(current)
+      ) {
+        return true
+      }
+      return false
+    }
+    current = current.return ?? null
+  }
+  return false
 }
 
 const skipClimbAncestor = (fiber: ReactFiber) =>
@@ -480,7 +547,7 @@ export const getDirectClimbOwner = (hostFiber: ReactFiber): ClimbOwner | null =>
   while (owner && hops < 12) {
     hops += 1
     const name = readComponentTypeName(owner.type)
-    if (name && isMotionFactoryName(name)) {
+    if (name && (isMotionFactoryName(name) || isTransparentClimbFiber(owner))) {
       owner = owner._debugOwner ?? null
       continue
     }

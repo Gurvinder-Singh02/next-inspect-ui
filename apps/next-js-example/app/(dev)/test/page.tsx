@@ -18,6 +18,7 @@ import {
   MotionWrapped,
 } from "@/components/algo-test/motion-fixture"
 import { SlotFixtures } from "@/components/algo-test/radix-fixture"
+import { ServerButtonCard } from "@/components/algo-test/server-button-fixture"
 import { ServerCard } from "@/components/algo-test/server-fixture"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -35,6 +36,7 @@ import {
   motionSvgNodes,
   motionWrappedTargets,
   radixSlotTargets,
+  serverClientButtonNodes,
   serverDirectNodes,
   serverNestedTargets,
   shadcnNestedNodes,
@@ -332,6 +334,16 @@ export default async function TestSuitePage() {
               <ServerCard data-accuracy-target="second" title="Second" />
             </div>
           </Suspense>
+        </SuiteCase>
+
+        <SuiteCase
+          id="server-client-button"
+          title="server-wrapped client button"
+          group="server"
+          description="Client Button used from a nested server card. Hover → button.tsx. ⌥ climb → this fixture's <Button/>, not the Base UI primitive."
+          nodes={serverClientButtonNodes}
+        >
+          <ServerButtonCard data-accuracy-target="root" />
         </SuiteCase>
       </SuiteGroup>
 
