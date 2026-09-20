@@ -680,7 +680,7 @@ const parseDebugStack = (stack: string) => {
       arguments: [],
       line1: Number(match[2]),
       column1: Number(match[3]),
-      isServer: match[1].startsWith("about://React/Server/"),
+      isServer: match[1].startsWith("about://React/Server/") || isReactServerStackFile(match[1]),
     })
   }
   return frames
@@ -737,7 +737,7 @@ const frameFromRecord = (record: Record<string, unknown>): StackFrame | null => 
     arguments: [],
     line1,
     column1: stackCol(record),
-    isServer: stackServer(file),
+    isServer: stackServer(file) || isReactServerStackFile(file),
   }
 }
 

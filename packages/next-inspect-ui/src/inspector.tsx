@@ -275,6 +275,50 @@ export const InspectUI = ({
       }
     }
 
+    const debugInfoMatchesName = (info: ServerDebugInfo, name: string) =>
+      info.name === name || info.owner?.name === name
+
+    const appendRscOwnerSteps = (
+      steps: OwnerChainStep[],
+      from: ReactFiber,
+      parentFiber: ReactFiber,
+      seenNames: Set<string>
+    ) => {
+      let node: ReactFiber | null = from
+      for (let hops = 0; node && hops < 12; hops += 1) {
+        const infos = node._debugInfo
+        if (infos?.length) {
+          for (let index = infos.length - 1; index >= 0; index -= 1) {
+            let info: ServerDebugInfo | null | undefined = infos[index]
+            while (info?.name && !isFrameworkInspectorName(info.name)) {
+              if (seenNames.has(info.name)) {
+                info = info.owner
+                continue
+              }
+              const resolved = resolveClimbStepSync(parentFiber, from, info)
+              steps.push({
+                name: info.name,
+                source: resolved.source,
+                definition: resolved.definition,
+                parentFiber,
+                debugInfo: resolved.debugInfo,
+              })
+              seenNames.add(info.name)
+              if (
+                isRouteFileBoundary(resolved.source, info.name) ||
+                isRouteFileBoundary(resolved.definition, info.name)
+              ) {
+                return true
+              }
+              info = info.owner
+            }
+          }
+        }
+        node = node.return ?? node._debugOwner ?? null
+      }
+      return false
+    }
+
     const buildOwnerChain = (fiber: ReactFiber): OwnerChainStep[] => {
       const cached = ownerChainCache.get(fiber)
       if (cached) return cached
@@ -287,26 +331,47 @@ export const InspectUI = ({
         if (!owner || (!owner.isSelfDebugOwner && !isDirectFiberChildOf(fiber, owner.fiber) && !isOwnerAncestorOf(fiber, owner.fiber))) return []
         const resolved = resolveClimbStepSync(owner.fiber, fiber, owner.debugInfo)
         steps.push({ name: owner.name, source: resolved.source, definition: resolved.definition, parentFiber: owner.fiber, debugInfo: resolved.debugInfo })
-        ownerChainCache.set(fiber, steps)
-        return steps
+        seen.add(owner.fiber)
+        seenNames.add(owner.name)
+        if (
+          isRouteFileBoundary(resolved.source, owner.name) ||
+          isRouteFileBoundary(resolved.definition, owner.name)
+        ) {
+          ownerChainCache.set(fiber, steps)
+          return steps
+        }
+        child = owner.fiber
+        parent = findNextNamedOwner(child)
+        if (!parent || (!isDirectFiberChildOf(child, parent) && !isOwnerAncestorOf(child, parent))) {
+          appendRscOwnerSteps(steps, fiber, owner.fiber, seenNames)
+          if (steps.length > 0) ownerChainCache.set(fiber, steps)
+          return steps
+        }
+      } else {
+        const named = getNamedTarget(fiber)?.fiber ?? fiber
+        parent = findNextNamedOwner(named)
+        if (!parent || (!isDirectFiberChildOf(named, parent) && !isOwnerAncestorOf(named, parent))) return []
+        child = named
       }
-      const named = getNamedTarget(fiber)?.fiber ?? fiber
-      parent = findNextNamedOwner(named)
-      if (!parent || (!isDirectFiberChildOf(named, parent) && !isOwnerAncestorOf(named, parent))) return []
-      child = named
       for (let hops = 0; parent && hops < 32; hops += 1) {
         if (seen.has(parent)) break
         seen.add(parent)
         if (!isDirectFiberChildOf(child, parent) && !isOwnerAncestorOf(child, parent)) break
         const name = readFiberDisplayName(parent)
         if (!name || isFrameworkInspectorName(name) || (seenNames.has(name) && seen.has(parent))) break
-        const resolved = resolveClimbStepSync(parent, child)
-        steps.push({ name, source: resolved.source, definition: resolved.definition, parentFiber: parent })
+        const debugInfo = [...(parent._debugInfo ?? []), ...(child._debugInfo ?? [])]
+          .reverse()
+          .find((info) => debugInfoMatchesName(info, name))
+        const resolved = resolveClimbStepSync(parent, child, debugInfo)
+        steps.push({ name, source: resolved.source, definition: resolved.definition, parentFiber: parent, debugInfo: resolved.debugInfo })
         seenNames.add(name)
         if (isRouteFileBoundary(resolved.source, name) || isRouteFileBoundary(resolved.definition, name) || isClimbUsageBoundary({ usage: resolved.source, definition: resolved.definition })) break
         child = parent
         const next = findNextNamedOwner(parent)
-        if (!next || (!isDirectFiberChildOf(parent, next) && !isOwnerAncestorOf(parent, next))) break
+        if (!next || (!isDirectFiberChildOf(parent, next) && !isOwnerAncestorOf(parent, next))) {
+          appendRscOwnerSteps(steps, child, parent, seenNames)
+          break
+        }
         parent = next
       }
       if (steps.length > 0) ownerChainCache.set(fiber, steps)
