@@ -440,267 +440,270 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
         className="relative flex min-h-0 flex-1 flex-col items-stretch justify-between rounded-2xl border border-border"
       >
         <ScrollArea className="min-h-0 flex-1">
-        <div
-          ref={contentRef}
-          className="relative z-10 flex flex-col gap-12 p-6 md:p-8"
-          onPointerMove={onContentPointerMove}
-          onPointerLeave={onContentPointerLeave}
-          onClick={onContentClick}
-        >
-          <PreviewTarget
-            targetId="section-1"
-            targetRefs={targetRefs}
-            className="flex flex-col gap-3"
+          <div
+            ref={contentRef}
+            className="relative z-10 flex flex-col gap-12 p-6 md:p-8"
+            onPointerMove={onContentPointerMove}
+            onPointerLeave={onContentPointerLeave}
+            onClick={onContentClick}
           >
             <PreviewTarget
-              targetId="hero-title"
-              targetRefs={targetRefs}
-              className="w-fit"
-            >
-              <h2 className="font-heading text-xl font-medium tracking-tight">
-                next-inspect-ui
-              </h2>
-            </PreviewTarget>
-            <PreviewTarget
-              targetId="hero-desc-1"
-              targetRefs={targetRefs}
-              className="max-w-[56ch]"
-            >
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Hover any node in your app, read its source path, and jump into
-                the editor without leaving the browser.
-              </p>
-            </PreviewTarget>
-            <PreviewTarget
-              targetId="hero-desc-2"
-              targetRefs={targetRefs}
-              className="max-w-[56ch]"
-            >
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                This stage mirrors a real page layout so you can judge fill,
-                stroke weight, and tooltip density on dense content.
-              </p>
-            </PreviewTarget>
-          </PreviewTarget>
-
-          <PreviewTarget
-            targetId="section-2"
-            targetRefs={targetRefs}
-            className="grid grid-cols-1 gap-10 md:grid-cols-2"
-          >
-            <PreviewTarget
-              targetId="waveform-card"
+              targetId="section-1"
               targetRefs={targetRefs}
               className="flex flex-col gap-3"
             >
               <PreviewTarget
-                targetId="waveform-title"
+                targetId="hero-title"
                 targetRefs={targetRefs}
                 className="w-fit"
               >
-                <h3 className="font-heading text-base font-medium">
-                  Live Audio Waveform
-                </h3>
+                <h2 className="font-heading text-xl font-medium tracking-tight">
+                  next-inspect-ui
+                </h2>
               </PreviewTarget>
               <PreviewTarget
-                targetId="waveform-description"
+                targetId="hero-desc-1"
                 targetRefs={targetRefs}
+                className="max-w-[56ch]"
               >
-                <p className="text-sm text-muted-foreground">
-                  Real-time microphone input visualization with audio
-                  reactivity.
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Hover any node in your app, read its source path, and jump
+                  into the editor without leaving the browser.
                 </p>
               </PreviewTarget>
-              <PreviewTarget targetId="waveform-chart" targetRefs={targetRefs}>
-                <LiveWaveform
-                  active={waveformActive}
-                  processing={waveformProcessing}
-                  height={116}
-                />
-              </PreviewTarget>
               <PreviewTarget
-                targetId="waveform-listen"
+                targetId="hero-desc-2"
                 targetRefs={targetRefs}
-                className="w-fit"
+                className="max-w-[56ch]"
               >
-                <Button
-                  size="sm"
-                  variant={waveformActive ? "default" : "outline"}
-                  onClick={() => {
-                    setWaveformActive((value) => {
-                      const next = !value
-                      if (next) setWaveformProcessing(false)
-                      return next
-                    })
-                  }}
-                >
-                  {waveformActive ? "Stop" : "Start"} Listening
-                </Button>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  This stage mirrors a real page layout so you can judge fill,
+                  stroke weight, and tooltip density on dense content.
+                </p>
               </PreviewTarget>
             </PreviewTarget>
 
             <PreviewTarget
-              targetId="fitness-card"
+              targetId="section-2"
               targetRefs={targetRefs}
-              className="flex flex-col gap-3"
+              className="grid grid-cols-1 gap-10 md:grid-cols-2"
             >
               <PreviewTarget
-                targetId="fitness-title"
+                targetId="waveform-card"
                 targetRefs={targetRefs}
-                className="w-fit"
+                className="flex flex-col gap-3"
               >
-                <h3 className="font-heading text-base font-medium">
-                  Yearly Fitness Summary
-                </h3>
-              </PreviewTarget>
-              <PreviewTarget
-                targetId="fitness-description"
-                targetRefs={targetRefs}
-              >
-                <p className="text-sm text-muted-foreground">
-                  Calories and workout load by month across the last year.
-                </p>
-              </PreviewTarget>
-              <PreviewTarget targetId="fitness-chart" targetRefs={targetRefs}>
-                <div className="grid grid-cols-12 gap-1.5">
-                  {YEARLY_ACTIVITY.map((month, index) => (
-                    <div
-                      key={`fitness-month-${index}`}
-                      className="flex flex-col gap-1 text-center"
-                    >
-                      <div className="text-[11px] text-muted-foreground">
-                        {month.month}
-                      </div>
-                      <div className="relative h-24 overflow-hidden rounded-sm bg-muted">
-                        <div
-                          className="absolute inset-x-0 bottom-0 rounded-sm bg-chart-3"
-                          style={
-                            {
-                              height: `${month.load}%`,
-                            } as CSSProperties
-                          }
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </PreviewTarget>
-              <PreviewTarget
-                targetId="fitness-action"
-                targetRefs={targetRefs}
-                className="w-fit"
-              >
-                <Button size="sm" variant="outline">
-                  View details
-                </Button>
-              </PreviewTarget>
-            </PreviewTarget>
-          </PreviewTarget>
-
-          <PreviewTarget
-            targetId="section-3"
-            targetRefs={targetRefs}
-            className="flex flex-col gap-4"
-          >
-            <div className="flex flex-col gap-1.5">
-              <PreviewTarget
-                targetId="section-inspect-title"
-                targetRefs={targetRefs}
-                className="w-fit"
-              >
-                <h3 className="font-heading text-base font-medium">
-                  Inspection activity
-                </h3>
-              </PreviewTarget>
-              <PreviewTarget
-                targetId="section-inspect-desc"
-                targetRefs={targetRefs}
-                className="max-w-[48ch]"
-              >
-                <p className="text-sm text-muted-foreground">
-                  Snapshot metrics from a typical local session — useful for
-                  checking overlay contrast on small labels.
-                </p>
-              </PreviewTarget>
-            </div>
-            <PreviewTarget targetId="metrics-row" targetRefs={targetRefs}>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
-                {METRICS.map((metric) => (
-                  <div key={metric.label} className="flex flex-col gap-0.5">
-                    <span className="text-[11px] tracking-wide text-muted-foreground uppercase">
-                      {metric.label}
-                    </span>
-                    <span className="font-heading text-xl tracking-tight font-medium">
-                      {metric.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </PreviewTarget>
-          </PreviewTarget>
-
-          <PreviewTarget
-            targetId="section-4"
-            targetRefs={targetRefs}
-            className="flex flex-col gap-4 pb-2"
-          >
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-2">
                 <PreviewTarget
-                  targetId="contributors-title"
+                  targetId="waveform-title"
                   targetRefs={targetRefs}
                   className="w-fit"
                 >
                   <h3 className="font-heading text-base font-medium">
-                    Contributors
+                    Live Audio Waveform
                   </h3>
                 </PreviewTarget>
                 <PreviewTarget
-                  targetId="contributors-badge"
+                  targetId="waveform-description"
+                  targetRefs={targetRefs}
+                >
+                  <p className="text-sm text-muted-foreground">
+                    Real-time microphone input visualization with audio
+                    reactivity.
+                  </p>
+                </PreviewTarget>
+                <PreviewTarget
+                  targetId="waveform-chart"
+                  targetRefs={targetRefs}
+                >
+                  <LiveWaveform
+                    active={waveformActive}
+                    processing={waveformProcessing}
+                    height={116}
+                  />
+                </PreviewTarget>
+                <PreviewTarget
+                  targetId="waveform-listen"
                   targetRefs={targetRefs}
                   className="w-fit"
                 >
-                  <Badge variant="secondary">312</Badge>
+                  <Button
+                    size="sm"
+                    variant={waveformActive ? "default" : "outline"}
+                    onClick={() => {
+                      setWaveformActive((value) => {
+                        const next = !value
+                        if (next) setWaveformProcessing(false)
+                        return next
+                      })
+                    }}
+                  >
+                    {waveformActive ? "Stop" : "Start"} Listening
+                  </Button>
+                </PreviewTarget>
+              </PreviewTarget>
+
+              <PreviewTarget
+                targetId="fitness-card"
+                targetRefs={targetRefs}
+                className="flex flex-col gap-3"
+              >
+                <PreviewTarget
+                  targetId="fitness-title"
+                  targetRefs={targetRefs}
+                  className="w-fit"
+                >
+                  <h3 className="font-heading text-base font-medium">
+                    Yearly Fitness Summary
+                  </h3>
+                </PreviewTarget>
+                <PreviewTarget
+                  targetId="fitness-description"
+                  targetRefs={targetRefs}
+                >
+                  <p className="text-sm text-muted-foreground">
+                    Calories and workout load by month across the last year.
+                  </p>
+                </PreviewTarget>
+                <PreviewTarget targetId="fitness-chart" targetRefs={targetRefs}>
+                  <div className="grid grid-cols-12 gap-1.5">
+                    {YEARLY_ACTIVITY.map((month, index) => (
+                      <div
+                        key={`fitness-month-${index}`}
+                        className="flex flex-col gap-1 text-center"
+                      >
+                        <div className="text-[11px] text-muted-foreground">
+                          {month.month}
+                        </div>
+                        <div className="relative h-24 overflow-hidden rounded-sm bg-muted">
+                          <div
+                            className="absolute inset-x-0 bottom-0 rounded-sm bg-chart-3"
+                            style={
+                              {
+                                height: `${month.load}%`,
+                              } as CSSProperties
+                            }
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </PreviewTarget>
+                <PreviewTarget
+                  targetId="fitness-action"
+                  targetRefs={targetRefs}
+                  className="w-fit"
+                >
+                  <Button size="sm" variant="outline">
+                    View details
+                  </Button>
+                </PreviewTarget>
+              </PreviewTarget>
+            </PreviewTarget>
+
+            <PreviewTarget
+              targetId="section-3"
+              targetRefs={targetRefs}
+              className="flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-1.5">
+                <PreviewTarget
+                  targetId="section-inspect-title"
+                  targetRefs={targetRefs}
+                  className="w-fit"
+                >
+                  <h3 className="font-heading text-base font-medium">
+                    Inspection activity
+                  </h3>
+                </PreviewTarget>
+                <PreviewTarget
+                  targetId="section-inspect-desc"
+                  targetRefs={targetRefs}
+                  className="max-w-[48ch]"
+                >
+                  <p className="text-sm text-muted-foreground">
+                    Snapshot metrics from a typical local session — useful for
+                    checking overlay contrast on small labels.
+                  </p>
+                </PreviewTarget>
+              </div>
+              <PreviewTarget targetId="metrics-row" targetRefs={targetRefs}>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+                  {METRICS.map((metric) => (
+                    <div key={metric.label} className="flex flex-col gap-0.5">
+                      <span className="text-[11px] tracking-wide text-muted-foreground uppercase">
+                        {metric.label}
+                      </span>
+                      <span className="font-heading text-xl font-medium tracking-tight">
+                        {metric.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </PreviewTarget>
+            </PreviewTarget>
+
+            <PreviewTarget
+              targetId="section-4"
+              targetRefs={targetRefs}
+              className="flex flex-col gap-4 pb-2"
+            >
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <PreviewTarget
+                    targetId="contributors-title"
+                    targetRefs={targetRefs}
+                    className="w-fit"
+                  >
+                    <h3 className="font-heading text-base font-medium">
+                      Contributors
+                    </h3>
+                  </PreviewTarget>
+                  <PreviewTarget
+                    targetId="contributors-badge"
+                    targetRefs={targetRefs}
+                    className="w-fit"
+                  >
+                    <Badge variant="secondary">312</Badge>
+                  </PreviewTarget>
+                </div>
+                <PreviewTarget
+                  targetId="contributors-desc"
+                  targetRefs={targetRefs}
+                  className="max-w-[48ch]"
+                >
+                  <p className="text-sm text-muted-foreground">
+                    People shipping the inspector - avatars highlight as one
+                    group.
+                  </p>
                 </PreviewTarget>
               </div>
               <PreviewTarget
-                targetId="contributors-desc"
+                targetId="contributors-avatars"
                 targetRefs={targetRefs}
-                className="max-w-[48ch]"
               >
-                <p className="text-sm text-muted-foreground">
-                  People shipping the inspector - avatars highlight as one
-                  group.
-                </p>
+                <div className="flex flex-wrap gap-2">
+                  {CONTRIBUTOR_USERNAMES.map((username) => (
+                    <Avatar key={username} className="grayscale">
+                      <AvatarImage
+                        src={`https://github.com/${username}.png`}
+                        alt={username}
+                      />
+                      <AvatarFallback>{username.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                  ))}
+                </div>
               </PreviewTarget>
-            </div>
-            <PreviewTarget
-              targetId="contributors-avatars"
-              targetRefs={targetRefs}
-            >
-              <div className="flex flex-wrap gap-2">
-                {CONTRIBUTOR_USERNAMES.map((username) => (
-                  <Avatar key={username} className="grayscale">
-                    <AvatarImage
-                      src={`https://github.com/${username}.png`}
-                      alt={username}
-                    />
-                    <AvatarFallback>{username.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                ))}
-              </div>
+              <PreviewTarget
+                targetId="contributors-link"
+                targetRefs={targetRefs}
+                className="w-fit"
+              >
+                <span className="text-sm underline underline-offset-4">
+                  + 810 contributors
+                </span>
+              </PreviewTarget>
             </PreviewTarget>
-            <PreviewTarget
-              targetId="contributors-link"
-              targetRefs={targetRefs}
-              className="w-fit"
-            >
-              <span className="text-sm underline underline-offset-4">
-                + 810 contributors
-              </span>
-            </PreviewTarget>
-          </PreviewTarget>
-        </div>
+          </div>
         </ScrollArea>
 
         {showOverlay ? (

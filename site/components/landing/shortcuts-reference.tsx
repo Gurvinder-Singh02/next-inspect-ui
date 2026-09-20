@@ -67,8 +67,7 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["⌘", "["],
     type: "nav",
-    description:
-      "Move the spotlight to the parent inspectable element.",
+    description: "Move the spotlight to the parent inspectable element.",
   },
   {
     keys: ["⌘", "]"],
