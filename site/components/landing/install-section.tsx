@@ -8,13 +8,13 @@ import {
 import { highlightCode } from "@/lib/highlight-code"
 
 const INSTALL_COMMANDS: Record<PackageManager, string> = {
-  npm: "npm i next-inspect-ui",
-  pnpm: "pnpm add next-inspect-ui",
-  yarn: "yarn add next-inspect-ui",
-  bun: "bun add next-inspect-ui",
+  npm: "npm i -D next-inspect-ui",
+  pnpm: "pnpm add -D next-inspect-ui",
+  yarn: "yarn add -D next-inspect-ui",
+  bun: "bun add -D next-inspect-ui",
 }
 
-const AGENT_PROMPT = `Install next-inspect-ui (npm i next-inspect-ui). Add <InspectUI projectRoot={process.cwd()} /> as a sibling alongside {children} in the root layout (not wrapping it), only in development.`
+const AGENT_PROMPT = `Install next-inspect-ui (npm i -D next-inspect-ui). Add <InspectUI projectRoot={process.cwd()} /> as a sibling alongside {children} in the root layout (not wrapping it), only in development.`
 
 const LAYOUT_CODE = `import { InspectUI } from "next-inspect-ui"
 
