@@ -1,13 +1,16 @@
 {
   "name": "site",
   "version": "0.0.1",
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -53,9 +56,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.6",
     "next-inspect-ui": "workspace:*",
+    "oxfmt": "^0.68.0",
+    "oxlint": "^1.83.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

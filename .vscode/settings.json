@@ -1,0 +1,28 @@
+{
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always",
+    "source.format.oxc": "always"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "oxc.fixKind": "safe_fix",
+  "oxc.enable.oxlint": true,
+  "oxc.useExecPath": true,
+  "oxc.path.oxfmt": "site/node_modules/oxfmt/bin/oxfmt",
+  "oxc.path.oxlint": "site/node_modules/oxlint/bin/oxlint",
+  "oxc.fmt.configPath": "site/.oxfmtrc.jsonc",
+  "oxc.configPath": "site/.oxlintrc.json"
+}

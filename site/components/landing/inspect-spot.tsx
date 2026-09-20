@@ -97,13 +97,7 @@ const UnderChip = ({
 
 const tooltipProps = DEFAULT_INSPECTOR_SETTINGS.tooltipProps
 
-const TooltipFront = ({
-  label,
-  used,
-}: {
-  label: string
-  used: boolean
-}) => (
+const TooltipFront = ({ label, used }: { label: string; used: boolean }) => (
   <span
     className="relative z-2 flex w-fit items-center overflow-hidden"
     style={tooltipChipStyle}

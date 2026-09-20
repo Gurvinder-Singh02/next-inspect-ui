@@ -27,12 +27,14 @@ const API_SECTIONS: ApiSection[] = [
       {
         name: "shortcut",
         type: "string",
-        description: 'Keyboard shortcut that toggles inspect mode. Default `"Alt+X"`.',
+        description:
+          'Keyboard shortcut that toggles inspect mode. Default `"Alt+X"`.',
       },
       {
         name: "ide",
         type: '"cursor" | "vscode" | "vscode-insiders" | "windsurf" | "zed"',
-        description: 'Editor used for open-in-source links. Default `"cursor"`.',
+        description:
+          'Editor used for open-in-source links. Default `"cursor"`.',
       },
       {
         name: "tooltipProps",
