@@ -74,7 +74,7 @@ html {
 }
 
 .dark {
-  --background: #121212;
+  --background: #0a0a0a;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -238,7 +238,7 @@ html {
   }
 
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background font-inter text-foreground;
   }
 
   html {
@@ -247,7 +247,7 @@ html {
 
   button,
   a {
-    @apply -outline-offset-1 cursor-pointer outline-sky-500 focus-visible:outline;
+    @apply cursor-pointer -outline-offset-1 outline-sky-500 focus-visible:outline;
   }
 }
 

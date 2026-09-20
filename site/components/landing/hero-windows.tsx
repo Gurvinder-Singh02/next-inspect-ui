@@ -1,7 +1,12 @@
 "use client"
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
-import useEmblaCarousel from "embla-carousel-react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 import { play } from "cuelume"
 import {
   ArrowUp,
@@ -29,7 +34,10 @@ import {
   X,
 } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
-import { formatTooltipLabel, DEFAULT_INSPECTOR_SETTINGS } from "next-inspect-ui/lib"
+import {
+  formatTooltipLabel,
+  DEFAULT_INSPECTOR_SETTINGS,
+} from "next-inspect-ui/lib"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
 import {
@@ -120,7 +128,7 @@ const WindowChrome = ({
   </header>
 )
 
-const InstallPill = () => {
+const _InstallPill = () => {
   const [hasCopied, setHasCopied] = useState(false)
 
   const handleCopy = async () => {
@@ -175,7 +183,7 @@ const ShortcutPress = ({ keys }: { keys: ShortcutKey[] }) => {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none absolute bottom-10 left-16 z-40 inline-flex items-center gap-1.5 rounded-md bg-background/80 px-2.5 py-1.5 text-foreground shadow-md ring-1 ring-border backdrop-blur-md sm:left-24"
+      className="pointer-events-none absolute bottom-6 left-4 z-40 inline-flex items-center gap-1.5 rounded-md bg-background/80 px-2.5 py-1.5 text-foreground shadow-md ring-1 ring-border backdrop-blur-md"
       initial={reduceMotion ? false : { opacity: 0, scale: 1.18 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ type: "spring", duration: 0.45, bounce: 0.08 }}
@@ -187,7 +195,7 @@ const ShortcutPress = ({ keys }: { keys: ShortcutKey[] }) => {
   )
 }
 
-const CopyPrompt = () => {
+const _CopyPrompt = () => {
   const [hasCopied, setHasCopied] = useState(false)
 
   const handleCopy = async () => {
@@ -251,7 +259,11 @@ const InboxScene = ({ step }: { step: number }) => {
     if (!stage) return
     const stageBox = stage.getBoundingClientRect()
     const target =
-      hover?.id === "stage" ? stage : hover ? targetRefs.current[hover.id] : null
+      hover?.id === "stage"
+        ? stage
+        : hover
+          ? targetRefs.current[hover.id]
+          : null
 
     if (!target) {
       setBox({
@@ -298,7 +310,10 @@ const InboxScene = ({ step }: { step: number }) => {
   }, [measure])
 
   return (
-    <div ref={stageRef} className="relative grid h-full gap-4 sm:grid-cols-[13rem_1fr]">
+    <div
+      ref={stageRef}
+      className="relative grid h-full gap-4 sm:grid-cols-[13rem_1fr]"
+    >
       {step >= 0 ? (
         <DemoCursor
           variant={step <= 1 ? "arrow" : "plus"}
@@ -329,7 +344,9 @@ const InboxScene = ({ step }: { step: number }) => {
               >
                 {thread.id}
               </span>
-              <span className="text-[11px] text-muted-foreground">{thread.time}</span>
+              <span className="text-[11px] text-muted-foreground">
+                {thread.time}
+              </span>
             </p>
             <p className="font-inter text-[11px] text-muted-foreground">
               {thread.title}
@@ -349,8 +366,7 @@ const InboxScene = ({ step }: { step: number }) => {
             Hover any node and open its source.
           </p>
           <p className="mt-1.5 font-inter text-[13px] leading-relaxed text-muted-foreground">
-            Hold ⌥ to climb to the usage site, then click to jump in the
-            editor.
+            Hold ⌥ to climb to the usage site, then click to jump in the editor.
           </p>
           <p className="mt-1.5 font-inter text-[12px] leading-relaxed text-muted-foreground">
             Tooltip should stay on the author line, not the wrapper.
@@ -403,7 +419,10 @@ const InboxScene = ({ step }: { step: number }) => {
           <span className="min-w-0 flex-1 font-inter text-[13px] text-muted-foreground">
             Reply…
           </span>
-          <span className="flex items-center gap-2 text-muted-foreground" aria-hidden>
+          <span
+            className="flex items-center gap-2 text-muted-foreground"
+            aria-hidden
+          >
             <Hexagon className="size-3" />
             <Paperclip className="size-3.5" />
             <span className="flex size-6 items-center justify-center rounded-full bg-foreground text-background">
@@ -495,7 +514,11 @@ const AuditScene = ({ step }: { step: number }) => {
     if (!stage) return
     const stageBox = stage.getBoundingClientRect()
     const target =
-      hover?.id === "stage" ? stage : hover ? targetRefs.current[hover.id] : null
+      hover?.id === "stage"
+        ? stage
+        : hover
+          ? targetRefs.current[hover.id]
+          : null
 
     if (!target) {
       setBox({
@@ -542,145 +565,157 @@ const AuditScene = ({ step }: { step: number }) => {
   }, [measure])
 
   return (
-  <div ref={stageRef} className="relative flex flex-col gap-4">
-    {step >= 0 ? (
-      <DemoCursor
-        variant={step <= 1 ? "arrow" : "plus"}
-        left={cursor.left}
-        top={cursor.top}
+    <div ref={stageRef} className="relative flex flex-col gap-4">
+      {step >= 0 ? (
+        <DemoCursor
+          variant={step <= 1 ? "arrow" : "plus"}
+          left={cursor.left}
+          top={cursor.top}
+        />
+      ) : null}
+      <FollowInspect
+        box={box}
+        visible={Boolean(hover)}
+        tag={hover?.tag ?? "div"}
+        pageName={hover?.pageName ?? "app/audit/page.tsx:8"}
       />
-    ) : null}
-    <FollowInspect
-      box={box}
-      visible={Boolean(hover)}
-      tag={hover?.tag ?? "div"}
-      pageName={hover?.pageName ?? "app/audit/page.tsx:8"}
-    />
-    <div
-      ref={setTargetRef("header")}
-      className="flex items-start justify-between gap-3"
-    >
-      <div className="flex flex-col gap-0.5">
-        <h3
-          ref={setTargetRef("title")}
-          className="font-inter text-[15px] font-medium tracking-tight"
-        >
-          Audit log
-        </h3>
-        <p
-          ref={setTargetRef("subtitle")}
-          className="font-inter text-[12px] text-muted-foreground"
-        >
-          A timeline of all your store activities.
-        </p>
-      </div>
-      <span
-        ref={setTargetRef("export")}
-        className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 font-inter text-[11px]"
+      <div
+        ref={setTargetRef("header")}
+        className="flex items-start justify-between gap-3"
       >
-        <Download className="size-3" aria-hidden />
-        Export as CSV
-      </span>
-    </div>
-    <div className="flex flex-wrap items-center justify-between gap-2">
-      <div className="flex flex-wrap items-center gap-2">
-        {AUDIT_FILTERS.map(({ icon: Icon, label }, index) => (
-          <span
-            key={label}
-            ref={setTargetRef(FILTER_HOVER_IDS[index])}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 font-inter text-[11px]"
+        <div className="flex flex-col gap-0.5">
+          <h3
+            ref={setTargetRef("title")}
+            className="font-inter text-[15px] font-medium tracking-tight"
           >
-            <Icon className="size-3 text-muted-foreground" aria-hidden />
-            {label}
-            <ChevronDown className="size-3 text-muted-foreground" aria-hidden />
-          </span>
-        ))}
-      </div>
-      <span
-        ref={setTargetRef("search")}
-        className="inline-flex min-w-48 items-center gap-1.5 rounded-md border border-border px-2.5 py-1 font-inter text-[11px] text-muted-foreground"
-      >
-        <Search className="size-3" aria-hidden />
-        Search by activity name, author…
-      </span>
-    </div>
-    <div className="flex flex-col">
-      <div className="grid grid-cols-[auto_minmax(0,1fr)_9rem_11rem] items-center gap-3 border-b border-border py-2 font-inter text-[11px] text-muted-foreground">
-        <span className="size-3.5 rounded-sm border border-border" aria-hidden />
-        <span>Activity</span>
-        <span>Author</span>
-        <span className="text-right">Timestamp</span>
-      </div>
-      {AUDIT_ROWS.map((row, index) => (
-        <div
-          key={`${row.activity}-${row.time}`}
-          ref={index === 0 ? setTargetRef("row") : undefined}
-          className="grid grid-cols-[auto_minmax(0,1fr)_9rem_11rem] items-center gap-3 border-b border-border/70 py-2"
-        >
-          <span className="size-3.5 rounded-sm border border-border" aria-hidden />
+            Audit log
+          </h3>
           <p
-            ref={index === 0 ? setTargetRef("activity") : undefined}
-            className="flex min-w-0 flex-wrap items-center gap-1.5 font-inter text-[12px]"
+            ref={setTargetRef("subtitle")}
+            className="font-inter text-[12px] text-muted-foreground"
           >
-            <span className="truncate">{row.activity}</span>
-            <span className="rounded-full bg-secondary px-1.5 py-0.5 text-[10px]">
-              {row.badge}
-            </span>
+            A timeline of all your store activities.
           </p>
-          <span
-            ref={index === 0 ? setTargetRef("author") : undefined}
-            className="flex items-center gap-1.5 font-inter text-[12px]"
-          >
-            <span
-              className={cn(
-                "flex size-5 shrink-0 items-center justify-center rounded-full font-inter text-[9px]",
-                row.tint
-              )}
-            >
-              {row.initials}
-            </span>
-            <span className="truncate">{row.author}</span>
-          </span>
-          <span className="text-right font-inter text-[11px] tabular-nums text-muted-foreground">
-            {row.time}
-          </span>
         </div>
-      ))}
-    </div>
-    <div className="flex flex-wrap items-center justify-between gap-3 font-inter text-[11px] text-muted-foreground">
-      <span>Viewing 1 to 15 of 145 activities</span>
-      <div className="flex items-center gap-3">
-        <span className="flex items-center gap-1">
-          <span className="flex size-6 items-center justify-center rounded-md border border-border">
-            <ChevronLeft className="size-3" aria-hidden />
-          </span>
-          {["1", "2", "3", "4", "5"].map((page) => (
+        <span
+          ref={setTargetRef("export")}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 font-inter text-[11px]"
+        >
+          <Download className="size-3" aria-hidden />
+          Export as CSV
+        </span>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {AUDIT_FILTERS.map(({ icon: Icon, label }, index) => (
             <span
-              key={page}
-              className={cn(
-                "flex size-6 items-center justify-center rounded-md border tabular-nums",
-                page === "1"
-                  ? "border-orange-500 text-foreground"
-                  : "border-border"
-              )}
+              key={label}
+              ref={setTargetRef(FILTER_HOVER_IDS[index])}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 font-inter text-[11px]"
             >
-              {page}
+              <Icon className="size-3 text-muted-foreground" aria-hidden />
+              {label}
+              <ChevronDown
+                className="size-3 text-muted-foreground"
+                aria-hidden
+              />
             </span>
           ))}
-          <span className="flex size-6 items-center justify-center rounded-md border border-border">
-            <ChevronRight className="size-3" aria-hidden />
-          </span>
-        </span>
-        <span className="flex items-center gap-1.5">
-          Items per page
-          <span className="inline-flex items-center gap-1 rounded-md border border-border px-1.5 py-0.5 text-foreground">
-            15
-            <ChevronDown className="size-3 text-muted-foreground" aria-hidden />
-          </span>
+        </div>
+        <span
+          ref={setTargetRef("search")}
+          className="inline-flex min-w-48 items-center gap-1.5 rounded-md border border-border px-2.5 py-1 font-inter text-[11px] text-muted-foreground"
+        >
+          <Search className="size-3" aria-hidden />
+          Search by activity name, author…
         </span>
       </div>
+      <div className="flex flex-col">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)_9rem_11rem] items-center gap-3 border-b border-border py-2 font-inter text-[11px] text-muted-foreground">
+          <span
+            className="size-3.5 rounded-sm border border-border"
+            aria-hidden
+          />
+          <span>Activity</span>
+          <span>Author</span>
+          <span className="text-right">Timestamp</span>
+        </div>
+        {AUDIT_ROWS.map((row, index) => (
+          <div
+            key={`${row.activity}-${row.time}`}
+            ref={index === 0 ? setTargetRef("row") : undefined}
+            className="grid grid-cols-[auto_minmax(0,1fr)_9rem_11rem] items-center gap-3 border-b border-border/70 py-2"
+          >
+            <span
+              className="size-3.5 rounded-sm border border-border"
+              aria-hidden
+            />
+            <p
+              ref={index === 0 ? setTargetRef("activity") : undefined}
+              className="flex min-w-0 flex-wrap items-center gap-1.5 font-inter text-[12px]"
+            >
+              <span className="truncate">{row.activity}</span>
+              <span className="rounded-full bg-secondary px-1.5 py-0.5 text-[10px]">
+                {row.badge}
+              </span>
+            </p>
+            <span
+              ref={index === 0 ? setTargetRef("author") : undefined}
+              className="flex items-center gap-1.5 font-inter text-[12px]"
+            >
+              <span
+                className={cn(
+                  "flex size-5 shrink-0 items-center justify-center rounded-full font-inter text-[9px]",
+                  row.tint
+                )}
+              >
+                {row.initials}
+              </span>
+              <span className="truncate">{row.author}</span>
+            </span>
+            <span className="text-right font-inter text-[11px] text-muted-foreground tabular-nums">
+              {row.time}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 font-inter text-[11px] text-muted-foreground">
+        <span>Viewing 1 to 15 of 145 activities</span>
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1">
+            <span className="flex size-6 items-center justify-center rounded-md border border-border">
+              <ChevronLeft className="size-3" aria-hidden />
+            </span>
+            {["1", "2", "3", "4", "5"].map((page) => (
+              <span
+                key={page}
+                className={cn(
+                  "flex size-6 items-center justify-center rounded-md border tabular-nums",
+                  page === "1"
+                    ? "border-orange-500 text-foreground"
+                    : "border-border"
+                )}
+              >
+                {page}
+              </span>
+            ))}
+            <span className="flex size-6 items-center justify-center rounded-md border border-border">
+              <ChevronRight className="size-3" aria-hidden />
+            </span>
+          </span>
+          <span className="flex items-center gap-1.5">
+            Items per page
+            <span className="inline-flex items-center gap-1 rounded-md border border-border px-1.5 py-0.5 text-foreground">
+              15
+              <ChevronDown
+                className="size-3 text-muted-foreground"
+                aria-hidden
+              />
+            </span>
+          </span>
+        </div>
+      </div>
     </div>
-  </div>
   )
 }
 
@@ -851,13 +886,15 @@ const DashboardScene = ({ step }: { step: number }) => {
                 key={metric.label}
                 size="sm"
                 ref={index === 0 ? setTargetRef("card") : undefined}
-                className="h-full from-primary/5 to-card bg-linear-to-t shadow-xs"
+                className="h-full bg-linear-to-t from-primary/5 to-card shadow-xs"
               >
-                <CardHeader ref={index === 0 ? setTargetRef("header") : undefined}>
+                <CardHeader
+                  ref={index === 0 ? setTargetRef("header") : undefined}
+                >
                   <CardDescription>{metric.label}</CardDescription>
                   <CardTitle
                     ref={index === 0 ? setTargetRef("title") : undefined}
-                    className="text-xl! tracking-tighter font-semibold tabular-nums"
+                    className="text-xl! font-semibold tracking-tighter tabular-nums"
                   >
                     {metric.value}
                   </CardTitle>
@@ -908,13 +945,41 @@ const DashboardScene = ({ step }: { step: number }) => {
             >
               <AreaChart data={DASHBOARD_CHART}>
                 <defs>
-                  <linearGradient id="heroFillDesktop" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--color-desktop)" stopOpacity={1} />
-                    <stop offset="95%" stopColor="var(--color-desktop)" stopOpacity={0.1} />
+                  <linearGradient
+                    id="heroFillDesktop"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-desktop)"
+                      stopOpacity={1}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-desktop)"
+                      stopOpacity={0.1}
+                    />
                   </linearGradient>
-                  <linearGradient id="heroFillMobile" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--color-mobile)" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="var(--color-mobile)" stopOpacity={0.1} />
+                  <linearGradient
+                    id="heroFillMobile"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-mobile)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-mobile)"
+                      stopOpacity={0.1}
+                    />
                   </linearGradient>
                 </defs>
                 <CartesianGrid vertical={false} />
@@ -956,7 +1021,12 @@ const DashboardScene = ({ step }: { step: number }) => {
 
 const SCENES = [
   { title: "Inbox", icon: Inbox, Scene: InboxScene, steps: INBOX_STEPS },
-  { title: "Audit log", icon: ScrollText, Scene: AuditScene, steps: AUDIT_STEPS },
+  {
+    title: "Audit log",
+    icon: ScrollText,
+    Scene: AuditScene,
+    steps: AUDIT_STEPS,
+  },
   {
     title: "Dashboard",
     icon: LayoutDashboard,
@@ -965,116 +1035,47 @@ const SCENES = [
   },
 ] as const
 
-export const HeroWindows = ({ className }: { className?: string }) => {
+const shortcutForScene = (
+  title: (typeof SCENES)[number]["title"],
+  step: number
+): ShortcutKey[] | null => {
+  if (title === "Dashboard") {
+    if (step === 1) return ["option"]
+    if (step >= 2) return ["option", "shift"]
+    return null
+  }
+  return step >= 1 ? ["option", "x"] : null
+}
+
+const HeroWindow = ({ title, icon, Scene, steps }: (typeof SCENES)[number]) => {
   const [isOpen, setIsOpen] = useState(true)
-  const [activeScene, setActiveScene] = useState(0)
-  const [canScrollPrev, setCanScrollPrev] = useState(false)
-  const [canScrollNext, setCanScrollNext] = useState(false)
-  const [step, setStep] = useOverlayLoop(true, SCENES[activeScene].steps)
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: "start",
-    duration: 22,
-    loop: true,
-    watchDrag: true,
-  })
-
-  useEffect(() => {
-    if (!emblaApi) return
-    const onSelect = () => {
-      setActiveScene(emblaApi.selectedScrollSnap())
-      setCanScrollPrev(emblaApi.canScrollPrev())
-      setCanScrollNext(emblaApi.canScrollNext())
-      setStep(0)
-    }
-    onSelect()
-    emblaApi.on("select", onSelect)
-    emblaApi.on("reInit", onSelect)
-    return () => {
-      emblaApi.off("select", onSelect)
-      emblaApi.off("reInit", onSelect)
-    }
-  }, [emblaApi, setStep])
-
-  const scrollPrev = useCallback(() => {
-    emblaApi?.scrollPrev()
-  }, [emblaApi])
-
-  const scrollNext = useCallback(() => {
-    emblaApi?.scrollNext()
-  }, [emblaApi])
+  const [step] = useOverlayLoop(true, steps)
+  const keys = shortcutForScene(title, step)
 
   if (!isOpen) return null
 
   return (
-    <section className={cn("mx-auto flex w-full max-w-5xl flex-col gap-3", className)}>
-      <div className="relative">
-        <button
-          type="button"
-          aria-label="Previous slide"
-          disabled={!canScrollPrev}
-          onClick={scrollPrev}
-          className="absolute top-1/2 left-6 z-30 flex size-10 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
-        >
-          <ChevronLeft className="size-5" aria-hidden />
-        </button>
-        <button
-          type="button"
-          aria-label="Next slide"
-          disabled={!canScrollNext}
-          onClick={scrollNext}
-          className="absolute top-1/2 right-6 z-30 flex size-10 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
-        >
-          <ChevronRight className="size-5" aria-hidden />
-        </button>
-        <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex touch-pan-y">
-            {SCENES.map(({ title, icon, Scene }, index) => {
-              const isActive = index === activeScene
-
-              return (
-                <div
-                  key={title}
-                  className="min-w-0 shrink-0 grow-0 basis-full px-14 sm:px-20"
-                >
-                  <article
-                    className="flex h-100 flex-col overflow-visible rounded-xl border border-border bg-card"
-                    aria-hidden={!isActive}
-                  >
-                    <WindowChrome
-                      icon={icon}
-                      title={title}
-                      isPlaying
-                      onClose={() => setIsOpen(false)}
-                    />
-                    <div className="min-h-0 flex-1 px-3 pt-3 pb-3">
-                      <Scene step={isActive ? step : -1} />
-                    </div>
-                  </article>
-                </div>
-              )
-            })}
-          </div>
+    <div className="relative">
+      <article className="flex h-100 flex-col overflow-visible rounded-xl border border-border bg-card">
+        <WindowChrome
+          icon={icon}
+          title={title}
+          isPlaying
+          onClose={() => setIsOpen(false)}
+        />
+        <div className="min-h-0 flex-1 px-3 pt-3 pb-3">
+          <Scene step={step} />
         </div>
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-16 bg-gradient-to-r from-background to-transparent sm:w-24" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-16 bg-gradient-to-l from-background to-transparent sm:w-24" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-44 bg-gradient-to-t from-background from-15% via-background/80 to-transparent" />
-        {activeScene <= 1 && step >= 1 ? (
-          <ShortcutPress
-            key={activeScene === 0 ? "inbox-option-x" : "audit-option-x"}
-            keys={["option", "x"]}
-          />
-        ) : null}
-        {activeScene === 2 && step === 1 ? (
-          <ShortcutPress key="dash-option" keys={["option"]} />
-        ) : null}
-        {activeScene === 2 && step >= 2 ? (
-          <ShortcutPress key="dash-option-shift" keys={["option", "shift"]} />
-        ) : null}
-      </div>
-      {/* <div className="flex items-center gap-2 px-14 sm:px-37">
-        <InstallPill />
-        <CopyPrompt />
-      </div> */}
-    </section>
+      </article>
+      {keys ? <ShortcutPress keys={keys} /> : null}
+    </div>
   )
 }
+
+export const HeroWindows = ({ className }: { className?: string }) => (
+  <section className={cn("mx-auto flex w-full flex-col gap-8", className)}>
+    {SCENES.map((scene) => (
+      <HeroWindow key={scene.title} {...scene} />
+    ))}
+  </section>
+)
