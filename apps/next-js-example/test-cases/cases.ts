@@ -43,20 +43,20 @@ export const TEST_CASE_META: SuiteCaseMeta[] = [
 ]
 
 export const basicHtmlHeadingNodes: AccuracyNode[] = [
-  { name: "h1", file: TEST_PAGE, line: 68 },
+  { name: "h1", file: TEST_PAGE, line: 82 },
 ]
 
 export const svgPlainNodes: AccuracyNode[] = [
-  { name: "rect", file: TEST_PAGE, line: 87 },
+  { name: "rect", file: TEST_PAGE, line: 101 },
 ]
 
 export const svgParentNodes: AccuracyNode[] = [
-  { name: "SvgBars", file: TEST_PAGE, line: 105 },
+  { name: "SvgBars", file: TEST_PAGE, line: 119 },
   { name: "svg", file: SVG, line: 5 },
 ]
 
 export const shadcnPlainNodes: AccuracyNode[] = [
-  { name: "Button", file: TEST_PAGE, line: 117 },
+  { name: "Button", file: TEST_PAGE, line: 131 },
   { name: "button", file: BUTTON, line: 52 },
 ]
 
@@ -65,7 +65,7 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     id: "secondary",
     label: "Secondary",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 128 },
+      { name: "Button", file: TEST_PAGE, line: 142 },
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
@@ -73,7 +73,7 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     id: "ghost",
     label: "Ghost",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 131 },
+      { name: "Button", file: TEST_PAGE, line: 145 },
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
@@ -81,14 +81,14 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     id: "destructive",
     label: "Destructive",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 134 },
+      { name: "Button", file: TEST_PAGE, line: 148 },
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
 ]
 
 export const shadcnNestedNodes: AccuracyNode[] = [
-  { name: "Button", file: TEST_PAGE, line: 152 },
+  { name: "Button", file: TEST_PAGE, line: 170 },
   { name: "button", file: BUTTON, line: 52 },
 ]
 
@@ -97,7 +97,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     id: "default",
     label: "Default",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 167 },
+      { name: "Badge", file: TEST_PAGE, line: 185 },
       { name: "span", file: BADGE, line: 36 },
     ],
   },
@@ -105,7 +105,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     id: "secondary",
     label: "Secondary",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 168 },
+      { name: "Badge", file: TEST_PAGE, line: 186 },
       { name: "span", file: BADGE, line: 36 },
     ],
   },
@@ -113,7 +113,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     id: "destructive",
     label: "Destructive",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 171 },
+      { name: "Badge", file: TEST_PAGE, line: 189 },
       { name: "span", file: BADGE, line: 36 },
     ],
   },
@@ -182,7 +182,7 @@ export const libraryOwnHostTargets: AccuracyTarget[] = [
     id: "first",
     label: "First",
     nodes: [
-      { name: "RendersOwnHost", file: TEST_PAGE, line: 229 },
+      { name: "RendersOwnHost", file: TEST_PAGE, line: 247 },
       { name: "svg", file: LIBRARY, line: 28 },
     ],
   },
@@ -190,7 +190,7 @@ export const libraryOwnHostTargets: AccuracyTarget[] = [
     id: "second",
     label: "Second",
     nodes: [
-      { name: "RendersOwnHost", file: TEST_PAGE, line: 230 },
+      { name: "RendersOwnHost", file: TEST_PAGE, line: 248 },
       { name: "svg", file: LIBRARY, line: 28 },
     ],
   },
@@ -228,7 +228,7 @@ export const kindsForwardRefTargets: AccuracyTarget[] = [
     id: "forward-ref",
     label: "forwardRef",
     nodes: [
-      { name: "ForwardedInput", file: TEST_PAGE, line: 256 },
+      { name: "ForwardedInput", file: TEST_PAGE, line: 274 },
       { name: "input", file: KINDS, line: 60 },
     ],
   },
@@ -236,7 +236,7 @@ export const kindsForwardRefTargets: AccuracyTarget[] = [
     id: "memo",
     label: "memo",
     nodes: [
-      { name: "MemoPill", file: TEST_PAGE, line: 257 },
+      { name: "MemoPill", file: TEST_PAGE, line: 278 },
       { name: "span", file: KINDS, line: 77 },
     ],
   },
@@ -254,17 +254,17 @@ export const compositionMapTargets: AccuracyTarget[] = [
   {
     id: "alpha",
     label: "alpha",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 273 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 294 }],
   },
   {
     id: "beta",
     label: "beta",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 273 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 294 }],
   },
   {
     id: "gamma",
     label: "gamma",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 273 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 294 }],
   },
 ]
 
@@ -272,30 +272,30 @@ export const thirdPartyIconTargets: AccuracyTarget[] = [
   {
     id: "sparkles",
     label: "Sparkles",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 294 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 315 }],
   },
   {
     id: "circle",
     label: "Circle",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 295 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 316 }],
   },
   {
     id: "arrow",
     label: "Arrow",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 296 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 317 }],
   },
   {
     id: "docs",
     label: "Docs link",
     nodes: [
-      { name: "LinkComponent", file: TEST_PAGE, line: 297 },
-      { name: "a", file: TEST_PAGE, line: 297 },
+      { name: "LinkComponent", file: TEST_PAGE, line: 318 },
+      { name: "a", file: TEST_PAGE, line: 318 },
     ],
   },
 ]
 
 export const serverDirectNodes: AccuracyNode[] = [
-  { name: "ServerCard", file: TEST_PAGE, line: 317 },
+  { name: "ServerCard", file: TEST_PAGE, line: 338 },
   { name: "div", file: SERVER, line: 17 },
 ]
 
@@ -304,7 +304,7 @@ export const serverNestedTargets: AccuracyTarget[] = [
     id: "first",
     label: "First",
     nodes: [
-      { name: "ServerCard", file: TEST_PAGE, line: 333 },
+      { name: "ServerCard", file: TEST_PAGE, line: 354 },
       { name: "div", file: SERVER, line: 17 },
     ],
   },
@@ -312,7 +312,7 @@ export const serverNestedTargets: AccuracyTarget[] = [
     id: "second",
     label: "Second",
     nodes: [
-      { name: "ServerCard", file: TEST_PAGE, line: 334 },
+      { name: "ServerCard", file: TEST_PAGE, line: 355 },
       { name: "div", file: SERVER, line: 17 },
     ],
   },
@@ -329,7 +329,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "badge",
     label: "Badge",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 370 },
+      { name: "Badge", file: TEST_PAGE, line: 391 },
       { name: "span", file: BADGE, line: 36 },
     ],
   },
@@ -337,7 +337,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "action",
     label: "CardAction",
     nodes: [
-      { name: "CardAction", file: TEST_PAGE, line: 369 },
+      { name: "CardAction", file: TEST_PAGE, line: 390 },
       { name: "div", file: CARD, line: 61 },
     ],
   },
@@ -345,7 +345,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "header",
     label: "CardHeader",
     nodes: [
-      { name: "CardHeader", file: TEST_PAGE, line: 359 },
+      { name: "CardHeader", file: TEST_PAGE, line: 380 },
       { name: "div", file: CARD, line: 25 },
     ],
   },
@@ -353,7 +353,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "card",
     label: "Card",
     nodes: [
-      { name: "Card", file: TEST_PAGE, line: 358 },
+      { name: "Card", file: TEST_PAGE, line: 379 },
       { name: "div", file: CARD, line: 11 },
     ],
   },
@@ -361,7 +361,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "title",
     label: "CardTitle",
     nodes: [
-      { name: "CardTitle", file: TEST_PAGE, line: 363 },
+      { name: "CardTitle", file: TEST_PAGE, line: 384 },
       { name: "div", file: CARD, line: 38 },
     ],
   },
@@ -369,7 +369,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "description",
     label: "CardDescription",
     nodes: [
-      { name: "CardDescription", file: TEST_PAGE, line: 360 },
+      { name: "CardDescription", file: TEST_PAGE, line: 381 },
       { name: "div", file: CARD, line: 51 },
     ],
   },
@@ -377,7 +377,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "button",
     label: "Button",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 377 },
+      { name: "Button", file: TEST_PAGE, line: 398 },
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
@@ -385,7 +385,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "content",
     label: "CardContent",
     nodes: [
-      { name: "CardContent", file: TEST_PAGE, line: 376 },
+      { name: "CardContent", file: TEST_PAGE, line: 397 },
       { name: "div", file: CARD, line: 74 },
     ],
   },
@@ -393,7 +393,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "footer",
     label: "CardFooter",
     nodes: [
-      { name: "CardFooter", file: TEST_PAGE, line: 381 },
+      { name: "CardFooter", file: TEST_PAGE, line: 402 },
       { name: "div", file: CARD, line: 84 },
     ],
   },

@@ -1,5 +1,7 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Button } from "./ui/button"
+import { WandSparkles } from "lucide-react"
 
 export function SiteHeader() {
   return (
@@ -10,7 +12,13 @@ export function SiteHeader() {
           orientation="vertical"
           className="mx-2 h-4 data-vertical:self-auto"
         />
-        <h1 className="text-base font-medium">Documents</h1>
+        <div className="flex w-full items-center justify-between">
+          <h1 className="text-base font-medium">Documents</h1>
+          <Button size="sm" variant="outline">
+            {" "}
+            <WandSparkles /> Ask AI
+          </Button>
+        </div>
       </div>
     </header>
   )

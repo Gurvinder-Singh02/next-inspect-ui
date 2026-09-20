@@ -820,7 +820,7 @@ export const InspectorSettingsControls = ({
         className
       )}
     >
-      <div className="min-h-0 flex-1 scroll-fade-y overflow-y-scroll">
+      <div className="min-h-0 flex-1 scroll-fade-y no-scrollbar overflow-y-scroll">
         <KitSection title="Editor">
           <KitRadioList
             name="inspector-ide"
