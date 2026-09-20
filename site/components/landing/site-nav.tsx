@@ -16,9 +16,15 @@ export const SiteNav = ({ className }: { className?: string }) => {
   const pathname = usePathname()
 
   return (
-    <nav className={cn("sticky top-12 z-40 h-fit", className)}>
-      <div className="absolute top-0 -left-20">
-        <div className="mx-auto flex h-12 flex-col gap-0 px-6 whitespace-nowrap">
+    <nav
+      aria-label="Site"
+      className={cn(
+        "sticky top-0 z-40 h-fit border-b border-border/60 bg-background/90 backdrop-blur-sm lg:top-12 lg:border-0 lg:bg-transparent lg:backdrop-blur-none",
+        className
+      )}
+    >
+      <div className="lg:absolute lg:top-0 lg:-left-20">
+        <div className="flex flex-row flex-wrap px-4 sm:px-6 lg:flex-col lg:whitespace-nowrap">
           {NAV_ITEMS.map((item) => {
             const isActive =
               item.href === "/"
@@ -31,7 +37,7 @@ export const SiteNav = ({ className }: { className?: string }) => {
                 href={item.href}
                 data-cuelume-press="tick"
                 className={cn(
-                  "rounded-md px-2.5 py-1.5 font-inter text-sm transition-colors",
+                  "inline-flex min-h-11 items-center rounded-md px-2.5 font-inter text-sm transition-colors [touch-action:manipulation] lg:min-h-0 lg:py-1.5",
                   isActive
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"

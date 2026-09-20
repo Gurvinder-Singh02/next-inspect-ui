@@ -16,7 +16,7 @@ const SHORTCUTS: KeyboardShortcut[] = [
     keys: [<Option key="opt" />, "x"],
     type: "toggle",
     description:
-      "Activate or deactivate inspect mode (configurable via `shortcut`).",
+      "Activate or deactivate inspect mode (configurable via `shortcut` / settings).",
   },
   {
     keys: ["Esc"],
@@ -24,53 +24,52 @@ const SHORTCUTS: KeyboardShortcut[] = [
     description: "Exit inspect mode.",
   },
   {
+    keys: ["Hover"],
+    type: "action",
+    description: "Show the element’s DOM tag and source file.",
+  },
+  {
     keys: ["Click"],
     type: "action",
-    description: "Open where the component is defined.",
+    description: "Open the hovered element’s source in the editor.",
   },
   {
     keys: ["Enter"],
     type: "action",
-    description: "Open where the component is defined (same as click).",
+    description: "Open the hovered element’s source (same as click).",
   },
   {
     keys: [<Option key="opt-used" />, "Click"],
     type: "action",
     description:
-      "Hold ⌥ to preview the usage site, then click (or Enter) to open it.",
+      "Hold ⌥ to climb to the component that rendered it, then click (or Enter) to open that usage site.",
   },
   {
     keys: [<Option key="opt-shift" />, "⇧"],
     type: "tree",
     description:
-      "While holding ⌥, press ⇧ to walk up the used-in owner chain. At the top, hop to the next parent that has a climb.",
+      "While holding ⌥, press ⇧ to climb another owner level. At the top, hop to the next parent that has a climb.",
   },
   {
-    keys: [<Option key="opt-ctrl" />, "⌃"],
-    type: "tree",
-    description:
-      "While holding ⌥, press ⌃ (Control) to walk back down the owner chain.",
-  },
-  {
-    keys: ["i"],
+    keys: ["I"],
     type: "panel",
     description:
-      "Toggle the info panel — source links, owner tree (└─ parents), and styles.",
+      "Toggle the info panel — node tree, source links, and CSS.",
   },
   {
     keys: ["↑", "↓"],
     join: "/",
     type: "panel",
     description:
-      "Info panel open: climb the Node tree. At the top, hop to the next parent that has a climb and show it. Closed: previous / next sibling.",
+      "Info panel open: climb the Node tree. At the top, hop to the next parent that has a climb. Closed: previous / next sibling.",
   },
   {
-    keys: ["⌘", "["],
+    keys: ["["],
     type: "nav",
     description: "Move the spotlight to the parent inspectable element.",
   },
   {
-    keys: ["⌘", "]"],
+    keys: ["]"],
     type: "nav",
     description: "Move the spotlight to the first child inspectable element.",
   },
@@ -87,12 +86,12 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["⌘", "←"],
     type: "nav",
-    description: "Jump to the first sibling inspectable element.",
+    description: "Jump to the first sibling inspectable element (Ctrl on Windows).",
   },
   {
     keys: ["⌘", "→"],
     type: "nav",
-    description: "Jump to the last sibling inspectable element.",
+    description: "Jump to the last sibling inspectable element (Ctrl on Windows).",
   },
   {
     keys: [<Option key="opt-minus" />, "−"],
@@ -107,7 +106,7 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["⌘", "\\"],
     type: "padding",
-    description: "Reset spotlight padding to the defaults.",
+    description: "Reset spotlight padding to the defaults (Ctrl on Windows).",
   },
 ]
 

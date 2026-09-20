@@ -16,37 +16,37 @@ const API_SECTIONS: ApiSection[] = [
   {
     title: "InspectUI",
     description:
-      "Development-only overlay. Hover to inspect React components; click opens the definition, hold ⌥ and click to open the usage site. Toggle with ⌥ + X (configurable in settings).",
+      "Development-only overlay. Hover shows the DOM tag and source file; click (or Enter) opens that line in your editor. Hold ⌥ to climb to the component that rendered it. Toggle with ⌥ + X. Editor, colours, tooltip, and spotlight can also be changed in the overlay settings panel.",
     props: [
       {
         name: "projectRoot",
         type: "string",
         description:
-          "Absolute path to the project root. Used to resolve component source files.",
+          "Required. Absolute path your source is under. Used to resolve files and strip the root from labels.",
       },
       {
         name: "shortcut",
         type: "string",
         description:
-          'Keyboard shortcut that toggles inspect mode. Default `"Alt+X"`.',
+          'Optional seed for the toggle shortcut. Default `"Alt+X"`. Overridable in the settings panel.',
       },
       {
         name: "ide",
         type: '"cursor" | "vscode" | "vscode-insiders" | "windsurf" | "zed"',
         description:
-          'Editor used for open-in-source links. Default `"cursor"`.',
+          'Optional seed for open-in-source links. Default `"cursor"`. Overridable in the settings panel.',
       },
       {
         name: "tooltipProps",
         type: "Partial<TooltipProps>",
         description:
-          "Initial tooltip appearance. Session toolbar edits override these until remount.",
+          "Optional seed for tooltip appearance. Settings-panel edits override these for the session.",
       },
       {
         name: "devSpotlightProps",
         type: "Partial<DevSpotlightProps>",
         description:
-          "Initial spotlight appearance. Session toolbar edits override these until remount.",
+          "Optional seed for spotlight appearance. Settings-panel edits override these for the session.",
       },
     ],
   },

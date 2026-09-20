@@ -13,9 +13,25 @@ import {
   type ReactNode,
 } from "react"
 
+import { motion, useReducedMotion } from "motion/react"
+import {
+  ArrowUpRight,
+  Calendar,
+  ChevronDown,
+  LayoutGrid,
+  Search,
+  UserRound,
+} from "lucide-react"
+
+import {
+  GhostCard,
+  GhostCardContent,
+  GhostCardDescription,
+  GhostCardFooter,
+  GhostCardHeader,
+  GhostCardTitle,
+} from "@/components/variant-test/ghost-card"
 import { LiveWaveform } from "@/components/variant-test/live-waveform"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -26,6 +42,7 @@ import {
   formatTooltipLabel,
   getOverlayPaint,
   getTooltipPosition,
+  underStackTransform,
   type InspectorSettings,
 } from "next-inspect-ui/lib"
 import { cn } from "@/lib/utils"
@@ -34,12 +51,13 @@ type PreviewTargetDef = {
   id: string
   name: string
   pageName: string
+  tagStyle?: "dom" | "component"
+  used?: boolean
+  measureId?: string
 }
 
 const PAGE = "components/variant-test/overlay-preview.tsx"
-const WAVEFORM_PAGE = "components/variant-test/live-waveform.tsx"
-const FITNESS_PAGE = "components/variant-test/overlay-preview.tsx"
-const CONTRIBUTORS_PAGE = "components/variant-test/overlay-preview.tsx"
+const GHOST_PAGE = "components/variant-test/ghost-card.tsx"
 
 const YEARLY_ACTIVITY = [
   { month: "J", load: 72 },
@@ -56,23 +74,37 @@ const YEARLY_ACTIVITY = [
   { month: "D", load: 44 },
 ]
 
-const CONTRIBUTOR_USERNAMES = [
-  "shadcn",
-  "vercel",
-  "nextjs",
-  "tailwindlabs",
-  "typescript-lang",
-  "eslint",
-  "prettier",
-  "babel",
-  "webpack",
-  "rollup",
-  "parcel",
-  "vite",
-  "react",
-  "vue",
-  "angular",
-  "solid",
+const AUDIT_FILTERS = [
+  { id: "audit-filter-activities", icon: LayoutGrid, label: "Any activities" },
+  { id: "audit-filter-author", icon: UserRound, label: "Any author" },
+  { id: "audit-filter-days", icon: Calendar, label: "Last 7 days" },
+] as const
+
+const AUDIT_ROWS = [
+  {
+    activity: "Order #1213 marked as",
+    badge: "Fulfilled",
+    author: "Jason Shatam",
+    initials: "JS",
+    tint: "bg-emerald-500/20",
+    time: "12/11/2025 09:12:44 AM",
+  },
+  {
+    activity: "Product “Essential Hoodie” marked as",
+    badge: "Active",
+    author: "Amelia Smith",
+    initials: "AS",
+    tint: "bg-rose-500/20",
+    time: "12/11/2025 08:44:12 AM",
+  },
+  {
+    activity: "User “Jack Bowlie” updated with",
+    badge: "New permissions",
+    author: "Bruno Mars",
+    initials: "BM",
+    tint: "bg-sky-500/20",
+    time: "12/10/2025 06:18:03 PM",
+  },
 ]
 
 const METRICS = [
@@ -85,66 +117,109 @@ const METRICS = [
 const TARGETS: PreviewTargetDef[] = [
   { id: "section-1", name: "Section1", pageName: PAGE },
   { id: "hero-title", name: "HeroTitle", pageName: PAGE },
-  { id: "hero-desc-1", name: "HeroDescription", pageName: PAGE },
-  { id: "hero-desc-2", name: "HeroDescriptionAlt", pageName: PAGE },
-  { id: "section-2", name: "Section2", pageName: PAGE },
-  { id: "waveform-card", name: "WaveformCard", pageName: WAVEFORM_PAGE },
-  { id: "waveform-title", name: "LiveAudioWaveform", pageName: WAVEFORM_PAGE },
   {
-    id: "waveform-description",
-    name: "WaveformDescription",
-    pageName: WAVEFORM_PAGE,
-  },
-  { id: "waveform-chart", name: "WaveformChart", pageName: WAVEFORM_PAGE },
-  { id: "waveform-listen", name: "ListenButton", pageName: WAVEFORM_PAGE },
-  { id: "fitness-card", name: "FitnessCard", pageName: FITNESS_PAGE },
-  {
-    id: "fitness-title",
-    name: "YearlyFitnessSummary",
-    pageName: FITNESS_PAGE,
+    id: "hero-desc-1",
+    name: "p",
+    pageName: PAGE,
+    tagStyle: "dom",
   },
   {
-    id: "fitness-description",
-    name: "FitnessDescription",
-    pageName: FITNESS_PAGE,
+    id: "ghost-description",
+    name: "p",
+    pageName: `${GHOST_PAGE}:29`,
+    tagStyle: "dom",
   },
-  { id: "fitness-chart", name: "FitnessChart", pageName: FITNESS_PAGE },
-  { id: "fitness-action", name: "ViewDetailsButton", pageName: FITNESS_PAGE },
+  {
+    id: "ghost-subtitle",
+    name: "CardSubtitle",
+    pageName: `${GHOST_PAGE}:29`,
+    tagStyle: "component",
+    used: true,
+    measureId: "ghost-description",
+  },
+  {
+    id: "ghost-header",
+    name: "CardHeader",
+    pageName: `${GHOST_PAGE}:12`,
+    tagStyle: "component",
+    used: true,
+  },
+  {
+    id: "ghost-card",
+    name: "Card",
+    pageName: `${GHOST_PAGE}:5`,
+    tagStyle: "component",
+    used: true,
+  },
   { id: "section-3", name: "Section3", pageName: PAGE },
-  { id: "section-inspect-title", name: "InspectSectionTitle", pageName: PAGE },
-  { id: "section-inspect-desc", name: "InspectSectionDesc", pageName: PAGE },
-  { id: "metrics-row", name: "MetricsRow", pageName: PAGE },
-  { id: "section-4", name: "Section4", pageName: CONTRIBUTORS_PAGE },
   {
-    id: "contributors-title",
-    name: "ContributorsTitle",
-    pageName: CONTRIBUTORS_PAGE,
+    id: "section-inspect-title",
+    name: "h3",
+    pageName: PAGE,
+    tagStyle: "dom",
   },
   {
-    id: "contributors-badge",
-    name: "ContributorsBadge",
-    pageName: CONTRIBUTORS_PAGE,
+    id: "metric-inspect-label",
+    name: "span",
+    pageName: PAGE,
+    tagStyle: "dom",
   },
   {
-    id: "contributors-desc",
-    name: "ContributorsDescription",
-    pageName: CONTRIBUTORS_PAGE,
+    id: "metric-inspect-value",
+    name: "span",
+    pageName: PAGE,
+    tagStyle: "dom",
   },
   {
-    id: "contributors-avatars",
-    name: "ContributorAvatars",
-    pageName: CONTRIBUTORS_PAGE,
+    id: "audit-row",
+    name: "div",
+    pageName: PAGE,
+    tagStyle: "dom",
   },
   {
-    id: "contributors-link",
-    name: "ContributorsLink",
-    pageName: CONTRIBUTORS_PAGE,
+    id: "audit-activity",
+    name: "p",
+    pageName: PAGE,
+    tagStyle: "dom",
+  },
+  {
+    id: "audit-author",
+    name: "span",
+    pageName: PAGE,
+    tagStyle: "dom",
+  },
+  {
+    id: "audit-time",
+    name: "span",
+    pageName: PAGE,
+    tagStyle: "dom",
   },
 ]
 
 const TARGET_BY_ID = Object.fromEntries(
   TARGETS.map((target) => [target.id, target])
 ) as Record<string, PreviewTargetDef>
+
+const climbStackFor = (
+  id: string,
+  tooltipProps: InspectorSettings["tooltipProps"]
+) => {
+  const index = TARGETS.findIndex((target) => target.id === id)
+  const current = TARGETS[index]
+  if (!current?.used || index < 0) return []
+  const start = TARGETS.findIndex((target) => target.id === "ghost-description")
+  if (start < 0 || index <= start) return []
+  return TARGETS.slice(start, index).map((step) => {
+    return (
+      formatTooltipLabel({
+        title: step.name,
+        pageName: step.pageName,
+        tooltipProps,
+        tagStyle: step.tagStyle ?? "component",
+      }) || formatComponentTag(step.name)
+    )
+  })
+}
 
 const STEP_MS = 1200
 
@@ -246,6 +321,9 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
   const [labelMeta, setLabelMeta] = useState({
     name: TARGETS[0]?.name ?? "Component",
     pageName: TARGETS[0]?.pageName ?? "page.tsx",
+    tagStyle: "component" as "dom" | "component",
+    used: false,
+    stack: [] as string[],
   })
   const [waveformActive, setWaveformActive] = useState(false)
   const [waveformProcessing, setWaveformProcessing] = useState(true)
@@ -282,7 +360,8 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
   const measure = useCallback(() => {
     const stage = stageRef.current
     const id = mode === "mouse" ? hoverIdRef.current : playIdRef.current
-    const el = id ? targetRefs.current[id] : null
+    const target = id ? TARGET_BY_ID[id] : null
+    const el = id ? targetRefs.current[target?.measureId ?? id] : null
     const boxEl = overlayBoxRef.current
     if (!stage || !el || !boxEl) return
 
@@ -337,6 +416,11 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
     setLabelMeta({
       name: target?.name ?? "Component",
       pageName: target?.pageName ?? "page.tsx",
+      tagStyle: target?.tagStyle ?? "component",
+      used: Boolean(target?.used),
+      stack: visibleId
+        ? climbStackFor(visibleId, settings.tooltipProps)
+        : [],
     })
     measure()
   }, [playId, hoverId, visibleId, measure, settings])
@@ -379,11 +463,17 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
 
   useEffect(() => {
     if (mode !== "autoplay") return
-    targetRefs.current[playId]?.scrollIntoView({
+    const target = TARGET_BY_ID[playId]
+    const el = targetRefs.current[target?.measureId ?? playId]
+    el?.scrollIntoView({
       block: "nearest",
       behavior: "smooth",
     })
   }, [mode, playId])
+
+  const setTarget = (id: string) => (node: HTMLElement | null) => {
+    targetRefs.current[id] = node
+  }
 
   const onContentPointerMove = (event: PointerEvent<HTMLDivElement>) => {
     if (mode !== "mouse") return
@@ -486,46 +576,31 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
             <PreviewTarget
               targetId="section-2"
               targetRefs={targetRefs}
-              className="grid grid-cols-1 gap-10 md:grid-cols-2"
+              className="grid grid-cols-1 items-stretch gap-10 md:grid-cols-2"
             >
-              <PreviewTarget
-                targetId="waveform-card"
-                targetRefs={targetRefs}
-                className="flex flex-col gap-3"
-              >
-                <PreviewTarget
-                  targetId="waveform-title"
-                  targetRefs={targetRefs}
-                  className="w-fit"
-                >
-                  <h3 className="font-heading text-base font-medium">
+              <GhostCard ref={setTarget("ghost-card")}>
+                <GhostCardHeader ref={setTarget("ghost-header")}>
+                  <GhostCardTitle ref={setTarget("ghost-title")}>
                     Live Audio Waveform
-                  </h3>
-                </PreviewTarget>
-                <PreviewTarget
-                  targetId="waveform-description"
-                  targetRefs={targetRefs}
-                >
-                  <p className="text-sm text-muted-foreground">
+                  </GhostCardTitle>
+                  <GhostCardDescription ref={setTarget("ghost-description")}>
                     Real-time microphone input visualization with audio
                     reactivity.
-                  </p>
-                </PreviewTarget>
-                <PreviewTarget
-                  targetId="waveform-chart"
-                  targetRefs={targetRefs}
-                >
+                  </GhostCardDescription>
+                </GhostCardHeader>
+                <GhostCardContent ref={setTarget("ghost-chart")}>
                   <LiveWaveform
                     active={waveformActive}
                     processing={waveformProcessing}
                     height={116}
+                    barWidth={3}
+                    barGap={2}
+                    fadeEdges
+                    barColor="gray"
+                    historySize={120}
                   />
-                </PreviewTarget>
-                <PreviewTarget
-                  targetId="waveform-listen"
-                  targetRefs={targetRefs}
-                  className="w-fit"
-                >
+                </GhostCardContent>
+                <GhostCardFooter ref={setTarget("ghost-listen")}>
                   <Button
                     size="sm"
                     variant={waveformActive ? "default" : "outline"}
@@ -539,32 +614,19 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
                   >
                     {waveformActive ? "Stop" : "Start"} Listening
                   </Button>
-                </PreviewTarget>
-              </PreviewTarget>
+                </GhostCardFooter>
+              </GhostCard>
 
-              <PreviewTarget
-                targetId="fitness-card"
-                targetRefs={targetRefs}
-                className="flex flex-col gap-3"
-              >
-                <PreviewTarget
-                  targetId="fitness-title"
-                  targetRefs={targetRefs}
-                  className="w-fit"
-                >
-                  <h3 className="font-heading text-base font-medium">
+              <GhostCard ref={setTarget("fitness-card")}>
+                <GhostCardHeader ref={setTarget("fitness-header")}>
+                  <GhostCardTitle ref={setTarget("fitness-title")}>
                     Yearly Fitness Summary
-                  </h3>
-                </PreviewTarget>
-                <PreviewTarget
-                  targetId="fitness-description"
-                  targetRefs={targetRefs}
-                >
-                  <p className="text-sm text-muted-foreground">
+                  </GhostCardTitle>
+                  <GhostCardDescription ref={setTarget("fitness-description")}>
                     Calories and workout load by month across the last year.
-                  </p>
-                </PreviewTarget>
-                <PreviewTarget targetId="fitness-chart" targetRefs={targetRefs}>
+                  </GhostCardDescription>
+                </GhostCardHeader>
+                <GhostCardContent ref={setTarget("fitness-chart")}>
                   <div className="grid grid-cols-12 gap-1.5">
                     {YEARLY_ACTIVITY.map((month, index) => (
                       <div
@@ -587,17 +649,13 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
                       </div>
                     ))}
                   </div>
-                </PreviewTarget>
-                <PreviewTarget
-                  targetId="fitness-action"
-                  targetRefs={targetRefs}
-                  className="w-fit"
-                >
+                </GhostCardContent>
+                <GhostCardFooter ref={setTarget("fitness-action")}>
                   <Button size="sm" variant="outline">
                     View details
                   </Button>
-                </PreviewTarget>
-              </PreviewTarget>
+                </GhostCardFooter>
+              </GhostCard>
             </PreviewTarget>
 
             <PreviewTarget
@@ -621,87 +679,174 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
                   className="max-w-[48ch]"
                 >
                   <p className="text-sm text-muted-foreground">
-                    Snapshot metrics from a typical local session — useful for
+                    Snapshot metrics from a typical local session, useful for
                     checking overlay contrast on small labels.
                   </p>
                 </PreviewTarget>
               </div>
               <PreviewTarget targetId="metrics-row" targetRefs={targetRefs}>
-                <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
-                  {METRICS.map((metric) => (
+                <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 sm:grid-cols-4">
+                  {METRICS.map((metric, index) => (
                     <div key={metric.label} className="flex flex-col gap-0.5">
-                      <span className="text-[11px] tracking-wide text-muted-foreground uppercase">
-                        {metric.label}
-                      </span>
-                      <span className="font-heading text-xl font-medium tracking-tight">
-                        {metric.value}
-                      </span>
+                      {index === 0 ? (
+                        <PreviewTarget
+                          targetId="metric-inspect-label"
+                          targetRefs={targetRefs}
+                          className="w-fit"
+                        >
+                          <span className="text-[11px] tracking-wide text-muted-foreground uppercase">
+                            {metric.label}
+                          </span>
+                        </PreviewTarget>
+                      ) : (
+                        <span className="text-[11px] tracking-wide text-muted-foreground uppercase">
+                          {metric.label}
+                        </span>
+                      )}
+                      {index === 0 ? (
+                        <PreviewTarget
+                          targetId="metric-inspect-value"
+                          targetRefs={targetRefs}
+                          className="w-fit"
+                        >
+                          <span className="font-heading text-xl font-medium tracking-tight">
+                            {metric.value}
+                          </span>
+                        </PreviewTarget>
+                      ) : (
+                        <span className="font-heading text-xl font-medium tracking-tight">
+                          {metric.value}
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>
               </PreviewTarget>
-            </PreviewTarget>
-
-            <PreviewTarget
-              targetId="section-4"
-              targetRefs={targetRefs}
-              className="flex flex-col gap-4 pb-2"
-            >
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center gap-2">
-                  <PreviewTarget
-                    targetId="contributors-title"
-                    targetRefs={targetRefs}
-                    className="w-fit"
-                  >
-                    <h3 className="font-heading text-base font-medium">
-                      Contributors
-                    </h3>
-                  </PreviewTarget>
-                  <PreviewTarget
-                    targetId="contributors-badge"
-                    targetRefs={targetRefs}
-                    className="w-fit"
-                  >
-                    <Badge variant="secondary">312</Badge>
-                  </PreviewTarget>
-                </div>
-                <PreviewTarget
-                  targetId="contributors-desc"
-                  targetRefs={targetRefs}
-                  className="max-w-[48ch]"
-                >
-                  <p className="text-sm text-muted-foreground">
-                    People shipping the inspector - avatars highlight as one
-                    group.
-                  </p>
-                </PreviewTarget>
-              </div>
-              <PreviewTarget
-                targetId="contributors-avatars"
-                targetRefs={targetRefs}
-              >
-                <div className="flex flex-wrap gap-2">
-                  {CONTRIBUTOR_USERNAMES.map((username) => (
-                    <Avatar key={username} className="grayscale">
-                      <AvatarImage
-                        src={`https://github.com/${username}.png`}
-                        alt={username}
-                      />
-                      <AvatarFallback>{username.charAt(0)}</AvatarFallback>
-                    </Avatar>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  {AUDIT_FILTERS.map(({ id, icon: Icon, label }) => (
+                    <PreviewTarget
+                      key={id}
+                      targetId={id}
+                      targetRefs={targetRefs}
+                      className="w-fit"
+                    >
+                      <span className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 font-inter text-[11px]">
+                        <Icon
+                          className="size-3 text-muted-foreground"
+                          aria-hidden
+                        />
+                        {label}
+                        <ChevronDown
+                          className="size-3 text-muted-foreground"
+                          aria-hidden
+                        />
+                      </span>
+                    </PreviewTarget>
                   ))}
                 </div>
-              </PreviewTarget>
-              <PreviewTarget
-                targetId="contributors-link"
-                targetRefs={targetRefs}
-                className="w-fit"
-              >
-                <span className="text-sm underline underline-offset-4">
-                  + 810 contributors
-                </span>
-              </PreviewTarget>
+                <PreviewTarget
+                  targetId="audit-search"
+                  targetRefs={targetRefs}
+                  className="w-fit"
+                >
+                  <span className="inline-flex min-w-48 items-center gap-1.5 rounded-md border border-border px-2.5 py-1 font-inter text-[11px] text-muted-foreground">
+                    <Search className="size-3" aria-hidden />
+                    Search by activity name, author…
+                  </span>
+                </PreviewTarget>
+              </div>
+              <div className="flex flex-col">
+                <div className="grid grid-cols-[auto_minmax(0,1fr)_9rem_11rem] items-center gap-3 border-b border-border py-2 font-inter text-[11px] text-muted-foreground">
+                  <span
+                    className="size-3.5 rounded-sm border border-border"
+                    aria-hidden
+                  />
+                  <span>Activity</span>
+                  <span>Author</span>
+                  <span className="text-right">Timestamp</span>
+                </div>
+                {AUDIT_ROWS.map((row, index) => {
+                  const isFirst = index === 0
+                  const activity = (
+                    <p className="flex min-w-0 flex-wrap items-center gap-1.5 font-inter text-[12px]">
+                      <span className="truncate">{row.activity}</span>
+                      <span className="rounded-full bg-secondary px-1.5 py-0.5 text-[10px]">
+                        {row.badge}
+                      </span>
+                    </p>
+                  )
+                  const author = (
+                    <span className="flex items-center gap-1.5 font-inter text-[12px]">
+                      <span
+                        className={cn(
+                          "flex size-5 shrink-0 items-center justify-center rounded-full font-inter text-[9px]",
+                          row.tint
+                        )}
+                      >
+                        {row.initials}
+                      </span>
+                      <span className="truncate">{row.author}</span>
+                    </span>
+                  )
+                  const time = (
+                    <span className="text-right font-inter text-[11px] text-muted-foreground tabular-nums">
+                      {row.time}
+                    </span>
+                  )
+                  const rowBody = (
+                    <div className="grid grid-cols-[auto_minmax(0,1fr)_9rem_11rem] items-center gap-3 border-b border-border/70 py-2">
+                      <span
+                        className="size-3.5 rounded-sm border border-border"
+                        aria-hidden
+                      />
+                      {isFirst ? (
+                        <PreviewTarget
+                          targetId="audit-activity"
+                          targetRefs={targetRefs}
+                          className="min-w-0"
+                        >
+                          {activity}
+                        </PreviewTarget>
+                      ) : (
+                        activity
+                      )}
+                      {isFirst ? (
+                        <PreviewTarget
+                          targetId="audit-author"
+                          targetRefs={targetRefs}
+                        >
+                          {author}
+                        </PreviewTarget>
+                      ) : (
+                        author
+                      )}
+                      {isFirst ? (
+                        <PreviewTarget
+                          targetId="audit-time"
+                          targetRefs={targetRefs}
+                        >
+                          {time}
+                        </PreviewTarget>
+                      ) : (
+                        time
+                      )}
+                    </div>
+                  )
+
+                  if (!isFirst) return <div key={row.time}>{rowBody}</div>
+
+                  return (
+                    <PreviewTarget
+                      key={row.time}
+                      targetId="audit-row"
+                      targetRefs={targetRefs}
+                    >
+                      {rowBody}
+                    </PreviewTarget>
+                  )
+                })}
+              </div>
             </PreviewTarget>
           </div>
         </ScrollArea>
@@ -712,6 +857,9 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
             tooltipBoxRef={tooltipBoxRef}
             name={labelMeta.name}
             pageName={labelMeta.pageName}
+            tagStyle={labelMeta.tagStyle}
+            used={labelMeta.used}
+            stack={labelMeta.stack}
             settings={settings}
           />
         ) : null}
@@ -800,29 +948,51 @@ const PreviewTarget = ({
   </div>
 )
 
+const FOLLOW_EASE = [0.22, 1, 0.36, 1] as const
+const FOLLOW_S = 0.16
+
 const PreviewOverlay = ({
   overlayBoxRef,
   tooltipBoxRef,
   name,
   pageName,
+  tagStyle = "component",
+  used = false,
+  stack = [],
   settings,
 }: {
   overlayBoxRef: MutableRefObject<HTMLDivElement | null>
   tooltipBoxRef: MutableRefObject<HTMLDivElement | null>
   name: string
   pageName: string
+  tagStyle?: "dom" | "component"
+  used?: boolean
+  stack?: string[]
   settings: InspectorSettings
 }) => {
+  const reduceMotion = useReducedMotion()
   const paint = getOverlayPaint(settings)
+  const duration = reduceMotion ? 0 : FOLLOW_S
   const follow = paint.animated
-    ? "left 160ms cubic-bezier(0.22, 1, 0.36, 1), top 160ms cubic-bezier(0.22, 1, 0.36, 1), width 160ms cubic-bezier(0.22, 1, 0.36, 1), height 160ms cubic-bezier(0.22, 1, 0.36, 1)"
+    ? `left ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), top ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), width ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), height ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1)`
     : "none"
   const label =
     formatTooltipLabel({
       title: name,
       pageName,
       tooltipProps: settings.tooltipProps,
+      tagStyle,
     }) || formatComponentTag("Component")
+  const chipStyle = {
+    background: paint.tooltipBackground,
+    border: `1px solid ${paint.tooltipBorder}`,
+    color: paint.tooltipText,
+    padding: paint.tooltipPadding,
+    borderRadius: paint.tooltipBorderRadius,
+    boxShadow: "0 4px 12px rgb(0 0 0 / 30%)",
+    font: '12px / 1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    maxWidth: "min(36rem, calc(100vw - 16px))",
+  }
 
   return (
     <>
@@ -841,17 +1011,54 @@ const PreviewOverlay = ({
         <div
           ref={tooltipBoxRef}
           aria-hidden
-          className="pointer-events-none absolute z-30 max-w-[18rem] truncate text-[12px] leading-[1.4] shadow-md"
-          style={{
-            background: paint.tooltipBackground,
-            border: `1px solid ${paint.tooltipBorder}`,
-            color: paint.tooltipText,
-            padding: paint.tooltipPadding,
-            borderRadius: paint.tooltipBorderRadius,
-            transition: follow,
-          }}
+          className="pointer-events-none absolute z-30 overflow-visible"
+          style={{ transition: follow }}
         >
-          {label}
+          {stack.map((under, index) => {
+            const depth = stack.length - index
+            return (
+              <motion.div
+                key={`${under}-${index}`}
+                aria-hidden
+                className="pointer-events-none absolute right-auto bottom-0 left-0 overflow-hidden text-ellipsis whitespace-nowrap"
+                initial={false}
+                animate={{
+                  transform: underStackTransform(depth),
+                  opacity: 0.92,
+                }}
+                transition={{ duration, ease: FOLLOW_EASE }}
+                style={{
+                  ...chipStyle,
+                  zIndex: 2 - depth,
+                }}
+              >
+                {under}
+              </motion.div>
+            )
+          })}
+          <div
+            className="relative z-2 flex w-fit items-center overflow-hidden"
+            style={chipStyle}
+          >
+            <motion.span
+              aria-hidden
+              className="inline-flex shrink-0 items-center justify-center overflow-hidden"
+              initial={false}
+              animate={{
+                width: used ? 12 : 0,
+                marginRight: used ? 3 : 0,
+              }}
+              transition={{
+                duration: reduceMotion ? 0 : FOLLOW_S,
+                ease: "easeInOut",
+              }}
+            >
+              <ArrowUpRight size={12} strokeWidth={2.4} />
+            </motion.span>
+            <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+              {label}
+            </span>
+          </div>
         </div>
       ) : null}
     </>

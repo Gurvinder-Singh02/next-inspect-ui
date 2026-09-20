@@ -40,7 +40,7 @@ export default function OverviewPage() {
               <Option />
             </kbd>{" "}
             + <kbd className={shortcutKeyClassName}>x</kbd>, hover any element
-            for its DOM tag + source, click to open it — hold{" "}
+            for its DOM tag + source, click to open it - hold{" "}
             <kbd className={shortcutKeyClassName}>
               <Option />
             </kbd>{" "}
