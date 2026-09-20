@@ -1,4 +1,13 @@
-import { UsageVideo } from "@/components/landing/usage-video"
+import type { Metadata } from "next"
+
+import { HeroWindows } from "@/components/landing/hero-windows"
+
+export const metadata: Metadata = {
+  title: "Usage",
+  description:
+    "See next-inspect-ui in action: hover, click to open source, and climb to the component that rendered an element.",
+  alternates: { canonical: "/usage" },
+}
 
 export default function UsagePage() {
   return (
@@ -12,7 +21,7 @@ export default function UsagePage() {
         </p>
       </header>
 
-      <UsageVideo className="w-full" />
+      <HeroWindows className="w-full" />
     </>
   )
 }

@@ -1,4 +1,13 @@
+import type { Metadata } from "next"
+
 import { ShortcutsReference } from "@/components/landing/shortcuts-reference"
+
+export const metadata: Metadata = {
+  title: "Shortcuts",
+  description:
+    "Keyboard and pointer controls for next-inspect-ui while inspect mode is active.",
+  alternates: { canonical: "/shortcuts" },
+}
 
 export default function ShortcutsPage() {
   return (

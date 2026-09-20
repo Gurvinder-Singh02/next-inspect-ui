@@ -58,9 +58,6 @@ export const InstallSection = async () => {
   return (
     <div className="flex flex-col gap-12">
       <div className="flex flex-col gap-3">
-        <p className="font-inter text-[14px] leading-relaxed text-muted-foreground">
-          Install next-inspect-ui with npm:
-        </p>
         <InstallCommand tabs={installTabs} />
       </div>
 
@@ -72,18 +69,14 @@ export const InstallSection = async () => {
       </div>
 
       <div className="flex flex-col gap-3">
+        <h2 className="font-inter text-[15px] font-medium tracking-tight">
+          Usage
+        </h2>
         <p className="font-inter text-[14px] leading-relaxed text-muted-foreground">
-          If installing manually, add{" "}
-          <InlineCode>{`<InspectUI />`}</InlineCode> to your layout:
+          Add <InlineCode>{`<InspectUI />`}</InlineCode> to your layout:
         </p>
         <CodeBlock code={LAYOUT_CODE} html={layoutHtml} />
       </div>
-
-      <p className="font-inter text-[14px] leading-relaxed text-muted-foreground">
-        That&apos;s it. Press <InlineCode>⌥ + X</InlineCode> to toggle inspect
-        mode. Click opens the definition; hold <InlineCode>⌥</InlineCode> and
-        click to open where it&apos;s used.
-      </p>
     </div>
   )
 }

@@ -1,4 +1,13 @@
+import type { Metadata } from "next"
+
 import { ApiReference } from "@/components/landing/api-reference"
+
+export const metadata: Metadata = {
+  title: "API Reference",
+  description:
+    "Props for InspectUI, tooltip, and spotlight configuration in next-inspect-ui.",
+  alternates: { canonical: "/api-reference" },
+}
 
 export default function ApiReferencePage() {
   return (
