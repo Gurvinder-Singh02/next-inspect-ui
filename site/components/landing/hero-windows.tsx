@@ -59,9 +59,9 @@ import { ChartContainer, type ChartConfig } from "@/components/ui/chart"
 import { cn } from "@/lib/utils"
 
 const STEP_MS = 1800
-const INSTALL_COMMAND = "npm i next-inspect-ui"
+const INSTALL_COMMAND = "npm i -D next-inspect-ui"
 const AGENT_PROMPT =
-  "Install next-inspect-ui (npm i next-inspect-ui). Add <InspectUI projectRoot={process.cwd()} /> as a sibling alongside {children} in the root layout (not wrapping it), only in development."
+  "Install next-inspect-ui (npm i -D next-inspect-ui). Add <InspectUI projectRoot={process.cwd()} /> as a sibling alongside {children} in the root layout (not wrapping it), only in development."
 
 const useOverlayLoop = (playing: boolean, length: number) => {
   const [index, setIndex] = useState(0)

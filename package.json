@@ -7,7 +7,7 @@
     "dev:dashboard": "pnpm --filter shadcn-dashboard-001-example dev",
     "dev:lib": "pnpm --filter next-inspect-ui dev",
     "build": "pnpm --filter next-inspect-ui build",
-    "build:site": "pnpm --filter site build",
+    "build:site": "pnpm --filter next-inspect-ui build && pnpm --filter site build",
     "build:example": "pnpm --filter next-js-example build",
     "build:dashboard": "pnpm --filter shadcn-dashboard-001-example build",
     "test": "pnpm --filter @next-inspect-ui/test-cases test",
