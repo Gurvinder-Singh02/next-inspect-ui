@@ -11,9 +11,10 @@ import {
   AUTHOR_NAME,
   AUTHOR_URL,
   GITHUB_REPO,
+  OG_IMAGE,
   SITE_DESCRIPTION,
   SITE_NAME,
-  SITE_TAGLINE,
+  SITE_TITLE,
   getSiteUrl,
 } from "@/lib/site"
 import { cn } from "@/lib/utils"
@@ -33,8 +34,8 @@ const siteUrl = getSiteUrl()
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${SITE_NAME} — ${SITE_TAGLINE}`,
-    template: `%s · ${SITE_NAME}`,
+    default: SITE_TITLE,
+    template: `${SITE_NAME} | %s`,
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
@@ -53,13 +54,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
   },
   twitter: {
-    card: "summary",
-    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    card: "summary_large_image",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
+    images: [OG_IMAGE.url],
   },
   robots: {
     index: true,
@@ -77,6 +80,7 @@ const jsonLd = {
       operatingSystem: "Web",
       description: SITE_DESCRIPTION,
       url: siteUrl,
+      image: `${siteUrl}${OG_IMAGE.url}`,
       downloadUrl: "https://www.npmjs.com/package/next-inspect-ui",
       codeRepository: GITHUB_REPO,
       author: {

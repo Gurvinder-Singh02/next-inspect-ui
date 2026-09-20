@@ -3,12 +3,7 @@ import Link from "next/link"
 
 import inspectUIPackage from "next-inspect-ui/package.json"
 
-import {
-  AUTHOR_NAME,
-  AUTHOR_URL,
-  GITHUB_AVATAR,
-  GITHUB_REPO,
-} from "@/lib/site"
+import { AUTHOR_NAME, AUTHOR_URL, GITHUB_AVATAR, GITHUB_REPO } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 const FooterLink = ({
@@ -23,19 +18,18 @@ const FooterLink = ({
 
   if (href.startsWith("/")) {
     return (
-      <Link href={href} className={className}>
+      <Link
+        href={href}
+        className={className}
+        rel={href === "/lab" ? "nofollow" : undefined}
+      >
         {children}
       </Link>
     )
   }
 
   return (
-    <a
-      href={href}
-      className={className}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <a href={href} className={className} target="_blank">
       {children}
     </a>
   )
@@ -48,12 +42,11 @@ export const SiteFooter = ({ className }: { className?: string }) => (
       <a
         href={AUTHOR_URL}
         target="_blank"
-        rel="noopener noreferrer"
         className="inline-flex min-h-6 items-center gap-2 text-foreground transition-colors hover:text-foreground/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       >
         <img
           src={GITHUB_AVATAR}
-          alt=""
+          alt={AUTHOR_NAME}
           width={24}
           height={24}
           className="size-4 rounded-full outline outline-black/10 dark:outline-white/10"

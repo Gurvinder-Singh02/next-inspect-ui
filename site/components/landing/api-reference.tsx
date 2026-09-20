@@ -14,9 +14,8 @@ type ApiSection = {
 
 const API_SECTIONS: ApiSection[] = [
   {
-    title: "InspectUI",
-    description:
-      "Development-only overlay. Hover shows the DOM tag and source file; click (or Enter) opens that line in your editor. Hold ⌥ to climb to the component that rendered it. Toggle with ⌥ + X. Editor, colours, tooltip, and spotlight can also be changed in the overlay settings panel.",
+    title: "Props ",
+    description: "Props for the <InspectUI /> component.",
     props: [
       {
         name: "projectRoot",
@@ -212,12 +211,8 @@ export const ApiReference = ({ className }: { className?: string }) => {
       {API_SECTIONS.map((section) => (
         <div key={section.title} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
-            <h3 className="font-inter text-[15px] font-medium tracking-tight">
-              {section.title}
-            </h3>
-            <p className="font-inter text-[13px] leading-relaxed text-muted-foreground">
-              {section.description}
-            </p>
+            <h3>{section.title}</h3>
+            <p>{section.description}</p>
           </div>
           <div>
             {section.props.map((prop, index) => (

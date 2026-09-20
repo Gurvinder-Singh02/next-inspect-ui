@@ -69,10 +69,8 @@ export const InstallSection = async () => {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-inter text-[15px] font-medium tracking-tight">
-          Usage
-        </h2>
-        <p className="font-inter text-[14px] leading-relaxed text-muted-foreground">
+        <h2>Usage</h2>
+        <p>
           Add <InlineCode>{`<InspectUI />`}</InlineCode> to your layout:
         </p>
         <CodeBlock code={LAYOUT_CODE} html={layoutHtml} />

@@ -7,7 +7,8 @@ import { cn } from "@/lib/utils"
 
 const NAV_ITEMS = [
   { href: "/", label: "Overview" },
-  { href: "/usage", label: "Usage" },
+  { href: "/walkthrough", label: "Walkthrough" },
+  { href: "/works-with", label: "Works with" },
   { href: "/api-reference", label: "API Reference" },
   { href: "/shortcuts", label: "Shortcuts" },
 ] as const
@@ -23,8 +24,8 @@ export const SiteNav = ({ className }: { className?: string }) => {
         className
       )}
     >
-      <div className="lg:absolute lg:top-0 lg:-left-20">
-        <div className="flex flex-row flex-wrap px-4 sm:px-6 lg:flex-col lg:whitespace-nowrap">
+      <div className="flex justify-center lg:absolute lg:top-0 lg:left-0 xl:-left-20">
+        <div className="flex w-full max-w-3xl no-scrollbar flex-row overflow-scroll px-4 lg:flex-col whitespace-nowrap">
           {NAV_ITEMS.map((item) => {
             const isActive =
               item.href === "/"
@@ -37,7 +38,7 @@ export const SiteNav = ({ className }: { className?: string }) => {
                 href={item.href}
                 data-cuelume-press="tick"
                 className={cn(
-                  "inline-flex min-h-11 items-center rounded-md px-2.5 font-inter text-sm transition-colors [touch-action:manipulation] lg:min-h-0 lg:py-1.5",
+                  "inline-flex min-h-11 [touch-action:manipulation] items-center rounded-md px-2.5 font-inter text-sm transition-colors lg:min-h-0 lg:py-1.5",
                   isActive
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
