@@ -58,6 +58,8 @@ type PreviewTargetDef = {
 
 const PAGE = "components/variant-test/overlay-preview.tsx"
 const GHOST_PAGE = "components/variant-test/ghost-card.tsx"
+const loc = (file: string, line: number, column: number) =>
+  `${file}:${line}:${column}`
 
 const YEARLY_ACTIVITY = [
   { month: "J", load: 72 },
@@ -115,24 +117,24 @@ const METRICS = [
 ]
 
 const TARGETS: PreviewTargetDef[] = [
-  { id: "section-1", name: "Section1", pageName: PAGE },
-  { id: "hero-title", name: "HeroTitle", pageName: PAGE },
+  { id: "section-1", name: "Section1", pageName: loc(PAGE, 540, 13) },
+  { id: "hero-title", name: "HeroTitle", pageName: loc(PAGE, 546, 15) },
   {
     id: "hero-desc-1",
     name: "p",
-    pageName: PAGE,
+    pageName: loc(PAGE, 554, 15),
     tagStyle: "dom",
   },
   {
     id: "ghost-description",
     name: "p",
-    pageName: `${GHOST_PAGE}:29`,
+    pageName: loc(GHOST_PAGE, 29, 3),
     tagStyle: "dom",
   },
   {
     id: "ghost-subtitle",
     name: "CardSubtitle",
-    pageName: `${GHOST_PAGE}:29`,
+    pageName: loc(GHOST_PAGE, 29, 3),
     tagStyle: "component",
     used: true,
     measureId: "ghost-description",
@@ -140,58 +142,58 @@ const TARGETS: PreviewTargetDef[] = [
   {
     id: "ghost-header",
     name: "CardHeader",
-    pageName: `${GHOST_PAGE}:12`,
+    pageName: loc(GHOST_PAGE, 12, 1),
     tagStyle: "component",
     used: true,
   },
   {
     id: "ghost-card",
     name: "Card",
-    pageName: `${GHOST_PAGE}:5`,
+    pageName: loc(GHOST_PAGE, 5, 1),
     tagStyle: "component",
     used: true,
   },
-  { id: "section-3", name: "Section3", pageName: PAGE },
+  { id: "section-3", name: "Section3", pageName: loc(PAGE, 661, 13) },
   {
     id: "section-inspect-title",
     name: "h3",
-    pageName: PAGE,
+    pageName: loc(PAGE, 667, 17),
     tagStyle: "dom",
   },
   {
     id: "metric-inspect-label",
     name: "span",
-    pageName: PAGE,
+    pageName: loc(PAGE, 692, 25),
     tagStyle: "dom",
   },
   {
     id: "metric-inspect-value",
     name: "span",
-    pageName: PAGE,
+    pageName: loc(PAGE, 707, 25),
     tagStyle: "dom",
   },
   {
     id: "audit-row",
     name: "div",
-    pageName: PAGE,
+    pageName: loc(PAGE, 840, 21),
     tagStyle: "dom",
   },
   {
     id: "audit-activity",
     name: "p",
-    pageName: PAGE,
+    pageName: loc(PAGE, 804, 25),
     tagStyle: "dom",
   },
   {
     id: "audit-author",
     name: "span",
-    pageName: PAGE,
+    pageName: loc(PAGE, 815, 25),
     tagStyle: "dom",
   },
   {
     id: "audit-time",
     name: "span",
-    pageName: PAGE,
+    pageName: loc(PAGE, 825, 25),
     tagStyle: "dom",
   },
 ]
@@ -320,7 +322,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
   const [isPlaying, setIsPlaying] = useState(true)
   const [labelMeta, setLabelMeta] = useState({
     name: TARGETS[0]?.name ?? "Component",
-    pageName: TARGETS[0]?.pageName ?? "page.tsx",
+    pageName: TARGETS[0]?.pageName ?? loc(PAGE, 1, 1),
     tagStyle: "component" as "dom" | "component",
     used: false,
     stack: [] as string[],
@@ -415,7 +417,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
     const target = TARGET_BY_ID[visibleId]
     setLabelMeta({
       name: target?.name ?? "Component",
-      pageName: target?.pageName ?? "page.tsx",
+      pageName: target?.pageName ?? loc(PAGE, 1, 1),
       tagStyle: target?.tagStyle ?? "component",
       used: Boolean(target?.used),
       stack: visibleId
