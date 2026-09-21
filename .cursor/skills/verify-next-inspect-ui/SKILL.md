@@ -7,11 +7,13 @@ description: Launch next-inspect-ui demo website, verify InspectUI overlay inter
 
 Verification skill for next-inspect-ui surfaces. The overlay lets developers hover any element to see its source file, click to open it, and hold ⌥ to climb to the component that rendered it.
 
-Surfaces:
+Surfaces (three separate Next.js apps):
 
-- `pnpm dev` — `site` marketing (port 3000)
-- `pnpm dev:example` — `apps/next-js-example` accuracy suite at `/test`
-- `pnpm dev:dashboard` — `apps/shadcn-dashboard-001-example` dashboard and `/components`
+- **Site** (`pnpm dev`) — Marketing site with landing, shortcuts, docs at `http://localhost:3000`
+- **Example** (`pnpm dev:example`) — Accuracy test suite at `/test` route (requires separate server)
+- **Dashboard** (`pnpm dev:dashboard`) — Components demo gallery at `/components` route (requires separate server)
+
+**Important**: Example and Dashboard apps run on their own servers. When running multiple apps simultaneously, use the `PORT` env var to avoid conflicts (e.g., `PORT=3001 pnpm dev:dashboard`).
 
 ## When to use this skill
 
@@ -34,28 +36,54 @@ pnpm run build  # builds next-inspect-ui
 
 ### Start dev server
 
+Which server you start depends on what features you're verifying:
+
+**For landing page and shortcuts** (site app):
 ```bash
 cd /workspace
-pnpm run dev
+pnpm run dev  # Starts on port 3000
 ```
 
-This runs `pnpm --filter site dev`, starting the marketing site on port 3000.
+**For test suite** (example app):
+```bash
+cd /workspace
+PORT=3002 pnpm run dev:example  # Use PORT env var if site is already running
+```
 
-Use `pnpm dev:example` for `/test` and `pnpm dev:dashboard` for the dashboard. Assign other ports with `PORT=3001` when more than one app is running.
+**For components demo** (dashboard app):
+```bash
+cd /workspace
+PORT=3001 pnpm run dev:dashboard  # Use PORT env var if site is already running
+```
 
 **Ready signal**: Look for `✓ Ready in` followed by the local URL.
+
+**Note**: Each app runs independently. You can run multiple apps concurrently on different ports using the `PORT` environment variable.
 
 **No auth required**. No seed data needed.
 
 ### Teardown
 
-Kill the process started by `pnpm run dev`. If launched via PID:
+Kill all dev servers you started. Multiple options:
 
+**If you tracked PIDs:**
 ```bash
 kill <PID>
 ```
 
-If running in a named tmux session, kill that session. Always verify the port is freed before declaring cleanup complete.
+**Kill all Next.js dev processes:**
+```bash
+pkill -f "next dev"
+```
+
+**Verify ports are freed:**
+```bash
+! lsof -i :3000  # Site
+! lsof -i :3001  # Dashboard (if used)
+! lsof -i :3002  # Example (if used)
+```
+
+Always verify ports are freed before declaring cleanup complete.
 
 ## Doctor
 
@@ -77,14 +105,18 @@ curl -s http://localhost:3000 | grep -q "next-inspect-ui"
 
 Should contain the package name in the title or header.
 
-### 3. Site does not host /test or /components
+### 3. Correct app for each surface
+
+Verify you're testing the right app:
+- Site (port 3000): Has `/`, `/shortcuts`, `/api-reference`, `/walkthrough`
+- Example (separate port): Has `/test`
+- Dashboard (separate port): Has `/components`
 
 ```bash
-curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/test
-curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/components
+# Site should NOT have /test or /components
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/test  # Expect 404
+curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/components  # Expect 404
 ```
-
-Expect `404` on the site. Those routes live on `next-js-example` and `shadcn-dashboard-001-example`.
 
 **If any check fails**, do not proceed to Drive. Fix or report the issue.
 

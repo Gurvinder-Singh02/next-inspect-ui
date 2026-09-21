@@ -5,11 +5,10 @@ The home page that explains what next-inspect-ui is, how to install it, and how 
 ## Sub-features
 
 - Package name and version display
-- "What it does" section with feature list
-- Installation instructions with npm/pnpm commands
-- Usage code examples
-- Link to live demo (`/components`)
-- Navigation sidebar with links to other sections (shortcuts, source, usage, API reference)
+- Installation section with npm/pnpm commands
+- FAQ section with common questions
+- Links to "See it in action" (walkthrough) and API reference
+- Navigation sidebar with links to other sections
 
 ## How to get to it (user POV)
 
@@ -44,35 +43,35 @@ async function verifyLandingPage() {
       fullPage: true
     });
     
-    // Verify "What it does" section
-    const whatItDoes = await page.locator('h2', { hasText: 'What it does' }).count() > 0;
-    if (!whatItDoes) throw new Error('"What it does" section not found');
-    
     // Verify Installation section
     const installation = await page.locator('h2', { hasText: 'Installation' }).count() > 0;
     if (!installation) throw new Error('Installation section not found');
     
-    // Verify Usage section
-    const usage = await page.locator('h2', { hasText: 'Usage' }).count() > 0;
-    if (!usage) throw new Error('Usage section not found');
+    // Verify FAQ section
+    const faq = await page.locator('h2', { hasText: 'FAQ' }).count() > 0;
+    if (!faq) throw new Error('FAQ section not found');
     
-    // Verify demo link exists
-    const demoLink = await page.getByRole('link', { name: /live demo/i }).count() > 0;
-    if (!demoLink) throw new Error('Demo link not found');
+    // Verify walkthrough link exists
+    const walkthroughLink = await page.getByRole('link', { name: /see it in action/i }).count() > 0;
+    if (!walkthroughLink) throw new Error('Walkthrough link not found');
+    
+    // Verify API reference link exists
+    const apiLink = await page.getByRole('link', { name: /api reference/i }).count() > 0;
+    if (!apiLink) throw new Error('API reference link not found');
     
     console.log('✓ Landing page sections verified');
     
-    // Test navigation to demo
-    await page.getByRole('link', { name: /live demo/i }).first().click();
-    await page.waitForURL('**/components');
+    // Test navigation to walkthrough
+    await page.getByRole('link', { name: /see it in action/i }).first().click();
+    await page.waitForURL('**/walkthrough');
     await page.waitForLoadState('networkidle');
     
     await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-demo-navigation.png',
+      path: '/tmp/verify-evidence/landing-page-walkthrough-navigation.png',
       fullPage: true
     });
     
-    console.log('✓ Navigation to demo works');
+    console.log('✓ Navigation to walkthrough works');
     return true;
     
   } catch (error) {
@@ -94,5 +93,5 @@ verifyLandingPage();
 
 - The page includes code blocks with syntax highlighting which may take time to render. Wait for `networkidle`.
 - Navigation sidebar is visible on larger screens but may be hidden on mobile viewports.
-- Demo link text might vary slightly, use case-insensitive matching with `/live demo/i`.
+- The "See it in action" link navigates to `/walkthrough`, not to a components demo.
 - The version number is dynamic (from package.json), so don't assert specific version values.

@@ -11,9 +11,10 @@ The main showcase page displaying interactive example components that demonstrat
 
 ## How to get to it (user POV)
 
-1. Visit home page at `http://localhost:3000`
-2. Click "Try the live demo →" link in the footer
-3. Or navigate directly to `http://localhost:3000/components`
+**Note**: This page is on the `shadcn-dashboard-001-example` app, not the main site.
+
+1. Start the dashboard server: `pnpm dev:dashboard` (uses PORT env var, or defaults to 3000)
+2. Navigate directly to `http://localhost:<PORT>/components` (e.g., `http://localhost:3000/components` if running alone, or `http://localhost:3001/components` if site is already on 3000)
 
 ## Driving it with Playwright
 
@@ -26,8 +27,11 @@ async function verifyComponentsGallery() {
   const page = await browser.newPage();
   
   try {
-    console.log('Navigating to components gallery...');
-    await page.goto('http://localhost:3000/components');
+    // NOTE: Components page is on shadcn-dashboard-001-example app
+    // Assumes pnpm dev:dashboard is running (adjust port as needed)
+    const port = process.env.DASHBOARD_PORT || '3000';
+    console.log(`Navigating to components gallery on port ${port}...`);
+    await page.goto(`http://localhost:${port}/components`);
     await page.waitForLoadState('networkidle');
     
     // Verify header exists
@@ -86,6 +90,8 @@ verifyComponentsGallery();
 
 ## Gotchas
 
+- **This page is on a different app** (`shadcn-dashboard-001-example`), not the site. Start with `pnpm dev:dashboard`.
+- When running multiple servers, use PORT env var to avoid conflicts: `PORT=3001 pnpm dev:dashboard`.
 - The page uses server components and may have hydration timing issues. Always wait for `networkidle` before assertions.
 - Component cards use responsive grid layout, so element positions change based on viewport size.
 - Some components (like LiveWaveform) may have animations that affect screenshot consistency.

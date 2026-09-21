@@ -14,10 +14,10 @@ A comprehensive test page at `/test` that displays various component patterns an
 
 ## How to get to it (user POV)
 
-1. Visit `http://localhost:3000` (dev mode)
-2. Scroll to footer
-3. Click "Test →" link (only visible in development mode)
-4. Or navigate directly to `http://localhost:3000/test`
+**Note**: This page is on the `next-js-example` app, not the main site.
+
+1. Start the example server: `pnpm dev:example` (uses PORT env var, or defaults to 3000)
+2. Navigate directly to `http://localhost:<PORT>/test` (e.g., `http://localhost:3000/test` if running alone, or `http://localhost:3002/test` if site and dashboard are already running)
 
 ## Driving it with Playwright
 
@@ -29,8 +29,11 @@ async function verifyTestSuite() {
   const page = await browser.newPage();
   
   try {
-    console.log('Navigating to test suite...');
-    await page.goto('http://localhost:3000/test');
+    // NOTE: Test suite is on next-js-example app
+    // Assumes pnpm dev:example is running (adjust port as needed)
+    const port = process.env.EXAMPLE_PORT || '3000';
+    console.log(`Navigating to test suite on port ${port}...`);
+    await page.goto(`http://localhost:${port}/test`);
     await page.waitForLoadState('networkidle');
     
     // Capture entry screenshot
@@ -113,6 +116,8 @@ verifyTestSuite();
 
 ## Gotchas
 
+- **This page is on a different app** (`next-js-example`), not the site. Start with `pnpm dev:example`.
+- When running multiple servers, use PORT env var to avoid conflicts: `PORT=3002 pnpm dev:example`.
 - This is a dev-only route. It won't be accessible in production builds.
 - The page is very long with many test cases. Use `fullPage: true` for complete screenshots or scroll and capture sections.
 - Test cases use `data-accuracy-target` attributes for programmatic testing, but these may not be visible in the DOM without inspecting.

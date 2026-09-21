@@ -13,45 +13,41 @@ async function verifyLandingPage() {
     const title = await page.locator('h1', { hasText: 'next-inspect-ui' }).count();
     if (title === 0) throw new Error('Page title not found');
     
-    // Verify version display
-    const version = await page.getByText(/v\d+\.\d+\.\d+/).count() > 0;
-    if (!version) throw new Error('Version not displayed');
-    
     // Capture entry screenshot
     await page.screenshot({
       path: '/tmp/verify-evidence/landing-page-loaded.png',
       fullPage: true
     });
     
-    // Verify "What it does" section
-    const whatItDoes = await page.locator('h2', { hasText: 'What it does' }).count() > 0;
-    if (!whatItDoes) throw new Error('"What it does" section not found');
-    
     // Verify Installation section
     const installation = await page.locator('h2', { hasText: 'Installation' }).count() > 0;
     if (!installation) throw new Error('Installation section not found');
     
-    // Verify Usage section
-    const usage = await page.locator('h2', { hasText: 'Usage' }).count() > 0;
-    if (!usage) throw new Error('Usage section not found');
+    // Verify FAQ section
+    const faq = await page.locator('h2', { hasText: 'FAQ' }).count() > 0;
+    if (!faq) throw new Error('FAQ section not found');
     
-    // Verify demo link exists
-    const demoLink = await page.getByRole('link', { name: /live demo/i }).count() > 0;
-    if (!demoLink) throw new Error('Demo link not found');
+    // Verify walkthrough link exists
+    const walkthroughLink = await page.getByRole('link', { name: /see it in action/i }).count() > 0;
+    if (!walkthroughLink) throw new Error('Walkthrough link not found');
+    
+    // Verify API reference link exists
+    const apiLink = await page.getByRole('link', { name: /api reference/i }).count() > 0;
+    if (!apiLink) throw new Error('API reference link not found');
     
     console.log('✓ Landing page sections verified');
     
-    // Test navigation to demo
-    await page.getByRole('link', { name: /live demo/i }).first().click();
-    await page.waitForURL('**/components');
+    // Test navigation to walkthrough
+    await page.getByRole('link', { name: /see it in action/i }).first().click();
+    await page.waitForURL('**/walkthrough');
     await page.waitForLoadState('networkidle');
     
     await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-demo-navigation.png',
+      path: '/tmp/verify-evidence/landing-page-walkthrough-navigation.png',
       fullPage: true
     });
     
-    console.log('✓ Navigation to demo works');
+    console.log('✓ Navigation to walkthrough works');
     return true;
     
   } catch (error) {

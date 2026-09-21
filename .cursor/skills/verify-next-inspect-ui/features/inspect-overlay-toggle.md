@@ -12,7 +12,13 @@ The core functionality of the InspectUI: activating the overlay with the keyboar
 
 ## How to get to it (user POV)
 
-1. Navigate to any page in the app (e.g., `/components` or `/`)
+**Note**: The InspectUI overlay works on any page across all apps. For testing, you can use:
+- Site: `http://localhost:3000` (pnpm dev) - shortcuts page, landing, etc.
+- Dashboard: `http://localhost:3001/components` (pnpm dev:dashboard) - components gallery
+- Example: `http://localhost:3002/test` (pnpm dev:example) - test suite
+
+Steps:
+1. Navigate to any page in any app
 2. Press ⌥ + X on the keyboard
 3. Overlay activates (visual indicator appears)
 4. Hover any element to see source info
@@ -33,8 +39,10 @@ async function verifyOverlayToggle() {
   const page = await browser.newPage();
   
   try {
-    console.log('Navigating to components page...');
-    await page.goto('http://localhost:3000/components');
+    // Can test on any page; using site shortcuts page for simplicity
+    // (Components page requires dashboard server on different port)
+    console.log('Navigating to test page...');
+    await page.goto('http://localhost:3000/shortcuts');
     await page.waitForLoadState('networkidle');
     
     // Capture before activation
