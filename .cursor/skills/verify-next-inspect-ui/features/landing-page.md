@@ -5,11 +5,11 @@ The home page that explains what next-inspect-ui is, how to install it, and how 
 ## Sub-features
 
 - Package name and version display
-- "What it does" section with feature list
 - Installation instructions with npm/pnpm commands
 - Usage code examples
-- Link to live demo (`/components`)
-- Navigation sidebar with links to other sections (shortcuts, source, usage, API reference)
+- FAQ section
+- Link to walkthrough ("See it in action" → `/walkthrough`)
+- Navigation sidebar with links to other sections (shortcuts, API reference)
 
 ## How to get to it (user POV)
 
@@ -44,10 +44,6 @@ async function verifyLandingPage() {
       fullPage: true
     });
     
-    // Verify "What it does" section
-    const whatItDoes = await page.locator('h2', { hasText: 'What it does' }).count() > 0;
-    if (!whatItDoes) throw new Error('"What it does" section not found');
-    
     // Verify Installation section
     const installation = await page.locator('h2', { hasText: 'Installation' }).count() > 0;
     if (!installation) throw new Error('Installation section not found');
@@ -56,15 +52,19 @@ async function verifyLandingPage() {
     const usage = await page.locator('h2', { hasText: 'Usage' }).count() > 0;
     if (!usage) throw new Error('Usage section not found');
     
-    // Verify demo link exists
-    const demoLink = await page.getByRole('link', { name: /live demo/i }).count() > 0;
-    if (!demoLink) throw new Error('Demo link not found');
+    // Verify FAQ section
+    const faq = await page.locator('h2', { hasText: 'FAQ' }).count() > 0;
+    if (!faq) throw new Error('FAQ section not found');
+    
+    // Verify walkthrough link exists
+    const actionLink = await page.getByRole('link', { name: /see it in action/i }).count() > 0;
+    if (!actionLink) throw new Error('Walkthrough link not found');
     
     console.log('✓ Landing page sections verified');
     
-    // Test navigation to demo
-    await page.getByRole('link', { name: /live demo/i }).first().click();
-    await page.waitForURL('**/components');
+    // Test navigation to walkthrough
+    await page.getByRole('link', { name: /see it in action/i }).first().click();
+    await page.waitForURL('**/walkthrough');
     await page.waitForLoadState('networkidle');
     
     await page.screenshot({
@@ -94,5 +94,6 @@ verifyLandingPage();
 
 - The page includes code blocks with syntax highlighting which may take time to render. Wait for `networkidle`.
 - Navigation sidebar is visible on larger screens but may be hidden on mobile viewports.
-- Demo link text might vary slightly, use case-insensitive matching with `/live demo/i`.
+- Walkthrough link text is "See it in action", not "live demo". Goes to `/walkthrough`, not `/components`.
 - The version number is dynamic (from package.json), so don't assert specific version values.
+- The "Usage" section is rendered by the InstallSection component, not directly in page.tsx.

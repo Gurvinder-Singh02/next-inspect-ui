@@ -12,8 +12,10 @@ The main showcase page displaying interactive example components that demonstrat
 ## How to get to it (user POV)
 
 1. Visit home page at `http://localhost:3000`
-2. Click "Try the live demo →" link in the footer
-3. Or navigate directly to `http://localhost:3000/components`
+2. Click "See it in action" link (goes to `/walkthrough`)
+3. Or navigate directly to `http://localhost:3002/components` (dashboard app)
+
+**Note**: The components gallery is hosted by the `shadcn-dashboard-001-example` app on port 3002, not the site app on port 3000.
 
 ## Driving it with Playwright
 
@@ -27,7 +29,7 @@ async function verifyComponentsGallery() {
   
   try {
     console.log('Navigating to components gallery...');
-    await page.goto('http://localhost:3000/components');
+    await page.goto('http://localhost:3002/components');
     await page.waitForLoadState('networkidle');
     
     // Verify header exists
@@ -54,11 +56,9 @@ async function verifyComponentsGallery() {
     console.log(`Found ${cards} component columns`);
     
     // Verify specific known components
-    const styleOverview = await page.getByText('Style Overview').count() > 0;
-    const barChart = await page.getByText('Revenue').count() > 0;
+    const barChart = await page.getByText('Traffic channels').count() > 0;
     
-    console.log('Style Overview present:', styleOverview);
-    console.log('Bar Chart present:', barChart);
+    console.log('Bar Chart (Traffic channels) present:', barChart);
     
     // Final screenshot
     await page.screenshot({

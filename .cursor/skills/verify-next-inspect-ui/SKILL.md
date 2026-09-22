@@ -7,11 +7,13 @@ description: Launch next-inspect-ui demo website, verify InspectUI overlay inter
 
 Verification skill for next-inspect-ui surfaces. The overlay lets developers hover any element to see its source file, click to open it, and hold ⌥ to climb to the component that rendered it.
 
-Surfaces:
+Surfaces across three apps:
 
-- `pnpm dev` — `site` marketing (port 3000)
-- `pnpm dev:example` — `apps/next-js-example` accuracy suite at `/test`
-- `pnpm dev:dashboard` — `apps/shadcn-dashboard-001-example` dashboard and `/components`
+- `pnpm dev` — `site` marketing (port 3000): `/`, `/shortcuts`, `/walkthrough`
+- `pnpm dev:example` — `next-js-example` (port 3001): `/test` accuracy suite
+- `pnpm dev:dashboard` — `shadcn-dashboard-001-example` (port 3002): `/components` gallery
+
+Each app defaults to port 3000. Run multiple servers concurrently using `PORT=<port>` env var.
 
 ## When to use this skill
 
@@ -32,16 +34,27 @@ pnpm install
 pnpm run build  # builds next-inspect-ui
 ```
 
-### Start dev server
+### Start dev servers
 
+For site app (port 3000):
 ```bash
 cd /workspace
 pnpm run dev
 ```
 
-This runs `pnpm --filter site dev`, starting the marketing site on port 3000.
+For example app (port 3001):
+```bash
+cd /workspace
+PORT=3001 pnpm dev:example
+```
 
-Use `pnpm dev:example` for `/test` and `pnpm dev:dashboard` for the dashboard. Assign other ports with `PORT=3001` when more than one app is running.
+For dashboard app (port 3002):
+```bash
+cd /workspace
+PORT=3002 pnpm dev:dashboard
+```
+
+To verify all features, all three servers must be running concurrently on their respective ports.
 
 **Ready signal**: Look for `✓ Ready in` followed by the local URL.
 
@@ -49,13 +62,13 @@ Use `pnpm dev:example` for `/test` and `pnpm dev:dashboard` for the dashboard. A
 
 ### Teardown
 
-Kill the process started by `pnpm run dev`. If launched via PID:
+Kill all three dev server processes. If launched via PIDs:
 
 ```bash
-kill <PID>
+kill <SITE_PID> <EXAMPLE_PID> <DASHBOARD_PID>
 ```
 
-If running in a named tmux session, kill that session. Always verify the port is freed before declaring cleanup complete.
+If running in tmux sessions, kill those sessions. Always verify all ports (3000, 3001, 3002) are freed before declaring cleanup complete.
 
 ## Doctor
 
@@ -77,14 +90,30 @@ curl -s http://localhost:3000 | grep -q "next-inspect-ui"
 
 Should contain the package name in the title or header.
 
-### 3. Site does not host /test or /components
+### 3. Site does not host /test or /components (expect 404)
 
 ```bash
 curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/test
 curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/components
 ```
 
-Expect `404` on the site. Those routes live on `next-js-example` and `shadcn-dashboard-001-example`.
+Expect `404` on the site. Those routes live on other apps.
+
+### 4. Example app hosts /test
+
+```bash
+curl -I http://localhost:3001/test
+```
+
+Expect `200 OK`.
+
+### 5. Dashboard app hosts /components
+
+```bash
+curl -I http://localhost:3002/components
+```
+
+Expect `200 OK`.
 
 **If any check fails**, do not proceed to Drive. Fix or report the issue.
 
