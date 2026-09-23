@@ -23,10 +23,6 @@ async function verifyLandingPage() {
       fullPage: true
     });
     
-    // Verify "What it does" section
-    const whatItDoes = await page.locator('h2', { hasText: 'What it does' }).count() > 0;
-    if (!whatItDoes) throw new Error('"What it does" section not found');
-    
     // Verify Installation section
     const installation = await page.locator('h2', { hasText: 'Installation' }).count() > 0;
     if (!installation) throw new Error('Installation section not found');
@@ -35,23 +31,27 @@ async function verifyLandingPage() {
     const usage = await page.locator('h2', { hasText: 'Usage' }).count() > 0;
     if (!usage) throw new Error('Usage section not found');
     
-    // Verify demo link exists
-    const demoLink = await page.getByRole('link', { name: /live demo/i }).count() > 0;
-    if (!demoLink) throw new Error('Demo link not found');
+    // Verify FAQ section
+    const faq = await page.locator('h2', { hasText: 'FAQ' }).count() > 0;
+    if (!faq) throw new Error('FAQ section not found');
+    
+    // Verify walkthrough link exists
+    const actionLink = await page.getByRole('link', { name: /see it in action/i }).count() > 0;
+    if (!actionLink) throw new Error('Walkthrough link not found');
     
     console.log('✓ Landing page sections verified');
     
-    // Test navigation to demo
-    await page.getByRole('link', { name: /live demo/i }).first().click();
-    await page.waitForURL('**/components');
+    // Test navigation to walkthrough
+    await page.getByRole('link', { name: /see it in action/i }).first().click();
+    await page.waitForURL('**/walkthrough');
     await page.waitForLoadState('networkidle');
     
     await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-demo-navigation.png',
+      path: '/tmp/verify-evidence/landing-page-walkthrough-navigation.png',
       fullPage: true
     });
     
-    console.log('✓ Navigation to demo works');
+    console.log('✓ Navigation to walkthrough works');
     return true;
     
   } catch (error) {
