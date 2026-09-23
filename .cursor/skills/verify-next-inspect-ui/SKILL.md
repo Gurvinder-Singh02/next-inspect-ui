@@ -143,7 +143,7 @@ const { chromium } = require('playwright');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
   
-  await page.goto('http://localhost:3000/components');
+  await page.goto('http://localhost:3002/components');
   await page.waitForLoadState('networkidle');
   
   // Take screenshot as proof
@@ -162,8 +162,8 @@ await page.keyboard.down('Alt');
 await page.keyboard.press('KeyX');
 await page.keyboard.up('Alt');
 
-// Wait for overlay to appear (check for specific class or element)
-await page.waitForSelector('[data-inspect-active="true"]', { timeout: 3000 });
+// Wait for overlay to appear (check for data-dev-inspector-overlay attribute)
+await page.waitForSelector('[data-dev-inspector-overlay]', { timeout: 3000 });
 ```
 
 **Note**: Keyboard shortcuts can be finicky in headless browsers. If the overlay doesn't toggle, consider using browser context with `--headed` mode or programmatically triggering the overlay state if there's a JS hook.
@@ -333,7 +333,7 @@ async function main() {
   try {
     console.log('Navigating to feature page...');
     // Replace with actual feature URL
-    await page.goto('http://localhost:3000/components');
+    await page.goto('http://localhost:3002/components');
     await page.waitForLoadState('networkidle');
 
     console.log('Feature loaded, capturing screenshot...');

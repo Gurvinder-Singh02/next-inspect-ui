@@ -33,8 +33,8 @@ async function verifyOverlayToggle() {
   const page = await browser.newPage();
   
   try {
-    console.log('Navigating to components page...');
-    await page.goto('http://localhost:3000/components');
+    console.log('Navigating to site home page...');
+    await page.goto('http://localhost:3000/');
     await page.waitForLoadState('networkidle');
     
     // Capture before activation
