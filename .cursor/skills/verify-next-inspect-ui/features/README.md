@@ -51,7 +51,7 @@ Features 1-4 are page load verifications. Feature 5 requires browser automation 
 
 This monorepo has three Next.js apps, each hosting different routes:
 
-- **site** (port 3000): `/`, `/shortcuts`, `/walkthrough`, `/api-reference`
+- **site** (port 3000): `/`, `/shortcuts`, `/walkthrough`, `/works-with`, `/api-reference`
 - **next-js-example** (port 3001): `/test` (dev-only accuracy test suite)
 - **shadcn-dashboard-001-example** (port 3002): `/components` (component gallery)
 

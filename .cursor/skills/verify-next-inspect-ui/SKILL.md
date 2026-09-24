@@ -9,7 +9,7 @@ Verification skill for next-inspect-ui surfaces. The overlay lets developers hov
 
 Surfaces across three apps:
 
-- `pnpm dev` — `site` marketing (port 3000): `/`, `/shortcuts`, `/walkthrough`
+- `pnpm dev` — `site` marketing (port 3000): `/`, `/shortcuts`, `/walkthrough`, `/works-with`, `/api-reference`
 - `pnpm dev:example` — `next-js-example` (port 3001): `/test` accuracy suite
 - `pnpm dev:dashboard` — `shadcn-dashboard-001-example` (port 3002): `/components` gallery
 
