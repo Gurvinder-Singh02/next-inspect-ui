@@ -44,8 +44,10 @@ Skip a feature verification if:
 3. [Components Demo Gallery](./components-demo-gallery.md) - Showcase page on dashboard app (port 3002)
 4. [Accuracy Test Suite](./accuracy-test-suite.md) - Test page on example app (port 3001)
 5. [InspectUI Overlay Toggle](./inspect-overlay-toggle.md) - Activating overlay with ⌥X (works on any app, test on site:3000)
+6. [Works with Patterns](./works-with-patterns.md) - Pattern showcase page on site app (port 3000)
+7. [API Reference](./api-reference.md) - API documentation page on site app (port 3000)
 
-Features 1-4 are page load verifications. Feature 5 requires browser automation of keyboard shortcuts.
+Features 1-4, 6-7 are page load verifications. Feature 5 requires browser automation of keyboard shortcuts.
 
 ## Multi-App Architecture
 
