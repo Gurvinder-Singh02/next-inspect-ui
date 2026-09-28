@@ -310,66 +310,76 @@ fi
 bash /workspace/.cursor/skills/verify-next-inspect-ui/cleanup-server.sh
 ```
 
-### `verify-feature.js`
+### Feature verification scripts
 
-Playwright script template for feature verification:
+All scripts require dev servers to be running and passing doctor checks. Ensure `/tmp/verify-evidence/` directory exists before running.
 
-```javascript
-const { chromium } = require('playwright');
-const fs = require('fs');
-const path = require('path');
+#### `verify-landing-page.js`
 
-const EVIDENCE_DIR = '/tmp/verify-evidence';
-
-async function main() {
-  // Ensure evidence directory exists
-  if (!fs.existsSync(EVIDENCE_DIR)) {
-    fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
-  }
-
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-
-  try {
-    console.log('Navigating to feature page...');
-    // Replace with actual feature URL
-    await page.goto('http://localhost:3002/components');
-    await page.waitForLoadState('networkidle');
-
-    console.log('Feature loaded, capturing screenshot...');
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, 'feature-loaded.png'),
-      fullPage: true
-    });
-
-    console.log('Performing feature interaction...');
-    // Add feature-specific interactions here
-
-    console.log('Capturing final state...');
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, 'feature-complete.png'),
-      fullPage: true
-    });
-
-    console.log('✓ Feature verification complete');
-    console.log(`Evidence saved to ${EVIDENCE_DIR}`);
-  } catch (error) {
-    console.error('✗ Feature verification failed:', error);
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, 'error.png'),
-      fullPage: true
-    });
-    throw error;
-  } finally {
-    await browser.close();
-  }
-}
-
-main();
-```
+Verifies site home page (Installation/Usage/FAQ sections) and navigation to `/walkthrough`.
 
 **Invocation**:
 
 ```bash
-node /workspace/.cursor/skills/verify-next-inspect-ui/verify-feature.js
+node /workspace/.cursor/skills/verify-next-inspect-ui/verify-landing-page.js
+```
+
+#### `verify-shortcuts-documentation.js`
+
+Verifies keyboard shortcuts reference page at `/shortcuts`.
+
+**Invocation**:
+
+```bash
+node /workspace/.cursor/skills/verify-next-inspect-ui/verify-shortcuts-documentation.js
+```
+
+#### `verify-components-demo-gallery.js`
+
+Verifies dashboard components showcase at `:3002/components` with Traffic channels example.
+
+**Invocation**:
+
+```bash
+node /workspace/.cursor/skills/verify-next-inspect-ui/verify-components-demo-gallery.js
+```
+
+#### `verify-accuracy-test-suite.js`
+
+Verifies example app test suite at `:3001/test` including all test groups (basic html, svg, shadcn, motion, server).
+
+**Invocation**:
+
+```bash
+node /workspace/.cursor/skills/verify-next-inspect-ui/verify-accuracy-test-suite.js
+```
+
+#### `verify-inspect-overlay-toggle.js`
+
+Verifies InspectUI overlay activation/deactivation with Alt+X keyboard shortcut and hover interactions.
+
+**Invocation**:
+
+```bash
+node /workspace/.cursor/skills/verify-next-inspect-ui/verify-inspect-overlay-toggle.js
+```
+
+#### `verify-works-with-patterns.js`
+
+Verifies pattern showcase page at `/works-with` documenting supported component patterns (HTML, shadcn, Motion, Server host).
+
+**Invocation**:
+
+```bash
+node /workspace/.cursor/skills/verify-next-inspect-ui/verify-works-with-patterns.js
+```
+
+#### `verify-api-reference.js`
+
+Verifies API documentation page at `/api-reference` including projectRoot prop and Playground link.
+
+**Invocation**:
+
+```bash
+node /workspace/.cursor/skills/verify-next-inspect-ui/verify-api-reference.js
 ```
