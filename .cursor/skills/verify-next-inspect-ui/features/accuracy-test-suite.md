@@ -5,7 +5,19 @@ A comprehensive test page at `/test` that displays various component patterns an
 ## Sub-features
 
 - Test suite shell with title and navigation
-- Multiple test groups (basic html, svg, shadcn, motion, server components, etc.)
+- Multiple test groups:
+  - basic html snippet
+  - svg
+  - shadcn
+  - base-ui
+  - motion
+  - library
+  - radix
+  - kinds (forwardRef, memo, compound)
+  - composition (map)
+  - third-party (icons)
+  - server
+  - parent inspectable
 - Individual test cases with:
   - Title and description
   - Target component to hover/inspect
@@ -51,8 +63,15 @@ async function verifyTestSuite() {
       'basic html snippet',
       'svg',
       'shadcn',
+      'base-ui',
       'motion',
-      'server'
+      'library',
+      'radix',
+      'kinds',
+      'composition',
+      'third-party',
+      'server',
+      'parent inspectable'
     ];
     
     for (const groupName of knownGroups) {

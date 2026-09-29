@@ -6,23 +6,23 @@ A comprehensive documentation page showcasing the different component patterns t
 
 - Page header with title "Works with"
 - Description explaining pattern support
-- Multiple pattern sections, each with:
-  - Pattern title (e.g., "HTML", "shadcn", "Motion", "Server host")
+- Multiple pattern sections (11 total), each with:
+  - Pattern title
   - Pattern description
   - Live preview component
   - Code snippet with syntax highlighting
-- Notable patterns include:
-  - HTML native markup
-  - SVG elements
-  - shadcn Button and Card components
-  - Base UI components
-  - Framer Motion components
-  - Library hosts (createElement)
-  - Radix Slot (asChild pattern)
-  - forwardRef, memo, compound components
-  - Mapped lists
-  - Icons (Lucide)
-  - Server components (sync only)
+- Complete pattern list:
+  1. HTML - Native markup authored on the page
+  2. SVG - svg and nested hosts like rect
+  3. shadcn - Button, variants, and a Button nested in Card
+  4. Base UI - useRender hosts like Badge, and nested compound children
+  5. Motion - motion.div as a return root, nested motion.div, and motion.rect
+  6. Library host - DOM built with createElement instead of JSX
+  7. Radix Slot - asChild merges onto the child host
+  8. forwardRef, memo, compound - Different fiber shapes
+  9. Mapped lists - Elements created in .map() still open the authoring file
+  10. Icons - Third-party SVG such as Lucide
+  11. Server host - A sync server component that emits DOM
 - Caveat: Async Server Components are not inspectable yet
 
 ## How to get to it (user POV)
@@ -62,8 +62,15 @@ async function verifyWorksWithPage() {
     // Verify known pattern sections exist
     const knownPatterns = [
       'HTML',
+      'SVG',
       'shadcn',
+      'Base UI',
       'Motion',
+      'Library host',
+      'Radix Slot',
+      'forwardRef, memo, compound',
+      'Mapped lists',
+      'Icons',
       'Server host'
     ];
     
@@ -74,7 +81,7 @@ async function verifyWorksWithPage() {
       console.log(`Pattern "${pattern}": ${found ? '✓' : '✗'}`);
     }
     
-    if (foundPatterns < 3) {
+    if (foundPatterns < 9) {
       throw new Error(`Only found ${foundPatterns} of ${knownPatterns.length} expected patterns`);
     }
     

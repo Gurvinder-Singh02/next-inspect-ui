@@ -20,8 +20,15 @@ async function verifyTestSuite() {
       'basic html snippet',
       'svg',
       'shadcn',
+      'base-ui',
       'motion',
-      'server'
+      'library',
+      'radix',
+      'kinds',
+      'composition',
+      'third-party',
+      'server',
+      'parent inspectable'
     ];
     
     for (const groupName of knownGroups) {

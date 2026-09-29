@@ -22,8 +22,15 @@ async function verifyWorksWithPage() {
     // Verify known pattern sections exist
     const knownPatterns = [
       'HTML',
+      'SVG',
       'shadcn',
+      'Base UI',
       'Motion',
+      'Library host',
+      'Radix Slot',
+      'forwardRef, memo, compound',
+      'Mapped lists',
+      'Icons',
       'Server host'
     ];
     
@@ -34,7 +41,7 @@ async function verifyWorksWithPage() {
       console.log(`Pattern "${pattern}": ${found ? '✓' : '✗'}`);
     }
     
-    if (foundPatterns < 3) {
+    if (foundPatterns < 9) {
       throw new Error(`Only found ${foundPatterns} of ${knownPatterns.length} expected patterns`);
     }
     
