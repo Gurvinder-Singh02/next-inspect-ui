@@ -673,7 +673,7 @@ const ResultList = ({ state }: { state?: TargetState | null }) => {
         </ul>
       ) : (
         <p className="whitespace-nowrap text-muted-foreground/70">
-          Hover this target and press Space to score.
+          Hover this target and press I to score.
         </p>
       )}
     </ListPane>

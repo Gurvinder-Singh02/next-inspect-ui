@@ -16,10 +16,30 @@
     "types": [
       "vite/client",
       "node"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "react": [
+        "./node_modules/@types/react"
+      ],
+      "react/*": [
+        "./node_modules/@types/react/*"
+      ]
+    },
+    "resolveJsonModule": true
   },
   "include": [
     "src",
-    "vite.config.ts"
+    "vite.config.ts",
+    "components",
+    "lib",
+    "test-cases"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts"
   ]
 }

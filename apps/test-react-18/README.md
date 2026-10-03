@@ -1,7 +1,9 @@
 # test-react-18
 
-React 18.3.1 on Vite, without Next.js. Run `bun run dev:test-react-18` from the repository root and open http://localhost:5174/test. Click Run all for exact node/source checks.
+Vite + React 18.3.1 (experimental). Run `bun run dev:test-react-18` from the repository root and open http://localhost:5174/test.
 
-React 18 is an experimental compatibility target. The library still declares React >=19; this app does not expand its supported versions.
+The same suite UI as every other test app: groups, status dots, Run all, Show source, and expected/result logs. This app runs 17 cases. Server Component cases run only in Next.js; Vite uses native links.
 
-Fixtures cover HTML, SVG, shared buttons, memo, forwardRef, classes, and mapped children. React Server Components belong in the Next.js suites.
+Run `bun run sync:test-ui` after updating the canonical UI in `apps/test-next-js`. Keep fixtures and exact source expectations local.
+
+React 18 is experimental; the library still declares React 19+ support.

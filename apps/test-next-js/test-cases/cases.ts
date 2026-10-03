@@ -1,5 +1,5 @@
 /**
- * Manual expected NODE TREE cases for apps/test.
+ * Manual expected NODE TREE cases for apps/test-next-js.
  * Edit by hand — pin from live inspect
  * (`window.__inspectUI.inspect` → `nodes[].source`;
  * `.cursor/skills/match-expected-case`).

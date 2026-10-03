@@ -55,3 +55,7 @@ Click to open the source
 
 Element navigation follows the rendered elements. Component climbing follows the React component chain. The info panel shows the resolved chain and source locations; click a source path to open it.
 
+
+## Test suite flow
+
+All test apps use the same suite UI: choose groups, press **Run all**, then open **Logs** to compare expected and found source locations. **Show source** opens the fixture snippets. Vite runs the browser cases; Next.js also runs the Server Component cases.

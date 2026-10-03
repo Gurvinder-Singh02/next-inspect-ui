@@ -10,7 +10,6 @@ import {
   useState,
   type ReactNode,
 } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 import type { SuiteSourceFile } from "@/components/accuracy/types"
 
@@ -73,25 +72,23 @@ export const SuiteProvider = ({
   const [hiddenGroups, setHiddenGroups] = useState<ReadonlySet<string>>(
     () => new Set()
   )
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const pathname = usePathname()
-  const groupParam = searchParams.get("group")
-  const onlyGroup = groupParam && groupParam.length > 0 ? groupParam : null
+  const [onlyGroup, setOnlyGroup] = useState<string | null>(null)
   const runnersRef = useRef(new Map<string, SuiteRunner>())
 
-  const writeGroupParam = useCallback(
-    (group: string | null) => {
-      const params = new URLSearchParams(searchParams.toString())
-      if (group) params.set("group", group)
-      else params.delete("group")
-      const query = params.toString()
-      router.replace(query ? `${pathname}?${query}` : pathname, {
-        scroll: false,
-      })
-    },
-    [pathname, router, searchParams]
-  )
+  useEffect(() => {
+    const readGroup = () => setOnlyGroup(new URLSearchParams(window.location.search).get("group") || null)
+    readGroup()
+    window.addEventListener("popstate", readGroup)
+    return () => window.removeEventListener("popstate", readGroup)
+  }, [])
+
+  const writeGroupParam = useCallback((group: string | null) => {
+    const url = new URL(window.location.href)
+    if (group) url.searchParams.set("group", group)
+    else url.searchParams.delete("group")
+    window.history.replaceState(window.history.state, "", url)
+    setOnlyGroup(group)
+  }, [])
 
   // Keep local eye-hides cleared when deep-linking into Only mode.
   useEffect(() => {
