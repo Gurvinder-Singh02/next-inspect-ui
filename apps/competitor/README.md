@@ -6,6 +6,8 @@ Next.js 16.2.6, React 19.2.4, Turbopack. No custom Babel/Vite plugin. The sample
 
 The top **Library** selector enables one inspector at a time. Switching writes the `competitor-inspector` cookie and reloads the document so global listeners and React instrumentation from the previous library are cleared. **Off** loads none. All inspector integration is development-only.
 
+Agentation and InterfaceKit are available alongside every inspector in development, including **Off**. They use their own annotation and styling buttons and have no entries in the Library selector.
+
 | Inspector | Version | Setup | Try |
 |---|---|---|---|
 | Next Inspect UI | Workspace package | `<InspectUI projectRoot={...} />` | Option + X; hover; Space |

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Script from "next/script"
 import { cookies } from "next/headers"
 import { InspectorSwitch } from "@/components/inspector-switch"
+import { DesignTools } from "@/components/design-tools"
 import { inspectorId } from "@/lib/inspectors"
 import "./globals.css"
 
@@ -16,6 +17,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         {dev && <InspectorSwitch selected={selected} projectRoot={process.cwd()} />}
         {children}
+        {dev && <DesignTools />}
       </body>
     </html>
   )
