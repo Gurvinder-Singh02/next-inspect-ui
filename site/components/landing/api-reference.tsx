@@ -42,6 +42,11 @@ const API_SECTIONS: ApiSection[] = [
           "Optional seed for tooltip appearance. Settings-panel edits override these for the session.",
       },
       {
+        name: "popoverProps",
+        type: '{ defaultTab?: "component" | "element" }',
+        description: 'Initial tree tab when Space opens the popover. Default "component".',
+      },
+      {
         name: "devSpotlightProps",
         type: "Partial<DevSpotlightProps>",
         description:

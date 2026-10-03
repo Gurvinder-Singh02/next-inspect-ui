@@ -45,22 +45,16 @@ const SHORTCUTS: KeyboardShortcut[] = [
       "Hold ⌥ to climb to the component that rendered it, then click (or Enter) to open that usage site.",
   },
   {
-    keys: [<Option key="opt-shift" />, "⇧"],
-    type: "tree",
-    description:
-      "While holding ⌥, press ⇧ to climb another owner level. At the top, hop to the next parent that has a climb.",
-  },
-  {
     keys: ["Space"],
     type: "panel",
-    description: "Toggle the info panel — node tree, source links, and CSS.",
+    description: "Toggle the Component and Element trees. In Element, arrows preview, Enter selects then opens, and … selects directly.",
   },
   {
     keys: ["↑", "↓"],
     join: "/",
     type: "panel",
     description:
-      "Info panel open: climb the Node tree. At the top, hop to the next parent that has a climb. Closed: previous / next sibling.",
+      "Popover open: select the previous / next tree row. Closed: previous / next sibling.",
   },
   {
     keys: ["["],
@@ -75,12 +69,12 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["←"],
     type: "nav",
-    description: "Move to the previous sibling inspectable element.",
+    description: "Popover open: switch tabs. Closed: move to the previous sibling element.",
   },
   {
     keys: ["→"],
     type: "nav",
-    description: "Move to the next sibling inspectable element.",
+    description: "Popover open: switch tabs. Closed: move to the next sibling element.",
   },
   {
     keys: ["⌘", "←"],

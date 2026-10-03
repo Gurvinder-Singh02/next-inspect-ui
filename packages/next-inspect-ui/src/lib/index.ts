@@ -87,6 +87,9 @@ export type InspectUIProps = {
   ide?: InspectorIde
   tooltipProps?: Partial<TooltipProps>
   devSpotlightProps?: Partial<DevSpotlightProps>
+  popoverProps?: {
+    defaultTab?: "component" | "element"
+  }
 }
 
 export const INSPECTOR_COLORS: Record<

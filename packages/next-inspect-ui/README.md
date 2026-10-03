@@ -33,10 +33,10 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 | hover | show the element's tag and source file |
 | click | open that line in your editor |
 | ⌥ hold | climb to the component that rendered it |
-| ⌥ ⇧ | climb another level |
-| `[` `]` | move to the parent / child element |
-| `Space` | toggle the info panel — node tree, CSS |
-| `↑` `↓` | while info is open, climb the node tree |
+| `[` / `{` · `]` / `}` | move to the parent / child element |
+| `Space` | toggle the popover — Component and Element trees |
+| `↑` `↓` | select tree rows when the popover is open; otherwise move between siblings |
+| `←` `→` | switch tabs when the popover is open; otherwise move between siblings |
 | `Esc` | exit |
 
 ## Props
@@ -44,6 +44,9 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 | prop | type | |
 |---|---|---|
 | `projectRoot` | `string` | absolute path your source is under |
+| `popoverProps` | `{ defaultTab?: "component" \| "element" }` | initial tree tab; defaults to `"component"` |
+
+The Component tab shows immediate ancestors through the page, stopping before layouts and the app shell. The Element tab shows 1–15 nested HTML nodes, prioritizing siblings, then parents, then children. Use `popoverProps={{ defaultTab: "element" }}` to start on Element. Shift does not climb.
 
 Settings — editor, colours, spotlight and tooltip styling — are configurable
 at runtime through the overlay's own settings panel.
@@ -117,3 +120,5 @@ It is local-only. Do not add `.pnpm-store` or `todo-next-inspect-ui.md`.
 ## License
 
 MIT
+
+In the Element tab, Up/Down previews HTML elements with a half-opacity red highlight, without a ghost tooltip. Enter selects the preview; Enter again opens its source. Click `…` to select an element directly. The Component tree starts at the hovered element and follows its immediate parents up to the page/layout boundary.

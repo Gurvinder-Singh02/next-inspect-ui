@@ -2,7 +2,7 @@ export const SITE_NAME = "Next Inspect UI"
 export const SITE_TAGLINE = "Never search for Next.js components again"
 export const SITE_TITLE = `${SITE_NAME} | Inspect`
 export const SITE_DESCRIPTION =
-  "Inspect any React or Next.js element in your browser and jump directly to its source in your IDE. Works with compound components too. Hold Option and press Shift to move up the hierarchy."
+  "Inspect any React or Next.js element in your browser and jump directly to its source in your IDE. Works with compound components too. Hold Option to select the owning component. Press Space to browse Component and Element trees."
 export const OG_IMAGE = {
   url: "/og.png",
   width: 1440,

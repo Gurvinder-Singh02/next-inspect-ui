@@ -23,7 +23,7 @@ Cursor / VS Code
 ```
 
 Browser code uses source maps. Server code can use Next.js's stack-frame endpoint.
-An editor link opens the file directly. Hold ⌥ to climb owners; press Space for the info panel.
+An editor link opens the file directly. Hold ⌥ to select the owning component; press Space for Component and Element trees. Left/Right switches tabs and Up/Down selects rows.
 
 ```
 packages/next-inspect-ui              published library
@@ -66,3 +66,5 @@ Run `bun run typecheck:compat` to check all test apps. Each app has a matching `
 ## Inspector comparison
 
 Run `bun run dev:competitor` and open [localhost:3104](http://localhost:3104). `apps/competitor` has a dashboard with nested components, a searchable/filterable project table, a chart, a dialog, and server-rendered activity. Use the **Library** selector to compare Next Inspect UI, Show Component, React Grab, and Click to React Component. Switching reloads the page, keeping just one inspector loaded. This app is separate from the four-app `dev:test` launcher.
+
+In the Element tab, Up/Down previews HTML elements with a half-opacity red highlight, without a ghost tooltip. Enter selects the preview; Enter again opens its source. Click `…` to select an element directly. The Component tree starts at the hovered element and follows its immediate parents up to the page/layout boundary.

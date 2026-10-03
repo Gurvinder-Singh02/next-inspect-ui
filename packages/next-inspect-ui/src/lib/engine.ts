@@ -13,7 +13,7 @@ const getElementFiber = <T = unknown>(element: Element): T | null => {
 export const isInspectorChrome = (element: Element) =>
   Boolean(
     element.closest(
-      "[data-dev-inspector-overlay], [data-dev-inspector-tooltip], [data-dev-inspector-info], [data-dev-inspector-log], [data-dev-inspector-debug-toggle]"
+      "[data-dev-inspector-ghost-overlay], [data-dev-inspector-ghost-tooltip], [data-dev-inspector-overlay], [data-dev-inspector-tooltip], [data-dev-inspector-info], [data-dev-inspector-log], [data-dev-inspector-debug-toggle]"
     )
   )
 
@@ -302,6 +302,7 @@ const FRAMEWORK_EXACT = new Set([
   "RedirectErrorBoundary", "NotFoundBoundary", "NotFoundErrorBoundary", "RootErrorBoundary",
   "ReactStrictMode", "StrictMode", "ClientPageRoot", "ServerRoot", "AppDevOverlay",
   "AppDevOverlayErrorBoundary",
+  "ScrollAndMaybeFocusHandler", "InnerScrollAndFocusHandlerOld", "DevLayout",
 ])
 
 export const isFrameworkInspectorName = (name: string) =>
@@ -355,6 +356,37 @@ export const getNamedTarget = (fiber: ReactFiber | null): NamedTarget | null => 
     }
   }
   return null
+}
+
+// A route's page is the last content component; layouts own the app shell.
+const isPopoverLayout = (name: string) => name === "Layout" || /Layout$/.test(name)
+const isPopoverPage = (name: string) => name === "Page" || /Page$/.test(name)
+
+/** Immediate ancestry within the route, without walking into the app shell. */
+export const getPopoverComponentAncestors = (fiber: ReactFiber): NamedTarget[] => {
+  const ancestors: NamedTarget[] = []
+  const seenFibers = new Set<ReactFiber>()
+  const seenInfo = new Set<ServerDebugInfo>()
+  for (let current: ReactFiber | null = fiber; current && !seenFibers.has(current); current = current.return ?? current._debugOwner ?? null) {
+    seenFibers.add(current)
+    const rawName = isCompositeComponentFiber(current) ? readFiberComponentName(current) : null
+    if (rawName && isPopoverLayout(rawName)) break
+    const name = !isTransparentClimbFiber(current) ? rawName : null
+    const component = name && !isFrameworkInspectorName(name) ? { name, fiber: current } : null
+    if (component) ancestors.push(component)
+    for (const info of [...(current._debugInfo ?? [])].reverse()) {
+      if (seenInfo.has(info)) continue
+      seenInfo.add(info)
+      if (info.name && isPopoverLayout(info.name)) return ancestors
+      if (!info.name || isFrameworkInspectorName(info.name)) continue
+      const existing = ancestors.find(ancestor => ancestor.fiber === current && ancestor.name === info.name)
+      if (existing) existing.debugInfo = info
+      else ancestors.push({ name: info.name, fiber: current, debugInfo: info })
+      if (isPopoverPage(info.name)) return ancestors
+    }
+    if (name && isPopoverPage(name)) break
+  }
+  return ancestors
 }
 
 const FRAGMENT_TAG = 7

@@ -8,7 +8,7 @@ import { Kbd } from "@/components/ui/kbd"
 export const metadata: Metadata = {
   title: "Walkthrough",
   description:
-    "Hover any node to see the component name. Click or Enter opens the code where it’s defined. Hold Option and press Shift to climb. Learn more in Shortcuts.",
+    "Hover any node to see the component name. Click or Enter opens the code where it’s defined. Hold Option to select the owning component. Press Space to browse the trees. Learn more in Shortcuts.",
   alternates: { canonical: "/walkthrough" },
 }
 
@@ -32,12 +32,9 @@ export default function WalkthroughPage() {
             <Kbd className="align-middle">
               <Option />
             </Kbd>{" "}
-            on a compound component to see where it’s used. Press{" "}
-            <Kbd className="align-middle">Shift</Kbd> while holding{" "}
-            <Kbd className="align-middle">
-              <Option />
-            </Kbd>{" "}
-            to climb up.
+            on a compound component to see where it’s used. Open the tree
+            popover with <Kbd className="align-middle">Space</Kbd> to select
+            other ancestors.
           </p>
           <p>
             Press <Kbd className="align-middle">[</Kbd> to go to the parent
