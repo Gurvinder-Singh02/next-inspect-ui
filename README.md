@@ -28,9 +28,12 @@ An editor link opens the file directly. Hold ⌥ to climb owners; press Space fo
 ```
 packages/next-inspect-ui              published library
 packages/test-cases                   library unit tests
-apps/test                            /test suite and cases
-apps/example-01                      dashboard with InspectUI installed
-site                                  marketing
+apps/nextjs                          dashboard with InspectUI
+apps/test-next-js                    Next.js / Turbopack suite
+apps/test-next-js-webpack            Next.js / Webpack suite
+apps/test-vite-react-19              Vite / React 19 suite
+apps/test-react-18                   Vite / React 18 suite
+site                                marketing
 ```
 
 ```bash
@@ -42,17 +45,20 @@ bun run dev:test     # /test suite
 bun run dev:example  # dashboard
 ```
 
-## Compatibility apps
+## Test apps
 
-| App | Stack | Run | URL |
+| App | Stack | Command | Port |
 |---|---|---|---|
-| `apps/test` | Next.js 16 + React 19, Turbopack | `bun run dev:test` | `/test` on port 3000 |
-| `apps/test-next-js` | Next.js 16 + React 19, Webpack | `bun run dev:test-next-js` | `/test` on port 3002 |
-| `apps/test-vite-react` | React 19 + Vite | `bun run dev:test-vite-react` | `/test` on port 5173 |
-| `apps/test-react-18` | React 18 + Vite, experimental | `bun run dev:test-react-18` | `/test` on port 5174 |
+| `apps/nextjs` | Dashboard example | `bun run dev:nextjs` | 3102 |
+| `apps/test-next-js` | Next.js 16 + React 19, Turbopack | `bun run dev:test-next-js` | 3000 |
+| `apps/test-next-js-webpack` | Next.js 16 + React 19, Webpack | `bun run dev:test-next-js-webpack` | 3002 |
+| `apps/test-vite-react-19` | React 19 + Vite | `bun run dev:test-vite-react-19` | 5173 |
+| `apps/test-react-18` | React 18 + Vite, experimental | `bun run dev:test-react-18` | 5174 |
 
-Click **Run all** in each app to compare exact node names and source lines. The Vite apps cover browser components; Server Component cases live in the Next.js apps. React 18 is a compatibility test target, not a change to the library’s React 19+ support.
+Open `/test` in any test app. Every suite uses the same header, group controls, case layout, source panels, and expected/result logs. The Next.js suites have 20 cases; Vite has the same 17 browser cases. The three Server Component cases require Next.js. Vite uses native links in place of Next.js links.
 
-Initial checks: Vite + React 19 passes 8/8. React 18 passes 3/8; Next.js + Webpack passes 0/20 because source locations do not resolve. These apps expose compatibility gaps; their existence does not imply full support.
+`apps/test-next-js` is the canonical UI. Run `bun run sync:test-ui` after changing its suite components or styles to update all test apps. Fixture files and exact source expectations remain local to each app.
 
-Run `bun run typecheck:compat` to check all three apps. Each has a matching `build:test-*` command.
+React 18 is a compatibility target; the library still declares React 19+ support. A runnable app does not imply every inspection case passes.
+
+Run `bun run typecheck:compat` to check all test apps. Each app has a matching `build:<app-name>` command. `dev:test` and `dev:example` remain aliases for `dev:test-next-js` and `dev:nextjs`.
