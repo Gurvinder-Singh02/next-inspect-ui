@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 
 import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, setInspectorSettings, subscribeInspectorSettings, type InspectUIProps } from "./lib/index.ts"
-import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isOwnerAncestorOf, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
+import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isPointInRect, openInEditor, preferredSourceFromFrames, readComponentTypeName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
 import { createOpenSourceIcon } from "./lib/icons.ts"
 import overlayCss from "./styles/overlay.css"
 import {
@@ -328,7 +328,7 @@ export const InspectUI = ({
       let child: ReactFiber, parent: ReactFiber | null = null
       if (isHostHover) {
         const owner = getDirectClimbOwner(fiber)
-        if (!owner || (!owner.isSelfDebugOwner && !isDirectFiberChildOf(fiber, owner.fiber) && !isOwnerAncestorOf(fiber, owner.fiber))) return []
+        if (!owner || (!owner.isSelfDebugOwner && !isDirectFiberChildOf(fiber, owner.fiber))) return []
         const resolved = resolveClimbStepSync(owner.fiber, fiber, owner.debugInfo)
         steps.push({ name: owner.name, source: resolved.source, definition: resolved.definition, parentFiber: owner.fiber, debugInfo: resolved.debugInfo })
         seen.add(owner.fiber)
@@ -342,7 +342,7 @@ export const InspectUI = ({
         }
         child = owner.fiber
         parent = findNextNamedOwner(child)
-        if (!parent || (!isDirectFiberChildOf(child, parent) && !isOwnerAncestorOf(child, parent))) {
+        if (!parent || !isDirectFiberChildOf(child, parent)) {
           appendRscOwnerSteps(steps, fiber, owner.fiber, seenNames)
           if (steps.length > 0) ownerChainCache.set(fiber, steps)
           return steps
@@ -350,13 +350,13 @@ export const InspectUI = ({
       } else {
         const named = getNamedTarget(fiber)?.fiber ?? fiber
         parent = findNextNamedOwner(named)
-        if (!parent || (!isDirectFiberChildOf(named, parent) && !isOwnerAncestorOf(named, parent))) return []
+        if (!parent || !isDirectFiberChildOf(named, parent)) return []
         child = named
       }
       for (let hops = 0; parent && hops < 32; hops += 1) {
         if (seen.has(parent)) break
         seen.add(parent)
-        if (!isDirectFiberChildOf(child, parent) && !isOwnerAncestorOf(child, parent)) break
+        if (!isDirectFiberChildOf(child, parent)) break
         const name = readFiberDisplayName(parent)
         if (!name || isFrameworkInspectorName(name) || (seenNames.has(name) && seen.has(parent))) break
         const debugInfo = [...(parent._debugInfo ?? []), ...(child._debugInfo ?? [])]
@@ -368,7 +368,7 @@ export const InspectUI = ({
         if (isRouteFileBoundary(resolved.source, name) || isRouteFileBoundary(resolved.definition, name) || isClimbUsageBoundary({ usage: resolved.source, definition: resolved.definition })) break
         child = parent
         const next = findNextNamedOwner(parent)
-        if (!next || (!isDirectFiberChildOf(parent, next) && !isOwnerAncestorOf(parent, next))) {
+        if (!next || !isDirectFiberChildOf(parent, next)) {
           appendRscOwnerSteps(steps, child, parent, seenNames)
           break
         }
@@ -690,7 +690,9 @@ export const InspectUI = ({
       const climbStep = infoClimbSelection?.step ?? null
       const climbDepth = infoClimbSelection?.depth ?? 0
       const hostTag = getDomHoverName(fiber) ?? "element"
-      const chain = buildOwnerChain(fiber)
+      const hostSource = (await resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)) ?? getHostAuthorSource(fiber, projectRoot)
+      const chain = await refineOwnerChain(fiber, hostSource)
+      if (!infoVisible || infoTarget !== target) return
       info.textContent = ""
       info.append(
         mk("div", "data-dev-inspector-info-title", climbStep ? formatComponentTag(climbStep.name) : formatDomTag(hostTag)),
@@ -702,7 +704,7 @@ export const InspectUI = ({
       infoSourceBox = sourceContainer
       infoTreeChain = chain
       const climbTree = chain.length
-        ? createClimbTreeSection(hostTag, getHostAuthorSource(fiber, projectRoot), chain, climbStep ? climbDepth : -1)
+        ? createClimbTreeSection(hostTag, hostSource, chain, climbStep ? climbDepth : -1)
         : null
       infoTreeMove = climbTree?.moveSelection ?? null
       if (climbTree) info.append(climbTree.section)
@@ -712,7 +714,6 @@ export const InspectUI = ({
       reposition()
       climbTree?.refinePaths(refineInfoStep)
       try {
-        const hostSource = (await resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)) ?? getHostAuthorSource(fiber, projectRoot)
         if (!infoVisible || infoTarget !== target) return
         climbTree?.setHostSource(hostSource)
         if (climbStep) {
@@ -763,6 +764,16 @@ export const InspectUI = ({
       }
     }
 
+
+    const refineOwnerChain = async (fiber: ReactFiber, host: SourceLocation | null) => {
+      const chain = buildOwnerChain(fiber)
+      await Promise.all(chain.map((step) => refineClimbStep(step)))
+      const boundary = chain.findIndex((step) => isRouteFileBoundary(step.source, step.name) || isClimbUsageBoundary({
+        usage: step.source, definition: step.definition, host,
+      }))
+      if (boundary >= 0) chain.splice(boundary + 1)
+      return chain
+    }
 
     let logOptionPress: (() => void) | null = null
     let walkOwnerChain: ((delta: number) => void) | null = null
@@ -907,8 +918,7 @@ export const InspectUI = ({
           if (loc) cache.set(fiber, formatPageLabel(loc, projectRoot)); else cache.delete(fiber)
         }
         setPath(instantHostPathCache, hostSource); setPath(instantDefinedPathCache, definition); setPath(instantUsedPathCache, usage)
-        const chain = buildOwnerChain(fiber)
-        await Promise.all(chain.map((step) => refineClimbStep(step)))
+        const chain = await refineOwnerChain(fiber, hostSource)
         if (stale()) return
         if (!hostSource && !definition && !usage && chain.every((s) => !s.source)) {
           setTooltipLabel("Source unavailable"); if (lastTargetRect) positionTooltip(lastTargetRect); return
@@ -1201,7 +1211,7 @@ export const InspectUI = ({
         event.preventDefault(); event.stopPropagation(); void openSource(fiber)
         return
       }
-      if (event.code === "KeyI" || event.key === "i" || event.key === "I") {
+      if (event.code === "Space" || event.key === " ") {
         if (!hoveredElement) return
         event.preventDefault()
         if (infoVisible && infoTarget === hoveredElement) { hideInfo(); return }
@@ -1307,8 +1317,7 @@ export const InspectUI = ({
       const fiber = getFiber(resolved)
       if (!fiber) return null
       const hostSource = (await resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)) ?? getHostAuthorSource(fiber, projectRoot)
-      const chain = buildOwnerChain(fiber)
-      await Promise.all(chain.map((step) => refineClimbStep(step)))
+      const chain = await refineOwnerChain(fiber, hostSource)
       const hostTag = getDomHoverName(fiber) ?? resolved.tagName.toLowerCase()
       const labelOf = (source: SourceLocation | null) => (source ? formatPageLabel(source, projectRoot) : null)
       const nodes = [
@@ -1347,4 +1356,3 @@ export const InspectUI = ({
 
   return null
 }
-

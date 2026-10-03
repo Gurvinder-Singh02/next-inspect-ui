@@ -1,9 +1,9 @@
-# shadcn-dashboard-001-example
+# example-01
 
 Dashboard app with `next-inspect-ui` installed.
 
 ```bash
-pnpm --filter shadcn-dashboard-001-example dev
+bun run dev:example
 ```
 
 Press ⌥ + X, then hover anything on the dashboard.

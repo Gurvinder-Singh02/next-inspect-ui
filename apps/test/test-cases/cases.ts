@@ -1,5 +1,5 @@
 /**
- * Manual expected NODE TREE cases for apps/next-js-example.
+ * Manual expected NODE TREE cases for apps/test.
  * Edit by hand — pin from live inspect
  * (`window.__inspectUI.inspect` → `nodes[].source`;
  * `.cursor/skills/match-expected-case`).
@@ -209,6 +209,7 @@ export const radixSlotTargets: AccuracyTarget[] = [
     id: "anchor",
     label: "Slot anchor",
     nodes: [
+      { name: "Clickable", file: RADIX, line: 44 },
       { name: "Slot.Slot", file: RADIX, line: 31 },
       { name: "a", file: RADIX, line: 45 },
     ],
@@ -217,6 +218,8 @@ export const radixSlotTargets: AccuracyTarget[] = [
     id: "link",
     label: "Slot link",
     nodes: [
+      { name: "Clickable", file: RADIX, line: 50 },
+      { name: "Slot.Slot", file: RADIX, line: 31 },
       { name: "LinkComponent", file: RADIX, line: 51 },
       { name: "a", file: RADIX, line: 51 },
     ],
@@ -244,6 +247,7 @@ export const kindsForwardRefTargets: AccuracyTarget[] = [
     id: "compound",
     label: "compound",
     nodes: [
+      { name: "CompoundDemo", file: TEST_PAGE, line: 279 },
       { name: "Panel", file: KINDS, line: 137 },
       { name: "div", file: KINDS, line: 113 },
     ],

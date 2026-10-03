@@ -20,6 +20,10 @@ import { underStackTransform } from "../../next-inspect-ui/src/lib/tooltip.ts"
 
 const loc = (filePath: string) => ({ filePath, line: 1, column: 1 })
 
+test("does not send browser chunks through server stack-frame resolution", () => {
+  assert.equal(isReactServerStackFile("http://localhost:3000/_next/static/chunks/app.js"), false)
+})
+
 test("stops once usage is a project file distinct from the definition", () => {
   assert.equal(
     isClimbUsageBoundary({
@@ -134,6 +138,15 @@ const BASE_UI_HOST_STACK = `Error: react-stack-top-frame
 
 const link = (partial: Partial<ReactFiber> & { tag: number }): ReactFiber =>
   partial as ReactFiber
+
+test("a debug owner cannot bypass a wrapping host when climbing", () => {
+  const owner = link({ tag: 0, type: { name: "Card" } })
+  const wrapper = link({ tag: 5, return: owner })
+  const child = link({ tag: 0, type: { name: "Button" }, return: wrapper, _debugOwner: owner })
+  assert.equal(isDirectFiberChildOf(child, owner), false)
+  child.return = owner
+  assert.equal(isDirectFiberChildOf(child, owner), true)
+})
 
 test("climbs past a vendor Button primitive to the project Button wrapper", () => {
   const host = link({

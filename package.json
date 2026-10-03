@@ -3,15 +3,15 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter site dev",
-    "dev:example": "pnpm --filter next-js-example dev",
-    "dev:dashboard": "pnpm --filter shadcn-dashboard-001-example dev",
+    "dev:test": "bun run --cwd apps/test dev",
+    "dev:example": "bun run --cwd apps/example-01 dev",
     "dev:lib": "pnpm --filter next-inspect-ui dev",
     "build": "pnpm --filter next-inspect-ui build",
     "build:site": "pnpm --filter next-inspect-ui build && pnpm --filter site build",
-    "build:example": "pnpm --filter next-js-example build",
-    "build:dashboard": "pnpm --filter shadcn-dashboard-001-example build",
+    "build:test": "pnpm --filter test build",
+    "build:example": "pnpm --filter example-01 build",
     "test": "pnpm --filter @next-inspect-ui/test-cases test",
-    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter @next-inspect-ui/test-cases typecheck && pnpm --filter site typecheck && pnpm --filter next-js-example typecheck && pnpm --filter shadcn-dashboard-001-example typecheck"
+    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter @next-inspect-ui/test-cases typecheck && pnpm --filter site typecheck && pnpm --filter test typecheck && pnpm --filter example-01 typecheck"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
