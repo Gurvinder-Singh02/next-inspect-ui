@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter site dev",
-    "dev:test": "bun run dev:test-next-js",
+    "dev:test": "bun run scripts/dev-tests.ts",
     "dev:example": "bun run dev:nextjs",
     "dev:lib": "pnpm --filter next-inspect-ui dev",
     "build": "pnpm --filter next-inspect-ui build",

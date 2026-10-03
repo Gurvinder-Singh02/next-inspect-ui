@@ -41,7 +41,7 @@ pnpm install
 pnpm --filter next-inspect-ui build
 pnpm test           # library unit tests
 pnpm dev            # site
-bun run dev:test     # /test suite
+bun run dev:test     # all four test apps
 bun run dev:example  # dashboard
 ```
 
@@ -50,7 +50,7 @@ bun run dev:example  # dashboard
 | App | Stack | Command | Port |
 |---|---|---|---|
 | `apps/nextjs` | Dashboard example | `bun run dev:nextjs` | 3102 |
-| `apps/test-next-js` | Next.js 16 + React 19, Turbopack | `bun run dev:test-next-js` | 3000 |
+| `apps/test-next-js` | Next.js 16 + React 19, Turbopack | `bun run dev:test-next-js` | 3001 |
 | `apps/test-next-js-webpack` | Next.js 16 + React 19, Webpack | `bun run dev:test-next-js-webpack` | 3002 |
 | `apps/test-vite-react-19` | React 19 + Vite | `bun run dev:test-vite-react-19` | 5173 |
 | `apps/test-react-18` | React 18 + Vite, experimental | `bun run dev:test-react-18` | 5174 |
@@ -61,4 +61,4 @@ Open `/test` in any test app. Every suite uses the same header, group controls, 
 
 React 18 is a compatibility target; the library still declares React 19+ support. A runnable app does not imply every inspection case passes.
 
-Run `bun run typecheck:compat` to check all test apps. Each app has a matching `build:<app-name>` command. `dev:test` and `dev:example` remain aliases for `dev:test-next-js` and `dev:nextjs`.
+Run `bun run typecheck:compat` to check all test apps. Each app has a matching `build:<app-name>` command. `bun run dev:test` starts all four test apps on ports 3001, 3002, 5173, and 5174. Press Ctrl+C to stop them together. If a port is busy, the launcher stops before starting any apps. `dev:example` remains an alias for `dev:nextjs`.

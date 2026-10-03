@@ -41,7 +41,7 @@ pnpm run dev
 
 This runs `pnpm --filter site dev`, starting the marketing site on port 3000.
 
-Use `bun run dev:test-next-js` for `/test` and `bun run dev:nextjs` for the dashboard. The Next.js suite uses port 3000; the dashboard uses port 3102.
+Use `bun run dev:test-next-js` for `/test` and `bun run dev:nextjs` for the dashboard. The Next.js suite uses port 3001; the dashboard uses port 3102.
 
 **Ready signal**: Look for `✓ Ready in` followed by the local URL.
 
