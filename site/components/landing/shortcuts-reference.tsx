@@ -51,7 +51,7 @@ const SHORTCUTS: KeyboardShortcut[] = [
       "While holding ⌥, press ⇧ to climb another owner level. At the top, hop to the next parent that has a climb.",
   },
   {
-    keys: ["I"],
+    keys: ["Space"],
     type: "panel",
     description:
       "Toggle the info panel — node tree, source links, and CSS.",

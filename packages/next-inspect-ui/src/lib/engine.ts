@@ -119,7 +119,6 @@ export const isReactServerStackFile = (filePath: string) => {
   const file = filePath.replace(/\\/g, "/")
   return (
     file.startsWith("about://React/Server/") ||
-    file.includes("/_next/") ||
     file.includes(".next/server") ||
     file.includes(".next/dev/server") ||
     file.includes("/ssr/")
@@ -720,7 +719,6 @@ const stackCol = (r: Record<string, unknown>, fallback = 1) =>
   (["columnNumber", "column1", "column"] as const).map((k) => r[k]).find(stackNum) ?? fallback
 const stackServer = (file: string) =>
   file.startsWith("about://React/Server/") ||
-  file.includes("/_next/") ||
   file.includes(".next/server")
 
 const frameFromRecord = (record: Record<string, unknown>): StackFrame | null => {

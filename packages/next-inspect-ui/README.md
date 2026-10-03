@@ -35,7 +35,7 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 | ⌥ hold | climb to the component that rendered it |
 | ⌥ ⇧ | climb another level |
 | `[` `]` | move to the parent / child element |
-| `I` | open the info panel — node tree, CSS |
+| `Space` | toggle the info panel — node tree, CSS |
 | `↑` `↓` | while info is open, climb the node tree |
 | `Esc` | exit |
 

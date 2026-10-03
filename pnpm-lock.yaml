@@ -21,7 +21,7 @@ importers:
         specifier: ^1.62.1
         version: 1.62.1
 
-  apps/next-js-example:
+  apps/test:
     dependencies:
       '@base-ui/react':
         specifier: ^1.6.0
@@ -169,7 +169,7 @@ importers:
         specifier: ^5
         version: 5.9.3
 
-  apps/shadcn-dashboard-001-example:
+  apps/example-01:
     dependencies:
       '@base-ui/react':
         specifier: ^1.6.0
