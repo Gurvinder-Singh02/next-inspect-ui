@@ -6,7 +6,7 @@ import { nodeMatches, scoreNodes } from "./match.ts"
 test("matches file and optional line", () => {
   assert.equal(
     nodeMatches(
-      { name: "button", source: "components/ui/button.tsx:50" },
+      { name: "button", source: "components/ui/button.tsx:52" },
       { name: "button", file: "components/ui/button.tsx", line: 52 }
     ),
     true
@@ -35,7 +35,7 @@ test("100% when both nodes match", () => {
     ],
     [
       { name: "Button", source: "app/(dev)/test/page.tsx:48" },
-      { name: "button", source: "components/ui/button.tsx:50" },
+      { name: "button", source: "components/ui/button.tsx:52" },
     ]
   )
   assert.equal(report.ok, true)

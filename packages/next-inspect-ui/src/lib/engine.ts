@@ -121,6 +121,7 @@ export const isReactServerStackFile = (filePath: string) => {
     file.startsWith("about://React/Server/") ||
     file.includes(".next/server") ||
     file.includes(".next/dev/server") ||
+    file.includes("/(rsc)/") ||
     file.includes("/ssr/")
   )
 }
@@ -263,6 +264,7 @@ export type ReactFiber = {
   _debugStack?: Error | string; return?: ReactFiber | null; child?: ReactFiber | null; tag?: number
   stateNode?: unknown; memoizedProps?: { className?: unknown; class?: unknown } | null
   type?: { displayName?: string; name?: string }
+  elementType?: { displayName?: string; name?: string }
 }
 
 type NamedTarget = { name: string; fiber: ReactFiber; debugInfo?: ServerDebugInfo }
@@ -283,6 +285,9 @@ export const readComponentTypeName = (type: ReactFiber["type"]): string | null =
   const candidate = w.displayName ?? w.name ?? w.render?.displayName ?? w.render?.name ?? w.type?.displayName ?? w.type?.name
   return typeof candidate === "string" && candidate ? candidate : null
 }
+
+export const readFiberComponentName = (fiber: ReactFiber): string | null =>
+  fiber.elementType?.displayName || readComponentTypeName(fiber.type)
 
 export const isCompositeComponentFiber = (fiber: ReactFiber) =>
   [0, 1, 11, 14, 15].includes(fiber.tag ?? -1)
@@ -337,8 +342,9 @@ const getHostTagName = (fiber: ReactFiber | null): string | null => {
 
 export const getNamedTarget = (fiber: ReactFiber | null): NamedTarget | null => {
   for (let current = fiber; current; current = current.return ?? null) {
+    if (isTransparentClimbFiber(current)) continue
     if (isCompositeComponentFiber(current)) {
-      const name = readComponentTypeName(current.type)
+      const name = readFiberComponentName(current)
       if (name && !isFrameworkInspectorName(name)) return { name, fiber: current }
     }
     if (current._debugInfo?.length) {
@@ -383,31 +389,34 @@ const firstNonWrapperChild = (fiber: ReactFiber): ReactFiber | null => {
   return child
 }
 
-const hostStackBuiltByVendor = (host: ReactFiber, componentName: string) => {
+const hostStackBuiltByVendor = (host: ReactFiber) => {
   const stack = readStackText(host)
   if (!stack) return false
   for (const line of stack.split("\n")) {
     const match = line.match(/at\s+(?:Object\.)?(\S+)\s+\((.+)\)$/)
     if (!match) continue
-    if (!frameMatchesComponent(match[1], componentName)) continue
+    if (/^(?:exports\.)?(?:createElement|jsxDEV|jsx|jsxs)$/.test(match[1]) || /react[_-]stack/.test(match[1])) continue
     const file = match[2].replace(/:\d+:\d+$/, "")
-    if (isVendorModulePath(file)) return true
+    return isVendorModulePath(file)
   }
   return false
 }
 
 const isVendorHostBuilder = (fiber: ReactFiber) => {
   if (!isCompositeComponentFiber(fiber)) return false
-  const name = readComponentTypeName(fiber.type)
+  const name = readFiberComponentName(fiber)
   if (!name) return false
   const child = firstNonWrapperChild(fiber)
   if (!child || !isHostComponentFiber(child)) return false
-  return hostStackBuiltByVendor(child, name)
+  // React 18 has no creation stacks for hosts made by vendor createElement calls.
+  if (!readStackText(child) && !child._debugSource && fiber._debugOwner &&
+    readFiberComponentName(fiber._debugOwner) === name) return true
+  return hostStackBuiltByVendor(child)
 }
 
 const isTransparentClimbFiber = (fiber: ReactFiber) => {
   if (!isCompositeComponentFiber(fiber)) return false
-  const name = readComponentTypeName(fiber.type)
+  const name = readFiberComponentName(fiber)
   if (name && isMotionFactoryName(name)) return true
   if (!name || !isVendorHostBuilder(fiber)) return false
 
@@ -417,7 +426,7 @@ const isTransparentClimbFiber = (fiber: ReactFiber) => {
       current = current.return ?? null
       continue
     }
-    const currentName = readComponentTypeName(current.type)
+    const currentName = readFiberComponentName(current)
     if (currentName && isMotionFactoryName(currentName)) {
       current = current.return ?? null
       continue
@@ -452,7 +461,7 @@ const getOwningCompositeFiber = (hostFiber: ReactFiber): ReactFiber | null => {
     }
 
     if (isCompositeComponentFiber(current)) {
-      const name = readComponentTypeName(current.type)
+      const name = readFiberComponentName(current)
       if (name && !isFrameworkInspectorName(name)) return current
       current = current.return ?? null
       continue
@@ -530,7 +539,7 @@ const getLabelOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
 
   const composite = getOwningCompositeFiber(hostFiber)
   if (!composite) return null
-  const name = readComponentTypeName(composite.type)
+  const name = readFiberComponentName(composite)
   if (!name || isFrameworkInspectorName(name)) return null
   return { name, fiber: composite, isSelfDebugOwner: false }
 }
@@ -545,7 +554,7 @@ export const getDirectClimbOwner = (hostFiber: ReactFiber): ClimbOwner | null =>
   let hops = 0
   while (owner && hops < 12) {
     hops += 1
-    const name = readComponentTypeName(owner.type)
+    const name = readFiberComponentName(owner)
     if (name && (isMotionFactoryName(name) || isTransparentClimbFiber(owner))) {
       owner = owner._debugOwner ?? null
       continue
@@ -616,7 +625,7 @@ const getMotionFactoryName = (fiber: ReactFiber | null): string | null => {
     }
     if (isHostComponentFiber(current)) return null
     if (isCompositeComponentFiber(current)) {
-      const name = readComponentTypeName(current.type)
+      const name = readFiberComponentName(current)
       if (name && isMotionFactoryName(name)) return name
       return null
     }
@@ -639,7 +648,7 @@ const getDebugSourceUntil = (start: ReactFiber | null, stop: ReactFiber | null):
   return null
 }
 
-const parseDebugStack = (stack: string) => {
+export const parseDebugStack = (stack: string) => {
   const frames: StackFrame[] = []
   const frameKeys = new Set<string>()
   const push = (frame: StackFrame) => {
@@ -653,7 +662,7 @@ const parseDebugStack = (stack: string) => {
       continue
     }
     let match = line.match(
-      /((?:about:\/\/React\/Server\/)?(?:file|https?):\/\/[^\s)]+?):(\d+):(\d+)\)?$/
+      /((?:about:\/\/React\/Server\/)?(?:file|https?|webpack-internal|webpack):\/\/[^\s]+?):(\d+):(\d+)\)?$/
     )
     if (!match) {
       match = line.match(
@@ -959,7 +968,7 @@ const resolveUsageSourceSync = (
     accept(sourceFromFiberDebugSource(node?._debugSource, projectRoot))
   const frame = (stackFrame: StackFrame) => sourceFromStackFrame(stackFrame, projectRoot)
   const component = target.fiber
-  const fromComponent = debug(component)
+  const fromComponent = sourceFromFiberDebugSource(component._debugSource, projectRoot)
   if (fromComponent) return fromComponent
   for (const stackFrame of getOwnStackFrames(component)) {
     const usage = frame(stackFrame)
@@ -1062,10 +1071,10 @@ const getSourceMapSection = (sections: SourceMapSection[], generatedLine: number
   return null
 }
 
-const resolveServerStackFrame = async (frame: StackFrame, projectRoot: string) => {
+const resolveNextStackFrame = async (frame: StackFrame, projectRoot: string) => {
   const response = await fetch("/__nextjs_original-stack-frames", {
     method: "POST",
-    body: JSON.stringify({ frames: [{ file: frame.file, methodName: frame.methodName, arguments: frame.arguments, line1: frame.line1, column1: frame.column1 }], isServer: true, isEdgeServer: false, isAppDirectory: true }),
+    body: JSON.stringify({ frames: [{ file: frame.file, methodName: frame.methodName, arguments: frame.arguments, line1: frame.line1, column1: frame.column1 }], isServer: frame.isServer, isEdgeServer: false, isAppDirectory: true }),
   })
   if (!response.ok) return null
   const [result] = (await response.json()) as OriginalFrameResult[]
@@ -1089,8 +1098,8 @@ const resolveFiberDebugSource = async (debugSource: FiberDebugSource | null | un
 const resolveStackFrame = async (frame: StackFrame, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
   const direct = sourceFromStackFrame(frame, projectRoot)
   if (direct) return direct
-  if (frame.isServer || frame.file.startsWith("about://React/Server/") || frame.file.includes(".next/server")) {
-    return resolveServerStackFrame(frame, projectRoot)
+  if (frame.isServer || frame.file.startsWith("webpack-internal:") || frame.file.startsWith("webpack://")) {
+    return resolveNextStackFrame(frame, projectRoot)
   }
   const sourceMapUrl = new URL(frame.file)
   sourceMapUrl.pathname = `${sourceMapUrl.pathname}.map`
@@ -1190,7 +1199,9 @@ export const resolveInstanceSource = async (
         : null
     )
   const component = target.fiber
-  const fromComponent = await debug(component)
+  const fromComponent = component._debugSource
+    ? await resolveFiberDebugSource(component._debugSource, projectRoot, sourceMapCache)
+    : null
   if (fromComponent) return fromComponent
   for (const stackFrame of getOwnStackFrames(component)) {
     try {

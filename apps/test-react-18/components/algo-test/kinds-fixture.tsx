@@ -190,3 +190,6 @@ export const LazyBox = () => (
     <LazyNote />
   </Suspense>
 )
+
+ForwardedInput.displayName = "ForwardedInput"
+MemoPill.displayName = "MemoPill"

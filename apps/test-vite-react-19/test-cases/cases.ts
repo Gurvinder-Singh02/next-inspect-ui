@@ -7,6 +7,7 @@
 import type { AccuracyNode, AccuracyTarget, SuiteCaseMeta } from "./types"
 
 const TEST_PAGE = "src/App.tsx"
+const LINK = "src/link.tsx"
 const BUTTON = "components/ui/button.tsx"
 const BADGE = "components/ui/badge.tsx"
 const CARD = "components/ui/card.tsx"
@@ -217,11 +218,10 @@ export const radixSlotTargets: AccuracyTarget[] = [
   {
     id: "link",
     label: "Slot link",
+    // The local Link host is defined in another file, which ends component climbing.
     nodes: [
-      { name: "Clickable", file: RADIX, line: 50 },
-      { name: "Slot.Slot", file: RADIX, line: 31 },
       { name: "LinkComponent", file: RADIX, line: 51 },
-      { name: "a", file: RADIX, line: 51 },
+      { name: "a", file: LINK, line: 4 },
     ],
   },
 ]
@@ -293,7 +293,7 @@ export const thirdPartyIconTargets: AccuracyTarget[] = [
     label: "Docs link",
     nodes: [
       { name: "LinkComponent", file: TEST_PAGE, line: 318 },
-      { name: "a", file: TEST_PAGE, line: 318 },
+      { name: "a", file: LINK, line: 4 },
     ],
   },
 ]
