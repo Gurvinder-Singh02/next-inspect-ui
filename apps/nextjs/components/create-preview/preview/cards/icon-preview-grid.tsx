@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+import { Card, CardContent } from "@/components/ui/card";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 const PREVIEW_ICONS = [
   {
@@ -116,7 +116,7 @@ const PREVIEW_ICONS = [
     phosphor: "GearIcon",
     remixicon: "RiSettingsLine",
   },
-] as const
+] as const;
 
 export function IconPreviewGrid() {
   return (
@@ -140,5 +140,5 @@ export function IconPreviewGrid() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

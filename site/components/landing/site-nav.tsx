@@ -26,7 +26,7 @@ export const SiteNav = ({ className }: { className?: string }) => {
       )}
     >
       <div className="flex justify-center lg:absolute lg:top-0 lg:left-0 xl:-left-20">
-        <div className="flex w-full max-w-3xl no-scrollbar flex-row overflow-scroll px-4 lg:flex-col whitespace-nowrap">
+        <div className="no-scrollbar flex w-full max-w-3xl flex-row overflow-scroll px-4 whitespace-nowrap lg:flex-col">
           {NAV_ITEMS.map((item) => {
             const isActive =
               item.href === "/"

@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Empty,
   EmptyContent,
@@ -7,8 +7,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/empty";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 export function EmptyConnectBank() {
   return (
@@ -27,8 +27,7 @@ export function EmptyConnectBank() {
           <EmptyHeader>
             <EmptyTitle>Connect Bank</EmptyTitle>
             <EmptyDescription>
-              Link your payout method to receive monthly royalty distributions
-              automatically.
+              Link your payout method to receive monthly royalty distributions automatically.
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
@@ -37,5 +36,5 @@ export function EmptyConnectBank() {
         </Empty>
       </CardContent>
     </Card>
-  )
+  );
 }

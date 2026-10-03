@@ -13,12 +13,8 @@ export default function ShortcutsPage() {
   return (
     <>
       <header className="flex flex-col gap-2">
-        <h1>
-          Shortcuts
-        </h1>
-        <p>
-          Keyboard and pointer controls while inspect mode is active.
-        </p>
+        <h1>Shortcuts</h1>
+        <p>Keyboard and pointer controls while inspect mode is active.</p>
       </header>
 
       <ShortcutsReference />

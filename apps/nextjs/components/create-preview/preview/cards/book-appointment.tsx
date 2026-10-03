@@ -1,11 +1,7 @@
-"use client"
+"use client";
 
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,13 +9,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 export function BookAppointment() {
   return (
@@ -33,13 +26,11 @@ export function BookAppointment() {
           <Field>
             <FieldLabel>Available on March 18, 2026</FieldLabel>
             <ToggleGroup spacing={2} defaultValue={["slot-0"]}>
-              {["9:00 AM", "10:30 AM", "11:00 AM", "1:30 PM"].map(
-                (time, index) => (
-                  <ToggleGroupItem key={time} value={`slot-${index}`}>
-                    {time}
-                  </ToggleGroupItem>
-                )
-              )}
+              {["9:00 AM", "10:30 AM", "11:00 AM", "1:30 PM"].map((time, index) => (
+                <ToggleGroupItem key={time} value={`slot-${index}`}>
+                  {time}
+                </ToggleGroupItem>
+              ))}
             </ToggleGroup>
           </Field>
         </FieldGroup>
@@ -52,5 +43,5 @@ export function BookAppointment() {
         <Button className="w-full">Book Appointment</Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

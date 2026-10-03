@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, XAxis } from "recharts"
+import { Bar, BarChart, XAxis } from "recharts";
 
 import {
   Card,
@@ -9,16 +9,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { useDesignSystemSearchParams } from "@/components/create-preview/search-params"
+} from "@/components/ui/chart";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { useDesignSystemSearchParams } from "@/components/create-preview/search-params";
 
 const chartData = [
   { hour: "6a", usage: 1.2 },
@@ -29,18 +29,18 @@ const chartData = [
   { hour: "4p", usage: 2.9 },
   { hour: "6p", usage: 3.8 },
   { hour: "8p", usage: 3.2 },
-]
+];
 
 const chartConfig = {
   usage: {
     label: "Usage (kW)",
     color: "var(--chart-2)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function PowerUsage() {
-  const [params] = useDesignSystemSearchParams()
-  const isRounded = !["lyra", "sera"].includes(params.style)
+  const [params] = useDesignSystemSearchParams();
+  const isRounded = !["lyra", "sera"].includes(params.style);
 
   return (
     <Card>
@@ -50,10 +50,7 @@ export function PowerUsage() {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <ChartContainer config={chartConfig} className="h-[140px] w-full">
-          <BarChart
-            data={chartData}
-            margin={{ left: 0, right: 0, top: 4, bottom: 0 }}
-          >
+          <BarChart data={chartData} margin={{ left: 0, right: 0, top: 4, bottom: 0 }}>
             <XAxis
               dataKey="hour"
               tickLine={false}
@@ -61,30 +58,19 @@ export function PowerUsage() {
               axisLine={false}
               className="text-xs"
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar
-              dataKey="usage"
-              fill="var(--color-usage)"
-              radius={isRounded ? [4, 4, 0, 0] : 0}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+            <Bar dataKey="usage" fill="var(--color-usage)" radius={isRounded ? [4, 4, 0, 0] : 0} />
           </BarChart>
         </ChartContainer>
         <Separator />
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm text-muted-foreground">
-              Currently Using
-            </span>
+            <span className="text-sm text-muted-foreground">Currently Using</span>
             <span className="text-lg font-semibold tabular-nums">3.4 kW</span>
           </div>
           <div className="flex flex-col gap-0.5">
             <span className="text-sm text-muted-foreground">Solar Gen</span>
-            <span className="text-lg font-semibold text-chart-1 tabular-nums">
-              +1.2 kW
-            </span>
+            <span className="text-lg font-semibold text-chart-1 tabular-nums">+1.2 kW</span>
           </div>
         </div>
       </CardContent>
@@ -96,5 +82,5 @@ export function PowerUsage() {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

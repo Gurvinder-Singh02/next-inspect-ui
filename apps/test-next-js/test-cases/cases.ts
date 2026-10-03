@@ -4,19 +4,19 @@
  * (`window.__inspectUI.inspect` → `nodes[].source`;
  * `.cursor/skills/match-expected-case`).
  */
-import type { AccuracyNode, AccuracyTarget, SuiteCaseMeta } from "./types"
+import type { AccuracyNode, AccuracyTarget, SuiteCaseMeta } from "./types";
 
-const TEST_PAGE = "app/(dev)/test/page.tsx"
-const BUTTON = "components/ui/button.tsx"
-const BADGE = "components/ui/badge.tsx"
-const CARD = "components/ui/card.tsx"
-const MOTION = "components/algo-test/motion-fixture.tsx"
-const LIBRARY = "components/algo-test/library-rendered-fixture.tsx"
-const RADIX = "components/algo-test/radix-fixture.tsx"
-const KINDS = "components/algo-test/kinds-fixture.tsx"
-const SERVER = "components/algo-test/server-fixture.tsx"
-const SERVER_BUTTON = "components/algo-test/server-button-fixture.tsx"
-const SVG = "components/algo-test/svg-fixture.tsx"
+const TEST_PAGE = "app/(dev)/test/page.tsx";
+const BUTTON = "components/ui/button.tsx";
+const BADGE = "components/ui/badge.tsx";
+const CARD = "components/ui/card.tsx";
+const MOTION = "components/algo-test/motion-fixture.tsx";
+const LIBRARY = "components/algo-test/library-rendered-fixture.tsx";
+const RADIX = "components/algo-test/radix-fixture.tsx";
+const KINDS = "components/algo-test/kinds-fixture.tsx";
+const SERVER = "components/algo-test/server-fixture.tsx";
+const SERVER_BUTTON = "components/algo-test/server-button-fixture.tsx";
+const SVG = "components/algo-test/svg-fixture.tsx";
 
 /** Sticky-header meta — keep in sync with cases rendered on /test. */
 export const TEST_CASE_META: SuiteCaseMeta[] = [
@@ -40,25 +40,21 @@ export const TEST_CASE_META: SuiteCaseMeta[] = [
   { id: "server-nested", title: "nested server cards", group: "server" },
   { id: "server-client-button", title: "server-wrapped client button", group: "server" },
   { id: "parent-inspectable-card", title: "card parent / child", group: "parent inspectable" },
-]
+];
 
-export const basicHtmlHeadingNodes: AccuracyNode[] = [
-  { name: "h1", file: TEST_PAGE, line: 82 },
-]
+export const basicHtmlHeadingNodes: AccuracyNode[] = [{ name: "h1", file: TEST_PAGE, line: 82 }];
 
-export const svgPlainNodes: AccuracyNode[] = [
-  { name: "rect", file: TEST_PAGE, line: 101 },
-]
+export const svgPlainNodes: AccuracyNode[] = [{ name: "rect", file: TEST_PAGE, line: 101 }];
 
 export const svgParentNodes: AccuracyNode[] = [
   { name: "SvgBars", file: TEST_PAGE, line: 119 },
   { name: "svg", file: SVG, line: 5 },
-]
+];
 
 export const shadcnPlainNodes: AccuracyNode[] = [
   { name: "Button", file: TEST_PAGE, line: 131 },
   { name: "button", file: BUTTON, line: 52 },
-]
+];
 
 export const shadcnVariantTargets: AccuracyTarget[] = [
   {
@@ -85,12 +81,12 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
       { name: "button", file: BUTTON, line: 52 },
     ],
   },
-]
+];
 
 export const shadcnNestedNodes: AccuracyNode[] = [
   { name: "Button", file: TEST_PAGE, line: 170 },
   { name: "button", file: BUTTON, line: 52 },
-]
+];
 
 export const baseuiBadgeTargets: AccuracyTarget[] = [
   {
@@ -117,7 +113,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
       { name: "span", file: BADGE, line: 36 },
     ],
   },
-]
+];
 
 export const motionSimpleTargets: AccuracyTarget[] = [
   {
@@ -133,7 +129,7 @@ export const motionSimpleTargets: AccuracyTarget[] = [
     label: "Nested",
     nodes: [{ name: "motion.div", file: MOTION, line: 36 }],
   },
-]
+];
 
 /** Nested in the flex wrapper — no climb, same as nested HTML. */
 export const motionBoxesTargets: AccuracyTarget[] = [
@@ -152,11 +148,9 @@ export const motionBoxesTargets: AccuracyTarget[] = [
     label: "Box 2",
     nodes: [{ name: "motion.div", file: MOTION, line: 52 }],
   },
-]
+];
 
-export const motionSvgNodes: AccuracyNode[] = [
-  { name: "motion.rect", file: MOTION, line: 68 },
-]
+export const motionSvgNodes: AccuracyNode[] = [{ name: "motion.rect", file: MOTION, line: 68 }];
 
 export const motionWrappedTargets: AccuracyTarget[] = [
   {
@@ -175,7 +169,7 @@ export const motionWrappedTargets: AccuracyTarget[] = [
       { name: "motion.div", file: MOTION, line: 136 },
     ],
   },
-]
+];
 
 export const libraryOwnHostTargets: AccuracyTarget[] = [
   {
@@ -194,7 +188,7 @@ export const libraryOwnHostTargets: AccuracyTarget[] = [
       { name: "svg", file: LIBRARY, line: 28 },
     ],
   },
-]
+];
 
 export const radixSlotTargets: AccuracyTarget[] = [
   {
@@ -224,7 +218,7 @@ export const radixSlotTargets: AccuracyTarget[] = [
       { name: "a", file: RADIX, line: 51 },
     ],
   },
-]
+];
 
 export const kindsForwardRefTargets: AccuracyTarget[] = [
   {
@@ -252,7 +246,7 @@ export const kindsForwardRefTargets: AccuracyTarget[] = [
       { name: "div", file: KINDS, line: 113 },
     ],
   },
-]
+];
 
 export const compositionMapTargets: AccuracyTarget[] = [
   {
@@ -270,7 +264,7 @@ export const compositionMapTargets: AccuracyTarget[] = [
     label: "gamma",
     nodes: [{ name: "span", file: TEST_PAGE, line: 294 }],
   },
-]
+];
 
 export const thirdPartyIconTargets: AccuracyTarget[] = [
   {
@@ -296,12 +290,12 @@ export const thirdPartyIconTargets: AccuracyTarget[] = [
       { name: "a", file: TEST_PAGE, line: 318 },
     ],
   },
-]
+];
 
 export const serverDirectNodes: AccuracyNode[] = [
   { name: "ServerCard", file: TEST_PAGE, line: 338 },
   { name: "div", file: SERVER, line: 17 },
-]
+];
 
 export const serverNestedTargets: AccuracyTarget[] = [
   {
@@ -320,12 +314,12 @@ export const serverNestedTargets: AccuracyTarget[] = [
       { name: "div", file: SERVER, line: 17 },
     ],
   },
-]
+];
 
 export const serverClientButtonNodes: AccuracyNode[] = [
   { name: "Button", file: SERVER_BUTTON, line: 15 },
   { name: "button", file: BUTTON, line: 52 },
-]
+];
 
 /** `[` / `]` hops on a full Card — each target is one inspectable. */
 export const parentInspectableCardTargets: AccuracyTarget[] = [
@@ -401,4 +395,4 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
       { name: "div", file: CARD, line: 84 },
     ],
   },
-]
+];

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, XAxis } from "recharts"
+import { Bar, BarChart, XAxis } from "recharts";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -12,19 +12,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart"
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-} from "@/components/ui/item"
-import { useDesignSystemSearchParams } from "@/components/create-preview/search-params"
+} from "@/components/ui/chart";
+import { Item, ItemContent, ItemDescription } from "@/components/ui/item";
+import { useDesignSystemSearchParams } from "@/components/create-preview/search-params";
 
 const chartData = [
   { month: "Dec", amount: 800 },
@@ -33,18 +29,18 @@ const chartData = [
   { month: "Mar", amount: 1300 },
   { month: "Apr", amount: 750 },
   { month: "May", amount: 1400 },
-]
+];
 
 const chartConfig = {
   amount: {
     label: "Contribution",
     color: "var(--chart-2)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function ContributionHistory() {
-  const [params] = useDesignSystemSearchParams()
-  const isRounded = !["lyra", "sera"].includes(params.style)
+  const [params] = useDesignSystemSearchParams();
+  const isRounded = !["lyra", "sera"].includes(params.style);
 
   return (
     <Card>
@@ -59,12 +55,7 @@ export function ContributionHistory() {
             data={chartData}
             margin={{ left: 0, right: 0, top: 8, bottom: 0 }}
           >
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={8}
-              axisLine={false}
-            />
+            <XAxis dataKey="month" tickLine={false} tickMargin={8} axisLine={false} />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel className="min-w-40" />}
@@ -85,12 +76,8 @@ export function ContributionHistory() {
               <ItemDescription className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                 Upcoming
               </ItemDescription>
-              <span className="cn-font-heading text-lg font-semibold">
-                May 25, 2024
-              </span>
-              <span className="text-sm text-muted-foreground">
-                $1,000 scheduled
-              </span>
+              <span className="cn-font-heading text-lg font-semibold">May 25, 2024</span>
+              <span className="text-sm text-muted-foreground">$1,000 scheduled</span>
             </ItemContent>
           </Item>
           <Item variant="muted" className="flex-col items-stretch">
@@ -98,12 +85,8 @@ export function ContributionHistory() {
               <ItemDescription className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                 Auto-Save Plan
               </ItemDescription>
-              <span className="cn-font-heading text-lg font-semibold">
-                Accelerated
-              </span>
-              <span className="text-sm text-muted-foreground">
-                Recurring weekly
-              </span>
+              <span className="cn-font-heading text-lg font-semibold">Accelerated</span>
+              <span className="text-sm text-muted-foreground">Recurring weekly</span>
             </ItemContent>
           </Item>
         </div>
@@ -112,5 +95,5 @@ export function ContributionHistory() {
         <Button className="w-full">View Full Report</Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

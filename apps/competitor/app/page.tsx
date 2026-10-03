@@ -1,8 +1,8 @@
-import { ArrowUpRight, Layers, Sparkles } from "lucide-react"
-import { MetricCard } from "@/components/primitives"
-import { ProjectTable } from "@/components/project-table"
-import { RevenueChart } from "@/components/revenue-chart"
-import { TeamActivity } from "@/components/team-activity"
+import { ArrowUpRight, Layers, Sparkles } from "lucide-react";
+import { MetricCard } from "@/components/primitives";
+import { ProjectTable } from "@/components/project-table";
+import { RevenueChart } from "@/components/revenue-chart";
+import { TeamActivity } from "@/components/team-activity";
 
 function WorkspaceNav() {
   return (
@@ -20,7 +20,7 @@ function WorkspaceNav() {
         AL
       </span>
     </nav>
-  )
+  );
 }
 function PageHeading() {
   return (
@@ -34,7 +34,7 @@ function PageHeading() {
         View projects <ArrowUpRight size={16} />
       </a>
     </header>
-  )
+  );
 }
 export default function CompetitorPage() {
   return (
@@ -43,25 +43,13 @@ export default function CompetitorPage() {
       <main>
         <PageHeading />
         <div className="metrics">
-          <MetricCard
-            label="Total revenue"
-            value="$24,680"
-            change="↗ 18.6% from last month"
-          >
+          <MetricCard label="Total revenue" value="$24,680" change="↗ 18.6% from last month">
             <ArrowUpRight size={18} />
           </MetricCard>
-          <MetricCard
-            label="Active projects"
-            value="12"
-            change="3 ready for review"
-          >
+          <MetricCard label="Active projects" value="12" change="3 ready for review">
             <Layers size={18} />
           </MetricCard>
-          <MetricCard
-            label="Team happiness"
-            value="98%"
-            change="Good things happen together"
-          >
+          <MetricCard label="Team happiness" value="98%" change="Good things happen together">
             <Sparkles size={18} />
           </MetricCard>
         </div>
@@ -74,11 +62,9 @@ export default function CompetitorPage() {
         <ProjectTable />
         <footer className="workspace-footer">
           <span>atelier / made for making.</span>
-          <span>
-            Client components · server components · SVG · lists · dialogs
-          </span>
+          <span>Client components · server components · SVG · lists · dialogs</span>
         </footer>
       </main>
     </div>
-  )
+  );
 }

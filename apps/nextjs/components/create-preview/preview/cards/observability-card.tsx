@@ -1,15 +1,9 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 export function ObservabilityCard() {
   return (
@@ -24,9 +18,8 @@ export function ObservabilityCard() {
       <CardHeader>
         <CardTitle>Observability Plus is replacing Monitoring</CardTitle>
         <CardDescription>
-          Switch to the improved way to explore your data, with natural
-          language. Monitoring will no longer be available on the Pro plan in
-          November, 2025
+          Switch to the improved way to explore your data, with natural language. Monitoring will no
+          longer be available on the Pro plan in November, 2025
         </CardDescription>
       </CardHeader>
       <CardFooter>
@@ -46,5 +39,5 @@ export function ObservabilityCard() {
         </Badge>
       </CardFooter>
     </Card>
-  )
+  );
 }

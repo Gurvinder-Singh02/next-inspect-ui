@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from "react";
 
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Item,
   ItemActions,
@@ -8,8 +8,8 @@ import {
   ItemHeader,
   ItemSeparator,
   ItemTitle,
-} from "@/components/ui/item"
-import { Kbd } from "@/components/ui/kbd"
+} from "@/components/ui/item";
+import { Kbd } from "@/components/ui/kbd";
 
 const shortcuts = [
   { label: "Search", keys: ["⌘", "K"] },
@@ -17,7 +17,7 @@ const shortcuts = [
   { label: "New File", keys: ["⌘", "N"] },
   { label: "Save", keys: ["⌘", "S"] },
   { label: "Toggle Sidebar", keys: ["⌘", "B"] },
-] as const
+] as const;
 
 export function Shortcuts() {
   return (
@@ -29,11 +29,7 @@ export function Shortcuts() {
             {shortcuts.map(({ label, keys }, i) => (
               <React.Fragment key={label}>
                 {i > 0 && <ItemSeparator />}
-                <Item
-                  variant="default"
-                  size="xs"
-                  className="border-0 px-0 py-0"
-                >
+                <Item variant="default" size="xs" className="border-0 px-0 py-0">
                   <ItemHeader>
                     <ItemTitle className="font-normal">{label}</ItemTitle>
                     <ItemActions>
@@ -51,5 +47,5 @@ export function Shortcuts() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

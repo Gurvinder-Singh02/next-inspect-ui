@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Breadcrumb,
@@ -7,16 +7,16 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Item,
   ItemContent,
@@ -24,8 +24,8 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/item";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 export function Payments() {
   return (
@@ -39,9 +39,7 @@ export function Payments() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger
-                  render={<Button size="icon-sm" variant="ghost" />}
-                >
+                <DropdownMenuTrigger render={<Button size="icon-sm" variant="ghost" />}>
                   <IconPlaceholder
                     lucide="MoreHorizontalIcon"
                     tabler="IconDots"
@@ -81,9 +79,7 @@ export function Payments() {
             </ItemMedia>
             <ItemContent>
               <ItemTitle>Change transfer limit</ItemTitle>
-              <ItemDescription>
-                Adjust how much you can send from your balance.
-              </ItemDescription>
+              <ItemDescription>Adjust how much you can send from your balance.</ItemDescription>
             </ItemContent>
             <IconPlaceholder
               lucide="ChevronRightIcon"
@@ -106,9 +102,7 @@ export function Payments() {
             </ItemMedia>
             <ItemContent>
               <ItemTitle>Scheduled transfers</ItemTitle>
-              <ItemDescription>
-                Set up a transfer to send at a later date.
-              </ItemDescription>
+              <ItemDescription>Set up a transfer to send at a later date.</ItemDescription>
             </ItemContent>
             <IconPlaceholder
               lucide="ChevronRightIcon"
@@ -131,9 +125,7 @@ export function Payments() {
             </ItemMedia>
             <ItemContent>
               <ItemTitle>Direct Debits</ItemTitle>
-              <ItemDescription>
-                Set up and manage regular payments.
-              </ItemDescription>
+              <ItemDescription>Set up and manage regular payments.</ItemDescription>
             </ItemContent>
             <IconPlaceholder
               lucide="ChevronRightIcon"
@@ -156,9 +148,7 @@ export function Payments() {
             </ItemMedia>
             <ItemContent>
               <ItemTitle>Recurring card payments</ItemTitle>
-              <ItemDescription>
-                Manage your repeated card transactions.
-              </ItemDescription>
+              <ItemDescription>Manage your repeated card transactions.</ItemDescription>
             </ItemContent>
             <IconPlaceholder
               lucide="ChevronRightIcon"
@@ -172,5 +162,5 @@ export function Payments() {
         </ItemGroup>
       </CardContent>
     </Card>
-  )
+  );
 }

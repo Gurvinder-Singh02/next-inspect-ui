@@ -420,9 +420,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
       pageName: target?.pageName ?? loc(PAGE, 1, 1),
       tagStyle: target?.tagStyle ?? "component",
       used: Boolean(target?.used),
-      stack: visibleId
-        ? climbStackFor(visibleId, settings.tooltipProps)
-        : [],
+      stack: visibleId ? climbStackFor(visibleId, settings.tooltipProps) : [],
     })
     measure()
   }, [playId, hoverId, visibleId, measure, settings])

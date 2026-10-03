@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { Bar, BarChart } from "recharts"
+import { Bar, BarChart } from "recharts";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,11 +11,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  ChartContainer,
-  type ChartConfig,
-} from "@/components/ui/chart"
+} from "@/components/ui/card";
+import { ChartContainer, type ChartConfig } from "@/components/ui/chart";
 
 const sleepChartData = [
   { hour: "10pm", deep: 0, light: 30, rem: 0 },
@@ -27,7 +24,7 @@ const sleepChartData = [
   { hour: "4am", deep: 15, light: 25, rem: 10 },
   { hour: "5am", deep: 5, light: 35, rem: 15 },
   { hour: "6am", deep: 0, light: 20, rem: 25 },
-]
+];
 
 const sleepChartConfig = {
   deep: {
@@ -42,7 +39,7 @@ const sleepChartConfig = {
     label: "REM",
     color: "var(--chart-3)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function SleepReport() {
   return (
@@ -59,24 +56,9 @@ export function SleepReport() {
             margin={{ left: 0, right: 0, top: 0, bottom: 0 }}
             barSize={16}
           >
-            <Bar
-              dataKey="deep"
-              stackId="a"
-              fill="var(--color-deep)"
-              radius={0}
-            />
-            <Bar
-              dataKey="light"
-              stackId="a"
-              fill="var(--color-light)"
-              radius={0}
-            />
-            <Bar
-              dataKey="rem"
-              stackId="a"
-              fill="var(--color-rem)"
-              radius={[2, 2, 0, 0]}
-            />
+            <Bar dataKey="deep" stackId="a" fill="var(--color-deep)" radius={0} />
+            <Bar dataKey="light" stackId="a" fill="var(--color-light)" radius={0} />
+            <Bar dataKey="rem" stackId="a" fill="var(--color-rem)" radius={[2, 2, 0, 0]} />
           </BarChart>
         </ChartContainer>
         <div className="grid grid-cols-4 gap-2">
@@ -100,5 +82,5 @@ export function SleepReport() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

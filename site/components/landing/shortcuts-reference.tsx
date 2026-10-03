@@ -53,8 +53,7 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["Space"],
     type: "panel",
-    description:
-      "Toggle the info panel — node tree, source links, and CSS.",
+    description: "Toggle the info panel — node tree, source links, and CSS.",
   },
   {
     keys: ["↑", "↓"],
@@ -86,12 +85,14 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["⌘", "←"],
     type: "nav",
-    description: "Jump to the first sibling inspectable element (Ctrl on Windows).",
+    description:
+      "Jump to the first sibling inspectable element (Ctrl on Windows).",
   },
   {
     keys: ["⌘", "→"],
     type: "nav",
-    description: "Jump to the last sibling inspectable element (Ctrl on Windows).",
+    description:
+      "Jump to the last sibling inspectable element (Ctrl on Windows).",
   },
   {
     keys: [<Option key="opt-minus" />, "−"],

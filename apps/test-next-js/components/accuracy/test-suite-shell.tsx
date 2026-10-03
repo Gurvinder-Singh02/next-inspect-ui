@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { Suspense } from "react"
+import { Suspense } from "react";
 
-import { SuiteHeader, type SuiteCaseMeta } from "@/components/accuracy/suite-header"
-import { SuiteProvider } from "@/components/accuracy/suite-context"
-import type { SuiteSourceFile } from "@/components/accuracy/types"
+import { SuiteHeader, type SuiteCaseMeta } from "@/components/accuracy/suite-header";
+import { SuiteProvider } from "@/components/accuracy/suite-context";
+import type { SuiteSourceFile } from "@/components/accuracy/types";
 
 export const TestSuiteShell = ({
   cases,
@@ -12,10 +12,10 @@ export const TestSuiteShell = ({
   sourcesByCase,
   children,
 }: {
-  cases: SuiteCaseMeta[]
-  projectRoot: string
-  sourcesByCase?: Record<string, SuiteSourceFile[]>
-  children: React.ReactNode
+  cases: SuiteCaseMeta[];
+  projectRoot: string;
+  sourcesByCase?: Record<string, SuiteSourceFile[]>;
+  children: React.ReactNode;
 }) => (
   <Suspense
     fallback={
@@ -35,4 +35,4 @@ export const TestSuiteShell = ({
       </main>
     </SuiteProvider>
   </Suspense>
-)
+);

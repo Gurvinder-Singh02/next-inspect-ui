@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,9 +8,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -18,8 +18,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 export function ReportBug() {
   return (
@@ -32,10 +32,7 @@ export function ReportBug() {
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="bug-title">Title</FieldLabel>
-            <Input
-              id="bug-title"
-              placeholder="Brief description of the issue"
-            />
+            <Input id="bug-title" placeholder="Brief description of the issue" />
           </Field>
           <div className="grid grid-cols-2 gap-3">
             <Field>
@@ -98,10 +95,7 @@ export function ReportBug() {
         </FieldGroup>
       </CardContent>
       <CardFooter>
-        <Field
-          orientation="horizontal"
-          className="justify-end style-sera:justify-center"
-        >
+        <Field orientation="horizontal" className="justify-end style-sera:justify-center">
           <Button variant="outline" className="style-sera:flex-1">
             Attach File
           </Button>
@@ -109,5 +103,5 @@ export function ReportBug() {
         </Field>
       </CardFooter>
     </Card>
-  )
+  );
 }

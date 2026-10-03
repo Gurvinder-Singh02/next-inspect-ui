@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -11,13 +11,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+} from "@/components/ui/card";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -25,20 +20,20 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Textarea } from "@/components/ui/textarea"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 const CURRENCIES = [
   { label: "USD — United States Dollar", value: "usd" },
   { label: "EUR — Euro", value: "eur" },
   { label: "GBP — British Pound", value: "gbp" },
   { label: "JPY — Japanese Yen", value: "jpy" },
-]
+];
 
 export function PayoutThreshold() {
-  const [amount, setAmount] = React.useState([2500])
+  const [amount, setAmount] = React.useState([2500]);
 
   return (
     <Card>
@@ -62,9 +57,7 @@ export function PayoutThreshold() {
       <CardContent>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="preferred-currency">
-              Preferred Currency
-            </FieldLabel>
+            <FieldLabel htmlFor="preferred-currency">Preferred Currency</FieldLabel>
             <Select items={CURRENCIES} defaultValue="usd">
               <SelectTrigger id="preferred-currency" className="w-full">
                 <SelectValue />
@@ -82,19 +75,13 @@ export function PayoutThreshold() {
           </Field>
           <Field>
             <div className="flex items-baseline justify-between">
-              <FieldLabel htmlFor="min-payout">
-                Minimum Payout Amount
-              </FieldLabel>
-              <span className="text-2xl font-semibold tabular-nums">
-                ${amount[0].toFixed(2)}
-              </span>
+              <FieldLabel htmlFor="min-payout">Minimum Payout Amount</FieldLabel>
+              <span className="text-2xl font-semibold tabular-nums">${amount[0].toFixed(2)}</span>
             </div>
             <Slider
               id="min-payout"
               value={amount}
-              onValueChange={(value) =>
-                setAmount(Array.isArray(value) ? [...value] : [value])
-              }
+              onValueChange={(value) => setAmount(Array.isArray(value) ? [...value] : [value])}
               min={50}
               max={10000}
               step={50}
@@ -118,5 +105,5 @@ export function PayoutThreshold() {
         <Button className="w-full">Save Threshold</Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

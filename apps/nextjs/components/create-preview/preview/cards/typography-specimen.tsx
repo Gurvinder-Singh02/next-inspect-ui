@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   Dialog,
   DialogClose,
@@ -13,9 +13,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -23,28 +23,28 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { FONTS } from "@/components/create-preview/fonts"
-import { useDesignSystemSearchParams } from "@/components/create-preview/search-params"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { FONTS } from "@/components/create-preview/fonts";
+import { useDesignSystemSearchParams } from "@/components/create-preview/search-params";
 
 export function TypographySpecimen() {
-  const [params] = useDesignSystemSearchParams()
+  const [params] = useDesignSystemSearchParams();
 
   const currentFont = React.useMemo(
     () => FONTS.find((font) => font.value === params.font),
-    [params.font]
-  )
+    [params.font],
+  );
 
   const currentFontHeading = React.useMemo(
     () => FONTS.find((font) => font.value === params.fontHeading),
-    [params.fontHeading]
-  )
+    [params.fontHeading],
+  );
   const headingLabel =
     currentFontHeading?.name && currentFontHeading.name !== currentFont?.name
       ? currentFontHeading.name
-      : "Inherit"
-  const bodyLabel = currentFont?.name ?? "Default"
+      : "Inherit";
+  const bodyLabel = currentFont?.name ?? "Default";
 
   return (
     <Card>
@@ -56,27 +56,22 @@ export function TypographySpecimen() {
           Designing with rhythm and hierarchy.
         </p>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          A strong body style keeps long-form content readable and balances the
-          visual weight of headings.
+          A strong body style keeps long-form content readable and balances the visual weight of
+          headings.
         </p>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Thoughtful spacing and cadence help paragraphs scan quickly without
-          feeling dense.
+          Thoughtful spacing and cadence help paragraphs scan quickly without feeling dense.
         </p>
       </CardContent>
       <CardFooter>
         <Dialog>
-          <DialogTrigger
-            render={<Button variant="outline" className="w-full" />}
-          >
+          <DialogTrigger render={<Button variant="outline" className="w-full" />}>
             Share Feedback
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Share Feedback</DialogTitle>
-              <DialogDescription>
-                Let us know how we can improve your experience.
-              </DialogDescription>
+              <DialogDescription>Let us know how we can improve your experience.</DialogDescription>
             </DialogHeader>
             <FieldGroup>
               <div className="grid grid-cols-2 gap-3">
@@ -86,11 +81,7 @@ export function TypographySpecimen() {
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="feedback-email">Email</FieldLabel>
-                  <Input
-                    id="feedback-email"
-                    type="email"
-                    placeholder="you@example.com"
-                  />
+                  <Input id="feedback-email" type="email" placeholder="you@example.com" />
                 </Field>
               </div>
               <Field>
@@ -127,14 +118,12 @@ export function TypographySpecimen() {
               </Field>
             </FieldGroup>
             <DialogFooter>
-              <DialogClose render={<Button variant="outline" />}>
-                Cancel
-              </DialogClose>
+              <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
               <Button>Submit</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </CardFooter>
     </Card>
-  )
+  );
 }
