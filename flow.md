@@ -59,3 +59,9 @@ Element navigation follows the rendered elements. Component climbing follows the
 ## Test suite flow
 
 All test apps use the same suite UI: choose groups, press **Run all**, then open **Logs** to compare expected and found source locations. **Show source** opens the fixture snippets. Vite runs the browser cases; Next.js also runs the Server Component cases.
+
+## Competitor app flow
+
+Run `bun run dev:competitor` → open port 3104 → choose a library → the page reloads → try that library’s shortcut on the same dashboard. The selection is stored in a cookie. **Off** loads no inspector.
+
+The comparison toolbar stays usable while inspecting. Only the selected inspector loads in development. React Grab’s installed script loads before React; the other inspectors mount as client components. Show Component uses Option + right-click (add Shift for its tree). React Grab uses ⌘C / Ctrl+C. Click to React Component uses Option + click and depends on older React source metadata, so lookup may fail on this React 19 page.

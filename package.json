@@ -23,7 +23,10 @@
     "build:test-next-js-webpack": "bun run --cwd apps/test-next-js-webpack build",
     "dev:test-vite-react-19": "bun run --cwd apps/test-vite-react-19 dev",
     "build:test-vite-react-19": "bun run --cwd apps/test-vite-react-19 build",
-    "sync:test-ui": "bun run scripts/sync-test-ui.ts"
+    "sync:test-ui": "bun run scripts/sync-test-ui.ts",
+    "dev:competitor": "bun run --cwd apps/competitor dev",
+    "build:competitor": "bun run --cwd apps/competitor build",
+    "typecheck:competitor": "bun run --cwd apps/competitor typecheck"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

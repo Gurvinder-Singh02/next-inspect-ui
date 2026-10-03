@@ -62,3 +62,7 @@ Open `/test` in any test app. Every suite uses the same header, group controls, 
 React 18 is a compatibility target; the library still declares React 19+ support. A runnable app does not imply every inspection case passes.
 
 Run `bun run typecheck:compat` to check all test apps. Each app has a matching `build:<app-name>` command. `bun run dev:test` starts all four test apps on ports 3001, 3002, 5173, and 5174. Press Ctrl+C to stop them together. If a port is busy, the launcher stops before starting any apps. `dev:example` remains an alias for `dev:nextjs`.
+
+## Inspector comparison
+
+Run `bun run dev:competitor` and open [localhost:3104](http://localhost:3104). `apps/competitor` has a dashboard with nested components, a searchable/filterable project table, a chart, a dialog, and server-rendered activity. Use the **Library** selector to compare Next Inspect UI, Show Component, React Grab, and Click to React Component. Switching reloads the page, keeping just one inspector loaded. This app is separate from the four-app `dev:test` launcher.
