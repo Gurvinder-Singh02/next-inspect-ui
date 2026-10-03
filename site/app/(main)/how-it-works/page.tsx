@@ -83,12 +83,13 @@ Cursor / VS Code`}
         </p>
         <p>
           Hold Option / Alt to climb to its component usage, such as &lt;Button
-          /&gt; in your page. Press Shift while holding it to climb another
-          level.
+          /&gt; in your page.
         </p>
         <p>
-          Press Space to toggle the info panel. It shows the node tree, source
-          links, and CSS. Press Escape to leave inspect mode.
+          Press Space to toggle the tree popover. Component shows the full
+          ancestor chain; Element shows nearby HTML elements. Left / Right
+          switches tabs, and Up / Down selects rows. Press Escape to leave
+          inspect mode.
         </p>
         <p>
           See the{" "}

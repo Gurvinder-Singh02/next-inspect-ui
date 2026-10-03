@@ -3,7 +3,8 @@
 import { useEffect } from "react"
 
 import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, setInspectorSettings, subscribeInspectorSettings, type InspectUIProps } from "./lib/index.ts"
-import { applyOverlayStyles, createStylesSection, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isPointInRect, openInEditor, preferredSourceFromFrames, readFiberComponentName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
+import { applyOverlayStyles, getPopoverComponentAncestors, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isPointInRect, openInEditor, preferredSourceFromFrames, readFiberComponentName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
+import { getElementTreeRows, getElementMarkup, getElementText } from "./lib/popover.ts"
 import { createOpenSourceIcon } from "./lib/icons.ts"
 import overlayCss from "./styles/overlay.css"
 import {
@@ -11,10 +12,11 @@ import {
   markInspectNode,
   paintTreePath,
   paintTreeRow,
-  paintTwisty,
   setInspectMotion,
 } from "./styles/styles.ts"
 import { createInspectTooltip, expandRectWithPadding, getInfoPanelPosition } from "./lib/tooltip.ts"
+
+let nextPopoverId = 0
 
 type OpenKind = "used" | "defined"
 
@@ -32,8 +34,10 @@ export const InspectUI = ({
   ide,
   tooltipProps,
   devSpotlightProps,
+  popoverProps,
 }: InspectUIProps) => {
   const tooltipKey = JSON.stringify(tooltipProps ?? null)
+  const defaultTab = popoverProps?.defaultTab ?? "component"
   const spotlightKey = JSON.stringify(devSpotlightProps ?? null)
 
   useEffect(() => {
@@ -58,7 +62,12 @@ export const InspectUI = ({
     const overlay = document.createElement("div")
     const inspectTooltip = createInspectTooltip()
     const tooltip = inspectTooltip.root
+    const ghostOverlay = document.createElement("div")
+    markInspectNode(ghostOverlay, "data-dev-inspector-ghost-overlay")
+    ghostOverlay.classList.add("next-inspect-ui-overlay")
+    ghostOverlay.style.display = "none"
     const info = document.createElement("div")
+    const popoverId = `next-inspect-ui-popover-${++nextPopoverId}`
     const previousCursor = document.body.style.cursor
     let hoveredElement: Element | null = null
 
@@ -86,7 +95,17 @@ export const InspectUI = ({
       isDom: boolean
       source: SourceLocation | null
       climbIndex: number
+      depth: number
+      element?: Element
+      relation?: string
+      pendingSource?: Promise<SourceLocation | null>
     }
+    let infoTab: "component" | "element" = defaultTab
+    let infoTabChange: ((tab: "component" | "element", focus?: boolean) => void) | null = null
+    let infoSelectedNode: InfoTreeNode | null = null
+    let infoPinnedNode: InfoTreeNode | null = null
+    let infoPreviousFocus: HTMLElement | null = null
+    let infoRenderGeneration = 0
     let infoClimbSelection: ClimbSelection | null = null
     let infoTreeMove: ((delta: number) => InfoTreeNode | null) | null = null
     let infoTreeChain: OwnerChainStep[] = []
@@ -123,7 +142,8 @@ export const InspectUI = ({
       }
       const row = mk("div", "data-dev-inspector-source-row")
       if (label) row.append(mk("span", "data-dev-inspector-source-label", label))
-      const path = mk("a", "data-dev-inspector-source-path")
+      const path = mk<HTMLButtonElement>("button", "data-dev-inspector-source-path")
+      path.type = "button"
       const pathIcon = mk("span", "data-dev-inspector-source-icon")
       pathIcon.append(createOpenSourceIcon())
       path.append(mk("span", undefined, `${relSourcePath(source)}:${source.line}:${source.column}`), pathIcon)
@@ -136,10 +156,6 @@ export const InspectUI = ({
     markInspectNode(overlay, "data-dev-inspector-overlay")
 
     const clearTooltipStack = () => inspectTooltip.clearStack()
-    const pushTooltipUnder = (text: string) => {
-      if (!optionHeld || !text) return
-      inspectTooltip.pushUnder(text)
-    }
     const setTooltipLabel = (text: string) => inspectTooltip.setLabel(text)
     const syncUsedIcon = (show: boolean) => inspectTooltip.showUsedIcon(show)
     const positionTooltip = (targetRect: { left: number; top: number; width: number; height: number }) => {
@@ -448,6 +464,7 @@ export const InspectUI = ({
     }
 
     const paintTooltipForFiber = (fiber: ReactFiber) => {
+      if (infoVisible && infoSelectedNode) { syncInfoTreeSelection(infoSelectedNode); return }
       const kind = resolveOpenKind(fiber)
       const step = kind === "used" ? (infoVisible && infoClimbSelection ? infoClimbSelection.step : getActiveChainStep(fiber)) : null
       const prev = infoClimbSelection
@@ -470,10 +487,11 @@ export const InspectUI = ({
     markInspectNode(info, "data-dev-inspector-info")
     const paintTooltipChrome = () => {
       applyOverlayStyles(overlay, tooltip, settings)
+
     }
 
     paintTooltipChrome()
-    document.body.append(overlay, tooltip, info)
+    document.body.append(overlay, tooltip, ghostOverlay, info)
 
     let onSettingsChanged: (() => void) | null = null
     let paintChrome: (() => void) | null = null
@@ -494,7 +512,30 @@ export const InspectUI = ({
       info.style.top = `${pos.top}px`
     }
 
+    const clearGhost = () => {
+      ghostOverlay.style.display = "none"
+    }
+    const paintGhost = (node: InfoTreeNode) => {
+      if (!node.element || node.element === infoTarget) { clearGhost(); return }
+      const rect = expandRectWithPadding(node.element.getBoundingClientRect(), {
+        left: settings.devSpotlightProps.paddingX, right: settings.devSpotlightProps.paddingX,
+        top: settings.devSpotlightProps.paddingY, bottom: settings.devSpotlightProps.paddingY,
+      })
+      Object.assign(ghostOverlay.style, { display: "block", left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px` })
+
+    }
+    const adoptElement = (element: Element) => {
+      clearGhost()
+      revealAndHighlight(element, true)
+    }
     const hideInfo = () => {
+      clearGhost()
+      if (info.contains(document.activeElement)) infoPreviousFocus?.focus({ preventScroll: true })
+      infoRenderGeneration += 1
+      infoPreviousFocus = null
+      infoSelectedNode = null
+      infoPinnedNode = null
+      infoTabChange = null
       infoVisible = false
       infoTarget = null
       infoClimbSelection = null
@@ -502,8 +543,13 @@ export const InspectUI = ({
       infoTreeChain = []
       infoTitleEl = null
       infoSourceBox = null
+      info.setAttribute("aria-hidden", "true")
       info.style.display = "none"
-      if (isActive) document.body.style.cursor = "crosshair"
+      if (isActive) {
+        document.body.style.cursor = "crosshair"
+        const fiber = hoveredElement ? getFiber(hoveredElement) : null
+        if (fiber) paintTooltipForFiber(fiber)
+      }
     }
 
     const reposition = () => {
@@ -512,23 +558,26 @@ export const InspectUI = ({
 
 
     const syncInfoTreeSelection = (node: InfoTreeNode) => {
-      if (infoTitleEl) {
-        infoTitleEl.textContent = node.isDom
-          ? formatDomTag(node.name)
-          : formatComponentTag(node.name)
-      }
-      infoSourceBox && paintSourceBox(infoSourceBox, node.source)
-
-      if (node.isDom) {
+      infoSelectedNode = node
+      if (infoTab === "element") {
         infoClimbSelection = null
-      } else {
-        const step = infoTreeChain[node.climbIndex]
-        if (step) {
-          ownerChainDepth = node.climbIndex
-          infoClimbSelection = { depth: node.climbIndex, step }
-        }
+        const current = infoTarget
+        const currentFiber = current ? getFiber(current) : null
+        const source = infoPinnedNode?.source ?? (currentFiber ? getHostAuthorSource(currentFiber, projectRoot) : null)
+        const name = current?.tagName.toLowerCase() ?? node.name
+        if (infoTitleEl) infoTitleEl.textContent = formatDomTag(name)
+        if (infoSourceBox) paintSourceBox(infoSourceBox, source)
+        setTooltipLabel(formatTooltipLabel({ title: name, pageName: source ? formatPageLabel(source, projectRoot) : null,
+          tooltipProps: settings.tooltipProps, tagStyle: "dom" }) || formatDomTag(name))
+        syncUsedIcon(false)
+        paintGhost(node)
+        return
       }
-
+      clearGhost()
+      if (infoTitleEl) infoTitleEl.textContent = node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name)
+      if (infoSourceBox) paintSourceBox(infoSourceBox, node.source)
+      const step = node.isDom ? null : infoTreeChain[node.climbIndex]
+      infoClimbSelection = step ? { depth: node.climbIndex, step } : null
       setTooltipLabel(formatTooltipLabel({
         title: node.name,
         pageName: node.source ? formatPageLabel(node.source, projectRoot) : null,
@@ -536,120 +585,114 @@ export const InspectUI = ({
         tagStyle: node.isDom ? "dom" : "component",
       }) || (node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name)))
       syncUsedIcon(!node.isDom)
-      if (lastTargetRect) { positionTooltip(lastTargetRect); positionInfo(lastTargetRect) }
+      if (lastTargetRect) positionTooltip(lastTargetRect)
     }
 
-    const createClimbTreeSection = (
-      hostTag: string,
-      hostSource: SourceLocation | null,
-      chain: OwnerChainStep[],
-      initialClimbIndex: number
-    ) => {
-      const nodes: InfoTreeNode[] = [
-        ...[...chain].map((step, index) => ({
-          name: step.name,
-          isDom: false,
-          source: getClimbStepDisplaySource(step),
-          climbIndex: index,
-        })).reverse(),
-        { name: hostTag, isDom: true, source: hostSource, climbIndex: -1 },
-      ]
+    const createInfoTreeSection = (nodes: InfoTreeNode[], initialIndex: number, label: string) => {
       const section = mk("div", "data-dev-inspector-owner-tree")
-      section.append(mk("div", "data-dev-inspector-tree-heading", "Node tree"))
       const tree = mk("div", "data-dev-inspector-tree")
       tree.setAttribute("role", "tree")
-      tree.setAttribute("aria-label", "Node tree")
-      const expanded = nodes.map(() => true)
-      const selection = { climbIndex: initialClimbIndex }
-      const visibleNodeIndices = () => {
-        const indices: number[] = []
-        for (let i = 0; i < nodes.length; i += 1) {
-          if (expanded.slice(0, i).every(Boolean)) indices.push(i)
-        }
-        return indices
+      tree.setAttribute("aria-label", label)
+      let selectedIndex = initialIndex
+      const paths: HTMLButtonElement[] = []
+      const paintPath = (path: HTMLButtonElement, node: InfoTreeNode) => {
+        path.disabled = !node.source
+        path.textContent = node.source ? formatPageLabel(node.source, projectRoot) : "…"
+        path.title = node.source ? `Open ${formatPageLabel(node.source, projectRoot)}` : "Source unavailable"
+        paintTreePath(path, node.source ? "open" : "empty")
       }
-      const syncNode = (nodeIndex: number, source: SourceLocation | null) => {
-        if (!infoVisible || !info.contains(tree)) return
-        if (nodeIndex < 0 || nodeIndex >= nodes.length) return
-        nodes[nodeIndex].source = source
-        paint()
-        const node = nodes[nodeIndex]
-        if (node && node.climbIndex === selection.climbIndex) syncInfoTreeSelection(node)
-        reposition()
+      const select = (index: number, focus = true) => {
+        selectedIndex = index
+        paint(focus)
+        syncInfoTreeSelection(nodes[index]!)
       }
-      const paint = () => {
+      const paint = (focus = false) => {
+        const hadFocus = tree.contains(document.activeElement)
         tree.textContent = ""
+        const closing: { depth: number; tag: string }[] = []
+        const closeTags = (depth: number) => {
+          while (closing.length && closing[closing.length - 1]!.depth >= depth) {
+            const entry = closing.pop()!
+            const line = mk("div", "data-dev-inspector-html-close", entry.tag)
+            line.style.paddingLeft = `${entry.depth * 12 + 2}px`
+            line.setAttribute("aria-hidden", "true")
+            tree.append(line)
+          }
+        }
         nodes.forEach((node, index) => {
-          if (!expanded.slice(0, index).every(Boolean)) return
-          const hasChildren = index < nodes.length - 1
-          const active = node.climbIndex === selection.climbIndex
-          const row = mk("div", "data-dev-inspector-tree-row")
+          if (node.element) closeTags(node.depth)
+          const active = index === selectedIndex
+          const row = mk<HTMLDivElement>("div", "data-dev-inspector-tree-row")
           paintTreeRow(row, active)
           row.setAttribute("role", "treeitem")
-          row.setAttribute("aria-selected", active ? "true" : "false")
-          row.setAttribute("aria-level", String(index + 1))
-          const gutter = mk("div", "data-dev-inspector-tree-gutter")
+          row.setAttribute("aria-selected", String(active))
+          row.setAttribute("aria-level", String(node.depth + 1))
+          row.tabIndex = active ? 0 : -1
           const indent = mk("span", "data-dev-inspector-tree-indent")
-          indent.style.setProperty("--inspect-tree-depth", String(index))
-          gutter.append(indent)
-          const twisty = mk<HTMLButtonElement>("button", "data-dev-inspector-tree-twisty")
-          twisty.type = "button"
-          if (hasChildren) {
-            paintTwisty(twisty, true)
-            twisty.textContent = expanded[index] ? "▾" : "▸"
-            twisty.onclick = (e) => { e.preventDefault(); e.stopPropagation(); expanded[index] = !expanded[index]; paint(); reposition() }
-          }
-          gutter.append(twisty)
+          indent.style.setProperty("--inspect-tree-depth", String(node.depth))
           const nameEl = mk("span", "data-dev-inspector-tree-name", node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name))
           const pathEl = mk<HTMLButtonElement>("button", "data-dev-inspector-tree-path")
           pathEl.type = "button"
-          if (node.source) {
-            const label = formatPageLabel(node.source, projectRoot)
-            pathEl.textContent = label
-            pathEl.title = label
-            paintTreePath(pathEl, "open")
-            pathEl.onclick = (e) => { e.preventDefault(); e.stopPropagation(); openInEditor(node.source!, settings.ide) }
-          } else {
+          pathEl.tabIndex = active ? 0 : -1
+          paths[index] = pathEl
+          if (node.element) {
+            row.classList.add("next-inspect-ui-html-row")
+            const markup = getElementMarkup(node.element)
+            const hasVisibleChildren = !!nodes[index + 1]?.element && nodes[index + 1]!.depth > node.depth
+            const text = getElementText(node.element)
+            nameEl.textContent = `${markup.opening}${text ? ` ${text} ` : ""}${hasVisibleChildren ? "" : markup.closing}`
+            if (hasVisibleChildren && markup.closing) closing.push({ depth: node.depth, tag: markup.closing })
+            nameEl.title = markup.opening
             pathEl.textContent = "…"
-            paintTreePath(pathEl, "empty")
+            pathEl.classList.add("next-inspect-ui-element-select")
+            pathEl.setAttribute("aria-label", `Select ${node.name} element`)
+            pathEl.title = "Select this element"
+          } else paintPath(pathEl, node)
+          pathEl.onclick = (event) => {
+            event.preventDefault(); event.stopPropagation()
+            if (node.element) adoptElement(node.element)
+            else if (node.source) openInEditor(node.source, settings.ide)
           }
-          row.append(gutter, nameEl, pathEl)
-          row.onclick = (e) => {
-            if (pathEl.contains(e.target as Node)) return
-            e.preventDefault()
-            selection.climbIndex = node.climbIndex
-            paint()
-            syncInfoTreeSelection(node)
+          row.append(indent, nameEl)
+          row.append(pathEl)
+          if (node.relation) row.append(mk("span", "data-dev-inspector-tree-relation", node.relation))
+          row.onclick = (event) => {
+            if (pathEl.contains(event.target as Node)) return
+            event.preventDefault()
+            select(index)
+          }
+          row.onfocus = () => {
+            if (selectedIndex !== index) select(index)
           }
           tree.append(row)
+          if (active && (focus || hadFocus)) {
+            row.focus({ preventScroll: true })
+            row.scrollIntoView({ block: "nearest" })
+          }
         })
+        closeTags(0)
       }
       paint()
       section.append(tree)
+      syncInfoTreeSelection(nodes[selectedIndex]!)
       return {
         section,
         moveSelection: (delta: number): InfoTreeNode | null => {
-          const visible = visibleNodeIndices()
-          if (!visible.length) return null
-          const current = visible.findIndex((i) => nodes[i]?.climbIndex === selection.climbIndex)
-          const from = current === -1 ? visible.length - 1 : current
-          const next = from + delta
-          if (next < 0 || next >= visible.length) return null
-          const node = nodes[visible[next]!]
-          if (!node) return null
-          selection.climbIndex = node.climbIndex
-          paint()
-          syncInfoTreeSelection(node)
-          return node
+          const next = selectedIndex + delta
+          if (next < 0 || next >= nodes.length) return null
+          select(next)
+          return nodes[next]!
         },
-        refinePaths: (refine: (step: OwnerChainStep) => Promise<void>) => {
-          chain.forEach((step, index) => {
-            void refine(step).then(() => syncNode(chain.length - 1 - index, getClimbStepDisplaySource(step)))
-          })
+        focusSelection: () => {
+          tree.querySelector<HTMLElement>('[aria-selected="true"]')?.focus({ preventScroll: true })
         },
-        setHostSource: (source: SourceLocation | null) => syncNode(nodes.length - 1, source),
-        setClimbStepSource: (climbIndex: number, source: SourceLocation | null) =>
-          syncNode(chain.length - 1 - climbIndex, source),
+        setSource: (index: number, source: SourceLocation | null) => {
+          nodes[index]!.source = source
+          if (!infoVisible || !info.contains(tree)) return
+          if (!nodes[index]!.element) paintPath(paths[index]!, nodes[index]!)
+          if (selectedIndex === index || nodes[index] === infoPinnedNode) syncInfoTreeSelection(nodes[selectedIndex]!)
+          reposition()
+        },
       }
     }
 
@@ -669,66 +712,95 @@ export const InspectUI = ({
         if (usage && !isBundledOrExternalPath(usage.filePath)) step.source = usage
       }
     }
-    const resolveClimbStepForInfo = async (step: OwnerChainStep) => {
-      if (step.debugInfo) {
-        const pair = await resolveDebugInfoPair(step.debugInfo, projectRoot, sourceMapCache)
-        step.source = pair.source ?? step.source
-        step.definition = pair.renderedBy ?? step.definition
-        return
-      }
-      const composite = step.parentFiber
-      const [usage, definition] = await Promise.all([
-        step.source ? Promise.resolve(step.source) : getInstanceSource(composite),
-        step.definition ? Promise.resolve(step.definition) : getSource(composite),
-      ])
-      step.source = usage ?? getInstantUsedSource(composite, projectRoot) ?? step.source
-      step.definition = definition ?? getInstantDefinedSource(composite, projectRoot) ?? step.definition
-    }
-    const renderInfo = async (target: Element, fiber: ReactFiber) => {
-      const liveStep = optionHeld ? getActiveChainStep(fiber) : null
-      infoClimbSelection = liveStep ? { depth: ownerChainDepth, step: liveStep } : null
-      const climbStep = infoClimbSelection?.step ?? null
-      const climbDepth = infoClimbSelection?.depth ?? 0
-      const hostTag = getDomHoverName(fiber) ?? "element"
-      const hostSource = (await resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)) ?? getHostAuthorSource(fiber, projectRoot)
-      const chain = await refineOwnerChain(fiber, hostSource)
-      if (!infoVisible || infoTarget !== target) return
-      info.textContent = ""
-      info.append(
-        mk("div", "data-dev-inspector-info-title", climbStep ? formatComponentTag(climbStep.name) : formatDomTag(hostTag)),
-      )
-      infoTitleEl = info.firstElementChild as HTMLDivElement
-      const sourceContainer = mk<HTMLDivElement>("div", "data-dev-inspector-source-box")
-      sourceContainer.append(mk("span", "data-dev-inspector-source-pending", "Resolving…"))
-      info.append(sourceContainer)
-      infoSourceBox = sourceContainer
+    const renderInfo = async (target: Element, fiber: ReactFiber | null) => {
+      const generation = ++infoRenderGeneration
+      const hostTag = (fiber ? getDomHoverName(fiber) : null) ?? target.tagName.toLowerCase()
+      const hostSource = fiber ? getHostAuthorSource(fiber, projectRoot) : null
+      const chain = (fiber ? getPopoverComponentAncestors(fiber) : []).map(({ name, fiber: parentFiber, debugInfo }) => ({
+        name, parentFiber, ...resolveClimbStepSync(parentFiber, fiber!, debugInfo),
+      }))
       infoTreeChain = chain
-      const climbTree = chain.length
-        ? createClimbTreeSection(hostTag, hostSource, chain, climbStep ? climbDepth : -1)
-        : null
-      infoTreeMove = climbTree?.moveSelection ?? null
-      if (climbTree) info.append(climbTree.section)
-      info.append(createStylesSection(target, reposition))
+      const componentNodes: InfoTreeNode[] = [
+        { name: hostTag, isDom: true, source: hostSource, climbIndex: -1, depth: 0,
+          pendingSource: fiber ? resolveHostAuthorSource(fiber, projectRoot, sourceMapCache) : Promise.resolve(null) },
+        ...chain.map((step, climbIndex) => ({
+          name: step.name, isDom: false, source: getClimbStepDisplaySource(step), climbIndex,
+          depth: climbIndex + 1,
+          pendingSource: refineInfoStep(step).then(() => getClimbStepDisplaySource(step)),
+        })),
+      ]
+      const elementNodes: InfoTreeNode[] = getElementTreeRows(target).map(({ element, depth, relation }) => {
+        const elementFiber = getFiber(element)
+        return {
+          element, name: element.tagName.toLowerCase(), isDom: true, climbIndex: -1, depth, relation,
+          source: elementFiber ? getHostAuthorSource(elementFiber, projectRoot) : null,
+          pendingSource: elementFiber ? resolveHostAuthorSource(elementFiber, projectRoot, sourceMapCache) : Promise.resolve(null),
+        }
+      })
+      if (!infoVisible || infoTarget !== target) return
+      infoPinnedNode = elementNodes.find(node => node.relation === "current") ?? null
+      info.textContent = ""
+      info.setAttribute("role", "dialog")
+      info.setAttribute("aria-label", "Inspector trees")
+      info.setAttribute("aria-hidden", "false")
+      infoTitleEl = mk<HTMLDivElement>("div", "data-dev-inspector-info-title")
+      infoSourceBox = mk<HTMLDivElement>("div", "data-dev-inspector-source-box")
+      info.append(infoTitleEl, infoSourceBox)
+      const tabs = mk("div", "data-dev-inspector-info-tabs")
+      tabs.setAttribute("role", "tablist")
+      tabs.setAttribute("aria-label", "Tree view")
+      const panel = mk("div", "data-dev-inspector-info-panel")
+      panel.id = `${popoverId}-panel`
+      panel.setAttribute("role", "tabpanel")
+      const tabButtons = new Map<"component" | "element", HTMLButtonElement>()
+      const trees = new Map<"component" | "element", ReturnType<typeof createInfoTreeSection>>()
+      const showTab = (tab: "component" | "element", focus = false) => {
+        infoTab = tab
+        tabButtons.forEach((button, key) => {
+          button.setAttribute("aria-selected", String(key === tab))
+          button.tabIndex = key === tab ? 0 : -1
+        })
+        panel.setAttribute("aria-labelledby", `${popoverId}-${tab}`)
+        let tree = trees.get(tab)
+        if (!tree) {
+          const nodes = tab === "component" ? componentNodes : elementNodes
+          const initial = tab === "component"
+            ? optionHeld && chain.length ? 1 : 0
+            : elementNodes.findIndex(node => node.relation === "current")
+          tree = createInfoTreeSection(nodes, initial, tab === "component" ? "Component tree" : "Element tree")
+          trees.set(tab, tree)
+          nodes.forEach((node, index) => {
+            void node.pendingSource?.then(source => {
+              if (generation === infoRenderGeneration) tree!.setSource(index, source)
+            }).catch(() => {})
+          })
+        }
+        panel.replaceChildren(tree.section)
+        infoTreeMove = tree.moveSelection
+        // Restore this tab's selected row without changing the selection.
+        tree.moveSelection(0)
+        if (focus) tabButtons.get(tab)?.focus({ preventScroll: true })
+        reposition()
+      }
+      for (const [tab, label] of [["component", "Component"], ["element", "Element"]] as const) {
+        const button = mk<HTMLButtonElement>("button", "data-dev-inspector-info-tab", label)
+        button.type = "button"
+        button.id = `${popoverId}-${tab}`
+        button.setAttribute("role", "tab")
+        button.setAttribute("aria-controls", panel.id)
+        button.onclick = () => showTab(tab, true)
+        tabButtons.set(tab, button)
+        tabs.append(button)
+      }
+      info.append(tabs, panel)
+      info.append(mk("div", "data-dev-inspector-info-hint", "← → tabs · ↑ ↓ preview · Enter select / open · Space close"))
+      infoTabChange = showTab
       info.style.display = "block"
       info.style.pointerEvents = "auto"
+      showTab(infoTab)
+      trees.get(infoTab)?.focusSelection()
       reposition()
-      climbTree?.refinePaths(refineInfoStep)
-      try {
-        if (!infoVisible || infoTarget !== target) return
-        climbTree?.setHostSource(hostSource)
-        if (climbStep) {
-          await resolveClimbStepForInfo(climbStep)
-          if (!infoVisible || infoTarget !== target) return
-          const climbPath = getClimbStepDisplaySource(climbStep)
-          if (climbPath) climbTree?.setClimbStepSource(climbDepth, climbPath)
-          paintSourceBox(sourceContainer, climbPath)
-        } else paintSourceBox(sourceContainer, hostSource)
-        reposition()
-      } catch {
-        if (infoVisible && infoTarget === target) sourceContainer.textContent = "Source unavailable"
-      }
     }
-
 
     const refineClimbStep = async (step: OwnerChainStep) => {
       if (step.source && !isBundledOrExternalPath(step.source.filePath) && isClimbUsageBoundary({ usage: step.source, definition: step.definition })) return
@@ -776,21 +848,18 @@ export const InspectUI = ({
     }
 
     let logOptionPress: (() => void) | null = null
-    let walkOwnerChain: ((delta: number) => void) | null = null
     let moveToParentInspectable: (() => boolean) | null = null
-    let climbUpPastHosts: (() => boolean) | null = null
     let shakeTooltip: (() => void) | null = null
 
     const syncOptionFromEvent = (event: KeyboardEvent | MouseEvent | PointerEvent) => {
       const next = event.altKey
       if (next === optionHeld) return
-      const previousLabel = inspectTooltip.label
       optionHeld = next; ownerChainDepth = 0; bustOwnerChainCache()
+      if (infoVisible) return
       if (next) {
         const fiber = hoveredElement ? getFiber(hoveredElement) : null
         const chainLen = fiber ? buildOwnerChain(fiber).length : 0
-        if (chainLen > 0 && previousLabel) pushTooltipUnder(previousLabel)
-        else if (inspectTooltip.isOpen()) shakeTooltip?.()
+        if (chainLen === 0 && inspectTooltip.isOpen()) shakeTooltip?.()
       } else clearTooltipStack()
       updateOpenHint()
       if (next) logOptionPress?.()
@@ -826,25 +895,6 @@ export const InspectUI = ({
       const step = buildOwnerChain(fiber)[ownerChainDepth]
       if (!step) return
       refineActiveStep(fiber, step, ownerChainDepth)
-    }
-
-    walkOwnerChain = (delta: number) => {
-      if (!optionHeld || !hoveredElement || delta <= 0) return
-      const fiber = getFiber(hoveredElement)
-      const chain = fiber ? buildOwnerChain(fiber) : []
-      if (chain.length > 0) {
-        const next = Math.min(chain.length - 1, ownerChainDepth + delta)
-        if (next !== ownerChainDepth) {
-          const currentLabel = inspectTooltip.label
-          if (currentLabel) pushTooltipUnder(currentLabel)
-          ownerChainDepth = next
-          paintTooltipForFiber(fiber!)
-          updateOpenHint()
-          refineActiveStep(fiber!, chain[ownerChainDepth]!, ownerChainDepth, true)
-          return
-        }
-      }
-      climbUpPastHosts?.()
     }
 
     let shakeAnimation: Animation | null = null
@@ -933,7 +983,7 @@ export const InspectUI = ({
       const resolved = exact ? target : resolveInspectElement(target)
       if (isInspectorChrome(resolved)) return false
       const fiber = getFiber(resolved)
-      if (!fiber) { hide(); return false }
+      if (!fiber && !(infoVisible && exact)) { hide(); return false }
       const hasTargetChanged = hoveredElement !== resolved
       hoveredElement = resolved
       const rect = expandRectWithPadding(resolved.getBoundingClientRect(), {
@@ -951,8 +1001,10 @@ export const InspectUI = ({
       inspectTooltip.show()
       if (hasTargetChanged) {
         ownerChainDepth = 0; bustOwnerChainCache(); clearTooltipStack(); infoClimbSelection = null
-        paintTooltipForFiber(fiber)
-        void inspect(resolved, fiber, inspectGeneration += 1)
+        if (fiber) {
+          paintTooltipForFiber(fiber)
+          void inspect(resolved, fiber, inspectGeneration += 1)
+        }
         if (infoVisible) { infoTarget = resolved; void renderInfo(resolved, fiber) }
       }
       positionTooltip(rect)
@@ -1022,20 +1074,6 @@ export const InspectUI = ({
         return false
       }
       return true
-    }
-
-    climbUpPastHosts = () => {
-      for (let hop = 0; hop < 32; hop += 1) {
-        if (!moveToParentInspectable?.()) return false
-        if (infoVisible) {
-          if (infoTreeMove?.(-1)) return true
-          continue
-        }
-        const fiber = hoveredElement ? getFiber(hoveredElement) : null
-        if (fiber && buildOwnerChain(fiber).length > 0) return true
-      }
-      shakeOverlay()
-      return false
     }
 
     onSettingsChanged = () => {
@@ -1199,12 +1237,19 @@ export const InspectUI = ({
       if (!isActive) return
       syncOptionFromEvent(event)
       if (event.key === "Escape") { deactivate(); return }
-      if (optionHeld && !event.metaKey && (event.key === "Shift" || event.code === "ShiftLeft" || event.code === "ShiftRight")) {
-        event.preventDefault(); event.stopPropagation()
-        if (!event.repeat) walkOwnerChain?.(1)
-        return
-      }
       if (event.key === "Enter") {
+        if (infoVisible && infoSelectedNode) {
+          event.preventDefault(); event.stopPropagation()
+          const node = infoSelectedNode
+          if (infoTab === "element" && node.element && node.element !== infoTarget) {
+            adoptElement(node.element)
+            return
+          }
+          void (node.pendingSource ?? Promise.resolve(node.source)).then(source => {
+            if (source && infoVisible && infoSelectedNode === node) openInEditor(source, settings.ide)
+          }).catch(() => {})
+          return
+        }
         if (!hoveredElement) return
         const fiber = getFiber(hoveredElement)
         if (!fiber) return
@@ -1217,8 +1262,8 @@ export const InspectUI = ({
         if (infoVisible && infoTarget === hoveredElement) { hideInfo(); return }
         const fiber = getFiber(hoveredElement)
         if (!fiber) return
-        const liveStep = optionHeld ? getActiveChainStep(fiber) : null
-        infoClimbSelection = liveStep ? { depth: ownerChainDepth, step: liveStep } : null
+        infoTab = defaultTab
+        infoPreviousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
         infoVisible = true; infoTarget = hoveredElement; document.body.style.cursor = "crosshair"
         void renderInfo(hoveredElement, fiber)
         return
@@ -1235,11 +1280,13 @@ export const InspectUI = ({
         }
       }
 
-      if ((event.key === "[" || event.key === "]") && !isMod && !event.altKey) {
+      const parentKey = event.code === "BracketLeft" || event.key === "[" || event.key === "{"
+      const childKey = event.code === "BracketRight" || event.key === "]" || event.key === "}"
+      if ((parentKey || childKey) && !isMod && !event.altKey) {
         event.preventDefault()
         event.stopPropagation()
         if (!hoveredElement) { shakeOverlay(); return }
-        if (event.key === "[") { moveToParentInspectable?.(); return }
+        if (parentKey) { moveToParentInspectable?.(); return }
         navOrShake(findBracketChild(hoveredElement), hoveredElement, true)
         return
       }
@@ -1257,9 +1304,9 @@ export const InspectUI = ({
       const isModArrow = event.metaKey || event.ctrlKey
       const up = event.key === "ArrowUp", down = event.key === "ArrowDown"
       const prev = up || event.key === "ArrowLeft", nextKey = down || event.key === "ArrowRight"
-      if (infoVisible && !isModArrow && (up || down)) {
-        const node = infoTreeMove?.(up ? -1 : 1)
-        if (!node) up ? climbUpPastHosts?.() : shakeOverlay()
+      if (infoVisible) {
+        if (up || down) infoTreeMove?.(up ? -1 : 1)
+        else infoTabChange?.(infoTab === "component" ? "element" : "component", true)
         return
       }
       if (!hoveredElement) { shakeOverlay(); return }
@@ -1281,7 +1328,8 @@ export const InspectUI = ({
       if (!isActive) return
 
       if (infoVisible) {
-        if (infoTarget) highlightTarget(infoTarget)
+        if (infoTarget) highlightTarget(infoTarget, true)
+        if (infoTab === "element" && infoSelectedNode) paintGhost(infoSelectedNode)
         return
       }
 
@@ -1349,10 +1397,11 @@ export const InspectUI = ({
       delete (window as Window & { __inspectUI?: unknown }).__inspectUI
       overlay.remove()
       tooltip.remove()
+      ghostOverlay.remove()
       info.remove()
       document.body.style.cursor = previousCursor
     }
-  }, [projectRoot, shortcut, ide, tooltipKey, spotlightKey])
+  }, [projectRoot, shortcut, ide, tooltipKey, spotlightKey, defaultTab])
 
   return null
 }

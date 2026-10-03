@@ -41,18 +41,18 @@ export const TEST_CASE_META: SuiteCaseMeta[] = [
   { id: "parent-inspectable-card", title: "card parent / child", group: "parent inspectable" },
 ];
 
-export const basicHtmlHeadingNodes: AccuracyNode[] = [{ name: "h1", file: TEST_PAGE, line: 82 }];
+export const basicHtmlHeadingNodes: AccuracyNode[] = [{ name: "h1", file: TEST_PAGE, line: 75 }];
 
-export const svgPlainNodes: AccuracyNode[] = [{ name: "rect", file: TEST_PAGE, line: 101 }];
+export const svgPlainNodes: AccuracyNode[] = [{ name: "rect", file: TEST_PAGE, line: 94 }];
 
 export const svgParentNodes: AccuracyNode[] = [
-  { name: "SvgBars", file: TEST_PAGE, line: 119 },
+  { name: "SvgBars", file: TEST_PAGE, line: 105 },
   { name: "svg", file: SVG, line: 5 },
 ];
 
 export const shadcnPlainNodes: AccuracyNode[] = [
-  { name: "Button", file: TEST_PAGE, line: 131 },
-  { name: "button", file: BUTTON, line: 52 },
+  { name: "Button", file: TEST_PAGE, line: 117 },
+  { name: "button", file: BUTTON, line: 51 },
 ];
 
 export const shadcnVariantTargets: AccuracyTarget[] = [
@@ -60,31 +60,31 @@ export const shadcnVariantTargets: AccuracyTarget[] = [
     id: "secondary",
     label: "Secondary",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 142 },
-      { name: "button", file: BUTTON, line: 52 },
+      { name: "Button", file: TEST_PAGE, line: 128 },
+      { name: "button", file: BUTTON, line: 51 },
     ],
   },
   {
     id: "ghost",
     label: "Ghost",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 145 },
-      { name: "button", file: BUTTON, line: 52 },
+      { name: "Button", file: TEST_PAGE, line: 131 },
+      { name: "button", file: BUTTON, line: 51 },
     ],
   },
   {
     id: "destructive",
     label: "Destructive",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 148 },
-      { name: "button", file: BUTTON, line: 52 },
+      { name: "Button", file: TEST_PAGE, line: 134 },
+      { name: "button", file: BUTTON, line: 51 },
     ],
   },
 ];
 
 export const shadcnNestedNodes: AccuracyNode[] = [
-  { name: "Button", file: TEST_PAGE, line: 170 },
-  { name: "button", file: BUTTON, line: 52 },
+  { name: "Button", file: TEST_PAGE, line: 152 },
+  { name: "button", file: BUTTON, line: 51 },
 ];
 
 // React 18 has no host creation stack for useRender; resolve to the JSX caller.
@@ -93,24 +93,24 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     id: "default",
     label: "Default",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 185 },
-      { name: "span", file: TEST_PAGE, line: 185 },
+      { name: "Badge", file: TEST_PAGE, line: 167 },
+      { name: "span", file: TEST_PAGE, line: 167 },
     ],
   },
   {
     id: "secondary",
     label: "Secondary",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 186 },
-      { name: "span", file: TEST_PAGE, line: 186 },
+      { name: "Badge", file: TEST_PAGE, line: 168 },
+      { name: "span", file: TEST_PAGE, line: 168 },
     ],
   },
   {
     id: "destructive",
     label: "Destructive",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 189 },
-      { name: "span", file: TEST_PAGE, line: 189 },
+      { name: "Badge", file: TEST_PAGE, line: 171 },
+      { name: "span", file: TEST_PAGE, line: 171 },
     ],
   },
 ];
@@ -157,16 +157,16 @@ export const motionWrappedTargets: AccuracyTarget[] = [
     id: "alpha",
     label: "alpha",
     nodes: [
-      { name: "Chip", file: MOTION, line: 147 },
-      { name: "motion.div", file: MOTION, line: 136 },
+      { name: "Chip", file: MOTION, line: 141 },
+      { name: "motion.div", file: MOTION, line: 130 },
     ],
   },
   {
     id: "beta",
     label: "beta",
     nodes: [
-      { name: "Chip", file: MOTION, line: 148 },
-      { name: "motion.div", file: MOTION, line: 136 },
+      { name: "Chip", file: MOTION, line: 142 },
+      { name: "motion.div", file: MOTION, line: 130 },
     ],
   },
 ];
@@ -177,16 +177,16 @@ export const libraryOwnHostTargets: AccuracyTarget[] = [
     id: "first",
     label: "First",
     nodes: [
-      { name: "RendersOwnHost", file: TEST_PAGE, line: 247 },
-      { name: "svg", file: TEST_PAGE, line: 247 },
+      { name: "RendersOwnHost", file: TEST_PAGE, line: 229 },
+      { name: "svg", file: TEST_PAGE, line: 229 },
     ],
   },
   {
     id: "second",
     label: "Second",
     nodes: [
-      { name: "RendersOwnHost", file: TEST_PAGE, line: 248 },
-      { name: "svg", file: TEST_PAGE, line: 248 },
+      { name: "RendersOwnHost", file: TEST_PAGE, line: 230 },
+      { name: "svg", file: TEST_PAGE, line: 230 },
     ],
   },
 ];
@@ -196,7 +196,7 @@ export const radixSlotTargets: AccuracyTarget[] = [
     id: "button",
     label: "Own button",
     nodes: [
-      { name: "Clickable", file: RADIX, line: 42 },
+      { name: "Clickable", file: RADIX, line: 39 },
       { name: "button", file: RADIX, line: 31 },
     ],
   },
@@ -204,9 +204,9 @@ export const radixSlotTargets: AccuracyTarget[] = [
     id: "anchor",
     label: "Slot anchor",
     nodes: [
-      { name: "Clickable", file: RADIX, line: 44 },
+      { name: "Clickable", file: RADIX, line: 41 },
       { name: "Slot.Slot", file: RADIX, line: 31 },
-      { name: "a", file: RADIX, line: 45 },
+      { name: "a", file: RADIX, line: 42 },
     ],
   },
   {
@@ -214,7 +214,7 @@ export const radixSlotTargets: AccuracyTarget[] = [
     label: "Slot link",
     // The local Link host is defined in another file, which ends component climbing.
     nodes: [
-      { name: "LinkComponent", file: RADIX, line: 51 },
+      { name: "LinkComponent", file: RADIX, line: 48 },
       { name: "a", file: LINK, line: 4 },
     ],
   },
@@ -225,25 +225,25 @@ export const kindsForwardRefTargets: AccuracyTarget[] = [
     id: "forward-ref",
     label: "forwardRef",
     nodes: [
-      { name: "ForwardedInput", file: TEST_PAGE, line: 274 },
-      { name: "input", file: KINDS, line: 60 },
+      { name: "ForwardedInput", file: TEST_PAGE, line: 256 },
+      { name: "input", file: KINDS, line: 57 },
     ],
   },
   {
     id: "memo",
     label: "memo",
     nodes: [
-      { name: "MemoPill", file: TEST_PAGE, line: 278 },
-      { name: "span", file: KINDS, line: 77 },
+      { name: "MemoPill", file: TEST_PAGE, line: 257 },
+      { name: "span", file: KINDS, line: 74 },
     ],
   },
   {
     id: "compound",
     label: "compound",
     nodes: [
-      { name: "CompoundDemo", file: TEST_PAGE, line: 279 },
-      { name: "Panel", file: KINDS, line: 137 },
-      { name: "div", file: KINDS, line: 113 },
+      { name: "CompoundDemo", file: TEST_PAGE, line: 258 },
+      { name: "Panel", file: KINDS, line: 127 },
+      { name: "div", file: KINDS, line: 103 },
     ],
   },
 ];
@@ -252,17 +252,17 @@ export const compositionMapTargets: AccuracyTarget[] = [
   {
     id: "alpha",
     label: "alpha",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 294 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 273 }],
   },
   {
     id: "beta",
     label: "beta",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 294 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 273 }],
   },
   {
     id: "gamma",
     label: "gamma",
-    nodes: [{ name: "span", file: TEST_PAGE, line: 294 }],
+    nodes: [{ name: "span", file: TEST_PAGE, line: 273 }],
   },
 ];
 
@@ -270,23 +270,23 @@ export const thirdPartyIconTargets: AccuracyTarget[] = [
   {
     id: "sparkles",
     label: "Sparkles",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 315 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 294 }],
   },
   {
     id: "circle",
     label: "Circle",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 316 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 295 }],
   },
   {
     id: "arrow",
     label: "Arrow",
-    nodes: [{ name: "svg", file: TEST_PAGE, line: 317 }],
+    nodes: [{ name: "svg", file: TEST_PAGE, line: 296 }],
   },
   {
     id: "docs",
     label: "Docs link",
     nodes: [
-      { name: "LinkComponent", file: TEST_PAGE, line: 318 },
+      { name: "LinkComponent", file: TEST_PAGE, line: 297 },
       { name: "a", file: LINK, line: 4 },
     ],
   },
@@ -317,8 +317,8 @@ export const serverNestedTargets: AccuracyTarget[] = [
 ];
 
 export const serverClientButtonNodes: AccuracyNode[] = [
-  { name: "Button", file: SERVER_BUTTON, line: 15 },
-  { name: "button", file: BUTTON, line: 52 },
+  { name: "Button", file: SERVER_BUTTON, line: 9 },
+  { name: "button", file: BUTTON, line: 51 },
 ];
 
 /** `[` / `]` hops on a full Card — each target is one inspectable. */
@@ -327,15 +327,15 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "badge",
     label: "Badge",
     nodes: [
-      { name: "Badge", file: TEST_PAGE, line: 391 },
-      { name: "span", file: TEST_PAGE, line: 391 },
+      { name: "Badge", file: TEST_PAGE, line: 327 },
+      { name: "span", file: TEST_PAGE, line: 327 },
     ],
   },
   {
     id: "action",
     label: "CardAction",
     nodes: [
-      { name: "CardAction", file: TEST_PAGE, line: 390 },
+      { name: "CardAction", file: TEST_PAGE, line: 326 },
       { name: "div", file: CARD, line: 61 },
     ],
   },
@@ -343,7 +343,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "header",
     label: "CardHeader",
     nodes: [
-      { name: "CardHeader", file: TEST_PAGE, line: 380 },
+      { name: "CardHeader", file: TEST_PAGE, line: 318 },
       { name: "div", file: CARD, line: 25 },
     ],
   },
@@ -351,7 +351,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "card",
     label: "Card",
     nodes: [
-      { name: "Card", file: TEST_PAGE, line: 379 },
+      { name: "Card", file: TEST_PAGE, line: 317 },
       { name: "div", file: CARD, line: 11 },
     ],
   },
@@ -359,7 +359,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "title",
     label: "CardTitle",
     nodes: [
-      { name: "CardTitle", file: TEST_PAGE, line: 384 },
+      { name: "CardTitle", file: TEST_PAGE, line: 320 },
       { name: "div", file: CARD, line: 38 },
     ],
   },
@@ -367,7 +367,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "description",
     label: "CardDescription",
     nodes: [
-      { name: "CardDescription", file: TEST_PAGE, line: 381 },
+      { name: "CardDescription", file: TEST_PAGE, line: 319 },
       { name: "div", file: CARD, line: 51 },
     ],
   },
@@ -375,24 +375,24 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     id: "button",
     label: "Button",
     nodes: [
-      { name: "Button", file: TEST_PAGE, line: 398 },
-      { name: "button", file: BUTTON, line: 52 },
+      { name: "Button", file: TEST_PAGE, line: 334 },
+      { name: "button", file: BUTTON, line: 51 },
     ],
   },
   {
     id: "content",
     label: "CardContent",
     nodes: [
-      { name: "CardContent", file: TEST_PAGE, line: 397 },
-      { name: "div", file: CARD, line: 74 },
+      { name: "CardContent", file: TEST_PAGE, line: 333 },
+      { name: "div", file: CARD, line: 71 },
     ],
   },
   {
     id: "footer",
     label: "CardFooter",
     nodes: [
-      { name: "CardFooter", file: TEST_PAGE, line: 402 },
-      { name: "div", file: CARD, line: 84 },
+      { name: "CardFooter", file: TEST_PAGE, line: 338 },
+      { name: "div", file: CARD, line: 77 },
     ],
   },
 ];

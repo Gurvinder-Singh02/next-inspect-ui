@@ -38,6 +38,12 @@ Hover an element
 See its name and source
      ↓
 Click to open the source
+     ↓
+Space → Component / Element tabs
+     ↓
+Left / Right → switch tabs
+Up / Down → select or preview a row
+Enter → adopt an element / open source
 ```
 
 | Control | Action |
@@ -45,17 +51,23 @@ Click to open the source
 | Option + X (Alt + X on Windows/Linux) | Turn the tool on or off. |
 | Hover | Highlight an element and find its source. |
 | Click or Enter | Open the selected source in the editor. |
-| Space | Open or close the info panel with the component tree. |
-| Up / Left | Move to the previous sibling element. |
-| Down / Right | Move to the next sibling element. |
-| Up / Down with the info panel open | Move through the tree rows. |
-| `[` | Move to a parent inspectable element. |
-| `]` | Move to a child inspectable element. |
+| Space | Open or close the tree popover. Component opens first by default. |
+| Up / Left with the popover closed | Move to the previous sibling element. |
+| Down / Right with the popover closed | Move to the next sibling element. |
+| Left / Right with the popover open | Switch between Component and Element tabs. |
+| Up / Down with the popover open | Select a component row or preview an element row. |
+| `[` / `{` | Move to a parent inspectable element. |
+| `]` / `}` | Move to a child inspectable element. |
+| Enter in Element | Adopt a previewed element; open its source when it is already the current target. |
+| `…` in Element | Adopt that element as the current target. |
 | Hold Option / Alt | Select a parent component’s source. |
-| Option / Alt + Shift | Climb another level in the component chain. |
 | Escape | Turn the tool off. |
 
-Element navigation follows the rendered elements. Component climbing follows the React component chain. The info panel shows the resolved chain and source locations; click a source path to open it.
+Element navigation follows the rendered elements. Hold Option / Alt to select the immediate owning component; Shift has no climb action and adds no tooltip.
+
+Space pins the hovered element and opens an underline tab bar. The Component tab shows the immediate React parent chain within the current page, starting with the hovered element, then its owning component and successive parents. The tree stops after the page component, or before the nearest layout when there is no page boundary. Layouts and surrounding app providers stay outside the tree; local components and providers remain in their actual order. Framework internals and transparent vendor wrappers are skipped. The Element tab shows the actual HTML tree: 1–15 element nodes, prioritizing nearby siblings, then ancestors, then descendants with any remaining space. Ancestors stop at `<body>`; `<html>` and `<head>` stay outside the tree. It nests child rows between parent opening and closing tags, includes text and actual HTML attributes, and provides a `…` selection button (void elements have no closing tag), without separate CSS or Tailwind sections.
+
+Left / Right switches tabs; Up / Down selects rows without changing the pinned target. In Element, another row shows a separate red highlight at 50% opacity, without a ghost tooltip while the current target stays pinned. Enter adopts that preview and moves the panel to it; Enter on the current target opens its source. The `…` button also adopts its element. Switching tabs or closing the panel clears the preview. In Component, Enter or a source link opens the selected row’s file. Each tab remembers its row while the popover is open. Space closes it and restores focus; Escape exits inspect mode. A new popover starts on Component, or on Element when configured with `<InspectUI popoverProps={{ defaultTab: "element" }} ... />`.
 
 
 ## Test suite flow

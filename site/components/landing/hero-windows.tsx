@@ -163,15 +163,11 @@ const _InstallPill = () => {
   )
 }
 
-type ShortcutKey = "option" | "x" | "shift"
+type ShortcutKey = "option" | "x"
 
 const ShortcutGlyph = ({ name }: { name: ShortcutKey }) => {
   if (name === "option") {
     return <Option className="size-4" strokeWidth={2.2} aria-hidden />
-  }
-
-  if (name === "shift") {
-    return <span className="text-sm leading-none font-medium">⇧</span>
   }
 
   return <span className="text-sm leading-none font-semibold">X</span>
@@ -803,14 +799,6 @@ const DASHBOARD_CLIMB = [
   },
 ] as const
 
-const climbLabel = (step: (typeof DASHBOARD_CLIMB)[number]) =>
-  formatTooltipLabel({
-    title: step.tag,
-    pageName: step.pageName,
-    tooltipProps: DEFAULT_INSPECTOR_SETTINGS.tooltipProps,
-    tagStyle: step.tagStyle,
-  })
-
 const DashboardScene = ({ step }: { step: number }) => {
   const stageRef = useRef<HTMLDivElement>(null)
   const targetRefs = useRef<Record<string, HTMLElement | null>>({})
@@ -869,7 +857,6 @@ const DashboardScene = ({ step }: { step: number }) => {
             pageName={climb.pageName}
             tagStyle={climb.tagStyle}
             used={step >= 1}
-            stack={DASHBOARD_CLIMB.slice(0, step).map(climbLabel)}
           />
         </>
       ) : null}
@@ -1031,7 +1018,7 @@ const SCENES = [
     title: "Dashboard",
     icon: LayoutDashboard,
     Scene: DashboardScene,
-    steps: DASHBOARD_CLIMB.length,
+    steps: 2,
   },
 ] as const
 
@@ -1041,7 +1028,6 @@ const shortcutForScene = (
 ): ShortcutKey[] | null => {
   if (title === "Dashboard") {
     if (step === 1) return ["option"]
-    if (step >= 2) return ["option", "shift"]
     return null
   }
   return step >= 1 ? ["option", "x"] : null
