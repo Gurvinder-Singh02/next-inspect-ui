@@ -35,6 +35,7 @@ export const getSiteUrl = () => {
 export const INDEXABLE_PATHS = [
   "/",
   "/walkthrough",
+  "/how-it-works",
   "/works-with",
   "/api-reference",
   "/shortcuts",
