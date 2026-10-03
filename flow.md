@@ -26,6 +26,8 @@ React’s debug fields can contain a file location or a stack trace. They are in
 
 A source map connects built JavaScript to the original TSX file. It is separate from React’s metadata. Browser code uses source maps when needed; server code can use Next.js’s development stack-frame endpoint. Once the tool finds the file, line, and column, an editor link opens that location.
 
+Webpack’s browser and server stack URLs also use Next.js’s development stack-frame endpoint, with the matching browser or server mode. Vendor host builders with the same name as a project wrapper are skipped so the wrapper keeps its usage location. React 18 reads a component’s own JSX source for that usage, including wrappers defined in the same file. When a React 18 host is built with `createElement` or `useRender` and has no JSX source, its location falls back to the component’s caller.
+
 ## UI flow
 
 ```text
@@ -59,6 +61,8 @@ Element navigation follows the rendered elements. Component climbing follows the
 ## Test suite flow
 
 All test apps use the same suite UI: choose groups, press **Run all**, then open **Logs** to compare expected and found source locations. **Show source** opens the fixture snippets. Vite runs the browser cases; Next.js also runs the Server Component cases.
+
+Names, files, lines, and node counts must match exactly. Each app keeps its own expectations: Vite’s local Link has its host in `src/link.tsx`, and React 18’s generated hosts use the caller fallback described above.
 
 ## Competitor app flow
 

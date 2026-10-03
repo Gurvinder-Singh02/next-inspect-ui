@@ -1,10 +1,37 @@
 type AttrMap = Record<string, string>
 
-const createNode = (tag: string, namespaceURI: string | null = null) => {
+type TestNode = {
+  tagName: string
+  namespaceURI: string | null
+  parentElement: TestNode | null
+  children: TestNode[]
+  attrs: AttrMap
+  style: Pick<CSSStyleDeclaration, "setProperty" | "getPropertyValue">
+  textContent: string
+  className: string
+  classList: {
+    toggle(name: string, force?: boolean): boolean
+    contains(name: string): boolean
+  }
+  readonly outerHTML: string
+  readonly childElementCount: number
+  setAttribute(name: string, value: string): void
+  getAttribute(name: string): string | null
+  hasAttribute(name: string): boolean
+  toggleAttribute(name: string, force?: boolean): void
+  append(...nodes: TestNode[]): void
+  querySelector(selector: string): TestNode | null
+  querySelectorAll(selector: string): TestNode[]
+  closest(selector: string): TestNode | null
+  replaceChildren(): void
+  remove(): void
+}
+
+const createNode = (tag: string, namespaceURI: string | null = null): TestNode => {
   const attrs: AttrMap = {}
   const children: ReturnType<typeof createNode>[] = []
   const props: Record<string, string> = {}
-  const node = {
+  const node: TestNode = {
     tagName: tag.toUpperCase(),
     namespaceURI,
     parentElement: null as ReturnType<typeof createNode> | null,

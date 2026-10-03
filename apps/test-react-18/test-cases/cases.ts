@@ -7,11 +7,10 @@
 import type { AccuracyNode, AccuracyTarget, SuiteCaseMeta } from "./types"
 
 const TEST_PAGE = "src/App.tsx"
+const LINK = "src/link.tsx"
 const BUTTON = "components/ui/button.tsx"
-const BADGE = "components/ui/badge.tsx"
 const CARD = "components/ui/card.tsx"
 const MOTION = "components/algo-test/motion-fixture.tsx"
-const LIBRARY = "components/algo-test/library-rendered-fixture.tsx"
 const RADIX = "components/algo-test/radix-fixture.tsx"
 const KINDS = "components/algo-test/kinds-fixture.tsx"
 const SERVER = "components/algo-test/server-fixture.tsx"
@@ -92,13 +91,14 @@ export const shadcnNestedNodes: AccuracyNode[] = [
   { name: "button", file: BUTTON, line: 52 },
 ]
 
+// React 18 has no host creation stack for useRender; resolve to the JSX caller.
 export const baseuiBadgeTargets: AccuracyTarget[] = [
   {
     id: "default",
     label: "Default",
     nodes: [
       { name: "Badge", file: TEST_PAGE, line: 185 },
-      { name: "span", file: BADGE, line: 36 },
+      { name: "span", file: TEST_PAGE, line: 185 },
     ],
   },
   {
@@ -106,7 +106,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     label: "Secondary",
     nodes: [
       { name: "Badge", file: TEST_PAGE, line: 186 },
-      { name: "span", file: BADGE, line: 36 },
+      { name: "span", file: TEST_PAGE, line: 186 },
     ],
   },
   {
@@ -114,7 +114,7 @@ export const baseuiBadgeTargets: AccuracyTarget[] = [
     label: "Destructive",
     nodes: [
       { name: "Badge", file: TEST_PAGE, line: 189 },
-      { name: "span", file: BADGE, line: 36 },
+      { name: "span", file: TEST_PAGE, line: 189 },
     ],
   },
 ]
@@ -177,13 +177,14 @@ export const motionWrappedTargets: AccuracyTarget[] = [
   },
 ]
 
+// createElement has no JSX source metadata in React 18; resolve to the caller.
 export const libraryOwnHostTargets: AccuracyTarget[] = [
   {
     id: "first",
     label: "First",
     nodes: [
       { name: "RendersOwnHost", file: TEST_PAGE, line: 247 },
-      { name: "svg", file: LIBRARY, line: 28 },
+      { name: "svg", file: TEST_PAGE, line: 247 },
     ],
   },
   {
@@ -191,7 +192,7 @@ export const libraryOwnHostTargets: AccuracyTarget[] = [
     label: "Second",
     nodes: [
       { name: "RendersOwnHost", file: TEST_PAGE, line: 248 },
-      { name: "svg", file: LIBRARY, line: 28 },
+      { name: "svg", file: TEST_PAGE, line: 248 },
     ],
   },
 ]
@@ -217,11 +218,10 @@ export const radixSlotTargets: AccuracyTarget[] = [
   {
     id: "link",
     label: "Slot link",
+    // The local Link host is defined in another file, which ends component climbing.
     nodes: [
-      { name: "Clickable", file: RADIX, line: 50 },
-      { name: "Slot.Slot", file: RADIX, line: 31 },
       { name: "LinkComponent", file: RADIX, line: 51 },
-      { name: "a", file: RADIX, line: 51 },
+      { name: "a", file: LINK, line: 4 },
     ],
   },
 ]
@@ -293,7 +293,7 @@ export const thirdPartyIconTargets: AccuracyTarget[] = [
     label: "Docs link",
     nodes: [
       { name: "LinkComponent", file: TEST_PAGE, line: 318 },
-      { name: "a", file: TEST_PAGE, line: 318 },
+      { name: "a", file: LINK, line: 4 },
     ],
   },
 ]
@@ -334,7 +334,7 @@ export const parentInspectableCardTargets: AccuracyTarget[] = [
     label: "Badge",
     nodes: [
       { name: "Badge", file: TEST_PAGE, line: 391 },
-      { name: "span", file: BADGE, line: 36 },
+      { name: "span", file: TEST_PAGE, line: 391 },
     ],
   },
   {
