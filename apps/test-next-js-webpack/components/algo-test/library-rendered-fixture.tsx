@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { createElement } from "react"
+import { createElement } from "react";
 
 /**
  * Stands in for framer-motion / recharts: builds host DOM via createElement
@@ -10,8 +10,8 @@ export const RendersOwnHost = ({
   label,
   ...props
 }: {
-  label: string
-  "data-accuracy-target"?: string
+  label: string;
+  "data-accuracy-target"?: string;
 }) => {
   const children = [0, 1, 2].map((index) =>
     createElement("rect", {
@@ -22,8 +22,8 @@ export const RendersOwnHost = ({
       height: 28,
       rx: 6,
       className: "fill-muted-foreground/30",
-    })
-  )
+    }),
+  );
 
   return createElement(
     "svg",
@@ -35,6 +35,6 @@ export const RendersOwnHost = ({
       className: "overflow-visible",
       ...props,
     },
-    children
-  )
-}
+    children,
+  );
+};

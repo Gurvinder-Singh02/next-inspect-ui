@@ -8,12 +8,12 @@ The top **Library** selector enables one inspector at a time. Switching writes t
 
 Agentation and InterfaceKit are available alongside every inspector in development, including **Off**. They use their own annotation and styling buttons and have no entries in the Library selector.
 
-| Inspector | Version | Setup | Try |
-|---|---|---|---|
-| Next Inspect UI | Workspace package | `<InspectUI projectRoot={...} />` | Option + X; hover; Space |
-| Show Component | 2.3.0 | `<ShowComponent sourceRoot={...} />` | Option + right-click; add Shift for tree |
-| React Grab | 0.2.0 | Local installed `index.global.js`, before React | Hover; ⌘C / Ctrl+C |
-| Click to React Component | 1.1.3 | `<ClickToComponent editor="cursor" />` | Option + click / right-click |
+| Inspector                | Version           | Setup                                           | Try                                      |
+| ------------------------ | ----------------- | ----------------------------------------------- | ---------------------------------------- |
+| Next Inspect UI          | Workspace package | `<InspectUI projectRoot={...} />`               | Option + X; hover; Space                 |
+| Show Component           | 2.3.0             | `<ShowComponent sourceRoot={...} />`            | Option + right-click; add Shift for tree |
+| React Grab               | 0.2.0             | Local installed `index.global.js`, before React | Hover; ⌘C / Ctrl+C                       |
+| Click to React Component | 1.1.3             | `<ClickToComponent editor="cursor" />`          | Option + click / right-click             |
 
 React Grab is served from the installed npm package at `/react-grab.js`, using Next.js’s documented `beforeInteractive` script setup. No CDN, agent integration, or custom build transform is added. Its normal element/context-copy UI remains intact.
 

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Card,
@@ -9,7 +9,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Item,
   ItemActions,
@@ -17,39 +17,36 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/item";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 const SCENES = {
   cooking: { brightness: [90], colorTemp: [70], volume: [30], fade: [0] },
   dining: { brightness: [50], colorTemp: [40], volume: [20], fade: [60] },
   nightlight: { brightness: [15], colorTemp: [20], volume: [0], fade: [80] },
   focus: { brightness: [100], colorTemp: [85], volume: [0], fade: [0] },
-} as const
+} as const;
 
 export function KitchenIsland() {
-  const [enabled, setEnabled] = React.useState(true)
-  const [scene, setScene] = React.useState("cooking")
-  const [brightness, setBrightness] = React.useState([90])
-  const [colorTemp, setColorTemp] = React.useState([70])
-  const [volume, setVolume] = React.useState([30])
-  const [fade, setFade] = React.useState([0])
+  const [enabled, setEnabled] = React.useState(true);
+  const [scene, setScene] = React.useState("cooking");
+  const [brightness, setBrightness] = React.useState([90]);
+  const [colorTemp, setColorTemp] = React.useState([70]);
+  const [volume, setVolume] = React.useState([30]);
+  const [fade, setFade] = React.useState([0]);
 
   const handleSceneChange = (value: string) => {
-    if (!value) return
-    setScene(value)
-    const preset = SCENES[value as keyof typeof SCENES]
-    setBrightness([...preset.brightness])
-    setColorTemp([...preset.colorTemp])
-    setVolume([...preset.volume])
-    setFade([...preset.fade])
-  }
+    if (!value) return;
+    setScene(value);
+    const preset = SCENES[value as keyof typeof SCENES];
+    setBrightness([...preset.brightness]);
+    setColorTemp([...preset.colorTemp]);
+    setVolume([...preset.volume]);
+    setFade([...preset.fade]);
+  };
 
   return (
     <Card>
@@ -126,9 +123,7 @@ export function KitchenIsland() {
             <ItemActions className="flex-1">
               <Slider
                 value={colorTemp}
-                onValueChange={(value) =>
-                  setColorTemp(Array.isArray(value) ? [...value] : [value])
-                }
+                onValueChange={(value) => setColorTemp(Array.isArray(value) ? [...value] : [value])}
                 max={100}
                 disabled={!enabled}
               />
@@ -150,9 +145,7 @@ export function KitchenIsland() {
             <ItemActions className="flex-1">
               <Slider
                 value={volume}
-                onValueChange={(value) =>
-                  setVolume(Array.isArray(value) ? [...value] : [value])
-                }
+                onValueChange={(value) => setVolume(Array.isArray(value) ? [...value] : [value])}
                 max={100}
                 disabled={!enabled}
               />
@@ -174,9 +167,7 @@ export function KitchenIsland() {
             <ItemActions className="flex-1">
               <Slider
                 value={fade}
-                onValueChange={(value) =>
-                  setFade(Array.isArray(value) ? [...value] : [value])
-                }
+                onValueChange={(value) => setFade(Array.isArray(value) ? [...value] : [value])}
                 max={100}
                 disabled={!enabled}
               />
@@ -185,5 +176,5 @@ export function KitchenIsland() {
         </ItemGroup>
       </CardContent>
     </Card>
-  )
+  );
 }

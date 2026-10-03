@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
-import { Slot } from "@radix-ui/react-slot"
+import Link from "next/link";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Slot } from "@radix-ui/react-slot";
 
 /**
  * Radix fixtures.
@@ -22,20 +22,17 @@ const Clickable = ({
   children,
   ...props
 }: {
-  asChild?: boolean
-  children: React.ReactNode
-  "data-accuracy-target"?: string
+  asChild?: boolean;
+  children: React.ReactNode;
+  "data-accuracy-target"?: string;
 }) => {
-  const Comp = asChild ? Slot : "button"
+  const Comp = asChild ? Slot : "button";
   return (
-    <Comp
-      className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
-      {...props}
-    >
+    <Comp className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]" {...props}>
       {children}
     </Comp>
-  )
-}
+  );
+};
 
 export const SlotFixtures = () => (
   <div className="flex flex-wrap items-center gap-3">
@@ -51,7 +48,7 @@ export const SlotFixtures = () => (
       <Link href="/test">Slot renders a next/link</Link>
     </Clickable>
   </div>
-)
+);
 
 /** A real Radix primitive, with portalled content. */
 export const RadixMenu = () => (
@@ -78,7 +75,7 @@ export const RadixMenu = () => (
       </DropdownMenu.Content>
     </DropdownMenu.Portal>
   </DropdownMenu.Root>
-)
+);
 
 /** Trigger using asChild — the trigger's DOM comes from the child. */
 export const RadixAsChildTrigger = () => (
@@ -98,4 +95,4 @@ export const RadixAsChildTrigger = () => (
       </DropdownMenu.Content>
     </DropdownMenu.Portal>
   </DropdownMenu.Root>
-)
+);

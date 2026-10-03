@@ -1,12 +1,8 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import {
   Item,
   ItemContent,
@@ -14,12 +10,9 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/item";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 const HOLDINGS = [
   {
@@ -54,7 +47,7 @@ const HOLDINGS = [
     shares: "320",
     value: "$15,136.59",
   },
-]
+];
 
 export function ReleaseCatalog() {
   return (
@@ -101,9 +94,7 @@ export function ReleaseCatalog() {
                   <span className="text-xs tracking-wider text-muted-foreground uppercase">
                     Value
                   </span>
-                  <span className="font-medium tabular-nums">
-                    {holding.value}
-                  </span>
+                  <span className="font-medium tabular-nums">{holding.value}</span>
                 </div>
               </div>
             </Item>
@@ -111,5 +102,5 @@ export function ReleaseCatalog() {
         </ItemGroup>
       </CardContent>
     </Card>
-  )
+  );
 }

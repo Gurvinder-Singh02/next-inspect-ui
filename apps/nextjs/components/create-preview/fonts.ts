@@ -19,6 +19,6 @@ export const FONTS = [
       },
     },
   },
-] as const
+] as const;
 
-export type Font = (typeof FONTS)[number]
+export type Font = (typeof FONTS)[number];

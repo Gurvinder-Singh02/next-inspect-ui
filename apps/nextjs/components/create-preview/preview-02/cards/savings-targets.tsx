@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -7,31 +7,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+} from "@/components/ui/card";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "@/components/ui/input-group"
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemFooter,
-  ItemGroup,
-} from "@/components/ui/item"
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select"
-import { Progress } from "@/components/ui/progress"
+} from "@/components/ui/input-group";
+import { Item, ItemContent, ItemDescription, ItemFooter, ItemGroup } from "@/components/ui/item";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { Progress } from "@/components/ui/progress";
 
 export function SavingsTargets() {
   return (
@@ -53,18 +39,12 @@ export function SavingsTargets() {
                 <ItemDescription className="cn-font-heading text-xs font-medium tracking-wider text-muted-foreground uppercase">
                   Retirement
                 </ItemDescription>
-                <span className="text-3xl font-semibold tabular-nums">
-                  $420,000
-                </span>
+                <span className="text-3xl font-semibold tabular-nums">$420,000</span>
                 <Progress value={65} />
               </ItemContent>
               <ItemFooter>
-                <span className="text-sm text-muted-foreground">
-                  65% achieved
-                </span>
-                <span className="text-sm font-medium tabular-nums">
-                  $273,000
-                </span>
+                <span className="text-sm text-muted-foreground">65% achieved</span>
+                <span className="text-sm font-medium tabular-nums">$273,000</span>
               </ItemFooter>
             </Item>
             <Item variant="muted" className="flex-col items-stretch">
@@ -72,18 +52,12 @@ export function SavingsTargets() {
                 <ItemDescription className="cn-font-heading text-xs font-medium tracking-wider text-muted-foreground uppercase">
                   Real Estate
                 </ItemDescription>
-                <span className="text-3xl font-semibold tabular-nums">
-                  $85,000
-                </span>
+                <span className="text-3xl font-semibold tabular-nums">$85,000</span>
                 <Progress value={32} />
               </ItemContent>
               <ItemFooter>
-                <span className="text-sm text-muted-foreground">
-                  32% achieved
-                </span>
-                <span className="text-sm font-medium tabular-nums">
-                  $27,200
-                </span>
+                <span className="text-sm text-muted-foreground">32% achieved</span>
+                <span className="text-sm font-medium tabular-nums">$27,200</span>
               </ItemFooter>
             </Item>
           </ItemGroup>
@@ -112,32 +86,20 @@ export function SavingsTargets() {
             <Field>
               <FieldLabel htmlFor="invest-type">Order Type</FieldLabel>
               <NativeSelect id="invest-type" defaultValue="market">
-                <NativeSelectOption value="market">
-                  Market Order
-                </NativeSelectOption>
-                <NativeSelectOption value="limit">
-                  Limit Order
-                </NativeSelectOption>
+                <NativeSelectOption value="market">Market Order</NativeSelectOption>
+                <NativeSelectOption value="limit">Limit Order</NativeSelectOption>
                 <NativeSelectOption value="stop">Stop Order</NativeSelectOption>
               </NativeSelect>
-              <FieldDescription>
-                Market orders execute at the current price.
-              </FieldDescription>
+              <FieldDescription>Market orders execute at the current price.</FieldDescription>
             </Field>
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Estimated Shares
-                </span>
+                <span className="text-sm text-muted-foreground">Estimated Shares</span>
                 <span className="text-sm font-semibold tabular-nums">1.95</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Buying Power
-                </span>
-                <span className="text-sm font-semibold tabular-nums">
-                  $12,450.00
-                </span>
+                <span className="text-sm text-muted-foreground">Buying Power</span>
+                <span className="text-sm font-semibold tabular-nums">$12,450.00</span>
               </div>
             </div>
           </FieldGroup>
@@ -150,5 +112,5 @@ export function SavingsTargets() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

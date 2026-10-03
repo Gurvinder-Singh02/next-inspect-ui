@@ -1,26 +1,22 @@
-"use client"
+"use client";
 
-import { useMemo, useState } from "react"
-import { ChevronDownIcon, ChevronsUpDown, CodeIcon } from "lucide-react"
+import { useMemo, useState } from "react";
+import { ChevronDownIcon, ChevronsUpDown, CodeIcon } from "lucide-react";
 
-import { CodeBlock } from "@/components/accuracy/code-block"
-import type { SuiteSourceFile } from "@/components/accuracy/types"
-import { cn } from "@/lib/utils"
+import { CodeBlock } from "@/components/accuracy/code-block";
+import type { SuiteSourceFile } from "@/components/accuracy/types";
+import { cn } from "@/lib/utils";
 
 const tabLabel = (label: string) => {
-  const lower = label.toLowerCase()
-  if (lower.startsWith("used")) return "Used"
-  if (lower.includes("defined")) return "Defined"
-  return label
-}
+  const lower = label.toLowerCase();
+  if (lower.startsWith("used")) return "Used";
+  if (lower.includes("defined")) return "Defined";
+  return label;
+};
 
-export const SuiteCaseSource = ({
-  sources,
-}: {
-  sources: SuiteSourceFile[]
-}) => {
-  const [open, setOpen] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(0)
+export const SuiteCaseSource = ({ sources }: { sources: SuiteSourceFile[] }) => {
+  const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const tabs = useMemo(
     () =>
@@ -32,12 +28,12 @@ export const SuiteCaseSource = ({
         code: source.code,
         html: source.html,
       })),
-    [sources]
-  )
+    [sources],
+  );
 
-  const active = tabs[activeIndex] ?? tabs[0]
+  const active = tabs[activeIndex] ?? tabs[0];
 
-  if (sources.length === 0 || !active) return null
+  if (sources.length === 0 || !active) return null;
 
   return (
     <div className="flex flex-col gap-2 px-1">
@@ -48,7 +44,7 @@ export const SuiteCaseSource = ({
         className={cn(
           "mb-2 inline-flex w-fit items-center gap-1.5",
           "font-mono text-[10px] tracking-wide text-muted-foreground uppercase",
-          "transition-colors hover:text-foreground"
+          "transition-colors hover:text-foreground",
         )}
       >
         <ChevronsUpDown className="size-3" aria-hidden />
@@ -58,13 +54,9 @@ export const SuiteCaseSource = ({
       {open ? (
         <div className="flex flex-col overflow-hidden rounded-xl bg-muted/30">
           <div className="flex items-center justify-between gap-3 border-b border-border/70 px-1">
-            <div
-              role="tablist"
-              aria-label="Source view"
-              className="flex min-w-0"
-            >
+            <div role="tablist" aria-label="Source view" className="flex min-w-0">
               {tabs.map((tab) => {
-                const isActive = tab.index === active.index
+                const isActive = tab.index === active.index;
                 return (
                   <button
                     key={tab.key}
@@ -76,9 +68,7 @@ export const SuiteCaseSource = ({
                       "relative inline-flex min-h-9 items-center px-3",
                       "font-mono text-[10px] tracking-wide uppercase",
                       "transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-                      isActive
-                        ? "text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
+                      isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
                     )}
                   >
                     {tab.name}
@@ -86,11 +76,11 @@ export const SuiteCaseSource = ({
                       aria-hidden
                       className={cn(
                         "absolute inset-x-3 bottom-0 h-0.5 rounded-full transition-colors",
-                        isActive ? "bg-foreground" : "bg-transparent"
+                        isActive ? "bg-foreground" : "bg-transparent",
                       )}
                     />
                   </button>
-                )
+                );
               })}
             </div>
 
@@ -110,5 +100,5 @@ export const SuiteCaseSource = ({
         </div>
       ) : null}
     </div>
-  )
-}
+  );
+};

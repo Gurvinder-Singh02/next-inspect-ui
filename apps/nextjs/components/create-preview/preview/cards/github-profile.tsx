@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,19 +8,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/card";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { Textarea } from "@/components/ui/textarea";
 
 export function GithubProfile() {
   return (
@@ -36,19 +28,15 @@ export function GithubProfile() {
               <FieldLabel htmlFor="name">Name</FieldLabel>
               <Input id="name" placeholder="shadcn" />
               <FieldDescription>
-                Your name may appear around GitHub where you contribute or are
-                mentioned. You can remove it at any time.
+                Your name may appear around GitHub where you contribute or are mentioned. You can
+                remove it at any time.
               </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="email">Public Email</FieldLabel>
               <NativeSelect id="email">
-                <NativeSelectOption value="m@shadcn.com">
-                  m@shadcn.com
-                </NativeSelectOption>
-                <NativeSelectOption value="m@gmail.com">
-                  m@gmail.com
-                </NativeSelectOption>
+                <NativeSelectOption value="m@shadcn.com">m@shadcn.com</NativeSelectOption>
+                <NativeSelectOption value="m@gmail.com">m@gmail.com</NativeSelectOption>
               </NativeSelect>
               <FieldDescription>
                 You can manage verified email addresses in your{" "}
@@ -57,13 +45,9 @@ export function GithubProfile() {
             </Field>
             <Field>
               <FieldLabel htmlFor="bio">Bio</FieldLabel>
-              <Textarea
-                id="bio"
-                placeholder="Tell us a little bit about yourself"
-              />
+              <Textarea id="bio" placeholder="Tell us a little bit about yourself" />
               <FieldDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
+                You can <span>@mention</span> other users and organizations to link to them.
               </FieldDescription>
             </Field>
           </FieldGroup>
@@ -75,5 +59,5 @@ export function GithubProfile() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

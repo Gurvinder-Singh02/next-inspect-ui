@@ -1,18 +1,8 @@
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 export function SocialLinks() {
   return (
@@ -34,10 +24,7 @@ export function SocialLinks() {
                   remixicon="RiAddCircleLine"
                 />
               </InputGroupAddon>
-              <InputGroupInput
-                id="spotify-url"
-                defaultValue="spotify.com/artist/3j...2k"
-              />
+              <InputGroupInput id="spotify-url" defaultValue="spotify.com/artist/3j...2k" />
             </InputGroup>
           </Field>
           <Field>
@@ -52,10 +39,7 @@ export function SocialLinks() {
                   remixicon="RiCameraLine"
                 />
               </InputGroupAddon>
-              <InputGroupInput
-                id="instagram-handle"
-                defaultValue="@julianduryea_music"
-              />
+              <InputGroupInput id="instagram-handle" defaultValue="@julianduryea_music" />
             </InputGroup>
           </Field>
           <Field>
@@ -70,10 +54,7 @@ export function SocialLinks() {
                   remixicon="RiCloudLine"
                 />
               </InputGroupAddon>
-              <InputGroupInput
-                id="soundcloud-url"
-                placeholder="soundcloud.com/username"
-              />
+              <InputGroupInput id="soundcloud-url" placeholder="soundcloud.com/username" />
             </InputGroup>
           </Field>
           <Field>
@@ -88,10 +69,7 @@ export function SocialLinks() {
                   remixicon="RiGlobalLine"
                 />
               </InputGroupAddon>
-              <InputGroupInput
-                id="website-url"
-                placeholder="https://yoursite.com"
-              />
+              <InputGroupInput id="website-url" placeholder="https://yoursite.com" />
             </InputGroup>
           </Field>
         </FieldGroup>
@@ -103,5 +81,5 @@ export function SocialLinks() {
         <Button className="style-sera:flex-1">Save Changes</Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

@@ -20,8 +20,8 @@ export {
   svgParentNodes,
   svgPlainNodes,
   thirdPartyIconTargets,
-} from "./cases"
-export { CASE_SOURCE_EXAMPLES } from "./case-source-examples"
+} from "./cases";
+export { CASE_SOURCE_EXAMPLES } from "./case-source-examples";
 export type {
   AccuracyNode,
   AccuracyTarget,
@@ -29,4 +29,4 @@ export type {
   FoundNode,
   SuiteCaseMeta,
   SuiteSourceFile,
-} from "./types"
+} from "./types";

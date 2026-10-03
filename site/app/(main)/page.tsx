@@ -50,7 +50,9 @@ const FAQ: { q: string; a: ReactNode }[] = [
         <p>Anything with a client fiber, including:</p>
         <ul className="flex list-disc flex-col gap-1 pl-4">
           <li>HTML : headings, buttons, links, cards</li>
-          <li>SVG : <code>svg</code>, <code>rect</code>, and SVG components</li>
+          <li>
+            SVG : <code>svg</code>, <code>rect</code>, and SVG components
+          </li>
           <li>shadcn : Button, Card, Badge, nested composition</li>
           <li>
             Base UI : useRender hosts, and nested children like Collapsible
@@ -83,9 +85,7 @@ export default function OverviewPage() {
     <>
       <header className="flex flex-col gap-6">
         <div className="flex items-center gap-2.5">
-          <h1>
-            next-inspect-ui
-          </h1>
+          <h1>next-inspect-ui</h1>
           <span className="font-inter text-[12px] text-muted-foreground">
             v{inspectUIPackage.version}
           </span>
@@ -113,28 +113,24 @@ export default function OverviewPage() {
       </header>
 
       <section className="flex flex-col gap-3">
-        <h2>
-          Installation
-        </h2>
+        <h2>Installation</h2>
         <InstallSection />
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2>
-          FAQ
-        </h2>
+        <h2>FAQ</h2>
         <FaqList items={FAQ} />
-        <p className="pt-4 text-sm" >
+        <p className="pt-4 text-sm">
           <Link
             href="/walkthrough"
-            className="text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
+            className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             See it in action
           </Link>
           {" · "}
           <Link
             href="/api-reference"
-            className="text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
+            className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             API reference
           </Link>

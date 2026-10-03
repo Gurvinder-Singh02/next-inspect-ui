@@ -3,7 +3,8 @@ import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "How it works",
-  description: "From a browser element to React Fiber, source maps, and the exact line in your editor.",
+  description:
+    "From a browser element to React Fiber, source maps, and the exact line in your editor.",
   alternates: { canonical: "/how-it-works" },
 }
 
@@ -38,7 +39,10 @@ export default function HowItWorksPage() {
         <p>Pick an element in your browser. Jump to the code that made it.</p>
       </header>
 
-      <pre className="overflow-x-auto rounded-lg border border-border bg-muted/30 p-5 text-sm leading-relaxed" aria-label="Path from a browser click to your editor">
+      <pre
+        className="overflow-x-auto rounded-lg border border-border bg-muted/30 p-5 text-sm leading-relaxed"
+        aria-label="Path from a browser click to your editor"
+      >
         {`Browser click
      ↓
 DOM element
@@ -65,14 +69,43 @@ Cursor / VS Code`}
         ))}
       </ol>
 
-      <section className="flex flex-col gap-3" aria-labelledby="inspect-controls">
-        <h2 id="inspect-controls" className="text-lg font-medium">Choose what to inspect</h2>
+      <section
+        className="flex flex-col gap-3"
+        aria-labelledby="inspect-controls"
+      >
+        <h2 id="inspect-controls" className="text-lg font-medium">
+          Choose what to inspect
+        </h2>
         <p>Press Alt + X to turn inspect mode on or off.</p>
-        <p>Click to open the element’s source. For a shared Button, this can be the button implementation.</p>
-        <p>Hold Option / Alt to climb to its component usage, such as &lt;Button /&gt; in your page. Press Shift while holding it to climb another level.</p>
-        <p>Press Space to toggle the info panel. It shows the node tree, source links, and CSS. Press Escape to leave inspect mode.</p>
         <p>
-          See the <Link href="/walkthrough" className="text-foreground underline underline-offset-4">walkthrough</Link> or the full <Link href="/shortcuts" className="text-foreground underline underline-offset-4">shortcut list</Link>.
+          Click to open the element’s source. For a shared Button, this can be
+          the button implementation.
+        </p>
+        <p>
+          Hold Option / Alt to climb to its component usage, such as &lt;Button
+          /&gt; in your page. Press Shift while holding it to climb another
+          level.
+        </p>
+        <p>
+          Press Space to toggle the info panel. It shows the node tree, source
+          links, and CSS. Press Escape to leave inspect mode.
+        </p>
+        <p>
+          See the{" "}
+          <Link
+            href="/walkthrough"
+            className="text-foreground underline underline-offset-4"
+          >
+            walkthrough
+          </Link>{" "}
+          or the full{" "}
+          <Link
+            href="/shortcuts"
+            className="text-foreground underline underline-offset-4"
+          >
+            shortcut list
+          </Link>
+          .
         </p>
       </section>
     </>

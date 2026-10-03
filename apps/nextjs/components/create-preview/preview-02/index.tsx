@@ -1,36 +1,36 @@
-import { AccountAccess } from "@/components/create-preview/preview-02/cards/account-access"
-import { CardOverview } from "@/components/create-preview/preview-02/cards/card-overview"
-import { ClaimableBalance } from "@/components/create-preview/preview-02/cards/claimable-balance"
-import { ContributionHistory } from "@/components/create-preview/preview-02/cards/contribution-history"
-import { CoverArt } from "@/components/create-preview/preview-02/cards/cover-art"
-import { DividendIncome } from "@/components/create-preview/preview-02/cards/dividend-income"
-import { EmptyConnectBank } from "@/components/create-preview/preview-02/cards/empty-connect-bank"
-import { EmptyDistributeTrack } from "@/components/create-preview/preview-02/cards/empty-distribute-track"
-import { EmptyExploreCatalog } from "@/components/create-preview/preview-02/cards/empty-explore-catalog"
-import { Faq } from "@/components/create-preview/preview-02/cards/faq"
-import { FrontDoor } from "@/components/create-preview/preview-02/cards/front-door"
-import { IndexInvesting } from "@/components/create-preview/preview-02/cards/index-investing"
-import { KitchenIsland } from "@/components/create-preview/preview-02/cards/kitchen-island"
-import { LoadingCard } from "@/components/create-preview/preview-02/cards/loading-card"
-import { NewMilestone } from "@/components/create-preview/preview-02/cards/new-milestone"
-import { NotificationSettings } from "@/components/create-preview/preview-02/cards/notification-settings"
-import { Payments } from "@/components/create-preview/preview-02/cards/payments"
-import { PayoutThreshold } from "@/components/create-preview/preview-02/cards/payout-threshold"
-import { PowerUsage } from "@/components/create-preview/preview-02/cards/power-usage"
-import { Preferences } from "@/components/create-preview/preview-02/cards/preferences"
-import { QrConnect } from "@/components/create-preview/preview-02/cards/qr-connect"
-import { ReceivingMethod } from "@/components/create-preview/preview-02/cards/receiving-method"
-import { RecentTransactions } from "@/components/create-preview/preview-02/cards/recent-transactions"
-import { ReleaseCatalog } from "@/components/create-preview/preview-02/cards/release-catalog"
-import { RollerShades } from "@/components/create-preview/preview-02/cards/roller-shades"
-import { SavingsProgress } from "@/components/create-preview/preview-02/cards/savings-progress"
-import { SavingsTargets } from "@/components/create-preview/preview-02/cards/savings-targets"
-import { SidebarNav } from "@/components/create-preview/preview-02/cards/sidebar-nav"
-import { SocialLinks } from "@/components/create-preview/preview-02/cards/social-links"
-import { StockPerformance } from "@/components/create-preview/preview-02/cards/stock-performance"
-import { SyncingState } from "@/components/create-preview/preview-02/cards/syncing-state"
-import { TransferFunds } from "@/components/create-preview/preview-02/cards/transfer-funds"
-import { UpcomingPayments } from "@/components/create-preview/preview-02/cards/upcoming-payments"
+import { AccountAccess } from "@/components/create-preview/preview-02/cards/account-access";
+import { CardOverview } from "@/components/create-preview/preview-02/cards/card-overview";
+import { ClaimableBalance } from "@/components/create-preview/preview-02/cards/claimable-balance";
+import { ContributionHistory } from "@/components/create-preview/preview-02/cards/contribution-history";
+import { CoverArt } from "@/components/create-preview/preview-02/cards/cover-art";
+import { DividendIncome } from "@/components/create-preview/preview-02/cards/dividend-income";
+import { EmptyConnectBank } from "@/components/create-preview/preview-02/cards/empty-connect-bank";
+import { EmptyDistributeTrack } from "@/components/create-preview/preview-02/cards/empty-distribute-track";
+import { EmptyExploreCatalog } from "@/components/create-preview/preview-02/cards/empty-explore-catalog";
+import { Faq } from "@/components/create-preview/preview-02/cards/faq";
+import { FrontDoor } from "@/components/create-preview/preview-02/cards/front-door";
+import { IndexInvesting } from "@/components/create-preview/preview-02/cards/index-investing";
+import { KitchenIsland } from "@/components/create-preview/preview-02/cards/kitchen-island";
+import { LoadingCard } from "@/components/create-preview/preview-02/cards/loading-card";
+import { NewMilestone } from "@/components/create-preview/preview-02/cards/new-milestone";
+import { NotificationSettings } from "@/components/create-preview/preview-02/cards/notification-settings";
+import { Payments } from "@/components/create-preview/preview-02/cards/payments";
+import { PayoutThreshold } from "@/components/create-preview/preview-02/cards/payout-threshold";
+import { PowerUsage } from "@/components/create-preview/preview-02/cards/power-usage";
+import { Preferences } from "@/components/create-preview/preview-02/cards/preferences";
+import { QrConnect } from "@/components/create-preview/preview-02/cards/qr-connect";
+import { ReceivingMethod } from "@/components/create-preview/preview-02/cards/receiving-method";
+import { RecentTransactions } from "@/components/create-preview/preview-02/cards/recent-transactions";
+import { ReleaseCatalog } from "@/components/create-preview/preview-02/cards/release-catalog";
+import { RollerShades } from "@/components/create-preview/preview-02/cards/roller-shades";
+import { SavingsProgress } from "@/components/create-preview/preview-02/cards/savings-progress";
+import { SavingsTargets } from "@/components/create-preview/preview-02/cards/savings-targets";
+import { SidebarNav } from "@/components/create-preview/preview-02/cards/sidebar-nav";
+import { SocialLinks } from "@/components/create-preview/preview-02/cards/social-links";
+import { StockPerformance } from "@/components/create-preview/preview-02/cards/stock-performance";
+import { SyncingState } from "@/components/create-preview/preview-02/cards/syncing-state";
+import { TransferFunds } from "@/components/create-preview/preview-02/cards/transfer-funds";
+import { UpcomingPayments } from "@/components/create-preview/preview-02/cards/upcoming-payments";
 
 export default function Preview02Example() {
   return (
@@ -94,5 +94,5 @@ export default function Preview02Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

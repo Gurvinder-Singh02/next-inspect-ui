@@ -1,9 +1,6 @@
-import { codeToHtml, type BundledLanguage } from "shiki"
+import { codeToHtml, type BundledLanguage } from "shiki";
 
-export const highlightCode = async (
-  code: string,
-  lang: BundledLanguage = "tsx"
-) => {
+export const highlightCode = async (code: string, lang: BundledLanguage = "tsx") => {
   return codeToHtml(code, {
     lang,
     themes: {
@@ -11,5 +8,5 @@ export const highlightCode = async (
       dark: "github-dark",
     },
     defaultColor: false,
-  })
-}
+  });
+};

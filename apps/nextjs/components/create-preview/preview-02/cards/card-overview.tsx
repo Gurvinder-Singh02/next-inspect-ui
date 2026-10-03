@@ -1,21 +1,16 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, XAxis } from "recharts"
+import { Bar, BarChart, XAxis } from "recharts";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
 const activityData = [
   { month: "Jan", amount: 40 },
@@ -30,14 +25,14 @@ const activityData = [
   { month: "Oct", amount: 70 },
   { month: "Nov", amount: 45 },
   { month: "Dec", amount: 80 },
-]
+];
 
 const chartConfig = {
   amount: {
     label: "Activity",
     color: "var(--chart-2)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function CardOverview() {
   return (
@@ -46,9 +41,7 @@ export function CardOverview() {
         <CardContent>
           <CardDescription>Card Balance</CardDescription>
           <CardTitle className="text-2xl tabular-nums">US$12.94</CardTitle>
-          <CardDescription className="tabular-nums">
-            US$11,337.06 Available
-          </CardDescription>
+          <CardDescription className="tabular-nums">US$11,337.06 Available</CardDescription>
         </CardContent>
       </Card>
       <Card className="flex flex-col justify-between">
@@ -69,10 +62,7 @@ export function CardOverview() {
             <Badge variant="secondary">+US$0.25 Daily Cash</Badge>
           </div>
           <ChartContainer config={chartConfig} className="h-20 w-full">
-            <BarChart
-              data={activityData}
-              margin={{ top: 4, right: 0, bottom: 0, left: 0 }}
-            >
+            <BarChart data={activityData} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
               <XAxis
                 dataKey="month"
                 tickLine={false}
@@ -81,19 +71,12 @@ export function CardOverview() {
                 tickFormatter={(v) => String(v).slice(0, 1)}
                 className="text-[10px]"
               />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Bar
-                dataKey="amount"
-                fill="var(--color-amount)"
-                radius={[3, 3, 0, 0]}
-              />
+              <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+              <Bar dataKey="amount" fill="var(--color-amount)" radius={[3, 3, 0, 0]} />
             </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

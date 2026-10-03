@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Card,
@@ -9,18 +9,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Slider } from "@/components/ui/slider"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
+} from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function RollerShades() {
-  const [position, setPosition] = React.useState([50])
+  const [position, setPosition] = React.useState([50]);
 
-  const preset =
-    position[0] <= 10 ? "open" : position[0] >= 90 ? "closed" : "half"
+  const preset = position[0] <= 10 ? "open" : position[0] >= 90 ? "closed" : "half";
 
   return (
     <Card>
@@ -41,9 +37,7 @@ export function RollerShades() {
           </span>
           <Slider
             value={position}
-            onValueChange={(value) =>
-              setPosition(Array.isArray(value) ? [...value] : [value])
-            }
+            onValueChange={(value) => setPosition(Array.isArray(value) ? [...value] : [value])}
             max={100}
             className="flex-1"
           />
@@ -56,10 +50,10 @@ export function RollerShades() {
         <ToggleGroup
           value={[preset]}
           onValueChange={(value) => {
-            const v = value[0]
-            if (v === "open") setPosition([0])
-            if (v === "half") setPosition([50])
-            if (v === "closed") setPosition([100])
+            const v = value[0];
+            if (v === "open") setPosition([0]);
+            if (v === "half") setPosition([50]);
+            if (v === "closed") setPosition([100]);
           }}
           variant="outline"
           spacing={1}
@@ -77,5 +71,5 @@ export function RollerShades() {
         </ToggleGroup>
       </CardFooter>
     </Card>
-  )
+  );
 }

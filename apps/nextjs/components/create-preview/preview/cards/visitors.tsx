@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { Area, AreaChart, XAxis } from "recharts"
+import { Area, AreaChart, XAxis } from "recharts";
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardAction,
@@ -10,13 +10,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
 const areaChartData = [
   { month: "January", desktop: 186 },
@@ -25,23 +25,22 @@ const areaChartData = [
   { month: "April", desktop: 73 },
   { month: "May", desktop: 209 },
   { month: "June", desktop: 214 },
-]
+];
 
 const areaChartConfig = {
   desktop: {
     label: "Desktop",
     color: "var(--chart-1)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
-const latestVisitors = areaChartData[areaChartData.length - 1]?.desktop ?? 0
-const previousVisitors =
-  areaChartData[areaChartData.length - 2]?.desktop ?? latestVisitors
+const latestVisitors = areaChartData[areaChartData.length - 1]?.desktop ?? 0;
+const previousVisitors = areaChartData[areaChartData.length - 2]?.desktop ?? latestVisitors;
 const trendPercent =
   previousVisitors === 0
     ? 0
-    : Math.round(((latestVisitors - previousVisitors) / previousVisitors) * 100)
-const trendPrefix = trendPercent > 0 ? "+" : ""
+    : Math.round(((latestVisitors - previousVisitors) / previousVisitors) * 100);
+const trendPrefix = trendPercent > 0 ? "+" : "";
 
 export function Visitors() {
   return (
@@ -71,10 +70,7 @@ export function Visitors() {
               tickMargin={6}
               tickFormatter={(value) => String(value).slice(0, 3)}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
             <Area
               dataKey="desktop"
               type="natural"
@@ -87,5 +83,5 @@ export function Visitors() {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

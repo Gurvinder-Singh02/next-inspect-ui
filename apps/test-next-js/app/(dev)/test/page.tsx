@@ -1,32 +1,23 @@
-import { Suspense } from "react"
-import Link from "next/link"
-import {
-  SparklesIcon,
-  CircleIcon,
-  ArrowRightIcon,
-  TrendingUpIcon,
-} from "lucide-react"
-import { SuiteCase } from "@/components/accuracy/suite-case"
-import { SuiteGroup } from "@/components/accuracy/suite-group"
-import { TestSuiteShell } from "@/components/accuracy/test-suite-shell"
-import { RendersOwnHost } from "@/components/algo-test/library-rendered-fixture"
-import { SvgBars } from "@/components/algo-test/svg-fixture"
-import {
-  CompoundDemo,
-  ForwardedInput,
-  MemoPill,
-} from "@/components/algo-test/kinds-fixture"
+import { Suspense } from "react";
+import Link from "next/link";
+import { SparklesIcon, CircleIcon, ArrowRightIcon, TrendingUpIcon } from "lucide-react";
+import { SuiteCase } from "@/components/accuracy/suite-case";
+import { SuiteGroup } from "@/components/accuracy/suite-group";
+import { TestSuiteShell } from "@/components/accuracy/test-suite-shell";
+import { RendersOwnHost } from "@/components/algo-test/library-rendered-fixture";
+import { SvgBars } from "@/components/algo-test/svg-fixture";
+import { CompoundDemo, ForwardedInput, MemoPill } from "@/components/algo-test/kinds-fixture";
 import {
   MotionBoxes,
   MotionSimplePair,
   MotionSvg,
   MotionWrapped,
-} from "@/components/algo-test/motion-fixture"
-import { SlotFixtures } from "@/components/algo-test/radix-fixture"
-import { ServerButtonCard } from "@/components/algo-test/server-button-fixture"
-import { ServerCard } from "@/components/algo-test/server-fixture"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/algo-test/motion-fixture";
+import { SlotFixtures } from "@/components/algo-test/radix-fixture";
+import { ServerButtonCard } from "@/components/algo-test/server-button-fixture";
+import { ServerCard } from "@/components/algo-test/server-fixture";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -35,7 +26,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 import {
   TEST_CASE_META,
@@ -59,11 +50,11 @@ import {
   shadcnVariantTargets,
   thirdPartyIconTargets,
   parentInspectableCardTargets,
-} from "@/test-cases"
-import { loadCaseSources } from "./load-case-sources"
+} from "@/test-cases";
+import { loadCaseSources } from "./load-case-sources";
 
 export default async function TestSuitePage() {
-  const sourcesByCase = await loadCaseSources()
+  const sourcesByCase = await loadCaseSources();
 
   return (
     <TestSuiteShell
@@ -98,14 +89,7 @@ export default async function TestSuitePage() {
             aria-label="plain bar"
             className="overflow-visible"
           >
-            <rect
-              x={4}
-              y={4}
-              width={28}
-              height={28}
-              rx={6}
-              className="fill-muted-foreground/30"
-            />
+            <rect x={4} y={4} width={28} height={28} rx={6} className="fill-muted-foreground/30" />
           </svg>
         </SuiteCase>
 
@@ -145,11 +129,7 @@ export default async function TestSuitePage() {
             <Button data-accuracy-target="ghost" variant="ghost">
               Ghost
             </Button>
-            <Button
-              data-accuracy-target="destructive"
-              variant="destructive"
-              size="sm"
-            >
+            <Button data-accuracy-target="destructive" variant="destructive" size="sm">
               Destructive
             </Button>
           </div>
@@ -271,10 +251,7 @@ export default async function TestSuitePage() {
           targets={kindsForwardRefTargets}
         >
           <div className="flex flex-col items-center gap-3">
-            <ForwardedInput
-              data-accuracy-target="forward-ref"
-              hint="forwardRef"
-            />
+            <ForwardedInput data-accuracy-target="forward-ref" hint="forwardRef" />
             <MemoPill data-accuracy-target="memo" label="memo" />
             <CompoundDemo data-accuracy-target="compound" />
           </div>
@@ -345,11 +322,7 @@ export default async function TestSuitePage() {
           description="Nested server trees must still point at the fixture file for every host."
           targets={serverNestedTargets}
         >
-          <Suspense
-            fallback={
-              <div className="text-muted-foreground">Loading server tree…</div>
-            }
-          >
+          <Suspense fallback={<div className="text-muted-foreground">Loading server tree…</div>}>
             <div className="flex flex-col gap-3">
               <ServerCard data-accuracy-target="first" title="First" />
               <ServerCard data-accuracy-target="second" title="Second" />
@@ -378,9 +351,7 @@ export default async function TestSuitePage() {
         >
           <Card className="w-full max-w-sm" data-accuracy-target="card">
             <CardHeader data-accuracy-target="header">
-              <CardDescription data-accuracy-target="description">
-                Total Revenue
-              </CardDescription>
+              <CardDescription data-accuracy-target="description">Total Revenue</CardDescription>
               <CardTitle
                 data-accuracy-target="title"
                 className="text-2xl font-semibold tabular-nums"
@@ -412,5 +383,5 @@ export default async function TestSuitePage() {
         </SuiteCase>
       </SuiteGroup>
     </TestSuiteShell>
-  )
+  );
 }

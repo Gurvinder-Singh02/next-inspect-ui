@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardAction,
@@ -6,8 +6,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/card";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 export function FrontDoor() {
   return (
@@ -37,5 +37,5 @@ export function FrontDoor() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

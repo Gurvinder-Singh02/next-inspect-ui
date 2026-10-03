@@ -1,21 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import * as React from "react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 import {
   Combobox,
   ComboboxContent,
@@ -23,11 +17,11 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-} from "@/components/ui/combobox"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/combobox";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Separator } from "@/components/ui/separator";
 
-const TICKERS = ["VOO", "VIG", "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"]
+const TICKERS = ["VOO", "VIG", "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"];
 
 const CHART_DATA: Record<string, { month: string; price: number }[]> = {
   VOO: [
@@ -46,7 +40,7 @@ const CHART_DATA: Record<string, { month: string; price: number }[]> = {
     { month: "May", price: 178 },
     { month: "Jun", price: 215 },
   ],
-}
+};
 
 const DEFAULT_DATA = [
   { month: "Jan", price: 100 },
@@ -55,19 +49,19 @@ const DEFAULT_DATA = [
   { month: "Apr", price: 125 },
   { month: "May", price: 108 },
   { month: "Jun", price: 130 },
-]
+];
 
 const chartConfig = {
   price: {
     label: "Price",
     color: "var(--chart-1)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function StockPerformance() {
-  const [ticker, setTicker] = React.useState("VOO")
+  const [ticker, setTicker] = React.useState("VOO");
 
-  const data = CHART_DATA[ticker] ?? DEFAULT_DATA
+  const data = CHART_DATA[ticker] ?? DEFAULT_DATA;
 
   return (
     <Card>
@@ -83,13 +77,10 @@ export function StockPerformance() {
               items={TICKERS}
               value={ticker}
               onValueChange={(value) => {
-                if (value !== null) setTicker(value)
+                if (value !== null) setTicker(value);
               }}
             >
-              <ComboboxInput
-                id="ticker-select"
-                placeholder="Search ticker..."
-              />
+              <ComboboxInput id="ticker-select" placeholder="Search ticker..." />
               <ComboboxContent>
                 <ComboboxEmpty>No tickers found.</ComboboxEmpty>
                 <ComboboxList>
@@ -112,23 +103,12 @@ export function StockPerformance() {
           >
             <defs>
               <linearGradient id="fillPrice" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="var(--color-price)"
-                  stopOpacity={0.3}
-                />
-                <stop
-                  offset="100%"
-                  stopColor="var(--color-price)"
-                  stopOpacity={0.05}
-                />
+                <stop offset="0%" stopColor="var(--color-price)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="var(--color-price)" stopOpacity={0.05} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             <Area
               type="monotone"
               dataKey="price"
@@ -140,5 +120,5 @@ export function StockPerformance() {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

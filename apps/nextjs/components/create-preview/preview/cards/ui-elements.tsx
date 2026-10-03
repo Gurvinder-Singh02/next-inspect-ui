@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   AlertDialog,
@@ -12,12 +12,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,42 +26,30 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Field, FieldGroup } from "@/components/ui/field"
+} from "@/components/ui/dropdown-menu";
+import { Field, FieldGroup } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "@/components/ui/input-group"
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from "@/components/ui/item"
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/input-group";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 export function UIElements() {
-  const [sliderValue, setSliderValue] = React.useState<number[]>([500])
-  const handleSliderValueChange = React.useCallback(
-    (value: number | readonly number[]) => {
-      if (typeof value === "number") {
-        setSliderValue([value])
-      } else {
-        setSliderValue([...value])
-      }
-    },
-    []
-  )
+  const [sliderValue, setSliderValue] = React.useState<number[]>([500]);
+  const handleSliderValueChange = React.useCallback((value: number | readonly number[]) => {
+    if (typeof value === "number") {
+      setSliderValue([value]);
+    } else {
+      setSliderValue([...value]);
+    }
+  }, []);
 
   return (
     <Card className="w-full">
@@ -135,17 +123,14 @@ export function UIElements() {
         <div className="flex items-center gap-4">
           <AlertDialog>
             <AlertDialogTrigger render={<Button variant="outline" />}>
-              <span className="hidden md:flex style-sera:md:hidden">
-                Alert Dialog
-              </span>
+              <span className="hidden md:flex style-sera:md:hidden">Alert Dialog</span>
               <span className="flex md:hidden style-sera:md:flex">Dialog</span>
             </AlertDialogTrigger>
             <AlertDialogContent size="sm">
               <AlertDialogHeader>
                 <AlertDialogTitle>Allow accessory to connect?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Do you want to allow the USB accessory to connect to this
-                  device and your data?
+                  Do you want to allow the USB accessory to connect to this device and your data?
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -160,9 +145,7 @@ export function UIElements() {
               <span className="hidden style-sera:block">Group</span>
             </Button>
             <DropdownMenu>
-              <DropdownMenuTrigger
-                render={<Button variant="outline" size="icon" />}
-              >
+              <DropdownMenuTrigger render={<Button variant="outline" size="icon" />}>
                 <IconPlaceholder
                   lucide="ChevronUpIcon"
                   tabler="IconChevronUp"
@@ -187,9 +170,7 @@ export function UIElements() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive">
-                    Delete Conversation
-                  </DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive">Delete Conversation</DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -198,5 +179,5 @@ export function UIElements() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -15,4 +15,4 @@ export const STYLES = [
     name: "mira",
     title: "Mira",
   },
-] as const
+] as const;

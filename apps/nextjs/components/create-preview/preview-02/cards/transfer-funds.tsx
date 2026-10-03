@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -7,15 +7,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+} from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "@/components/ui/input-group"
-import { Item, ItemContent } from "@/components/ui/item"
+} from "@/components/ui/input-group";
+import { Item, ItemContent } from "@/components/ui/item";
 import {
   Select,
   SelectContent,
@@ -23,28 +23,26 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
 
 const FROM_ACCOUNTS = [
   { label: "Main Checking (··8402) — $12,450.00", value: "checking" },
   { label: "Business (··7731) — $8,920.00", value: "business" },
-]
+];
 
 const TO_ACCOUNTS = [
   { label: "High Yield Savings (··1192) — $42,100.00", value: "savings" },
   { label: "Investment (··3349) — $18,200.00", value: "investment" },
-]
+];
 
 export function TransferFunds() {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Transfer Funds</CardTitle>
-        <CardDescription>
-          Move money between your connected accounts.
-        </CardDescription>
+        <CardDescription>Move money between your connected accounts.</CardDescription>
         <CardAction>
           <Button variant="ghost" size="icon-sm" className="bg-muted">
             <IconPlaceholder
@@ -60,9 +58,7 @@ export function TransferFunds() {
       <CardContent>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="transfer-amount">
-              Amount to Transfer
-            </FieldLabel>
+            <FieldLabel htmlFor="transfer-amount">Amount to Transfer</FieldLabel>
             <InputGroup>
               <InputGroupAddon>
                 <InputGroupText>$</InputGroupText>
@@ -107,24 +103,18 @@ export function TransferFunds() {
           <Item variant="muted" className="flex-col items-stretch">
             <ItemContent className="gap-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Estimated arrival
-                </span>
+                <span className="text-sm text-muted-foreground">Estimated arrival</span>
                 <span className="text-sm font-medium">Today, Apr 14</span>
               </div>
               <Separator />
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Transaction fee
-                </span>
+                <span className="text-sm text-muted-foreground">Transaction fee</span>
                 <span className="text-sm font-medium tabular-nums">$0.00</span>
               </div>
               <Separator />
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Total amount</span>
-                <span className="text-sm font-semibold tabular-nums">
-                  $1,200.00
-                </span>
+                <span className="text-sm font-semibold tabular-nums">$1,200.00</span>
               </div>
             </ItemContent>
           </Item>
@@ -134,5 +124,5 @@ export function TransferFunds() {
         <Button className="w-full">Confirm Transfer</Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
