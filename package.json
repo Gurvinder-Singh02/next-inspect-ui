@@ -11,12 +11,24 @@
     "build:test": "pnpm --filter test build",
     "build:example": "pnpm --filter example-01 build",
     "test": "pnpm --filter @next-inspect-ui/test-cases test",
-    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter @next-inspect-ui/test-cases typecheck && pnpm --filter site typecheck && pnpm --filter test typecheck && pnpm --filter example-01 typecheck"
+    "typecheck": "pnpm --filter next-inspect-ui typecheck && pnpm --filter @next-inspect-ui/test-cases typecheck && pnpm --filter site typecheck && pnpm --filter test typecheck && pnpm --filter example-01 typecheck",
+    "dev:test-next-js": "bun run --cwd apps/test-next-js dev",
+    "build:test-next-js": "bun run --cwd apps/test-next-js build",
+    "dev:test-vite-react": "bun run --cwd apps/test-vite-react dev",
+    "build:test-vite-react": "bun run --cwd apps/test-vite-react build",
+    "dev:test-react-18": "bun run --cwd apps/test-react-18 dev",
+    "build:test-react-18": "bun run --cwd apps/test-react-18 build",
+    "typecheck:compat": "bun run --cwd apps/test-next-js typecheck && bun run --cwd apps/test-vite-react typecheck && bun run --cwd apps/test-react-18 typecheck"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "oxfmt": "^0.68.0",
     "oxlint": "^1.83.0",
     "playwright": "^1.62.1"
-  }
+  },
+  "workspaces": [
+    "packages/**",
+    "apps/**",
+    "site"
+  ]
 }
