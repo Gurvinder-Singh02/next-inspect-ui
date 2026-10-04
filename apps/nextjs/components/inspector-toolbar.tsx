@@ -859,30 +859,6 @@ export const InspectorSettingsControls = ({ className }: { className?: string })
             step={STROKE_WIDTH_STEP}
             onChange={(strokeWidth) => setDevSpotlightProps({ strokeWidth })}
           />
-          <KitSlider
-            label="Roundness"
-            value={spotlight.borderRadius}
-            min={BORDER_RADIUS_MIN}
-            max={BORDER_RADIUS_MAX}
-            suffix="px"
-            onChange={(borderRadius) => setDevSpotlightProps({ borderRadius })}
-          />
-          <KitSlider
-            label="Padding X"
-            value={spotlight.paddingX}
-            min={PADDING_MIN}
-            max={PADDING_MAX}
-            suffix="px"
-            onChange={(paddingX) => setDevSpotlightProps({ paddingX })}
-          />
-          <KitSlider
-            label="Padding Y"
-            value={spotlight.paddingY}
-            min={PADDING_MIN}
-            max={PADDING_MAX}
-            suffix="px"
-            onChange={(paddingY) => setDevSpotlightProps({ paddingY })}
-          />
           <KitSegmented
             value={spotlight.strokeStyle}
             options={STROKE_STYLES}
@@ -906,11 +882,6 @@ export const InspectorSettingsControls = ({ className }: { className?: string })
             label="Background"
             value={tooltip.background}
             onChange={(background) => setTooltipProps({ background })}
-          />
-          <KitColorRow
-            label="Border"
-            value={tooltip.border}
-            onChange={(border) => setTooltipProps({ border })}
           />
           <KitColorRow
             label="Text"
@@ -973,9 +944,9 @@ export const InspectorSettingsControls = ({ className }: { className?: string })
             onCheckedChange={(showTitle) => setTooltipProps({ showTitle })}
           />
           <KitToggleRow
-            label="Show page name"
-            checked={tooltip.showPageName}
-            onCheckedChange={(showPageName) => setTooltipProps({ showPageName })}
+            label="Show full URL"
+            checked={tooltip.showFullUrl}
+            onCheckedChange={(showFullUrl) => setTooltipProps({ showFullUrl })}
           />
         </KitSection>
 

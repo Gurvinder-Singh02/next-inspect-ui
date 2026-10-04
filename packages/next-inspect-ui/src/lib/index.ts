@@ -1,6 +1,6 @@
 "use client"
 
-export type InspectorColor = "orange" | "sky" | "red" | "white"
+export type InspectorColor = "orange" | "sky" | "red" | "white" | "yellow"
 
 export type InspectorStrokeStyle = "solid" | "dashed" | "dotted"
 
@@ -10,10 +10,9 @@ export type TooltipAlign = "start" | "center" | "end"
 
 export type TooltipProps = {
   background: string
-  border: string
   text: string
   showTitle: boolean
-  showPageName: boolean
+  showFullUrl: boolean
   side: TooltipSide
   align: TooltipAlign
   sideOffset: number
@@ -30,9 +29,6 @@ export type DevSpotlightProps = {
   strokeOpacity: number
   strokeWidth: number
   strokeStyle: InspectorStrokeStyle
-  borderRadius: number
-  paddingX: number
-  paddingY: number
   animated: boolean
 }
 
@@ -96,6 +92,12 @@ export const INSPECTOR_COLORS: Record<
   InspectorColor,
   { stroke: string; fill: string; tooltip: string; label: string }
 > = {
+  yellow: {
+    stroke: "#fcd34d",
+    fill: "252 211 77",
+    tooltip: "#fcd34d",
+    label: "Yellow",
+  },
   orange: {
     stroke: "#f97316",
     fill: "249 115 22",
@@ -145,11 +147,10 @@ export const TOOLTIP_RADIUS_MIN = 0
 export const TOOLTIP_RADIUS_MAX = 24
 
 export const DEFAULT_TOOLTIP_PROPS: TooltipProps = {
-  background: INSPECTOR_COLORS.orange.tooltip,
-  border: "transparent",
+  background: "#006efe",
   text: "#ffffff",
   showTitle: true,
-  showPageName: true,
+  showFullUrl: true,
   side: "top",
   align: "start",
   sideOffset: 6,
@@ -160,15 +161,12 @@ export const DEFAULT_TOOLTIP_PROPS: TooltipProps = {
 }
 
 export const DEFAULT_DEV_SPOTLIGHT_PROPS: DevSpotlightProps = {
-  background: INSPECTOR_COLORS.orange.stroke,
-  border: INSPECTOR_COLORS.orange.stroke,
-  bgOpacity: 0.09,
+  background: "#006efe",
+  border: "#006efe",
+  bgOpacity: 0.1,
   strokeOpacity: 1,
-  strokeWidth: 1,
-  strokeStyle: "dashed",
-  borderRadius: 4,
-  paddingX: 0,
-  paddingY: 0,
+  strokeWidth: 0.5,
+  strokeStyle: "solid",
   animated: true,
 }
 
@@ -226,10 +224,9 @@ const normalizeTooltipProps = (
     ...DEFAULT_TOOLTIP_PROPS,
     ...rest,
     background: rest.background ?? DEFAULT_TOOLTIP_PROPS.background,
-    border: rest.border ?? DEFAULT_TOOLTIP_PROPS.border,
     text: rest.text ?? DEFAULT_TOOLTIP_PROPS.text,
     showTitle: rest.showTitle ?? DEFAULT_TOOLTIP_PROPS.showTitle,
-    showPageName: rest.showPageName ?? DEFAULT_TOOLTIP_PROPS.showPageName,
+    showFullUrl: rest.showFullUrl ?? DEFAULT_TOOLTIP_PROPS.showFullUrl,
     side: isTooltipSide(rest.side) ? rest.side : DEFAULT_TOOLTIP_PROPS.side,
     align: isTooltipAlign(rest.align)
       ? rest.align
@@ -295,7 +292,6 @@ const normalizeDevSpotlightProps = (
 
   return {
     ...DEFAULT_DEV_SPOTLIGHT_PROPS,
-    ...rest,
     background:
       rest.background ??
       preset?.stroke ??
@@ -317,15 +313,6 @@ const normalizeDevSpotlightProps = (
     strokeStyle: isStrokeStyle(rest.strokeStyle)
       ? rest.strokeStyle
       : DEFAULT_DEV_SPOTLIGHT_PROPS.strokeStyle,
-    borderRadius: snapBorderRadius(
-      rest.borderRadius ?? DEFAULT_DEV_SPOTLIGHT_PROPS.borderRadius
-    ),
-    paddingX: snapPadding(
-      rest.paddingX ?? fallbackPaddingX ?? DEFAULT_DEV_SPOTLIGHT_PROPS.paddingX
-    ),
-    paddingY: snapPadding(
-      rest.paddingY ?? fallbackPadding ?? DEFAULT_DEV_SPOTLIGHT_PROPS.paddingY
-    ),
     animated: rest.animated ?? DEFAULT_DEV_SPOTLIGHT_PROPS.animated,
   }
 }
@@ -453,12 +440,11 @@ const normalizeShortcutKey = (event: KeyboardEvent) => {
 
 export const tooltipDefaultsForColor = (
   color: InspectorColor
-): Pick<TooltipProps, "background" | "text" | "border"> => {
+): Pick<TooltipProps, "background" | "text"> => {
   const palette = INSPECTOR_COLORS[color]
   return {
     background: palette.tooltip,
-    border: "transparent",
-    text: color === "white" ? "#121212" : "#ffffff",
+    text: color === "yellow" ? "#000000" : color === "white" ? "#121212" : "#ffffff",
   }
 }
 

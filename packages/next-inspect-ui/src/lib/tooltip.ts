@@ -184,7 +184,7 @@ export const formatTooltipLabel = ({
       tagStyle === "dom" ? formatDomTag(title) : formatComponentTag(title)
     )
   }
-  if (tooltipProps.showPageName && pageName) parts.push(pageName)
+  if (pageName) parts.push(tooltipProps.showFullUrl ? pageName : pageName.split(/[\\/]/).pop()!)
   return parts.join(" · ")
 }
 

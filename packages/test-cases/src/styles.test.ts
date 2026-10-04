@@ -46,12 +46,12 @@ test("paints overlay and tooltip through CSS variables", () => {
   const overlay = document.createElement("div")
   const tooltip = document.createElement("div")
   applyOverlayPaint(overlay, tooltip, DEFAULT_INSPECTOR_SETTINGS)
-  assert.equal(overlay.style.getPropertyValue("--inspect-fill"), "rgb(249 115 22 / 0.09)")
+  assert.equal(overlay.style.getPropertyValue("--inspect-fill"), "rgb(0 110 254 / 0.1)")
   assert.equal(
     overlay.style.getPropertyValue("--inspect-border"),
-    "1px dashed rgba(249 115 22 / 1)"
+    "0.5px solid rgba(0 110 254 / 1)"
   )
-  assert.equal(tooltip.style.getPropertyValue("--inspect-tooltip-bg"), "#FF6100")
+  assert.equal(tooltip.style.getPropertyValue("--inspect-tooltip-bg"), "#006efe")
   assert.equal(overlay.classList.contains(INSTANT_CLASS), false)
 })
 

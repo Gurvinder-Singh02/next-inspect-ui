@@ -57,7 +57,7 @@
   max-width: min(36rem, calc(100vw - 16px));
   overflow: hidden;
   background: var(--inspect-tooltip-bg);
-  border: 1px solid var(--inspect-tooltip-border);
+  border: none;
   color: var(--inspect-tooltip-text);
   border-radius: var(--inspect-tooltip-radius);
   padding: var(--inspect-tooltip-padding);
@@ -116,9 +116,12 @@
   overflow: auto;
   overscroll-behavior: contain;
   box-sizing: border-box;
-  background: var(--card, #18181b);
-  border: 1px solid var(--border, rgb(255 255 255 / 12%));
-  color: var(--card-foreground, #e4e4e7);
+  color-scheme: dark;
+  --inspect-fg: #e4e4e7;
+  --inspect-muted: #8b949e;
+  background: #18181b;
+  border: 1px solid rgb(255 255 255 / 12%);
+  color: #e4e4e7;
   padding: 12px 14px;
   border-radius: 12px;
   font: 12px / 1.5 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -419,12 +422,6 @@
 
 .next-inspect-ui-html-row .next-inspect-ui-tree-indent {
   flex-shrink: 0;
-}
-
-.next-inspect-ui-ghost-overlay {
-  background-color: rgb(239 68 68 / 20%);
-  border: 1px dashed #ef4444;
-  border-radius: 4px;
 }
 
 .next-inspect-ui-html-close {
