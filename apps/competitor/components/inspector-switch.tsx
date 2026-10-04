@@ -67,7 +67,7 @@ export function InspectorSwitch({
           </span>
         </p>
       </aside>
-      {selected === "next-inspect-ui" && <NextInspector projectRoot={projectRoot} />}
+      {selected === "next-inspect-ui" && <NextInspector />}
       {selected === "show-component" && (
         <ShowInspector sourceRoot={projectRoot} editorScheme="cursor" />
       )}

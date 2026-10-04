@@ -158,7 +158,7 @@ export const resolveSourceMapSourcePath = ({
   }
 
   if (
-    withRoot.startsWith(projectRoot) ||
+    (projectRoot && withRoot.startsWith(projectRoot)) ||
     isFilesystemAbsolutePath(withRoot)
   ) {
     return toAbsolutePath(withRoot, projectRoot)
@@ -200,7 +200,7 @@ export const resolveSourceMapSourcePath = ({
 }
 
 export const formatPageLabel = (source: SourceLocation, projectRoot: string) => {
-  const relativePath = source.filePath.startsWith(projectRoot) ? source.filePath.slice(projectRoot.length + 1) : source.filePath
+  const relativePath = projectRoot && source.filePath.startsWith(projectRoot) ? source.filePath.slice(projectRoot.length + 1) : source.filePath
   return `${relativePath}:${source.line}`
 }
 
@@ -855,12 +855,12 @@ export const sourceFromStackFrame = (frame: StackFrame, projectRoot: string): So
   let file = frame.file
   if (!file) return null
   if (file.startsWith("about://React/Server/")) file = file.slice("about://React/Server/".length)
-  if (isBundledOrExternalPath(file) || ((file.startsWith("http://") || file.startsWith("https://")) && !file.includes(projectRoot))) {
+  if (isBundledOrExternalPath(file) || ((file.startsWith("http://") || file.startsWith("https://")) && (!projectRoot || !file.includes(projectRoot)))) {
     return null
   }
   const filePath = toAbsolutePath(file, projectRoot)
   if (isBundledOrExternalPath(filePath)) return null
-  if (!isLikelySourceFile(filePath) && !filePath.startsWith(projectRoot)) return null
+  if (!isLikelySourceFile(filePath) && (!projectRoot || !filePath.startsWith(projectRoot))) return null
   return { filePath, line: frame.line1, column: frame.column1 }
 }
 
@@ -1271,11 +1271,19 @@ export const resolveNearestAncestorSource = async (element: Element, projectRoot
 }
 
 export const openInEditor = (source: SourceLocation, ide: InspectorIde) => {
-  window.location.href = INSPECTOR_IDES[ide].url(
-    source.filePath,
-    source.line,
-    source.column
-  )
+  if (isFilesystemAbsolutePath(source.filePath)) {
+    window.location.href = INSPECTOR_IDES[ide].url(source.filePath, source.line, source.column)
+    return
+  }
+  void (async () => {
+    const next = document.getElementById("__next") !== null || Array.from(document.scripts).some(script => script.src.includes("/_next/"))
+    const params = new URLSearchParams({ file: source.filePath, [next ? "line1" : "line"]: String(source.line), [next ? "column1" : "column"]: String(source.column) })
+    try {
+      const response = await fetch(`${next ? "/__nextjs_launch-editor" : "/__open-in-editor"}?${params}`)
+      if (response.ok) return
+    } catch { /* Fall back to the configured editor URL. */ }
+    window.location.href = INSPECTOR_IDES[ide].url(source.filePath, source.line, source.column)
+  })()
 }
 
 export const resolveDebugInfoPairSync = (info: ServerDebugInfo, projectRoot: string) => ({

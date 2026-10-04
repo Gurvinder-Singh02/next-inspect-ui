@@ -27,7 +27,7 @@ const steps = [
   },
   {
     title: "Open your editor",
-    text: "Click or press Enter to open the source. The tool builds an editor link with the full file path, line, and column. Your computer opens that link in Cursor, VS Code, or your chosen editor.",
+    text: "Click or press Enter to open the source. An absolute path opens through an editor link. A relative path goes to the local dev server, which opens its configured editor. If that endpoint is unavailable, the tool falls back to an editor link. Mount <InspectUI /> without required props.",
   },
 ] as const
 
@@ -55,7 +55,7 @@ Source maps (when needed)
      ↓
 file.tsx:42:8
      ↓
-Editor link
+Editor link / dev server
      ↓
 Cursor / VS Code`}
       </pre>

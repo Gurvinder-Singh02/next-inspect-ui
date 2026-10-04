@@ -14,7 +14,7 @@ const INSTALL_COMMANDS: Record<PackageManager, string> = {
   bun: "bun add -D next-inspect-ui",
 }
 
-const AGENT_PROMPT = `Install next-inspect-ui (npm i -D next-inspect-ui). Add <InspectUI projectRoot={process.cwd()} /> as a sibling alongside {children} in the root layout (not wrapping it), only in development.`
+const AGENT_PROMPT = `Install next-inspect-ui (npm i -D next-inspect-ui). Add <InspectUI /> as a sibling alongside {children} in the root layout (not wrapping it), only in development.`
 
 const LAYOUT_CODE = `import { InspectUI } from "next-inspect-ui"
 
@@ -28,7 +28,7 @@ export default function RootLayout({
       <body>
         {children}
         {process.env.NODE_ENV === "development" && (
-          <InspectUI projectRoot={process.cwd()} />
+          <InspectUI />
         )}
       </body>
     </html>

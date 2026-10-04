@@ -20,7 +20,7 @@ const LazyDevInspector =
       )
     : null
 
-export const InspectUI = (props: InspectUIProps) => {
+export const InspectUI = (props: InspectUIProps = {}) => {
   if (!LazyDevInspector) return null
   return createElement(
     Suspense,

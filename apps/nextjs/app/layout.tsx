@@ -35,7 +35,7 @@ export default function RootLayout({
             <CuelumeBind />
             {children}
             <Toaster />
-            {process.env.NODE_ENV === "development" && <InspectUI projectRoot={process.cwd()} />}
+            {process.env.NODE_ENV === "development" && <InspectUI />}
           </TooltipProvider>
         </ThemeProvider>
       </body>

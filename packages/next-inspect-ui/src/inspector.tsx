@@ -29,7 +29,7 @@ type OwnerChainStep = {
 }
 
 export const InspectUI = ({
-  projectRoot,
+  projectRoot = "",
   shortcut,
   ide,
   tooltipProps,
@@ -128,7 +128,7 @@ export const InspectUI = ({
       return n
     }
     const relSourcePath = (source: SourceLocation) =>
-      source.filePath.startsWith(projectRoot)
+      projectRoot && source.filePath.startsWith(projectRoot)
         ? source.filePath.slice(projectRoot.length + 1)
         : source.filePath
     const paintSourceBox = (

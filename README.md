@@ -2,6 +2,8 @@
 
 Dev-only overlay for Next.js. Hover any element to see its source, click to open it.
 
+Use `<InspectUI />` in your layout in development. No props are required; `projectRoot` is optional.
+
 ## How it works
 
 ```text
@@ -17,13 +19,13 @@ Source maps (when needed)
      ↓
 file.tsx:42:8
      ↓
-Editor link
+Editor link / dev server
      ↓
 Cursor / VS Code
 ```
 
 Browser code uses source maps. Server code can use Next.js's stack-frame endpoint.
-An editor link opens the file directly. Hold ⌥ to select the owning component; press Space for Component and Element trees. Left/Right switches tabs and Up/Down selects rows.
+Absolute paths open through an editor link. Relative paths use the local dev server’s editor endpoint, with an editor-link fallback. Hold ⌥ to select the owning component; press Space for Component and Element trees. Left/Right switches tabs and Up/Down selects rows.
 
 ```
 packages/next-inspect-ui              published library

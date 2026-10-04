@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         {process.env.NODE_ENV === "development" && (
-          <InspectUI projectRoot={process.cwd()} />
+          <InspectUI />
         )}
       </body>
     </html>
@@ -43,7 +43,7 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 
 | prop | type | |
 |---|---|---|
-| `projectRoot` | `string` | absolute path your source is under |
+| `projectRoot` | `string` (optional) | Explicit root for relative source paths; not needed for basic setup. |
 | `popoverProps` | `{ defaultTab?: "component" \| "element" }` | initial tree tab; defaults to `"component"` |
 
 The Component tab shows immediate ancestors through the page, stopping before layouts and the app shell. The Element tab shows 1–15 nested HTML nodes, prioritizing siblings, then parents, then children. Use `popoverProps={{ defaultTab: "element" }}` to start on Element. Shift does not climb.
@@ -54,7 +54,7 @@ at runtime through the overlay's own settings panel.
 Supported editors: Cursor, VS Code, VS Code Insiders, Windsurf, Zed.
 
 **Measured production cost: +0.2 KB gzipped** when gated on `NODE_ENV`. Keep
-that guard — without it, React serializes `projectRoot` into the page payload.
+that guard to keep the inspector out of production.
 
 ## Install local
 
@@ -107,7 +107,7 @@ Then inside `<body>`, after `{children}`:
 
 ```tsx
 {process.env.NODE_ENV === "development" && (
-  <InspectUI projectRoot={process.cwd()} />
+  <InspectUI />
 )}
 ```
 
