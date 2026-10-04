@@ -43,7 +43,7 @@ Space → Component / Element tabs
      ↓
 Left / Right → switch tabs
 Up / Down → select or preview a row
-Enter → adopt an element / open source
+Enter → open source
 ```
 
 | Control | Action |
@@ -56,18 +56,18 @@ Enter → adopt an element / open source
 | Down / Right with the popover closed | Move to the next sibling element. |
 | Left / Right with the popover open | Switch between Component and Element tabs. |
 | Up / Down with the popover open | Select a component row or preview an element row. |
+| Command + Up / Down (Ctrl on Windows/Linux) with the popover open | Jump to the first / last row in the current tab, including closing tags. |
 | `[` / `{` | Move to a parent inspectable element. |
 | `]` / `}` | Move to a child inspectable element. |
-| Enter in Element | Adopt a previewed element; open its source when it is already the current target. |
-| `…` in Element | Adopt that element as the current target. |
+| Enter or click in Element | Open the selected element’s source. |
 | Hold Option / Alt | Select a parent component’s source. |
 | Escape | Turn the tool off. |
 
 Element navigation follows the rendered elements. Hold Option / Alt to select the immediate owning component; Shift has no climb action and adds no tooltip.
 
-Space pins the hovered element and opens an underline tab bar. The Component tab shows the immediate React parent chain within the current page, starting with the hovered element, then its owning component and successive parents. The tree stops after the page component, or before the nearest layout when there is no page boundary. Layouts and surrounding app providers stay outside the tree; local components and providers remain in their actual order. Framework internals and transparent vendor wrappers are skipped. The Element tab shows the actual HTML tree: 1–15 element nodes, prioritizing nearby siblings, then ancestors, then descendants with any remaining space. Ancestors stop at `<body>`; `<html>` and `<head>` stay outside the tree. It nests child rows between parent opening and closing tags, includes text and actual HTML attributes, and provides a `…` selection button (void elements have no closing tag), without separate CSS or Tailwind sections.
+Space pins the hovered element and opens an underline tab bar. The Component tab shows the immediate React parent chain within the current page, starting with the hovered element, then its owning component and successive parents. The tree stops after the page component, or before the nearest layout when there is no page boundary. Layouts and surrounding app providers stay outside the tree; local components and providers remain in their actual order. Framework internals and transparent vendor wrappers are skipped. The Element tab shows the actual HTML tree: 1–15 element nodes, prioritizing nearby siblings, then ancestors, then descendants with any remaining space. Ancestors stop at `<body>`; `<html>` and `<head>` stay outside the tree. It nests child rows between parent opening and closing tags. Text stays inline with its element’s tags; the hovered element row is selected by default. Up / Down can reach closing tags too; they highlight and open the same element as their opening tag. Rails continue through the closing rows. The tree includes text and actual HTML attributes, and scrolls as one area without row buttons or relation labels (void elements have no closing tag), without separate CSS or Tailwind sections.
 
-Left / Right switches tabs; Up / Down selects rows without changing the pinned target. In Element, another row shows a separate red highlight at 50% opacity, without a ghost tooltip while the current target stays pinned. Enter adopts that preview and moves the panel to it; Enter on the current target opens its source. The `…` button also adopts its element. Switching tabs or closing the panel clears the preview. In Component, Enter or a source link opens the selected row’s file. Each tab remembers its row while the popover is open. Space closes it and restores focus; Escape exits inspect mode. A new popover starts on Component, or on Element when configured with `<InspectUI popoverProps={{ defaultTab: "element" }} ... />`.
+Left / Right switches tabs; Up / Down selects rows without changing the pinned target. In Element, another row shows a separate red highlight at 50% opacity, without a ghost tooltip while the current target stays pinned. Enter, clicking a row, or clicking its red preview opens that element’s source without adopting it or changing the hover tooltip. Switching tabs or closing the panel clears the preview. In Component, moving through rows shows the same red ghost highlight around the component’s rendered elements, while the original target stays pinned. Enter, a source link, or clicking that ghost opens the selected row’s file. Each tab remembers its row while the popover is open. Space closes it and restores focus; Escape exits inspect mode. A new popover starts on Component, or on Element when configured with `<InspectUI popoverProps={{ defaultTab: "element" }} ... />`.
 
 
 ## Test suite flow
@@ -83,3 +83,5 @@ Run `bun run dev:competitor` → open port 3104 → choose a library → the pag
 Agentation and InterfaceKit also mount in development, independently of the inspector switch. Use their own buttons to annotate elements or adjust styles; both remain available when the inspector selection is **Off**.
 
 The comparison toolbar stays usable while inspecting. Only the selected inspector loads in development. React Grab’s installed script loads before React; the other inspectors mount as client components. Show Component uses Option + right-click (add Shift for its tree). React Grab uses ⌘C / Ctrl+C. Click to React Component uses Option + click and depends on older React source metadata, so lookup may fail on this React 19 page.
+
+The selected row updates the panel title and its source link. Opening the panel leaves the tooltip unchanged. Selection in either tab keeps the hover tooltip and its icon pinned; only the panel title, source link, and ghost highlight change. The title source uses the same short path and line as the tooltip. Continuous left rails show row depth; component rows show only file name and line. The footer shows keyboard hints: Left / Right switches tabs, Up / Down previews rows, Enter selects or opens, and Space closes. A React icon on the hover tooltip means Option can select an owning component.
