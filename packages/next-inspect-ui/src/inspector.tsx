@@ -97,6 +97,7 @@ export const InspectUI = ({
       climbIndex: number
       depth: number
       element?: Element
+      closingTag?: string
       relation?: string
       pendingSource?: Promise<SourceLocation | null>
     }
@@ -146,7 +147,7 @@ export const InspectUI = ({
       path.type = "button"
       const pathIcon = mk("span", "data-dev-inspector-source-icon")
       pathIcon.append(createOpenSourceIcon())
-      path.append(mk("span", undefined, `${relSourcePath(source)}:${source.line}:${source.column}`), pathIcon)
+      path.append(mk("span", undefined, formatPageLabel(source, projectRoot)), pathIcon)
       path.onclick = () => openInEditor(source, settings.ide)
       row.append(path)
       box.append(row)
@@ -478,7 +479,7 @@ export const InspectUI = ({
         title: getTooltipTitle(fiber, kind), pageName: getCachedPageName(fiber, kind),
         tooltipProps: settings.tooltipProps, tagStyle: kind === "used" ? "component" : "dom",
       }) || (kind === "used" ? formatComponentTag("Component") : formatDomTag("element")))
-      syncUsedIcon(kind === "used")
+      inspectTooltip.showSourceIcon(kind === "used", !!fiber && buildOwnerChain(fiber).length > 0)
       if (lastTargetRect) positionTooltip(lastTargetRect)
       if (infoNeedsRefresh && infoVisible && infoTarget && hoveredElement === infoTarget) void renderInfo(infoTarget, fiber)
     }
@@ -516,17 +517,38 @@ export const InspectUI = ({
       ghostOverlay.style.display = "none"
     }
     const paintGhost = (node: InfoTreeNode) => {
-      if (!node.element || node.element === infoTarget) { clearGhost(); return }
-      const rect = expandRectWithPadding(node.element.getBoundingClientRect(), {
+      const elements: Element[] = []
+      if (node.element) {
+        if (node.element === infoTarget) { clearGhost(); return }
+        elements.push(node.element)
+      } else if (!node.isDom) {
+        const root = infoTreeChain[node.climbIndex]?.parentFiber
+        const collect = (fiber: ReactFiber) => {
+          if (fiber.stateNode instanceof Element) {
+            if (fiber.stateNode.isConnected) elements.push(fiber.stateNode)
+            return
+          }
+          for (let child = fiber.child; child; child = (child as ReactFiber & { sibling?: ReactFiber | null }).sibling ?? null) collect(child)
+        }
+        if (root) collect(root)
+      }
+      const boxes = elements.map(element => element.getBoundingClientRect()).filter(box => box.width > 0 && box.height > 0)
+      if (!boxes.length) { clearGhost(); return }
+      const left = Math.min(...boxes.map(box => box.left))
+      const top = Math.min(...boxes.map(box => box.top))
+      const right = Math.max(...boxes.map(box => box.right))
+      const bottom = Math.max(...boxes.map(box => box.bottom))
+      const rect = expandRectWithPadding({ left, top, width: right - left, height: bottom - top }, {
         left: settings.devSpotlightProps.paddingX, right: settings.devSpotlightProps.paddingX,
         top: settings.devSpotlightProps.paddingY, bottom: settings.devSpotlightProps.paddingY,
       })
       Object.assign(ghostOverlay.style, { display: "block", left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px` })
 
     }
-    const adoptElement = (element: Element) => {
-      clearGhost()
-      revealAndHighlight(element, true)
+    const openInfoNode = (node: InfoTreeNode) => {
+      void (node.pendingSource ?? Promise.resolve(node.source)).then(source => {
+        if (source && infoVisible) openInEditor(source, settings.ide)
+      }).catch(() => {})
     }
     const hideInfo = () => {
       clearGhost()
@@ -559,36 +581,39 @@ export const InspectUI = ({
 
     const syncInfoTreeSelection = (node: InfoTreeNode) => {
       infoSelectedNode = node
-      if (infoTab === "element") {
-        infoClimbSelection = null
-        const current = infoTarget
-        const currentFiber = current ? getFiber(current) : null
-        const source = infoPinnedNode?.source ?? (currentFiber ? getHostAuthorSource(currentFiber, projectRoot) : null)
-        const name = current?.tagName.toLowerCase() ?? node.name
-        if (infoTitleEl) infoTitleEl.textContent = formatDomTag(name)
-        if (infoSourceBox) paintSourceBox(infoSourceBox, source)
-        setTooltipLabel(formatTooltipLabel({ title: name, pageName: source ? formatPageLabel(source, projectRoot) : null,
-          tooltipProps: settings.tooltipProps, tagStyle: "dom" }) || formatDomTag(name))
-        syncUsedIcon(false)
-        paintGhost(node)
-        return
-      }
-      clearGhost()
       if (infoTitleEl) infoTitleEl.textContent = node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name)
       if (infoSourceBox) paintSourceBox(infoSourceBox, node.source)
-      const step = node.isDom ? null : infoTreeChain[node.climbIndex]
-      infoClimbSelection = step ? { depth: node.climbIndex, step } : null
-      setTooltipLabel(formatTooltipLabel({
-        title: node.name,
-        pageName: node.source ? formatPageLabel(node.source, projectRoot) : null,
-        tooltipProps: settings.tooltipProps,
-        tagStyle: node.isDom ? "dom" : "component",
-      }) || (node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name)))
-      syncUsedIcon(!node.isDom)
-      if (lastTargetRect) positionTooltip(lastTargetRect)
+      if (infoTab === "element") {
+        infoClimbSelection = null
+        paintGhost(node)
+      } else {
+        paintGhost(node)
+        const step = node.isDom ? null : infoTreeChain[node.climbIndex]
+        infoClimbSelection = step ? { depth: node.climbIndex, step } : null
+      }
     }
 
     const createInfoTreeSection = (nodes: InfoTreeNode[], initialIndex: number, label: string) => {
+      const originalNodes = nodes
+      const initialNode = nodes[initialIndex]!
+      if (nodes.some(node => node.element)) {
+        const expanded: InfoTreeNode[] = []
+        const stack: InfoTreeNode[] = []
+        const close = (depth: number) => {
+          while (stack.length && stack[stack.length - 1]!.depth >= depth) {
+            const node = stack.pop()!
+            expanded.push({ ...node, closingTag: getElementMarkup(node.element!).closing })
+          }
+        }
+        nodes.forEach((node, index) => {
+          close(node.depth)
+          expanded.push(node)
+          if (nodes[index + 1] && nodes[index + 1]!.depth > node.depth && getElementMarkup(node.element!).closing) stack.push(node)
+        })
+        close(0)
+        nodes = expanded
+        initialIndex = nodes.indexOf(initialNode)
+      }
       const section = mk("div", "data-dev-inspector-owner-tree")
       const tree = mk("div", "data-dev-inspector-tree")
       tree.setAttribute("role", "tree")
@@ -597,7 +622,7 @@ export const InspectUI = ({
       const paths: HTMLButtonElement[] = []
       const paintPath = (path: HTMLButtonElement, node: InfoTreeNode) => {
         path.disabled = !node.source
-        path.textContent = node.source ? formatPageLabel(node.source, projectRoot) : "…"
+        path.textContent = node.source ? `${node.source.filePath.split(/[\\/]/).pop()}:${node.source.line}` : "…"
         path.title = node.source ? `Open ${formatPageLabel(node.source, projectRoot)}` : "Source unavailable"
         paintTreePath(path, node.source ? "open" : "empty")
       }
@@ -609,18 +634,7 @@ export const InspectUI = ({
       const paint = (focus = false) => {
         const hadFocus = tree.contains(document.activeElement)
         tree.textContent = ""
-        const closing: { depth: number; tag: string }[] = []
-        const closeTags = (depth: number) => {
-          while (closing.length && closing[closing.length - 1]!.depth >= depth) {
-            const entry = closing.pop()!
-            const line = mk("div", "data-dev-inspector-html-close", entry.tag)
-            line.style.paddingLeft = `${entry.depth * 12 + 2}px`
-            line.setAttribute("aria-hidden", "true")
-            tree.append(line)
-          }
-        }
         nodes.forEach((node, index) => {
-          if (node.element) closeTags(node.depth)
           const active = index === selectedIndex
           const row = mk<HTMLDivElement>("div", "data-dev-inspector-tree-row")
           paintTreeRow(row, active)
@@ -640,8 +654,7 @@ export const InspectUI = ({
             const markup = getElementMarkup(node.element)
             const hasVisibleChildren = !!nodes[index + 1]?.element && nodes[index + 1]!.depth > node.depth
             const text = getElementText(node.element)
-            nameEl.textContent = `${markup.opening}${text ? ` ${text} ` : ""}${hasVisibleChildren ? "" : markup.closing}`
-            if (hasVisibleChildren && markup.closing) closing.push({ depth: node.depth, tag: markup.closing })
+            nameEl.textContent = node.closingTag ?? `${markup.opening}${text ? ` ${text} ` : ""}${hasVisibleChildren ? "" : markup.closing}`
             nameEl.title = markup.opening
             pathEl.textContent = "…"
             pathEl.classList.add("next-inspect-ui-element-select")
@@ -650,16 +663,16 @@ export const InspectUI = ({
           } else paintPath(pathEl, node)
           pathEl.onclick = (event) => {
             event.preventDefault(); event.stopPropagation()
-            if (node.element) adoptElement(node.element)
+            if (node.element) openInfoNode(node)
             else if (node.source) openInEditor(node.source, settings.ide)
           }
           row.append(indent, nameEl)
-          row.append(pathEl)
-          if (node.relation) row.append(mk("span", "data-dev-inspector-tree-relation", node.relation))
+          if (!node.element) row.append(pathEl)
           row.onclick = (event) => {
             if (pathEl.contains(event.target as Node)) return
             event.preventDefault()
-            select(index)
+            if (node.element) openInfoNode(node)
+            else select(index)
           }
           row.onfocus = () => {
             if (selectedIndex !== index) select(index)
@@ -670,7 +683,6 @@ export const InspectUI = ({
             row.scrollIntoView({ block: "nearest" })
           }
         })
-        closeTags(0)
       }
       paint()
       section.append(tree)
@@ -678,7 +690,7 @@ export const InspectUI = ({
       return {
         section,
         moveSelection: (delta: number): InfoTreeNode | null => {
-          const next = selectedIndex + delta
+          const next = delta === -Infinity ? 0 : delta === Infinity ? nodes.length - 1 : selectedIndex + delta
           if (next < 0 || next >= nodes.length) return null
           select(next)
           return nodes[next]!
@@ -687,10 +699,13 @@ export const InspectUI = ({
           tree.querySelector<HTMLElement>('[aria-selected="true"]')?.focus({ preventScroll: true })
         },
         setSource: (index: number, source: SourceLocation | null) => {
-          nodes[index]!.source = source
+          const original = originalNodes[index]!
+          original.source = source
+          nodes.forEach(node => { if (node.element && node.element === original.element) node.source = source })
           if (!infoVisible || !info.contains(tree)) return
-          if (!nodes[index]!.element) paintPath(paths[index]!, nodes[index]!)
-          if (selectedIndex === index || nodes[index] === infoPinnedNode) syncInfoTreeSelection(nodes[selectedIndex]!)
+          const rowIndex = nodes.indexOf(original)
+          if (!original.element) paintPath(paths[rowIndex]!, original)
+          if (nodes[selectedIndex] === original || nodes[selectedIndex]?.element === original.element || original === infoPinnedNode) syncInfoTreeSelection(nodes[selectedIndex]!)
           reposition()
         },
       }
@@ -745,6 +760,7 @@ export const InspectUI = ({
       info.setAttribute("aria-hidden", "false")
       infoTitleEl = mk<HTMLDivElement>("div", "data-dev-inspector-info-title")
       infoSourceBox = mk<HTMLDivElement>("div", "data-dev-inspector-source-box")
+      infoTitleEl.textContent = formatDomTag(hostTag)
       info.append(infoTitleEl, infoSourceBox)
       const tabs = mk("div", "data-dev-inspector-info-tabs")
       tabs.setAttribute("role", "tablist")
@@ -771,7 +787,9 @@ export const InspectUI = ({
           trees.set(tab, tree)
           nodes.forEach((node, index) => {
             void node.pendingSource?.then(source => {
-              if (generation === infoRenderGeneration) tree!.setSource(index, source)
+              if (generation === infoRenderGeneration) {
+              tree!.setSource(index, source)
+            }
             }).catch(() => {})
           })
         }
@@ -793,7 +811,7 @@ export const InspectUI = ({
         tabs.append(button)
       }
       info.append(tabs, panel)
-      info.append(mk("div", "data-dev-inspector-info-hint", "← → tabs · ↑ ↓ preview · Enter select / open · Space close"))
+      info.append(mk("div", "data-dev-inspector-info-hint", "← → tabs · ↑ ↓ preview · ⌘/Ctrl ↑ ↓ first / last · Enter open · Space close"))
       infoTabChange = showTab
       info.style.display = "block"
       info.style.pointerEvents = "auto"
@@ -869,7 +887,7 @@ export const InspectUI = ({
       paintTooltipChrome()
       const fiber = hoveredElement ? getFiber(hoveredElement) : null
       const kind = resolveOpenKind(fiber)
-      syncUsedIcon(kind === "used")
+      inspectTooltip.showSourceIcon(kind === "used", !!fiber && buildOwnerChain(fiber).length > 0)
     }
 
     const updateOpenHint = () => {
@@ -1180,7 +1198,14 @@ export const InspectUI = ({
       event.preventDefault()
       event.stopPropagation()
 
-      if (infoVisible) return
+      if (infoVisible) {
+        const node = infoSelectedNode
+        if (node && ghostOverlay.style.display !== "none") {
+          const rect = ghostOverlay.getBoundingClientRect()
+          if (event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom) openInfoNode(node)
+        }
+        return
+      }
 
       const target = pendingClickElement ?? hoveredElement ?? clicked
       pendingClickElement = null
@@ -1241,10 +1266,6 @@ export const InspectUI = ({
         if (infoVisible && infoSelectedNode) {
           event.preventDefault(); event.stopPropagation()
           const node = infoSelectedNode
-          if (infoTab === "element" && node.element && node.element !== infoTarget) {
-            adoptElement(node.element)
-            return
-          }
           void (node.pendingSource ?? Promise.resolve(node.source)).then(source => {
             if (source && infoVisible && infoSelectedNode === node) openInEditor(source, settings.ide)
           }).catch(() => {})
@@ -1305,7 +1326,7 @@ export const InspectUI = ({
       const up = event.key === "ArrowUp", down = event.key === "ArrowDown"
       const prev = up || event.key === "ArrowLeft", nextKey = down || event.key === "ArrowRight"
       if (infoVisible) {
-        if (up || down) infoTreeMove?.(up ? -1 : 1)
+        if (up || down) infoTreeMove?.(isModArrow ? (up ? -Infinity : Infinity) : (up ? -1 : 1))
         else infoTabChange?.(infoTab === "component" ? "element" : "component", true)
         return
       }
@@ -1329,7 +1350,7 @@ export const InspectUI = ({
 
       if (infoVisible) {
         if (infoTarget) highlightTarget(infoTarget, true)
-        if (infoTab === "element" && infoSelectedNode) paintGhost(infoSelectedNode)
+        if (infoSelectedNode) paintGhost(infoSelectedNode)
         return
       }
 
