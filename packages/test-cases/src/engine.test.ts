@@ -154,7 +154,7 @@ test("parses Webpack browser and RSC frames with parentheses in their paths", ()
   assert.equal(isReactServerStackFile("webpack-internal:///(rsc)/./app/page.tsx"), true)
 })
 
-test("resolves Webpack frames through Next with the correct browser or server mode", async (t) => {
+test("resolves Next browser chunks and Webpack frames in the correct mode", async (t) => {
   const modes: boolean[] = []
   t.mock.method(globalThis, "fetch", async (url: string, init: RequestInit) => {
     assert.equal(url, "/__nextjs_original-stack-frames")
@@ -163,14 +163,14 @@ test("resolves Webpack frames through Next with the correct browser or server mo
       file: "components/svg.tsx", line1: 5, column1: 1,
     } } }])
   })
-  for (const file of ["webpack-internal:///(app-pages-browser)/./components/svg.tsx", "webpack-internal:///(rsc)/./components/svg.tsx"]) {
+  for (const file of ["webpack-internal:///(app-pages-browser)/./components/svg.tsx", "webpack-internal:///(rsc)/./components/svg.tsx", "http://localhost:3000/_next/static/chunks/app.js"]) {
     const source = await resolveFirstMappedFrame([{
       file, methodName: "SvgBars", arguments: [], line1: 7, column1: 159,
       isServer: isReactServerStackFile(file),
     }], "/repo", new Map())
     assert.deepEqual(source, { filePath: "/repo/components/svg.tsx", line: 5, column: 1 })
   }
-  assert.deepEqual(modes, [false, true])
+  assert.deepEqual(modes, [false, true, false])
 })
 
 test("uses React 18 component JSX metadata before its owner's caller", () => {
@@ -327,4 +327,11 @@ test("hit-tests the spotlight rect inclusively", () => {
 test("offsets under-chips down and right by stack depth", () => {
   assert.equal(underStackTransform(1), "translate(29px, calc(100% * 1 + 5px))")
   assert.equal(underStackTransform(2), "translate(58px, calc(100% * 2 + 10px))")
+})
+
+test("source labels hide machine paths without a project root", () => {
+  assert.equal(formatPageLabel({ filePath: "/Users/me/repo/apps/react-grab-bench/components/tailwind/tw-card.tsx", line: 5, column: 1 }, ""), "components/tailwind/tw-card.tsx:5")
+  assert.equal(formatPageLabel({ filePath: "/home/me/project/src/components/card.tsx", line: 8, column: 1 }, ""), "src/components/card.tsx:8")
+  assert.equal(formatPageLabel({ filePath: "/home/me/project/config.ts", line: 2, column: 1 }, ""), "config.ts:2")
+  assert.equal(formatPageLabel({ filePath: "components/card.tsx", line: 8, column: 1 }, ""), "components/card.tsx:8")
 })

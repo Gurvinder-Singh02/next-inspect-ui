@@ -1,3 +1,4 @@
+import { getSource as getFiberSource, getOwnerStack, getParentStack, isSourceFile, normalizeFileName } from "bippy/source"
 import {
   INSPECTOR_IDES,
   toAbsolutePath,
@@ -200,7 +201,15 @@ export const resolveSourceMapSourcePath = ({
 }
 
 export const formatPageLabel = (source: SourceLocation, projectRoot: string) => {
-  const relativePath = projectRoot && source.filePath.startsWith(projectRoot) ? source.filePath.slice(projectRoot.length + 1) : source.filePath
+  const file = source.filePath.replace(/\\/g, "/")
+  const root = projectRoot.replace(/\\/g, "/").replace(/\/$/, "")
+  let relativePath = root && file.startsWith(`${root}/`) ? file.slice(root.length + 1) : file
+  if (/^(?:\/|[A-Za-z]:\/|file:\/\/)/.test(relativePath)) {
+    // Recovered stacks can have absolute paths even without a projectRoot prop.
+    const workspace = relativePath.match(/\/(?:apps|packages)\/[^/]+\/(.+)$/)
+    const sourceFolder = relativePath.match(/\/((?:src|app|pages|components|lib|hooks|test-cases|styles|public)\/.+)$/)
+    relativePath = workspace?.[1] ?? sourceFolder?.[1] ?? relativePath.split("/").pop() ?? relativePath
+  }
   return `${relativePath}:${source.line}`
 }
 
@@ -1130,7 +1139,7 @@ const resolveFiberDebugSource = async (debugSource: FiberDebugSource | null | un
 const resolveStackFrame = async (frame: StackFrame, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
   const direct = sourceFromStackFrame(frame, projectRoot)
   if (direct) return direct
-  if (frame.isServer || frame.file.startsWith("webpack-internal:") || frame.file.startsWith("webpack://")) {
+  if (frame.isServer || frame.file.startsWith("webpack-internal:") || frame.file.startsWith("webpack://") || /^https?:\/\/[^/]+\/_next\//.test(frame.file)) {
     return resolveNextStackFrame(frame, projectRoot)
   }
   const sourceMapUrl = new URL(frame.file)
@@ -1158,11 +1167,30 @@ const resolveStackFrame = async (frame: StackFrame, projectRoot: string, sourceM
   return { filePath, line: position.originalLine + 1, column: position.originalColumn + 1 }
 }
 
+const resolveRecoveredFiberSource = async (fiber: ReactFiber, projectRoot: string, definition = false): Promise<SourceLocation | null> => {
+  try {
+    const input = fiber as unknown as Parameters<typeof getFiberSource>[0]
+    const [direct, stack] = await Promise.all([definition ? Promise.resolve(null) : getFiberSource(input), definition ? getParentStack(input) : getOwnerStack(input)])
+    const candidates = [direct, ...stack]
+    for (const candidate of candidates) {
+      if (!candidate?.fileName || !isSourceFile(candidate.fileName)) continue
+      const file = normalizeFileName(candidate.fileName)
+      if (isBundledOrExternalPath(file)) continue
+      return { filePath: toAbsolutePath(file, projectRoot), line: candidate.lineNumber ?? 1, column: candidate.columnNumber ?? 1 }
+    }
+  } catch { /* Older React and unsupported builds retain the metadata path. */ }
+  return null
+}
+
 export const resolveHostAuthorSource = async (
   fiber: ReactFiber,
   projectRoot: string,
   sourceMapCache: Map<string, Promise<SourceMap>>
 ) => {
+  if (!fiber._debugSource) {
+    const recovered = await resolveRecoveredFiberSource(fiber, projectRoot)
+    if (recovered) return recovered
+  }
   const target = getNamedTarget(fiber)
   const hostDebug = await resolveFiberDebugSource(fiber._debugSource, projectRoot, sourceMapCache)
   const fromHost = pickOpenSource(hostDebug, absBoundedSource(fiber, target, projectRoot))
@@ -1190,6 +1218,11 @@ export const resolveSource = async (
   projectRoot: string,
   sourceMapCache: Map<string, Promise<SourceMap>>
 ) => {
+  const target = getNamedTarget(fiber)
+  if (target && !target.fiber._debugSource) {
+    const recovered = await resolveRecoveredFiberSource(target.fiber, projectRoot, true)
+    if (recovered) return recovered
+  }
   const parts = definedSourceParts(
     fiber,
     projectRoot,
@@ -1231,6 +1264,10 @@ export const resolveInstanceSource = async (
         : null
     )
   const component = target.fiber
+  if (!component._debugSource) {
+    const recovered = await resolveRecoveredFiberSource(component, projectRoot)
+    if (recovered) return recovered
+  }
   const fromComponent = component._debugSource
     ? await resolveFiberDebugSource(component._debugSource, projectRoot, sourceMapCache)
     : null

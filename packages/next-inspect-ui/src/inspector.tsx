@@ -490,7 +490,7 @@ export const InspectUI = ({
       applyOverlayStyles(overlay, tooltip, settings)
       applyOverlayStyles(ghostOverlay, tooltip, {
         ...settings,
-        devSpotlightProps: { ...settings.devSpotlightProps, strokeStyle: "dotted", strokeWidth: 2 },
+        devSpotlightProps: { ...settings.devSpotlightProps, strokeStyle: "dotted", strokeWidth: 1, bgOpacity: settings.devSpotlightProps.bgOpacity * 0.5, strokeOpacity: 1 },
       })
 
     }
@@ -828,7 +828,7 @@ export const InspectUI = ({
         tabs.append(button)
       }
       info.append(tabs, panel)
-      info.append(mk("div", "data-dev-inspector-info-hint", "← → tabs · ↑ ↓ preview · ⌘/Ctrl ↑ ↓ first / last · Enter open · Space close"))
+      info.append(mk("div", "data-dev-inspector-info-hint", "← → tabs · ↑ ↓ preview · Enter open · Space close"))
       infoTabChange = showTab
       info.style.display = "block"
       info.style.pointerEvents = "auto"
@@ -884,18 +884,13 @@ export const InspectUI = ({
 
     let logOptionPress: (() => void) | null = null
     let moveToParentInspectable: (() => boolean) | null = null
-    let shakeTooltip: (() => void) | null = null
 
     const syncOptionFromEvent = (event: KeyboardEvent | MouseEvent | PointerEvent) => {
       const next = event.altKey
       if (next === optionHeld) return
       optionHeld = next; ownerChainDepth = 0; bustOwnerChainCache()
       if (infoVisible) return
-      if (next) {
-        const fiber = hoveredElement ? getFiber(hoveredElement) : null
-        const chainLen = fiber ? buildOwnerChain(fiber).length : 0
-        if (chainLen === 0 && inspectTooltip.isOpen()) shakeTooltip?.()
-      } else clearTooltipStack()
+      if (!next) clearTooltipStack()
       updateOpenHint()
       if (next) logOptionPress?.()
     }
@@ -931,28 +926,6 @@ export const InspectUI = ({
       if (!step) return
       refineActiveStep(fiber, step, ownerChainDepth)
     }
-
-    let shakeAnimation: Animation | null = null
-    const shakeEl = (el: HTMLElement) => {
-      if (el.style.display === "none") return
-      shakeAnimation?.cancel()
-      const rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      shakeAnimation = el.animate(
-        rm
-          ? [{ opacity: "1" }, { opacity: "0.45" }, { opacity: "1" }]
-          : [
-              { transform: "translateX(0)" },
-              { transform: "translateX(-4px)" },
-              { transform: "translateX(4px)" },
-              { transform: "translateX(-2px)" },
-              { transform: "translateX(3px)" },
-              { transform: "translateX(0)" },
-            ],
-        { duration: rm ? 160 : 260, easing: "ease-out" }
-      )
-    }
-    const shakeOverlay = () => shakeEl(overlay)
-    shakeTooltip = () => shakeEl(tooltip)
 
     const hide = () => {
       inspectGeneration += 1
@@ -1091,13 +1064,11 @@ export const InspectUI = ({
 
     moveToParentInspectable = () => {
       if (!hoveredElement) {
-        shakeOverlay()
         return false
       }
       const from = hoveredElement
       const next = findParentInspectable(from)
       if (!next || next === from) {
-        shakeOverlay()
         return false
       }
       treeNavStack.push(from)
@@ -1107,7 +1078,6 @@ export const InspectUI = ({
         if (treeNavStack[treeNavStack.length - 1] === from) {
           treeNavStack.pop()
         }
-        shakeOverlay()
         return false
       }
       return true
@@ -1227,10 +1197,10 @@ export const InspectUI = ({
     }
 
     const navOrShake = (next: Element | null, from: Element, exact = false) => {
-      if (!next || next === from) { shakeOverlay(); return false }
+      if (!next || next === from) { return false }
       pointerPinned = true
       const ok = revealAndHighlight(next, exact)
-      if (!ok || hoveredElement === from) { shakeOverlay(); return false }
+      if (!ok || hoveredElement === from) { return false }
       return true
     }
     const findBracketChild = (from: Element) => {
@@ -1292,7 +1262,7 @@ export const InspectUI = ({
       if ((parentKey || childKey) && !isMod && !event.altKey) {
         event.preventDefault()
         event.stopPropagation()
-        if (!hoveredElement) { shakeOverlay(); return }
+        if (!hoveredElement) { return }
         if (parentKey) { moveToParentInspectable?.(); return }
         navOrShake(findBracketChild(hoveredElement), hoveredElement, true)
         return
@@ -1309,7 +1279,7 @@ export const InspectUI = ({
         else infoTabChange?.(infoTab === "component" ? "element" : "component", true)
         return
       }
-      if (!hoveredElement) { shakeOverlay(); return }
+      if (!hoveredElement) { return }
       const from = hoveredElement
       const next = prev
         ? (isModArrow ? findEdgeSiblingInspectable(from, "first") : findSiblingInspectable(from, "prev"))

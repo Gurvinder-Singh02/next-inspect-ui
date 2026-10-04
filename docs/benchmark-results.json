@@ -1,0 +1,66 @@
+{
+  "inspectUiScript": {
+    "raw": 280161,
+    "gzip": 88897
+  },
+  "measuredAt": "2026-10-04T06:27:49.210Z",
+  "method": "Standalone minified esbuild ESM; React/ReactDOM external; gzip bytes. Development is minified for comparison. Not application build delta or runtime benchmark.",
+  "results": [
+    {
+      "name": "Next Inspect UI",
+      "production": {
+        "raw": 132,
+        "gzip": 133,
+        "inputs": 1
+      },
+      "development": {
+        "raw": 87278,
+        "gzip": 29894,
+        "inputs": 6
+      },
+      "guarded": {
+        "inputs": 0,
+        "excluded": true
+      }
+    },
+    {
+      "name": "Show Component 2.3.0",
+      "production": {
+        "raw": 307852,
+        "gzip": 79348,
+        "inputs": 120
+      },
+      "development": {
+        "raw": 445930,
+        "gzip": 124686,
+        "inputs": 120
+      },
+      "guarded": {
+        "inputs": 0,
+        "excluded": true
+      }
+    },
+    {
+      "name": "Click to React Component 1.1.3",
+      "production": {
+        "raw": 46,
+        "gzip": 66,
+        "inputs": 21
+      },
+      "development": {
+        "raw": 42995,
+        "gzip": 15311,
+        "inputs": 21
+      },
+      "guarded": {
+        "inputs": 0,
+        "excluded": true
+      }
+    }
+  ],
+  "reactGrab": {
+    "version": "0.2.0",
+    "raw": 308797,
+    "gzip": 99270
+  }
+}

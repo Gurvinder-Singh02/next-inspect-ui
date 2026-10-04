@@ -20,11 +20,11 @@ const steps = [
   },
   {
     title: "Read the source clues",
-    text: "In development, React can provide a source location or stack trace through its _debugSource, _debugStack, and _debugInfo fields. A stack trace lists the code calls that led to the element. These are internal React fields, so what is available can vary.",
+    text: "In development, React can provide a source location or stack trace through its _debugSource, _debugStack, and _debugInfo fields. A stack trace lists the code calls that led to the element. These are internal React fields, so what is available can vary. When those clues are missing or unreliable, the tool uses bippy, the same source resolver used by React Grab, to recover the component’s stack.",
   },
   {
     title: "Find the original file",
-    text: "Next.js turns TSX into JavaScript for the browser. A source map is a separate file that links that JavaScript back to the original TSX. The tool uses it when needed to find the file, line, and column. For server code, Next.js’s dev endpoint can help map the stack trace.",
+    text: "Next.js turns TSX into JavaScript for the browser. A source map is a separate file that links that JavaScript back to the original TSX. The tool uses it when needed to find the file, line, and column. For Next.js browser and server code, its dev endpoint can map the stack trace in the matching mode.",
   },
   {
     title: "Open your editor",

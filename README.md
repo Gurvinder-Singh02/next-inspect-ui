@@ -80,3 +80,5 @@ A dev-only standalone script is also available, like React Grab. The Next.js das
 For the 330-case component source comparison, see [source-benchmarks](docs/source-benchmarks.md). Run `bun run dev:bench`, then `bun run benchmark:source`.
 
 Hover selects the exact visible element under the pointer, including SVG parts and classless children. Hold Option / Alt to climb to a component; hover does not automatically select its group.
+
+Source lookup uses `bippy/source` (also used by React Grab) to recover React component frames when JSX debug metadata is unavailable. The inspector keeps its own UI, editor opening, and component navigation; no AI or clipboard feature is involved.
