@@ -29,7 +29,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Does this affect production?",
-    a: "Not if you mount InspectUI only when NODE_ENV is development. The overlay is omitted from production builds; gated that way the measured cost is about 0.2 KB gzipped. Keep the development guard.",
+    a: "Guard the dynamic import with NODE_ENV development, then mount InspectUI. This keeps the inspector out of the production module graph. Exact build overhead depends on your bundler.",
   },
   {
     q: "Does it rely on any other libraries internally?",

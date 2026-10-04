@@ -1,6 +1,6 @@
 # App flow
 
-Mount `<InspectUI />` with no required props. `projectRoot` is optional for explicitly resolving relative paths. Absolute source paths open through the configured editor URL; relative paths use Next.js’s `/__nextjs_launch-editor` or `/__open-in-editor` and fall back to the editor URL if unavailable. The dev server uses its configured editor.
+Import `next-inspect-ui` dynamically only inside a development check, then mount `<InspectUI />` with no required props. Next.js uses `process.env.NODE_ENV === "development"`; Vite uses `import.meta.env.DEV`. The guarded import excludes the inspector module from the production graph. `projectRoot` is optional for explicitly resolving relative paths. Absolute source paths open through the configured editor URL; relative paths use Next.js’s `/__nextjs_launch-editor` or `/__open-in-editor` and fall back to the editor URL if unavailable. The dev server uses its configured editor.
 
 Turn on InspectUI, hover an element, then click to open its source in your editor.
 
@@ -86,7 +86,7 @@ Agentation and InterfaceKit also mount in development, independently of the insp
 
 The comparison toolbar stays usable while inspecting. Only the selected inspector loads in development. React Grab’s installed script loads before React; the other inspectors mount as client components. Show Component uses Option + right-click (add Shift for its tree). React Grab uses ⌘C / Ctrl+C. Click to React Component uses Option + click and depends on older React source metadata, so lookup may fail on this React 19 page.
 
-The selected row updates the panel title and its source link. Opening the panel leaves the tooltip unchanged. The first Component row shows the hovered element and preserves its React icon when an owner is available. Only when the hovered host supports Option climbing (such as a Button host), the second row shows the immediate owner and source, matching Option-click. A plain nested HTML element such as `<h1>` shows no React icon and ancestor rows do not change its tooltip. Further ancestor rows keep that tooltip fixed while the panel title, source link, and ghost change. Element selection also keeps the tooltip fixed. The title source uses the same short path and line as the tooltip. Continuous left rails show row depth; component rows show only file name and line. The footer shows keyboard hints: Left / Right switches tabs, Up / Down previews rows, Enter selects or opens, and Space closes. A React icon on the hover tooltip means Option can select an owning component.
+The selected row updates the panel title and its source link. Opening the panel and resolving row sources leave the tooltip unchanged; only deliberate row navigation can update it. The first Component row shows the hovered element and preserves its Option icon (`⌥`) when an owner is available. Only when the hovered host supports Option climbing (such as a Button host), the second row shows the immediate owner and source, matching Option-click. A plain nested HTML element such as `<h1>` shows no climb icon and ancestor rows do not change its tooltip. Further ancestor rows keep that tooltip fixed while the panel title, source link, and ghost change. Element selection also keeps the tooltip fixed. The title source uses the same short path and line as the tooltip. Continuous left rails show row depth; component rows show only file name and line. The footer shows keyboard hints: Left / Right switches tabs, Up / Down previews rows, Enter selects or opens, and Space closes. An Option icon (`⌥`) on the hover tooltip means Option can select an owning component. Holding Option shows the React icon instead.
 
 The default tooltip and spotlight are blue (`#006efe`). The spotlight uses 10% fill and a solid 0.5px border. It follows the element’s actual bounds and computed corners, with no custom spotlight padding or radius props. Tooltip padding and radius remain configurable.
 
@@ -95,3 +95,11 @@ The tooltip has no border or border-color prop.
 Ghost previews use the current preset’s fill and border colors at 50% overall opacity. The ghost border is dotted and 2px wide. Fill opacity, animation, and element corners follow the current spotlight settings.
 
 Show full URL (`tooltipProps.showFullUrl`) controls the source label in the tooltip and panel title: on shows the current path and line; off shows only the filename and line. The source label is always visible when available.
+
+## Production flow
+
+`Development check → dynamic import → InspectUI`. In production the import branch is removed. Keep the component as a sibling of the app. Use an async Next.js layout; Vite checks `import.meta.env.DEV`. Run `bun run benchmark` for repeatable standalone bundle sizes; see `docs/benchmarks.md`. This benchmark measures bytes, not interaction speed.
+
+## Dev-only script setup
+
+Next.js can also load `<Script src="/inspect-ui.js" strategy="afterInteractive" />` only when `NODE_ENV` is development. The local route serves the installed `next-inspect-ui/script` file and returns 404 in production. The standalone script mounts the inspector automatically; do not mount the component too. Production visitors receive no inspector script tag or script download. The script bundles its own React runtime, making it larger in development than the component setup.

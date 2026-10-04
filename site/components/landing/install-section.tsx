@@ -14,20 +14,23 @@ const INSTALL_COMMANDS: Record<PackageManager, string> = {
   bun: "bun add -D next-inspect-ui",
 }
 
-const AGENT_PROMPT = `Install next-inspect-ui (npm i -D next-inspect-ui). Add <InspectUI /> as a sibling alongside {children} in the root layout (not wrapping it), only in development.`
+const AGENT_PROMPT = `Install next-inspect-ui (npm i -D next-inspect-ui). Use a dynamic import of next-inspect-ui inside a NODE_ENV development check in the async root layout, then add <InspectUI /> as a sibling alongside {children} in the root layout (not wrapping it), only in development.`
 
-const LAYOUT_CODE = `import { InspectUI } from "next-inspect-ui"
-
-export default function RootLayout({
+const LAYOUT_CODE = `
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const InspectUI = process.env.NODE_ENV === "development"
+    ? (await import("next-inspect-ui")).InspectUI
+    : null
+
   return (
     <html lang="en">
       <body>
         {children}
-        {process.env.NODE_ENV === "development" && (
+        {InspectUI && (
           <InspectUI />
         )}
       </body>

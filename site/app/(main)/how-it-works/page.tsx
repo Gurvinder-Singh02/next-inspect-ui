@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import benchmarks from "../../../../docs/benchmark-results.json"
 
 export const metadata: Metadata = {
   title: "How it works",
@@ -59,6 +60,43 @@ Editor link / dev server
      ↓
 Cursor / VS Code`}
       </pre>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-lg font-medium">Use only in development</h2>
+        <p>Guard the import itself. No props are required.</p>
+        <pre className="overflow-x-auto rounded-lg border border-border p-5 text-sm">{`const InspectUI = process.env.NODE_ENV === "development"
+  ? (await import("next-inspect-ui")).InspectUI
+  : null
+
+// Inside your async layout:
+{InspectUI && <InspectUI />}`}</pre>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-lg font-medium">Dev-only script</h2>
+        <p>Like React Grab, you can load a standalone script only in development. Serve the installed next-inspect-ui/script file at /inspect-ui.js, with a route that returns 404 in production. The script mounts the inspector automatically.</p>
+        <pre className="overflow-x-auto rounded-lg border border-border p-5 text-sm">{`import Script from "next/script"
+
+{process.env.NODE_ENV === "development" && (
+  <Script src="/inspect-ui.js" strategy="afterInteractive" />
+)}`}</pre>
+        <p>Production visitors get no inspector script tag or download. Do not mount the component alongside the script.</p>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-lg font-medium">Bundle benchmarks</h2>
+        <p>Measured October 4, 2026. Minified standalone bundles, gzip bytes, with React excluded. These measure code size, not runtime speed or an app’s exact build increase.</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead><tr><th className="p-2">Inspector</th><th className="p-2">Dev</th><th className="p-2">Production static import</th><th className="p-2">Production guarded import</th></tr></thead>
+            <tbody>{benchmarks.results.map(row => <tr key={row.name}><td className="p-2">{row.name}</td><td className="p-2">{row.development.gzip.toLocaleString("en-US")} B</td><td className="p-2">{row.production.gzip.toLocaleString("en-US")} B</td><td className="p-2">Library excluded by dev guard</td></tr>)}
+              <tr><td className="p-2">Next Inspect UI global script</td><td className="p-2">{benchmarks.inspectUiScript.gzip.toLocaleString("en-US")} B</td><td className="p-2">Depends on script inclusion</td><td className="p-2">Excluded with dev-only script guard</td></tr>
+              <tr><td className="p-2">React Grab 0.2.0 global script</td><td className="p-2">{benchmarks.reactGrab.gzip.toLocaleString("en-US")} B</td><td className="p-2">Depends on script inclusion</td><td className="p-2">Excluded with dev-only script guard</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>All three guarded component imports exclude the library from the bundle. React Grab’s global script is a different delivery format. Run <code>bun run benchmark</code> to repeat the comparison.</p>
+      </section>
 
       <ol className="flex list-decimal flex-col gap-6 pl-5">
         {steps.map((step) => (

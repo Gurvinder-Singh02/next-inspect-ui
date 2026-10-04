@@ -583,7 +583,7 @@ export const InspectUI = ({
     }
 
 
-    const syncInfoTreeSelection = (node: InfoTreeNode) => {
+    const syncInfoTreeSelection = (node: InfoTreeNode, updateTooltip = false) => {
       infoSelectedNode = node
       if (infoTitleEl) infoTitleEl.textContent = node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name)
       if (infoSourceBox) paintSourceBox(infoSourceBox, node.source)
@@ -596,7 +596,7 @@ export const InspectUI = ({
         infoClimbSelection = step ? { depth: node.climbIndex, step } : null
         const targetFiber = infoTarget ? getFiber(infoTarget) : null
         const canClimb = !!targetFiber && buildOwnerChain(targetFiber).length > 0
-        if (node.isDom || (canClimb && node.climbIndex === 0)) {
+        if (updateTooltip && (node.isDom || (canClimb && node.climbIndex === 0))) {
           setTooltipLabel(formatTooltipLabel({
             title: node.name,
             pageName: node.source ? formatPageLabel(node.source, projectRoot) : null,
@@ -643,9 +643,10 @@ export const InspectUI = ({
         paintTreePath(path, node.source ? "open" : "empty")
       }
       const select = (index: number, focus = true) => {
+        const changed = selectedIndex !== index
         selectedIndex = index
         paint(focus)
-        syncInfoTreeSelection(nodes[index]!)
+        syncInfoTreeSelection(nodes[index]!, changed)
       }
       const paint = (focus = false) => {
         const hadFocus = tree.contains(document.activeElement)

@@ -3,9 +3,9 @@
 import dynamic from "next/dynamic";
 import { inspectors, type InspectorId } from "@/lib/inspectors";
 
-const NextInspector = dynamic(() => import("next-inspect-ui").then((module) => module.InspectUI), {
-  ssr: false,
-});
+const NextInspector = process.env.NODE_ENV === "development"
+  ? dynamic(() => import("next-inspect-ui").then((module) => module.InspectUI), { ssr: false })
+  : () => null;
 const ShowInspector = dynamic(
   () => import("show-component").then((module) => module.ShowComponent),
   { ssr: false },

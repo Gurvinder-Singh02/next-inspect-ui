@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { CuelumeBind } from "@/components/cuelume-bind"
-import { InspectUI } from "next-inspect-ui"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -108,11 +107,14 @@ const jsonLd = {
   ],
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const InspectUI = process.env.NODE_ENV === "development"
+    ? (await import("next-inspect-ui")).InspectUI
+    : null
   return (
     <html
       lang="en"
@@ -133,7 +135,7 @@ export default function RootLayout({
             <CuelumeBind />
             {children}
             <Toaster />
-            {process.env.NODE_ENV === "development" && (
+            {InspectUI && (
               <InspectUI />
             )}
           </TooltipProvider>
