@@ -122,3 +122,5 @@ It is local-only. Do not add `.pnpm-store` or `todo-next-inspect-ui.md`.
 MIT
 
 In the Element tab, Up/Down previews HTML elements with a half-opacity red highlight, without a ghost tooltip. Enter selects the preview; Enter again opens its source. Click `…` to select an element directly. The Component tree starts at the hovered element and follows its immediate parents up to the page/layout boundary.
+
+The default tooltip and spotlight use `#006efe`. The spotlight has 10% fill and a solid 0.5px border. It follows the element’s bounds and computed corner radius automatically. Spotlight radius and padding props are removed; tooltip radius and padding remain configurable.

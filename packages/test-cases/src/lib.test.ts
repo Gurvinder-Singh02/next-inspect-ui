@@ -52,11 +52,11 @@ test("builds rgba from hex and keeps invalid hex unchanged", () => {
   assert.equal(toRgba("nope", 1), "nope")
 })
 
-test("paints the default orange dashed spotlight", () => {
+test("paints the default blue solid spotlight", () => {
   const paint = getOverlayPaint(DEFAULT_INSPECTOR_SETTINGS)
-  assert.equal(paint.fill, "rgb(249 115 22 / 0.09)")
-  assert.equal(paint.border, "1px dashed rgba(249 115 22 / 1)")
-  assert.equal(paint.tooltipBackground, "#FF6100")
+  assert.equal(paint.fill, "rgb(0 110 254 / 0.1)")
+  assert.equal(paint.border, "0.5px solid rgba(0 110 254 / 1)")
+  assert.equal(paint.tooltipBackground, "#006efe")
   assert.equal(paint.tooltipPadding, "2px 8px")
   assert.equal(paint.animated, true)
 })

@@ -34,7 +34,7 @@ export const paintUsedIcon = (el: HTMLElement, open: boolean) => {
 }
 
 export const paintTreeRow = (el: HTMLElement, active: boolean) => {
-  el.style.background = active ? "rgb(56 189 248 / 12%)" : ""
+  el.style.background = active ? "rgb(255 255 255 / 8%)" : ""
   el.style.color = active
     ? "var(--inspect-fg, var(--foreground, #e4e4e7))"
     : ""
@@ -85,12 +85,12 @@ export const getOverlayPaint = (settings: InspectorSettings) => {
       spotlight.strokeWidth <= 0
         ? "0px none transparent"
         : `${spotlight.strokeWidth}px ${spotlight.strokeStyle} ${stroke}`,
-    borderRadius: `${spotlight.borderRadius}px`,
-    paddingX: spotlight.paddingX,
-    paddingY: spotlight.paddingY,
+    borderRadius: "0px",
+    paddingX: 0,
+    paddingY: 0,
     animated: spotlight.animated,
     tooltipBackground: tooltip.background,
-    tooltipBorder: tooltip.border,
+    tooltipBorder: "transparent",
     tooltipText: tooltip.text,
     tooltipPadding: `${tooltip.paddingY}px ${tooltip.paddingX}px`,
     tooltipBorderRadius: `${tooltip.borderRadius}px`,

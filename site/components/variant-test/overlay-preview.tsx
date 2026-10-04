@@ -333,8 +333,8 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
   const isMouseMode = mode === "mouse"
   const visibleId = mode === "none" ? null : isMouseMode ? hoverId : playId
   const showOverlay = Boolean(visibleId)
-  const paddingX = settings.devSpotlightProps.paddingX
-  const paddingY = settings.devSpotlightProps.paddingY
+  const paddingX = 0
+  const paddingY = 0
 
   const stepBy = useCallback((delta: number) => {
     setPlayId((current) => {
@@ -985,7 +985,7 @@ const PreviewOverlay = ({
     }) || formatComponentTag("Component")
   const chipStyle = {
     background: paint.tooltipBackground,
-    border: `1px solid ${paint.tooltipBorder}`,
+    border: "none",
     color: paint.tooltipText,
     padding: paint.tooltipPadding,
     borderRadius: paint.tooltipBorderRadius,

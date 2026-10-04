@@ -147,7 +147,8 @@ export const InspectUI = ({
       path.type = "button"
       const pathIcon = mk("span", "data-dev-inspector-source-icon")
       pathIcon.append(createOpenSourceIcon())
-      path.append(mk("span", undefined, formatPageLabel(source, projectRoot)), pathIcon)
+      const sourceLabel = formatPageLabel(source, projectRoot)
+      path.append(mk("span", undefined, settings.tooltipProps.showFullUrl ? sourceLabel : sourceLabel.split(/[\\/]/).pop()!), pathIcon)
       path.onclick = () => openInEditor(source, settings.ide)
       row.append(path)
       box.append(row)
@@ -425,7 +426,6 @@ export const InspectUI = ({
     }
 
     const getCachedPageName = (fiber: ReactFiber, kind: OpenKind) => {
-      if (!settings.tooltipProps.showPageName) return null
       if (kind === "used") {
         const step = getActiveChainStep(fiber)
         const display = step ? getClimbStepDisplaySource(step) : null
@@ -488,6 +488,10 @@ export const InspectUI = ({
     markInspectNode(info, "data-dev-inspector-info")
     const paintTooltipChrome = () => {
       applyOverlayStyles(overlay, tooltip, settings)
+      applyOverlayStyles(ghostOverlay, tooltip, {
+        ...settings,
+        devSpotlightProps: { ...settings.devSpotlightProps, strokeStyle: "dotted", strokeWidth: 2 },
+      })
 
     }
 
@@ -539,9 +543,9 @@ export const InspectUI = ({
       const right = Math.max(...boxes.map(box => box.right))
       const bottom = Math.max(...boxes.map(box => box.bottom))
       const rect = expandRectWithPadding({ left, top, width: right - left, height: bottom - top }, {
-        left: settings.devSpotlightProps.paddingX, right: settings.devSpotlightProps.paddingX,
-        top: settings.devSpotlightProps.paddingY, bottom: settings.devSpotlightProps.paddingY,
+        left: 0, right: 0, top: 0, bottom: 0,
       })
+      ghostOverlay.style.borderRadius = elements.length === 1 ? getComputedStyle(elements[0]!).borderRadius : "0px"
       Object.assign(ghostOverlay.style, { display: "block", left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px` })
 
     }
@@ -590,6 +594,18 @@ export const InspectUI = ({
         paintGhost(node)
         const step = node.isDom ? null : infoTreeChain[node.climbIndex]
         infoClimbSelection = step ? { depth: node.climbIndex, step } : null
+        const targetFiber = infoTarget ? getFiber(infoTarget) : null
+        const canClimb = !!targetFiber && buildOwnerChain(targetFiber).length > 0
+        if (node.isDom || (canClimb && node.climbIndex === 0)) {
+          setTooltipLabel(formatTooltipLabel({
+            title: node.name,
+            pageName: node.source ? formatPageLabel(node.source, projectRoot) : null,
+            tooltipProps: settings.tooltipProps,
+            tagStyle: node.isDom ? "dom" : "component",
+          }) || (node.isDom ? formatDomTag(node.name) : formatComponentTag(node.name)))
+          inspectTooltip.showSourceIcon(!node.isDom, canClimb)
+          if (lastTargetRect) positionTooltip(lastTargetRect)
+        }
       }
     }
 
@@ -781,7 +797,7 @@ export const InspectUI = ({
         if (!tree) {
           const nodes = tab === "component" ? componentNodes : elementNodes
           const initial = tab === "component"
-            ? optionHeld && chain.length ? 1 : 0
+            ? optionHeld && fiber && buildOwnerChain(fiber).length && chain.length ? 1 : 0
             : elementNodes.findIndex(node => node.relation === "current")
           tree = createInfoTreeSection(nodes, initial, tab === "component" ? "Component tree" : "Element tree")
           trees.set(tab, tree)
@@ -887,7 +903,7 @@ export const InspectUI = ({
       paintTooltipChrome()
       const fiber = hoveredElement ? getFiber(hoveredElement) : null
       const kind = resolveOpenKind(fiber)
-      inspectTooltip.showSourceIcon(kind === "used", !!fiber && buildOwnerChain(fiber).length > 0)
+      if (!infoVisible) inspectTooltip.showSourceIcon(kind === "used", !!fiber && buildOwnerChain(fiber).length > 0)
     }
 
     const updateOpenHint = () => {
@@ -1005,9 +1021,11 @@ export const InspectUI = ({
       const hasTargetChanged = hoveredElement !== resolved
       hoveredElement = resolved
       const rect = expandRectWithPadding(resolved.getBoundingClientRect(), {
-        left: settings.devSpotlightProps.paddingX, right: settings.devSpotlightProps.paddingX,
-        top: settings.devSpotlightProps.paddingY, bottom: settings.devSpotlightProps.paddingY,
+        left: 0, right: 0, top: 0, bottom: 0,
       })
+      const corners = getComputedStyle(resolved)
+      overlay.style.borderRadius = corners.borderRadius
+      overlay.style.setProperty("corner-shape", corners.getPropertyValue("corner-shape"))
       lastTargetRect = rect
       const wasHidden = overlay.style.display === "none"
       if (wasHidden) setInspectMotion(overlay, tooltip, false)
@@ -1216,19 +1234,6 @@ export const InspectUI = ({
       void openSource(fiber)
     }
 
-    const applyPadding = (delta: number | "reset") => {
-      const { paddingX, paddingY } = settings.devSpotlightProps
-      const nextX = delta === "reset" ? DEFAULT_DEV_SPOTLIGHT_PROPS.paddingX : Math.min(PADDING_MAX, Math.max(PADDING_MIN, paddingX + delta))
-      const nextY = delta === "reset" ? DEFAULT_DEV_SPOTLIGHT_PROPS.paddingY : Math.min(PADDING_MAX, Math.max(PADDING_MIN, paddingY + delta))
-      setDevSpotlightProps({ paddingX: nextX, paddingY: nextY })
-      settings = getInspectorSettings()
-      if (!hoveredElement) return
-      highlightTarget(hoveredElement)
-      inspectTooltip.show()
-      setTooltipLabel(delta === "reset" ? `padding reset ${nextX} · ${nextY}` : `padding ${nextX} · ${nextY}`)
-      if (lastTargetRect) positionTooltip(lastTargetRect)
-    }
-
     const navOrShake = (next: Element | null, from: Element, exact = false) => {
       if (!next || next === from) { shakeOverlay(); return false }
       pointerPinned = true
@@ -1290,17 +1295,6 @@ export const InspectUI = ({
         return
       }
       const isMod = event.metaKey || event.ctrlKey
-      if (event.altKey && !isMod) {
-        const grow = event.code === "Equal" || event.key === "=" || event.key === "+"
-        const shrink = event.code === "Minus" || event.key === "-" || event.key === "_"
-        if (grow || shrink) {
-          event.preventDefault()
-          event.stopPropagation()
-          applyPadding(grow ? 4 : -4)
-          return
-        }
-      }
-
       const parentKey = event.code === "BracketLeft" || event.key === "[" || event.key === "{"
       const childKey = event.code === "BracketRight" || event.key === "]" || event.key === "}"
       if ((parentKey || childKey) && !isMod && !event.altKey) {
@@ -1309,13 +1303,6 @@ export const InspectUI = ({
         if (!hoveredElement) { shakeOverlay(); return }
         if (parentKey) { moveToParentInspectable?.(); return }
         navOrShake(findBracketChild(hoveredElement), hoveredElement, true)
-        return
-      }
-
-      if (isMod && (event.code === "Backslash" || event.key === "\\")) {
-        event.preventDefault()
-        event.stopPropagation()
-        applyPadding("reset")
         return
       }
 
