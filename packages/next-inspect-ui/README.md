@@ -143,3 +143,5 @@ import Script from "next/script"
 ```
 
 No inspector component import or mount is needed with this setup. Production excludes the script tag and download. The script includes its own React runtime; use the component setup for a smaller development download. Never include the script unconditionally.
+
+Hover selects the exact visible element under the pointer, including SVG parts and classless children. Hold Option / Alt to climb to a component; hover does not automatically select its group.

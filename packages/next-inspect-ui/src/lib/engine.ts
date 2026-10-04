@@ -1368,38 +1368,45 @@ const getElementClassName = (element: Element) => {
   return (element.getAttribute("class") ?? "").trim()
 }
 
-const isPreferredInspectHost = (element: Element) => {
-  const tag = element.tagName.toLowerCase()
-  if (tag === "button" || tag === "a") return true
-  const role = element.getAttribute("role")
-  if (role === "button" || role === "link" || role === "menuitem") return true
-  const slot = element.getAttribute("data-slot") ?? ""
-  return slot.includes("trigger") || slot.includes("button") || slot.endsWith("-link")
-}
+// Keep the pointer's DOM target, as React Grab does. Component climbing is
+// an explicit Option action, independent of classes, roles, and icon markup.
+export const resolveInspectElement = (hit: Element): Element => hit
 
-const isNestedMediaHit = (element: Element) => {
-  const tag = element.tagName.toLowerCase()
-  if (tag === "svg" || tag === "path" || tag === "img" || tag === "picture" || tag === "canvas" || tag === "video") {
-    return true
+export const getInspectElementAtPoint = (x: number, y: number): Element | null => {
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null
+  const pick = (root: Document | ShadowRoot): Element | null => {
+    for (const element of root.elementsFromPoint(x, y)) {
+      if (isInspectorChrome(element)) continue
+      const shadowHit = element.shadowRoot ? pick(element.shadowRoot) : null
+      if (shadowHit) return shadowHit
+      const tag = element.tagName.toLowerCase()
+      if (tag === "html" || tag === "body") continue
+      const style = getComputedStyle(element)
+      if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) continue
+      const rect = element.getBoundingClientRect()
+      if (rect.width <= 0 || rect.height <= 0) continue
+      // Skip transparent page-covering surfaces, rather than selecting a group.
+      if (rect.width >= window.innerWidth * 0.9 && rect.height >= window.innerHeight * 0.9
+        && (style.position === "fixed" || style.position === "absolute")
+        && (style.backgroundColor === "transparent" || style.backgroundColor === "rgba(0, 0, 0, 0)" || Number(style.opacity) < 0.1)) continue
+      return element
+    }
+    return null
   }
-  return element.getAttribute("aria-hidden") === "true" || element.hasAttribute("data-icon")
-}
-
-export const resolveInspectElement = (hit: Element): Element => {
-  if (isNestedMediaHit(hit) || !isPreferredInspectHost(hit)) {
-    let current: Element | null = hit.parentElement
-    while (current && current !== document.body && current !== document.documentElement) {
-      if (getFiber(current) && isPreferredInspectHost(current)) return current
-      current = current.parentElement
+  // Modal libraries can disable pointer events on body. Temporarily thaw
+  // that inherited lock for hit testing, then restore it synchronously.
+  const body = document.body
+  const pointerEvents = body.style.getPropertyValue("pointer-events")
+  const priority = body.style.getPropertyPriority("pointer-events")
+  const locked = getComputedStyle(body).pointerEvents === "none"
+  if (locked) body.style.setProperty("pointer-events", "auto", "important")
+  try { return pick(document) }
+  finally {
+    if (locked) {
+      if (pointerEvents) body.style.setProperty("pointer-events", pointerEvents, priority)
+      else body.style.removeProperty("pointer-events")
     }
   }
-  if (getElementClassName(hit) && getFiber(hit)) return hit
-  let current: Element | null = hit.parentElement
-  while (current && current !== document.body && current !== document.documentElement) {
-    if (getFiber(current) && getElementClassName(current)) return current
-    current = current.parentElement
-  }
-  return hit
 }
 
 export const isPointInRect = (

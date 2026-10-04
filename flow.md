@@ -22,6 +22,8 @@ Editor link / dev server
 Cursor / VS Code
 ```
 
+Hover selects the topmost visible DOM element at the pointer, including SVG parts and classless or inline-styled children. It checks elementsFromPoint, descends open shadow roots, and skips inspector UI, document roots, hidden elements, and transparent page-covering surfaces. It does not promote icons, button children, or classless elements to a parent. Hit testing temporarily clears an inherited body pointer lock and restores it immediately, so modal-library locks do not force selection to the document root. Moving between children immediately updates selection; Option remains the explicit component-climb action.
+
 The DOM element is what you see on the page. Its React Fiber connects it to the React tree. The tool follows that tree to find the element’s source or the selected parent component’s source.
 
 React’s debug fields can contain a file location or a stack trace. They are internal fields, so their availability depends on the React version and build tool.
@@ -103,3 +105,9 @@ Show full URL (`tooltipProps.showFullUrl`) controls the source label in the tool
 ## Dev-only script setup
 
 Next.js can also load `<Script src="/inspect-ui.js" strategy="afterInteractive" />` only when `NODE_ENV` is development. The local route serves the installed `next-inspect-ui/script` file and returns 404 in production. The standalone script mounts the inspector automatically; do not mount the component too. Production visitors receive no inspector script tag or script download. The script bundles its own React runtime, making it larger in development than the component setup.
+
+## Source benchmark flow
+
+`bun run dev:bench` → port 3106 → `bun run benchmark:source` → 330 upstream cases → compare expected definition files with source results → `docs/source-benchmark-results.json`. This local test opens no editor and uses no agent API. See `docs/source-benchmarks.md` for scoring limits.
+
+`bun run benchmark:open` exercises the actual hover and click handlers for normal click and Option-click. It intercepts editor endpoint requests, records file/line/column in `docs/open-benchmark-results.json`, and opens no editor. Pointer hits are controlled so offscreen fixtures can be tested. The upstream expected file is the component definition; JSX usage correctness needs separate expectations.
