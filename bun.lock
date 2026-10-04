@@ -300,6 +300,9 @@
     "packages/next-inspect-ui": {
       "name": "next-inspect-ui",
       "version": "0.3.0",
+      "dependencies": {
+        "bippy": "0.6.1",
+      },
       "devDependencies": {
         "@types/node": "^20.19.43",
         "@types/react": "^19",

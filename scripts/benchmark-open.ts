@@ -7,6 +7,15 @@ const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage();
 const results: any[] = [];
 try {
+  // Stub only the final editor-protocol transport in the delivered dev bundle.
+  // Source lookup, target selection, and all click handlers remain unchanged.
+  await page.route("**/*.js*", async route => {
+    const response = await route.fetch();
+    const original = await response.text();
+    const body = original.replace(/window\.location\.href\s*=\s*[^;\n]+\.url\(source\.filePath,\s*source\.line,\s*source\.column\);?/g,
+      'window.__OPEN_REQUESTS__.push({file: source.filePath, line1: String(source.line), column1: String(source.column), transport: "editor-protocol"});');
+    await route.fulfill({ response, body });
+  });
   await page.addInitScript(() => {
     const original = window.fetch;
     (window as any).__OPEN_REQUESTS__ = [];
@@ -111,7 +120,7 @@ writeFileSync(
     {
       measuredAt: new Date().toISOString(),
       method:
-        "Actual click handler, intercepted editor endpoint; controlled DOM hit, definition file expectations only",
+        "Actual click handler; endpoint interception and final editor-protocol transport stub; controlled DOM hit; definition-file expectations only",
       summary,
       results,
     },

@@ -18,53 +18,28 @@ The upstream compound table renders text directly inside a table row, producing 
 
 ## Measured results
 
-Next.js 16.2.6, React 19.2.4, Turbopack, Chromium, local development. Six of 330 targets were missing for every tool; none produced a lookup error. The denominator retains all cases.
+Next.js 16.2.6, React 19.2.4, Turbopack, local Chromium. Six of 330 targets were missing for every tool. Expected files are component definitions; this is not an agent accuracy score or an exact-line score.
 
 | Tool | Definition file matches | Tree/context contains file | Median | p95 |
 |---|---:|---:|---:|---:|
-| next-inspect-ui | 9/330 (2.7%) | 9/330 | 16.4 ms | 32.1 ms |
-| react-grab | 270/330 (81.8%) | 9/330 | 1.5 ms | 3.3 ms |
-| show-component | 5/330 (1.5%) | 8/330 | 0.0 ms | 0.2 ms |
-| click-to-react-component | 0/330 (0.0%) | 0/330 | 4.6 ms | 5.6 ms |
+| next-inspect-ui | 275/330 | 284/330 | 7.7 ms | 39.1 ms |
+| react-grab | 270/330 | 9/330 | 1.4 ms | 4.3 ms |
+| show-component | 5/330 | 8/330 | 0.0 ms | 0.2 ms |
+| click-to-react-component | 0/330 | 0/330 | 4.4 ms | 6.5 ms |
 
-Show Component’s near-zero timings mostly reflect cached framework locations, not faster correct lookup. Click to React Component found no sources on this React 19 corpus.
+Next Inspect UI now uses `bippy/source` for recovered component frames, the same source-resolution package used by React Grab. Every case where React Grab found the expected file also succeeds in our measured source lookup. Ours matches five additional cases in this run. Show Component’s near-zero timings mostly reflect cached framework locations, not correct resolution.
 
-## Where ours lags
-
-React Grab finds the expected file in 262 cases where ours does not. Ours frequently returns `app/page.tsx:21`, with a styled layout/grid in the tree. This suggests target promotion or owner selection skips the target too early; investigate before changing resolution. Usage-versus-definition semantics also contribute.
-
-| Test ID group | React Grab succeeds, ours fails |
-|---|---:|
-| generic | 41 |
-| deep | 36 |
-| factory | 27 |
-| sibling | 23 |
-| dynamic | 18 |
-| util | 18 |
-| hook | 9 |
-| config | 8 |
-
-| Example | Expected | Ours |
-|---|---|---|
-| alias-alert-banner | `components/aliased/internal-alert-impl.tsx` | `app/page.tsx` |
-| alias-confirm-modal | `components/aliased/internal-modal-base.tsx` | `app/page.tsx` |
-| alias-footer | `components/aliased/internal-footer-center.tsx` | `app/page.tsx` |
-| alias-main-nav | `components/aliased/internal-nav-base.tsx` | `app/page.tsx` |
-| alias-search-bar | `components/aliased/internal-search-core.tsx` | `app/page.tsx` |
-
-Check target promotion for styled wrappers, then owner chains for generic/deep/factory cases. Consider a separate definition lookup alongside JSX usage lookup. Repeat this corpus after fixes; keep the existing exact-line suite too.
+The earlier surrounding-page results came from parent promotion and unreliable debug stacks. Exact hover no longer promotes classless children to groups. Source recovery now prefers a project source from trusted debug information or a recovered component stack, before falling back to a page. React 18 JSX metadata remains supported. Component usage and definition sources remain separate for the existing UI and Option-climb flow.
 
 ## Actual editor-opening check
 
-Run `bun run benchmark:open` while the app is on port 3106. This exercises the real pointer-move, pointer-down, and click handlers, with and without Option. It intercepts the editor endpoint and saves its requested file/line/column instead of launching an editor. DOM hits are controlled at each target’s own coordinates; this is a handler test, not physical browser hit-testing.
+Run `bun run benchmark:open`. This loads only our inspector and exercises its real hover, pointer-down, and click handlers, with and without Option. DOM hits are controlled at each target’s coordinates. It intercepts local editor endpoint requests and stubs only the final editor-protocol assignment in the delivered test JavaScript. Source resolution and the click handler are unchanged. No editor is launched.
 
-| Mode | Requested expected definition file | Missing target | No captured endpoint request |
+| Mode | Requested expected definition file | Missing target | No captured destination |
 |---|---:|---:|---:|
-| click | 4/330 | 6 | 6 |
-| optionClick | 2/330 | 6 | 5 |
+| click | 274/330 | 6 | 0 |
+| optionClick | 271/330 | 6 | 0 |
 
-Full destinations are in `open-benchmark-results.json`. A request to a different file is a definition-file mismatch, not automatically an incorrect JSX usage location. However, repeated `app/page.tsx:21` destinations show that parent promotion affects actual opening too, not only the development probe. The class-name preference in `resolveInspectElement` promotes many inline-styled targets to a classed styled-layout ancestor. That needs a targeted fix.
+`open-benchmark-results.json` contains the requested file, line, and column for every available target. This does not verify the editor application launches, and upstream does not supply expected lines. A definition-file mismatch can be a valid component usage location, especially with Option-click; keep the local exact-line suite too.
 
-No captured request is inconclusive: it can mean no source, delayed lookup, or an absolute-path editor protocol link, which this endpoint interception does not record. The test does not verify the editor application launches or an exact expected line; upstream provides only definition-file expectations. The existing test suite remains the check for authored JSX locations.
-
-Exact-hover update: parent promotion by CSS class, button/link roles, and icon markup has been removed. Hover now selects the precise DOM hit, checks the hit stack, descends open shadow roots, and skips non-target surfaces. Real mouse verification matches spotlight bounds to the hovered children and checks info navigation. This fixes target selection; the low definition-file lookup rate still needs separate source-resolution work. Earlier opening measurements are superseded by the current JSON because the harness now isolates our inspector.
+There are still 55 source-lookup mismatches including the six missing targets. Many involve adapters, inline components, projected children, and render tunnels; those remain in the report rather than being counted as successes. Real mouse checks also verify exact spotlight bounds and info-panel navigation (`bun run scripts/verify-exact-hover.ts`).
