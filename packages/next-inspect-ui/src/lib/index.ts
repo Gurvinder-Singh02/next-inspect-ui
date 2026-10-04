@@ -82,7 +82,7 @@ export type InspectorSettings = {
 }
 
 export type InspectUIProps = {
-  projectRoot: string
+  projectRoot?: string
   shortcut?: string
   ide?: InspectorIde
   tooltipProps?: Partial<TooltipProps>
@@ -475,7 +475,6 @@ export const spotlightDefaultsForColor = (
 export const formatInspectorComponentSnippet = (
   settings: InspectorSettings
 ) => `<InspectUI
-  projectRoot={process.cwd()}
   shortcut=${JSON.stringify(settings.shortcut)}
   tooltipProps={${JSON.stringify(settings.tooltipProps, null, 2)}}
   devSpotlightProps={${JSON.stringify(settings.devSpotlightProps, null, 2)}}
@@ -541,5 +540,6 @@ export const toAbsolutePath = (filePath: string, projectRoot: string) => {
     return decodeURIComponent(new URL(filePath).pathname)
   }
   if (filePath.startsWith("/")) return filePath
+  if (!projectRoot) return filePath.replace(/^\.\//, "")
   return `${projectRoot.replace(/\/$/, "")}/${filePath.replace(/^\.\//, "")}`
 }

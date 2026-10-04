@@ -21,7 +21,7 @@ const API_SECTIONS: ApiSection[] = [
         name: "projectRoot",
         type: "string",
         description:
-          "Required. Absolute path your source is under. Used to resolve files and strip the root from labels.",
+          "Optional. Explicit root for resolving relative paths and shortening labels. Basic setup needs no props.",
       },
       {
         name: "shortcut",

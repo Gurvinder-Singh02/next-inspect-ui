@@ -1,5 +1,7 @@
 # App flow
 
+Mount `<InspectUI />` with no required props. `projectRoot` is optional for explicitly resolving relative paths. Absolute source paths open through the configured editor URL; relative paths use Next.js’s `/__nextjs_launch-editor` or `/__open-in-editor` and fall back to the editor URL if unavailable. The dev server uses its configured editor.
+
 Turn on InspectUI, hover an element, then click to open its source in your editor.
 
 ```text
@@ -15,7 +17,7 @@ Source maps (when needed, e.g. Next.js server components)
      ↓
 file.tsx:42:8
      ↓
-Editor link (cursor:// or vscode://)
+Editor link / dev server
      ↓
 Cursor / VS Code
 ```

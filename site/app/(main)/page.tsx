@@ -29,7 +29,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Does this affect production?",
-    a: "Not if you mount InspectUI only when NODE_ENV is development. The overlay is omitted from production builds; gated that way the measured cost is about 0.2 KB gzipped. Keep the guard, or React serializes projectRoot into the page payload.",
+    a: "Not if you mount InspectUI only when NODE_ENV is development. The overlay is omitted from production builds; gated that way the measured cost is about 0.2 KB gzipped. Keep the development guard.",
   },
   {
     q: "Does it rely on any other libraries internally?",
@@ -37,7 +37,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Is this a build plugin?",
-    a: "No. There is no Webpack, Vite, Turbopack, Babel, or SWC plugin. You mount InspectUI in development. It reads the React fiber tree at runtime. projectRoot is just a prop so relative debug paths resolve to real files.",
+    a: "No. There is no Webpack, Vite, Turbopack, Babel, or SWC plugin. You mount InspectUI in development. It reads the React fiber tree at runtime. No props are required. projectRoot can optionally resolve relative paths explicitly.",
   },
   {
     q: "Does this only work with Next.js?",

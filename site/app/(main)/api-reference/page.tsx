@@ -7,7 +7,7 @@ import { ApiReference } from "@/components/landing/api-reference"
 export const metadata: Metadata = {
   title: "API Reference",
   description:
-    "InspectUI props. projectRoot is required; shortcut, editor, tooltip, and spotlight props seed the overlay settings panel.",
+    "InspectUI props. projectRoot is optional; shortcut, editor, tooltip, and spotlight props seed the overlay settings panel.",
   alternates: { canonical: "/api-reference" },
 }
 
@@ -17,7 +17,7 @@ export default function ApiReferencePage() {
       <header className="flex flex-col gap-2">
         <h1>API Reference</h1>
         <p>
-          InspectUI takes a required projectRoot. Optional shortcut, ide,
+          InspectUI works without required props. projectRoot is optional. Optional shortcut, ide,
           tooltip, and spotlight props seed the overlay settings panel. Update
           live in the{" "}
           <Link

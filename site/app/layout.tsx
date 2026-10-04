@@ -134,7 +134,7 @@ export default function RootLayout({
             {children}
             <Toaster />
             {process.env.NODE_ENV === "development" && (
-              <InspectUI projectRoot={process.cwd()} />
+              <InspectUI />
             )}
           </TooltipProvider>
         </ThemeProvider>
