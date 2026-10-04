@@ -1,0 +1,6530 @@
+{
+  "measuredAt": "2026-10-04T06:18:19.935Z",
+  "method": "Actual click handler, intercepted editor endpoint; controlled DOM hit, definition file expectations only",
+  "summary": [
+    {
+      "mode": "click",
+      "total": 330,
+      "expectedDefinitionFile": 4,
+      "missing": 6,
+      "noCapturedDestination": 6
+    },
+    {
+      "mode": "optionClick",
+      "total": 330,
+      "expectedDefinitionFile": 2,
+      "missing": 6,
+      "noCapturedDestination": 5
+    }
+  ],
+  "results": [
+    {
+      "testId": "adapter-changelog-entry",
+      "expectedDefinition": "components/adapter-wrapped/changelog-entry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "adapter-deployment-status",
+      "expectedDefinition": "components/adapter-wrapped/deployment-status.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "adapter-incident-banner",
+      "expectedDefinition": "components/adapter-wrapped/incident-banner.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "adapter-quota-gauge",
+      "expectedDefinition": "components/adapter-wrapped/quota-gauge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "adapter-team-member-row",
+      "expectedDefinition": "components/adapter-wrapped/team-member-row.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "alias-alert-banner",
+      "expectedDefinition": "components/aliased/internal-alert-impl.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "alias-confirm-modal",
+      "expectedDefinition": "components/aliased/internal-modal-base.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "alias-footer",
+      "expectedDefinition": "components/aliased/internal-footer-center.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "alias-main-nav",
+      "expectedDefinition": "components/aliased/internal-nav-base.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "alias-search-bar",
+      "expectedDefinition": "components/aliased/internal-search-core.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "animated-list-item",
+      "expectedDefinition": "components/motion/animated-list.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "animation-maze-content",
+      "expectedDefinition": "components/challenge/animation-maze.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "barrel-base-badge",
+      "expectedDefinition": "components/primitives/base-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "barrel-base-button",
+      "expectedDefinition": "components/primitives/base-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "barrel-base-input",
+      "expectedDefinition": "components/primitives/base-input.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "barrel-primary-action",
+      "expectedDefinition": "components/core/interactive/primary-action.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "button-in-dialog-in-motion",
+      "expectedDefinition": "components/styled/styled-button.tsx",
+      "click": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "client-island-button",
+      "expectedDefinition": "components/server/client-island.tsx",
+      "click": {
+        "destination": {
+          "file": "components/server/server-with-client-island.tsx",
+          "line1": "22",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "components/server/server-with-client-island.tsx",
+          "line1": "22",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "collision-a-button",
+      "expectedDefinition": "components/collision-a/collision-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "collision-a-card",
+      "expectedDefinition": "components/collision-a/collision-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "collision-b-button",
+      "expectedDefinition": "components/collision-b/collision-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "collision-b-card",
+      "expectedDefinition": "components/collision-b/collision-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "collision-c-button",
+      "expectedDefinition": "components/collision-c/collision-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "collision-c-card",
+      "expectedDefinition": "components/collision-c/collision-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "common-icon-label",
+      "expectedDefinition": "components/common/icon-label.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "common-key-value",
+      "expectedDefinition": "components/common/key-value.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "common-status-dot",
+      "expectedDefinition": "components/common/status-dot.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "composed-metric-row",
+      "expectedDefinition": "components/composed/composed-metric-row.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "composed-status-bar",
+      "expectedDefinition": "components/composed/composed-status-bar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "composed-toolbar",
+      "expectedDefinition": "components/composed/composed-toolbar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "compound-command-item",
+      "expectedDefinition": "components/compound/compound-command.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "compound-sidebar-footer",
+      "expectedDefinition": "components/compound/compound-sidebar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "compound-sidebar-header",
+      "expectedDefinition": "components/compound/compound-sidebar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "compound-table-cell",
+      "expectedDefinition": "components/compound/compound-data-table.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "config-empty-illustration",
+      "expectedDefinition": "lib/empty-state-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "config-error-fallback",
+      "expectedDefinition": "lib/error-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "config-pricing-feature",
+      "expectedDefinition": "lib/pricing-feature-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "config-role-icon-admin",
+      "expectedDefinition": "lib/role-icon-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "config-role-icon-viewer",
+      "expectedDefinition": "lib/role-icon-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "config-skeleton-block",
+      "expectedDefinition": "lib/skeleton-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "config-step-content",
+      "expectedDefinition": "lib/step-wizard-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "config-step-indicator",
+      "expectedDefinition": "lib/step-wizard-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "contextual-error-rate-widget",
+      "expectedDefinition": "lib/create-contextual-widget.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "contextual-latency-widget",
+      "expectedDefinition": "lib/create-contextual-widget.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "contextual-uptime-widget",
+      "expectedDefinition": "lib/create-contextual-widget.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-api-key-row",
+      "expectedDefinition": "components/features/integrations/api-keys/display/api-key-row.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-approval-button",
+      "expectedDefinition": "components/features/workflows/approvals/actions/approval-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-build-status",
+      "expectedDefinition": "components/features/deployments/builds/status/build-status.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-calendar-cell",
+      "expectedDefinition": "components/features/scheduling/calendar/cells/calendar-cell.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-channel-badge",
+      "expectedDefinition": "components/features/messaging/channels/badges/channel-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-checklist-item",
+      "expectedDefinition": "components/features/onboarding/checklist/items/checklist-item.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-comment-bubble",
+      "expectedDefinition": "components/features/collaboration/comments/bubbles/comment-bubble.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-commit-message",
+      "expectedDefinition": "components/features/versioning/commits/display/commit-message.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-condition-row",
+      "expectedDefinition": "components/features/workflows/conditions/rows/condition-row.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-coupon-input",
+      "expectedDefinition": "components/features/billing/coupons/forms/coupon-input.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-cron-display",
+      "expectedDefinition": "components/features/scheduling/cron/display/cron-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-diff-header",
+      "expectedDefinition": "components/features/versioning/diffs/headers/diff-header.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-filter-chip",
+      "expectedDefinition": "components/features/search/filters/chips/filter-chip.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-funnel-step",
+      "expectedDefinition": "components/features/analytics/funnels/steps/funnel-step.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-invoice-row",
+      "expectedDefinition": "components/features/billing/invoices/rows/invoice-row.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-log-entry",
+      "expectedDefinition": "components/features/monitoring/logs/entries/log-entry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-media-thumb",
+      "expectedDefinition": "components/features/content/media/thumbnails/media-thumb.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-mention-tag",
+      "expectedDefinition": "components/features/collaboration/mentions/tags/mention-tag.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-metric-chart",
+      "expectedDefinition": "components/features/analytics/charts/metric-chart.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-metric-sparkline",
+      "expectedDefinition": "components/features/analytics/metrics/sparklines/metric-sparkline.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-nested-approval-step",
+      "expectedDefinition": "components/features/workflows/approvals/reviews/actions/indicators/approval-step-indicator.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-nested-calendar-recurring",
+      "expectedDefinition": "components/features/scheduling/calendar/events/recurring/badges/calendar-recurring-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-nested-deployment-secret",
+      "expectedDefinition": "components/features/deployments/config/environments/secrets/entries/deployment-env-secret.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-nested-invoice-discount",
+      "expectedDefinition": "components/features/billing/invoices/lines/discounts/amounts/invoice-line-discount.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-nested-webhook-retry",
+      "expectedDefinition": "components/features/integrations/webhooks/retries/status/displays/webhook-retry-status.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-permission-chip",
+      "expectedDefinition": "components/features/admin/roles/permissions/permission-chip.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-pipeline-stage",
+      "expectedDefinition": "components/features/ci/pipelines/stages/pipeline-stage.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-reaction-chip",
+      "expectedDefinition": "components/features/collaboration/reactions/chips/reaction-chip.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-role-selector",
+      "expectedDefinition": "components/features/admin/users/roles/role-selector.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-segment-pill",
+      "expectedDefinition": "components/features/analytics/segments/pills/segment-pill.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-shipping-label",
+      "expectedDefinition": "components/features/orders/shipping/labels/shipping-label.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-sort-button",
+      "expectedDefinition": "components/features/search/sorting/controls/sort-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-subscription-badge",
+      "expectedDefinition": "components/features/billing/subscriptions/status/subscription-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-tag-input",
+      "expectedDefinition": "components/features/content/tags/inputs/tag-input.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-tax-line",
+      "expectedDefinition": "components/features/billing/taxes/display/tax-line.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "deep-thread-bubble",
+      "expectedDefinition": "components/features/messaging/threads/thread-bubble.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dispatch-date-element",
+      "expectedDefinition": "components/dispatchers/element-renderer.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dispatch-number-element",
+      "expectedDefinition": "components/dispatchers/element-renderer.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dispatch-rating-element",
+      "expectedDefinition": "components/dispatchers/element-renderer.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dispatch-select-element",
+      "expectedDefinition": "components/dispatchers/element-renderer.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dispatch-text-element",
+      "expectedDefinition": "components/dispatchers/element-renderer.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "display-name-content",
+      "expectedDefinition": "components/display-name/display-name-menu.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "display-name-item",
+      "expectedDefinition": "components/display-name/display-name-menu.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "display-name-separator",
+      "expectedDefinition": "components/display-name/display-name-menu.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "display-name-trigger",
+      "expectedDefinition": "components/display-name/display-name-menu.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-circle-icon",
+      "expectedDefinition": "components/generated/icon-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-diamond-icon",
+      "expectedDefinition": "components/generated/icon-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-import-billing-settings",
+      "expectedDefinition": "components/dynamic-import/panels/billing-panel.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-import-general-settings",
+      "expectedDefinition": "components/dynamic-import/panels/general-panel.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-import-integrations-settings",
+      "expectedDefinition": "components/dynamic-import/panels/integrations-panel.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-import-notifications-settings",
+      "expectedDefinition": "components/dynamic-import/panels/notifications-panel.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-import-security-settings",
+      "expectedDefinition": "components/dynamic-import/panels/security-panel.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-large-widget",
+      "expectedDefinition": "components/generated/widget-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-medium-widget",
+      "expectedDefinition": "components/generated/widget-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-renderer",
+      "expectedDefinition": "components/computed/dynamic-renderer.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-sidebar-layout",
+      "expectedDefinition": "components/generated/layout-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-single-layout",
+      "expectedDefinition": "components/generated/layout-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-small-widget",
+      "expectedDefinition": "components/generated/widget-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-square-icon",
+      "expectedDefinition": "components/generated/icon-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-stacked-layout",
+      "expectedDefinition": "components/generated/layout-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-star-icon",
+      "expectedDefinition": "components/generated/icon-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-three-layout",
+      "expectedDefinition": "components/generated/layout-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-triangle-icon",
+      "expectedDefinition": "components/generated/icon-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "dynamic-two-layout",
+      "expectedDefinition": "components/generated/layout-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-avg-session",
+      "expectedDefinition": "lib/create-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-conversion-rate",
+      "expectedDefinition": "lib/create-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-cpu-card",
+      "expectedDefinition": "lib/create-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-delete-action",
+      "expectedDefinition": "lib/create-action.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-details-tab",
+      "expectedDefinition": "lib/create-tab.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-disk-card",
+      "expectedDefinition": "lib/create-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-error-count",
+      "expectedDefinition": "lib/create-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-history-tab",
+      "expectedDefinition": "lib/create-tab.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-info-alert",
+      "expectedDefinition": "lib/create-alert.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-latency-card",
+      "expectedDefinition": "lib/create-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-logs-tab",
+      "expectedDefinition": "lib/create-tab.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-memory-card",
+      "expectedDefinition": "lib/create-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-notes-field",
+      "expectedDefinition": "lib/create-field.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-overview-tab",
+      "expectedDefinition": "lib/create-tab.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-priority-badge",
+      "expectedDefinition": "lib/create-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-revenue-widget",
+      "expectedDefinition": "lib/create-widget.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-role-badge",
+      "expectedDefinition": "lib/create-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-search-field",
+      "expectedDefinition": "lib/create-field.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-settings-tab",
+      "expectedDefinition": "lib/create-tab.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-status-badge",
+      "expectedDefinition": "lib/create-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-success-alert",
+      "expectedDefinition": "lib/create-alert.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-throughput-card",
+      "expectedDefinition": "lib/create-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-total-sales",
+      "expectedDefinition": "lib/create-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-uptime-card",
+      "expectedDefinition": "lib/create-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-url-field",
+      "expectedDefinition": "lib/create-field.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-users-widget",
+      "expectedDefinition": "lib/create-widget.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-version-badge",
+      "expectedDefinition": "lib/create-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "factory-warning-alert",
+      "expectedDefinition": "lib/create-alert.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "fractal-innermost",
+      "expectedDefinition": "components/recursive/fractal-layout.tsx",
+      "click": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generated-integration-card",
+      "expectedDefinition": "components/generated/integration-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-alert-box",
+      "expectedDefinition": "components/feedback/notification-box.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-card-footer",
+      "expectedDefinition": "components/layout/panel-actions.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-chart-bar",
+      "expectedDefinition": "components/data-display/metric-bar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-checkbox",
+      "expectedDefinition": "components/forms/agreement-check.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-code-snippet",
+      "expectedDefinition": "components/data-display/source-preview.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-data-card",
+      "expectedDefinition": "components/data-display/metric-overview.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-date-cell",
+      "expectedDefinition": "components/data-display/calendar-entry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-drawer-sheet",
+      "expectedDefinition": "components/overlays/slide-panel.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-dropdown-menu",
+      "expectedDefinition": "components/overlays/action-menu.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-file-icon",
+      "expectedDefinition": "components/data-display/document-icon.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-footer-text",
+      "expectedDefinition": "components/layout/page-footer.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-grid-cell",
+      "expectedDefinition": "components/dashboard/kpi-tracker.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-hover-tip",
+      "expectedDefinition": "components/primitives/hover-context.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-icon-button",
+      "expectedDefinition": "components/actions/tool-trigger.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-link-button",
+      "expectedDefinition": "components/actions/redirect-action.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-list-tile",
+      "expectedDefinition": "components/data-display/item-tile.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-loading-ring",
+      "expectedDefinition": "components/feedback/async-boundary.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-menu-item",
+      "expectedDefinition": "components/navigation/command-item.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-modal-dialog",
+      "expectedDefinition": "components/overlays/interrupt-handler.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-nav-link",
+      "expectedDefinition": "components/navigation/route-handler.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-path-crumb",
+      "expectedDefinition": "components/navigation/path-trail.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-popover-panel",
+      "expectedDefinition": "components/overlays/info-panel.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-progress-bar",
+      "expectedDefinition": "components/feedback/progress-tracker.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-radio-option",
+      "expectedDefinition": "components/forms/plan-selector.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-search-bar",
+      "expectedDefinition": "components/navigation/query-input.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-select-box",
+      "expectedDefinition": "components/forms/option-picker.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-separator",
+      "expectedDefinition": "components/layout/content-separator.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-sidebar-link",
+      "expectedDefinition": "components/navigation/drawer-entry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-slider-range",
+      "expectedDefinition": "components/forms/range-picker.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-status-tag",
+      "expectedDefinition": "components/feedback/process-monitor.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-step-circle",
+      "expectedDefinition": "components/feedback/milestone-dot.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-submit-button",
+      "expectedDefinition": "components/actions/submit-action.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-switch-track",
+      "expectedDefinition": "components/forms/binary-toggle.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-tab-button",
+      "expectedDefinition": "components/ui/segmented-control.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-table-row",
+      "expectedDefinition": "components/data-display/record-row.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-tag-list",
+      "expectedDefinition": "components/data-display/label-group.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-text-area",
+      "expectedDefinition": "components/forms/content-editor.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-text-input",
+      "expectedDefinition": "components/forms/validated-input.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-toast-bar",
+      "expectedDefinition": "components/feedback/snack-message.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-toggle-switch",
+      "expectedDefinition": "components/settings/feature-flag.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-token-chip",
+      "expectedDefinition": "components/atoms/removable-token.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-upload-zone",
+      "expectedDefinition": "components/forms/drop-target.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "generic-user-avatar",
+      "expectedDefinition": "components/auth/session-indicator.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hoc-analytics-tracked-form",
+      "expectedDefinition": "components/stacked/analytics-tracked-form.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hoc-feature-gated-panel",
+      "expectedDefinition": "components/stacked/feature-gated-panel.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hoc-licensed-premium-badge",
+      "expectedDefinition": "components/stacked/licensed-premium-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hoc-motion-styled-card",
+      "expectedDefinition": "components/motion/animated-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hoc-quad-wrapped-card",
+      "expectedDefinition": "components/stacked/quad-wrapped-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hoc-triple-wrapped-button",
+      "expectedDefinition": "components/stacked/triple-wrapped-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-clipboard-feedback",
+      "expectedDefinition": "hooks/use-clipboard-copy.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-confirm-dialog",
+      "expectedDefinition": "hooks/use-confirm-dialog.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-drag-handle",
+      "expectedDefinition": "hooks/use-drag-drop.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-pagination-nav",
+      "expectedDefinition": "hooks/use-page-nav.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-resize-grip",
+      "expectedDefinition": "hooks/use-resizable.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-shortcut-hint",
+      "expectedDefinition": "hooks/use-keyboard-shortcuts.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-toast-message",
+      "expectedDefinition": "hooks/use-toast-queue.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-undo-toast",
+      "expectedDefinition": "hooks/use-undo-stack.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "hook-wizard-step",
+      "expectedDefinition": "hooks/use-wizard.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "identity-depth-1",
+      "expectedDefinition": "components/challenge/identity-crisis.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "identity-depth-11",
+      "expectedDefinition": "components/challenge/identity-crisis.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "inline-list-first-item",
+      "expectedDefinition": "components/mixed/inline-list.tsx",
+      "click": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "inline-motion-button",
+      "expectedDefinition": "components/mixed/inline-motion-hybrid.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "inline-stat-bandwidth",
+      "expectedDefinition": "lib/create-inline-stat.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "inline-stat-connections",
+      "expectedDefinition": "lib/create-inline-stat.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "inline-stat-requests",
+      "expectedDefinition": "lib/create-inline-stat.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "inline-tag",
+      "expectedDefinition": "components/mixed/inline-tag.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "lazy-named-calendar",
+      "expectedDefinition": "components/lazy-named/lazy-calendar-source.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "lazy-named-chart",
+      "expectedDefinition": "components/lazy-named/lazy-chart-source.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "lazy-named-editor",
+      "expectedDefinition": "components/lazy-named/lazy-editor-source.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "lazy-named-table",
+      "expectedDefinition": "components/lazy-named/lazy-table-source.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "memo-forwardref-button",
+      "expectedDefinition": "components/styled/styled-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "misleading-button-in-hooks",
+      "expectedDefinition": "hooks/use-action-sheet.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "misleading-card-in-utils",
+      "expectedDefinition": "lib/ui-primitives.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "misleading-list-in-config",
+      "expectedDefinition": "lib/layout-config.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "module-breadcrumb",
+      "expectedDefinition": "components/modules/module-breadcrumb.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "module-switch",
+      "expectedDefinition": "components/modules/module-switch.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "module-table-badge",
+      "expectedDefinition": "components/modules/module-table.tsx",
+      "click": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "module-tw-hybrid-item",
+      "expectedDefinition": "components/mixed/module-tw-hybrid.tsx",
+      "click": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-animated-card",
+      "expectedDefinition": "components/motion/animated-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-inline-card",
+      "expectedDefinition": "components/mixed/inline-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-styled-badge",
+      "expectedDefinition": "components/styled/styled-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-styled-button",
+      "expectedDefinition": "components/styled/styled-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-styled-card",
+      "expectedDefinition": "components/styled/styled-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-styled-divider",
+      "expectedDefinition": "components/styled/styled-divider.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-styled-progress",
+      "expectedDefinition": "components/styled/styled-progress.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-tw-alert",
+      "expectedDefinition": "components/tailwind/tw-alert.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-tw-badge",
+      "expectedDefinition": "components/tailwind/tw-badge.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-tw-button",
+      "expectedDefinition": "components/tailwind/tw-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-tw-card",
+      "expectedDefinition": "components/tailwind/tw-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-tw-heading",
+      "expectedDefinition": "components/tailwind/tw-heading.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "plain-tw-toggle",
+      "expectedDefinition": "components/tailwind/tw-toggle.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "polymorphic-button",
+      "expectedDefinition": "components/polymorphic/polymorphic-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "polymorphic-card",
+      "expectedDefinition": "components/polymorphic/polymorphic-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "polymorphic-input",
+      "expectedDefinition": "components/polymorphic/polymorphic-input.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "polymorphic-list",
+      "expectedDefinition": "components/polymorphic/polymorphic-list.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "portal-motion-modal",
+      "expectedDefinition": "components/motion/animated-modal.tsx",
+      "click": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "portal-overlay-banner",
+      "expectedDefinition": "components/portals/overlay-stack.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "projected-action-bar",
+      "expectedDefinition": "components/projected/projected-action-bar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "projected-alert-strip",
+      "expectedDefinition": "components/projected/projected-alert-strip.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "projected-breadcrumb",
+      "expectedDefinition": "components/projected/projected-breadcrumb.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "projected-stats-row",
+      "expectedDefinition": "components/projected/projected-stats-row.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "projected-user-card",
+      "expectedDefinition": "components/projected/projected-user-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "provider-auth-badge",
+      "expectedDefinition": "components/providers/auth-status.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "provider-connectivity-dot",
+      "expectedDefinition": "components/providers/connectivity-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "provider-feature-badge",
+      "expectedDefinition": "components/providers/feature-flag-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "provider-locale-label",
+      "expectedDefinition": "components/providers/locale-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "provider-status-badge",
+      "expectedDefinition": "components/providers/notification-provider.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "radix-accordion-content",
+      "expectedDefinition": "components/radix/radix-accordion.tsx",
+      "click": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "radix-dropdown-item",
+      "expectedDefinition": "components/radix/radix-dropdown.tsx",
+      "click": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "radix-tabs-panel-content",
+      "expectedDefinition": "components/radix/radix-tabs.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "radix-tabs-trigger",
+      "expectedDefinition": "components/radix/radix-tabs.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "recursive-menu-deepest",
+      "expectedDefinition": "components/recursive/recursive-menu.tsx",
+      "click": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "recursive-tree-leaf",
+      "expectedDefinition": "components/recursive/recursive-tree.tsx",
+      "click": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "render-prop-form-field",
+      "expectedDefinition": "components/render-props/render-prop-form.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "render-prop-layout-header",
+      "expectedDefinition": "components/render-props/render-prop-layout.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "render-prop-list-item",
+      "expectedDefinition": "components/render-props/render-prop-list.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "render-prop-table-cell",
+      "expectedDefinition": "components/render-props/render-prop-table.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "russian-doll-button",
+      "expectedDefinition": "components/challenge/russian-doll.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "server-feature-list",
+      "expectedDefinition": "components/server/server-feature-list.tsx",
+      "click": {
+        "destination": {
+          "file": "components/server/server-feature-list.tsx",
+          "line1": "21",
+          "column1": "5"
+        },
+        "expectedDefinitionFile": true
+      },
+      "optionClick": {
+        "destination": {
+          "file": "components/server/server-feature-list.tsx",
+          "line1": "32",
+          "column1": "17"
+        },
+        "expectedDefinitionFile": true
+      }
+    },
+    {
+      "testId": "server-hero",
+      "expectedDefinition": "components/server/server-hero.tsx",
+      "click": {
+        "destination": {
+          "file": "components/server/server-hero.tsx",
+          "line1": "7",
+          "column1": "5"
+        },
+        "expectedDefinitionFile": true
+      },
+      "optionClick": {
+        "destination": {
+          "file": "components/server/server-hero.tsx",
+          "line1": "23",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": true
+      }
+    },
+    {
+      "testId": "server-stat-users",
+      "expectedDefinition": "components/server/server-stat-card.tsx",
+      "click": {
+        "destination": {
+          "file": "components/server/server-stat-card.tsx",
+          "line1": "13",
+          "column1": "5"
+        },
+        "expectedDefinitionFile": true
+      },
+      "optionClick": {
+        "destination": {
+          "file": "components/server/server-stats.tsx",
+          "line1": "34",
+          "column1": "9"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "server-with-client-island",
+      "expectedDefinition": "components/server/server-with-client-island.tsx",
+      "click": {
+        "destination": {
+          "file": "components/server/server-with-client-island.tsx",
+          "line1": "6",
+          "column1": "5"
+        },
+        "expectedDefinitionFile": true
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "18",
+          "column1": "11"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "shadcn-profile-card",
+      "expectedDefinition": "components/shadcn/shadcn-profile-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "shadcn-skeleton",
+      "expectedDefinition": "components/shadcn/shadcn-data-display.tsx",
+      "click": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "missing": true,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "shadcn-tooltip-button",
+      "expectedDefinition": "components/shadcn/shadcn-data-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "shapeshifter",
+      "expectedDefinition": "components/challenge/shapeshifter.tsx",
+      "click": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": null,
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-away-indicator",
+      "expectedDefinition": "components/feedback/status-indicators.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-busy-indicator",
+      "expectedDefinition": "components/feedback/status-indicators.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-churn-stat",
+      "expectedDefinition": "components/data-display/stat-cards.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-cpu-tile",
+      "expectedDefinition": "components/data-display/metric-tiles.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-create-btn",
+      "expectedDefinition": "components/actions/crud-buttons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-delete-btn",
+      "expectedDefinition": "components/actions/crud-buttons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-disk-tile",
+      "expectedDefinition": "components/data-display/metric-tiles.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-dnd-indicator",
+      "expectedDefinition": "components/feedback/status-indicators.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-gpu-tile",
+      "expectedDefinition": "components/data-display/metric-tiles.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-help-icon",
+      "expectedDefinition": "components/navigation/nav-icons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-home-icon",
+      "expectedDefinition": "components/navigation/nav-icons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-logout-icon",
+      "expectedDefinition": "components/navigation/nav-icons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-mrr-stat",
+      "expectedDefinition": "components/data-display/stat-cards.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-offline-indicator",
+      "expectedDefinition": "components/feedback/status-indicators.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-online-indicator",
+      "expectedDefinition": "components/feedback/status-indicators.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-order-stat",
+      "expectedDefinition": "components/data-display/stat-cards.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-profile-icon",
+      "expectedDefinition": "components/navigation/nav-icons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-ram-tile",
+      "expectedDefinition": "components/data-display/metric-tiles.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-retention-stat",
+      "expectedDefinition": "components/data-display/stat-cards.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-revenue-stat",
+      "expectedDefinition": "components/data-display/stat-cards.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-search-icon",
+      "expectedDefinition": "components/navigation/nav-icons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-settings-icon",
+      "expectedDefinition": "components/navigation/nav-icons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "sibling-update-btn",
+      "expectedDefinition": "components/actions/crud-buttons.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "slot-footer-content",
+      "expectedDefinition": "lib/create-slot-content.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "slot-header-content",
+      "expectedDefinition": "lib/create-slot-content.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "slot-sidebar-content",
+      "expectedDefinition": "lib/create-slot-content.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "stagger-grid-child",
+      "expectedDefinition": "components/motion/stagger-grid.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "style-clash-badge",
+      "expectedDefinition": "components/mixed/style-clash.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "style-clash-button",
+      "expectedDefinition": "components/mixed/style-clash.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "styled-data-cell",
+      "expectedDefinition": "components/styled/styled-data-cell.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "styled-tooltip",
+      "expectedDefinition": "components/styled/styled-tooltip.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "suspense-lazy-content",
+      "expectedDefinition": "components/wrappers/suspense-lazy-loader.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tooltip-hoc-styled-button",
+      "expectedDefinition": "components/styled/styled-button.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tracked-styled-card",
+      "expectedDefinition": "components/styled/styled-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tunnel-sidebar-actions",
+      "expectedDefinition": "components/tunnel/tunnel-sidebar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tunnel-sidebar-body",
+      "expectedDefinition": "components/tunnel/tunnel-sidebar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tunnel-sidebar-header",
+      "expectedDefinition": "components/tunnel/tunnel-sidebar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tunnel-sidebar-status",
+      "expectedDefinition": "components/tunnel/tunnel-sidebar.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tw-mini-table",
+      "expectedDefinition": "components/tailwind/tw-dashboard.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tw-skeleton",
+      "expectedDefinition": "components/tailwind/tw-skeleton.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tw-stat-revenue",
+      "expectedDefinition": "components/tailwind/tw-dashboard.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "tw-styled-hybrid-button",
+      "expectedDefinition": "components/mixed/tw-styled-hybrid.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "unexpected-constant-status",
+      "expectedDefinition": "constants/status-icon-map.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "unexpected-middleware-banner",
+      "expectedDefinition": "middleware/auth-banner.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "unexpected-schema-feedback",
+      "expectedDefinition": "schemas/validation-feedback-display.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "unexpected-script-widget",
+      "expectedDefinition": "scripts/analytics-embed.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "unexpected-type-preview",
+      "expectedDefinition": "types/type-preview-card.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-avatar-stack",
+      "expectedDefinition": "lib/avatar-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-color-swatch",
+      "expectedDefinition": "lib/color-swatch.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-copy-button",
+      "expectedDefinition": "lib/clipboard-helpers.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-count-badge",
+      "expectedDefinition": "lib/counter-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-diff-line",
+      "expectedDefinition": "lib/diff-renderer.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-duration-label",
+      "expectedDefinition": "lib/duration-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-empty-state",
+      "expectedDefinition": "lib/placeholder-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-external-link",
+      "expectedDefinition": "lib/link-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-formatted-currency",
+      "expectedDefinition": "lib/data-formatters.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-hotkey-label",
+      "expectedDefinition": "lib/hotkey-registry.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-markdown-preview",
+      "expectedDefinition": "lib/markdown-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-permission-gate",
+      "expectedDefinition": "lib/permission-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-progress-ring",
+      "expectedDefinition": "lib/progress-helpers.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-relative-time",
+      "expectedDefinition": "lib/date-helpers.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-scroll-indicator",
+      "expectedDefinition": "lib/scroll-indicator.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-status-indicator",
+      "expectedDefinition": "lib/render-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-timeline-dot",
+      "expectedDefinition": "lib/timeline-utils.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    },
+    {
+      "testId": "util-truncated-text",
+      "expectedDefinition": "lib/text-helpers.tsx",
+      "click": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      },
+      "optionClick": {
+        "destination": {
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
+        },
+        "expectedDefinitionFile": false
+      }
+    }
+  ]
+}

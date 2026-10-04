@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const steps = [
   {
     title: "Find the element",
-    text: "In inspect mode, hover a button, heading, or icon. The tool finds the DOM element under your pointer and draws a highlight around it. DOM means the elements your browser displays.",
+    text: "In inspect mode, hover a button, heading, or icon. The tool highlights the exact element under your pointer, including icons and children inside buttons. It does not jump to a group because of CSS classes. DOM means the elements your browser displays.",
   },
   {
     title: "Read React Fiber",

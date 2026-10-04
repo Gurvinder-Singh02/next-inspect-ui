@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 
 import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, setInspectorSettings, subscribeInspectorSettings, type InspectUIProps } from "./lib/index.ts"
-import { applyOverlayStyles, getPopoverComponentAncestors, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, isPointInRect, openInEditor, preferredSourceFromFrames, readFiberComponentName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
+import { applyOverlayStyles, getPopoverComponentAncestors, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getInspectElementAtPoint, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, openInEditor, preferredSourceFromFrames, readFiberComponentName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
 import { getElementTreeRows, getElementMarkup, getElementText } from "./lib/popover.ts"
 import { createOpenSourceIcon } from "./lib/icons.ts"
 import overlayCss from "./styles/overlay.css"
@@ -1134,19 +1134,10 @@ export const InspectUI = ({
       pinnedPointerX = event.clientX
       pinnedPointerY = event.clientY
 
-      const target = document.elementFromPoint(event.clientX, event.clientY)
+      const target = getInspectElementAtPoint(event.clientX, event.clientY)
 
-      if (!target || isInspectorChrome(target)) return
-
-      if (hoveredElement && lastTargetRect && isPointInRect(event.clientX, event.clientY, lastTargetRect)) {
-        const resolved = resolveInspectElement(target)
-        if (
-          resolved !== hoveredElement &&
-          !hoveredElement.contains(resolved)
-        ) {
-          return
-        }
-      }
+      if (!target) { hide(); return }
+      if (isInspectorChrome(target)) return
 
       highlightTarget(target)
     }
@@ -1347,7 +1338,7 @@ export const InspectUI = ({
         return
       }
 
-      const target = document.elementFromPoint(pinnedPointerX, pinnedPointerY)
+      const target = getInspectElementAtPoint(pinnedPointerX, pinnedPointerY)
       if (target && !isInspectorChrome(target)) {
         highlightTarget(target)
       } else {

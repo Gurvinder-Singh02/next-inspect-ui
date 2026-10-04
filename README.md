@@ -76,3 +76,7 @@ In the Element tab, Up/Down previews HTML elements with a half-opacity red highl
 Run `bun run benchmark` in this repository. [Bundle benchmarks](docs/benchmarks.md) explain the guarded import, measured gzip sizes, and limits. Guarded production imports include no inspector library modules in the standalone test; exact app build overhead varies. Runtime speed has not been benchmarked.
 
 A dev-only standalone script is also available, like React Grab. The Next.js dashboard uses a guarded `/inspect-ui.js` script; the route returns 404 in production. See the [script setup](packages/next-inspect-ui/README.md#dev-only-script-like-react-grab).
+
+For the 330-case component source comparison, see [source-benchmarks](docs/source-benchmarks.md). Run `bun run dev:bench`, then `bun run benchmark:source`.
+
+Hover selects the exact visible element under the pointer, including SVG parts and classless children. Hold Option / Alt to climb to a component; hover does not automatically select its group.

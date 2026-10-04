@@ -30,7 +30,7 @@ after(() => {
   document.body.replaceChildren()
 })
 
-test("climbs from an svg path to the button that owns it", () => {
+test("keeps the exact SVG target inside a button", () => {
   const button = attachFiber(document.createElement("button"), "inline-flex")
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path")
@@ -40,18 +40,18 @@ test("climbs from an svg path to the button that owns it", () => {
   button.append(svg)
   document.body.append(button)
 
-  assert.equal(resolveInspectElement(path), button)
-  assert.equal(resolveInspectElement(svg), button)
+  assert.equal(resolveInspectElement(path), path)
+  assert.equal(resolveInspectElement(svg), svg)
 })
 
-test("does not treat a lone svg as the host when a link wraps it", () => {
+test("keeps an SVG target inside a link", () => {
   const link = attachFiber(document.createElement("a"), "nav-link")
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
   attachFiber(svg)
   link.append(svg)
   document.body.append(link)
 
-  assert.equal(resolveInspectElement(svg), link)
+  assert.equal(resolveInspectElement(svg), svg)
 })
 
 test("skips inspector chrome so the overlay cannot inspect itself", () => {
@@ -73,4 +73,15 @@ test("treats the info panel as chrome, not a page host", () => {
   document.body.append(info)
 
   assert.equal(isInspectorChrome(row), true)
+})
+
+ test("keeps classless and inline-styled children instead of a classed group", () => {
+  const group = attachFiber(document.createElement("section"), "group")
+  const button = attachFiber(document.createElement("button"), "button")
+  const child = attachFiber(document.createElement("span"))
+  button.append(child)
+  group.append(button)
+  document.body.append(group)
+  assert.equal(resolveInspectElement(child), child)
+  assert.equal(resolveInspectElement(button), button)
 })
