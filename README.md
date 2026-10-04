@@ -2,7 +2,7 @@
 
 Dev-only overlay for Next.js. Hover any element to see its source, click to open it.
 
-Use `<InspectUI />` in your layout in development. No props are required; `projectRoot` is optional.
+Dynamically import `next-inspect-ui` inside a development check, then use `<InspectUI />` in your layout. No props are required; `projectRoot` is optional.
 
 ## How it works
 
@@ -70,3 +70,9 @@ Run `bun run typecheck:compat` to check all test apps. Each app has a matching `
 Run `bun run dev:competitor` and open [localhost:3104](http://localhost:3104). `apps/competitor` has a dashboard with nested components, a searchable/filterable project table, a chart, a dialog, and server-rendered activity. Use the **Library** selector to compare Next Inspect UI, Show Component, React Grab, and Click to React Component. Switching reloads the page, keeping just one inspector loaded. This app is separate from the four-app `dev:test` launcher.
 
 In the Element tab, Up/Down previews HTML elements with a half-opacity red highlight, without a ghost tooltip. Enter selects the preview; Enter again opens its source. Click `…` to select an element directly. The Component tree starts at the hovered element and follows its immediate parents up to the page/layout boundary.
+
+## Benchmarks
+
+Run `bun run benchmark` in this repository. [Bundle benchmarks](docs/benchmarks.md) explain the guarded import, measured gzip sizes, and limits. Guarded production imports include no inspector library modules in the standalone test; exact app build overhead varies. Runtime speed has not been benchmarked.
+
+A dev-only standalone script is also available, like React Grab. The Next.js dashboard uses a guarded `/inspect-ui.js` script; the route returns 404 in production. See the [script setup](packages/next-inspect-ui/README.md#dev-only-script-like-react-grab).

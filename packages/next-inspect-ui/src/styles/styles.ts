@@ -29,8 +29,8 @@ export const ensureInspectorStyles = (css: string, doc = document) => {
 }
 
 export const paintUsedIcon = (el: HTMLElement, open: boolean) => {
-  el.style.width = open ? "12px" : "0"
-  el.style.marginRight = open ? "3px" : "0"
+  el.style.width = open ? "20px" : "0"
+  el.style.marginRight = open ? "2px" : "0"
 }
 
 export const paintTreeRow = (el: HTMLElement, active: boolean) => {

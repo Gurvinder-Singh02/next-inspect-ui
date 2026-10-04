@@ -1,4 +1,4 @@
-import { createUsedIcon, createReactIcon } from "./icons.ts"
+import { createUsedIcon, createReactIcon, createOptionIcon } from "./icons.ts"
 import type { TooltipAlign, TooltipProps, TooltipSide } from "./index.ts"
 import { markInspectNode, paintUsedIcon } from "../styles/styles.ts"
 
@@ -288,7 +288,7 @@ export const createInspectTooltip = () => {
     setLabel,
     showUsedIcon,
     showSourceIcon: (used: boolean, canClimb: boolean) => {
-      iconWrap.replaceChildren(used ? createUsedIcon() : createReactIcon())
+      iconWrap.replaceChildren(used ? createReactIcon() : createOptionIcon())
       paintUsedIcon(iconWrap, used || canClimb)
     },
     pushUnder,

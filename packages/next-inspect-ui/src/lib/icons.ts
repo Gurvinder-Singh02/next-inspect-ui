@@ -41,3 +41,12 @@ export const createReactIcon = () => {
   svg.append(dot)
   return svg
 }
+
+export const createOptionIcon = () => {
+  const svg = document.createElementNS(SVG_NS, "svg")
+  for (const [key, value] of Object.entries({ width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" })) svg.setAttribute(key, value)
+  const path = document.createElementNS(SVG_NS, "path")
+  path.setAttribute("d", "M3 5h5l8 14h5M14 5h7")
+  svg.append(path)
+  return svg
+}

@@ -61,7 +61,7 @@ import { cn } from "@/lib/utils"
 const STEP_MS = 1800
 const INSTALL_COMMAND = "npm i -D next-inspect-ui"
 const AGENT_PROMPT =
-  "Install next-inspect-ui (npm i -D next-inspect-ui). Add <InspectUI /> as a sibling alongside {children} in the root layout (not wrapping it), only in development."
+  "Install next-inspect-ui (npm i -D next-inspect-ui). Use a dynamic import of next-inspect-ui inside a NODE_ENV development check in the async root layout, then add <InspectUI /> as a sibling alongside {children} in the root layout (not wrapping it), only in development."
 
 const useOverlayLoop = (playing: boolean, length: number) => {
   const [index, setIndex] = useState(0)

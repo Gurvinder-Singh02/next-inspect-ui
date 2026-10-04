@@ -2,6 +2,7 @@
   "name": "next-inspect-ui-monorepo",
   "private": true,
   "scripts": {
+    "benchmark": "bun run build && node scripts/benchmark-inspectors.cjs",
     "format": "oxfmt --write apps site '!**/dist/**' '!**/.next/**' '!**/node_modules/**' '!**/coverage/**' '!**/.turbo/**'",
     "dev": "pnpm --filter site dev",
     "dev:test": "bun run scripts/dev-tests.ts",

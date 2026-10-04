@@ -21,11 +21,12 @@
     "devtools",
     "open-in-editor"
   ],
-  "sideEffects": false,
+  "sideEffects": ["./dist/index.global.js"],
   "files": [
     "dist"
   ],
   "exports": {
+    "./script": "./dist/index.global.js",
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
@@ -42,7 +43,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsup --config tsup.script.config.ts",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
