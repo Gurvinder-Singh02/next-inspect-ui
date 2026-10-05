@@ -25,15 +25,15 @@ export const metadata: Metadata = {
 const FAQ: { q: string; a: ReactNode }[] = [
   {
     q: "How does this work?",
-    a: "Hover a node. The overlay finds that DOM node’s React fiber, reads the debug source, and shows the file. Click or Enter opens that line in your editor. Hold Option to climb to the component that rendered it.",
+    a: "Press Option / Alt + X to enable inspect mode, then hover an element. The inspector reads React Fiber metadata and source maps to find its source. Click or press Enter to open it. Hold Option / Alt to inspect the owning component’s usage.",
   },
   {
     q: "Does this affect production?",
-    a: "Guard the dynamic import with NODE_ENV development, then mount InspectUI. This keeps the inspector out of the production module graph. Exact build overhead depends on your bundler.",
+    a: "Use the development-only dynamic import shown in Usage. Your bundler excludes the library from production. A static import disables the inspector but may retain a small wrapper. Serve the standalone script only in development.",
   },
   {
     q: "Does it rely on any other libraries internally?",
-    a: "No. You don’t install anything else under the hood. It only needs React, which a React 19+ app already has, and it works by reading the React fiber tree.",
+    a: "Yes. It uses bippy/source, the source resolver also used by React Grab, to recover component stacks. Your package manager installs it automatically. React and ReactDOM are peer dependencies.",
   },
   {
     q: "Is this a build plugin?",
@@ -41,13 +41,21 @@ const FAQ: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Does this only work with Next.js?",
-    a: "No. It works with any React 19+ app. Next.js is a common setup, not a requirement. Right now async Server Components are not inspectable.",
+    a: "No. It supports React 19+ apps, including Next.js and Vite. React 18 compatibility is experimental. Source accuracy depends on your framework’s development metadata and source maps; Next.js Server Component locations use available server debug metadata.",
+  },
+  {
+    q: "How do I navigate the tree?",
+    a: "Press Space to open the popover. Component shows immediate parents up to the page boundary. Element shows nearby HTML, stopping at body. Left / Right switches tabs; Up / Down moves between rows and previews their elements. Enter opens the selected source. Press Space to close the popover or Escape to exit inspect mode.",
+  },
+  {
+    q: "Which editors does it support?",
+    a: "Cursor, VS Code, and VS Code Insiders. Choose your editor in the inspector settings. The inspector opens source through an editor URL or your framework’s development endpoint.",
   },
   {
     q: "What kind of elements can I inspect?",
     a: (
       <div className="flex flex-col gap-2">
-        <p>Anything with a client fiber, including:</p>
+        <p>Elements connected to React’s rendered tree, including:</p>
         <ul className="flex list-disc flex-col gap-1 pl-4">
           <li>HTML : headings, buttons, links, cards</li>
           <li>
@@ -65,7 +73,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
           <li>React kinds : forwardRef, memo, compound components</li>
           <li>Lists : children created in .map()</li>
           <li>Icons : Lucide and other third-party SVG</li>
-          <li>Server hosts : sync server components that emit DOM</li>
+          <li>Server-rendered HTML when Next.js exposes source metadata</li>
         </ul>
         <p>
           <Link
@@ -106,8 +114,7 @@ export default function OverviewPage() {
             <kbd className={shortcutKeyClassName}>
               <Option />
             </kbd>{" "}
-            and press <kbd className={shortcutKeyClassName}>⇧</kbd> to move up
-            the hierarchy.
+            to inspect the owning component’s usage.
           </p>
         </div>
       </header>

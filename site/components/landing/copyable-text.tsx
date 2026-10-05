@@ -36,7 +36,7 @@ export const CopyableText = ({
       <button
         type="button"
         onClick={handleCopy}
-        className="absolute top-3.5 right-4 z-10 font-inter text-[13px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline"
+        className="absolute top-3.5 right-4 font-inter text-[13px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline"
         aria-label={hasCopied ? "Copied" : "Copy prompt"}
       >
         {hasCopied ? "Copied" : "Copy"}
