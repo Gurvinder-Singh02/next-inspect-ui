@@ -74,7 +74,7 @@ For performance or bundle changes:
 bun run benchmark
 ```
 
-For source-lookup or editor-destination measurements, start `bun run dev:bench` in one terminal, then run these in another:
+For source-lookup or editor-destination measurements, run these commands; each starts the fork app automatically if needed:
 
 ```bash
 bun run benchmark:source
@@ -94,3 +94,5 @@ Add user-visible changes to the **Unreleased** section of [CHANGELOG.md](CHANGEL
 ## License
 
 The project uses the [MIT license](LICENSE). Preserve the copyright and license notices, including the separate licenses for third-party material.
+
+The source benchmark lives in [the private benchmark repository](https://github.com/Gurvinder-Singh02/next-inspect-bench/tree/main/packages/benchmark). Clone it beside this repository as `react-grab-bench`. The commands build Next Inspect UI and install the fork dependencies automatically. `REACT_BENCH_DIR` overrides the checkout path. The benchmark commands use that checkout and save reports in this repository’s `docs` folder.

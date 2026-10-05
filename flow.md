@@ -146,7 +146,7 @@ Next.js can also load `<Script src="/inspect-ui.js" strategy="afterInteractive" 
 
 ## Source benchmark flow
 
-`bun run dev:bench` → port 3106 → `bun run benchmark:source` → 330 upstream cases → compare expected definition files with source results → `docs/source-benchmark-results.json`. This local test opens no editor and uses no agent API. See `docs/source-benchmarks.md` for scoring limits.
+`bun run benchmark:source` → build local library → start fork app on port 3106 → 330 upstream cases → compare expected definition files with source results → `docs/source-benchmark-results.json`. This local test opens no editor and uses no agent API. See `docs/source-benchmarks.md` for scoring limits.
 
 `bun run benchmark:open` exercises the actual hover and click handlers for normal click and Option-click. It intercepts editor endpoint requests, records file/line/column in `docs/open-benchmark-results.json`, and opens no editor. Pointer hits are controlled so offscreen fixtures can be tested. The upstream expected file is the component definition; JSX usage correctness needs separate expectations.
 
@@ -162,4 +162,6 @@ Hover, panel, pointer-down warming, and editor opening share per-fiber source pr
 
 The development inspection probe still waits for the full owner chain. Host and chain work run concurrently, and the optional profiling flag reports both durations from their common start; the durations overlap and must not be added. The source benchmark retains its complete context and exact-file scoring.
 
-The latest source report measures 1.1 ms median and 3.8 ms p95 for lookup plus tree/context gathering. It finds 305/330 expected definition files, including six missing targets in the denominator. This is not an exact-line score, hover FPS, or editor launch time. All 84 unit tests and workspace/compatibility type checks pass. See [Source benchmarks](docs/source-benchmarks.md) for the full report.
+The latest source report measures 1.0 ms median and 5.2 ms p95 for lookup plus tree/context gathering. It finds 305/330 expected definition files, including six missing targets in the denominator. This is not an exact-line score, hover FPS, or editor launch time. All 84 unit tests and workspace/compatibility type checks pass. See [Source benchmarks](docs/source-benchmarks.md) for the full report.
+
+The source benchmark lives in [the private benchmark repository](https://github.com/Gurvinder-Singh02/next-inspect-bench/tree/main/packages/benchmark). Clone it beside this repository as `react-grab-bench`. The commands build Next Inspect UI and install the fork dependencies automatically. `REACT_BENCH_DIR` overrides the checkout path. The benchmark commands use that checkout and save reports in this repository’s `docs` folder.
