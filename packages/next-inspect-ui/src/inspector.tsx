@@ -4,6 +4,7 @@ import { useEffect } from "react"
 
 import { DEFAULT_DEV_SPOTLIGHT_PROPS, formatTooltipLabel, formatComponentTag, formatDomTag, getInspectorSettings, initInspectorSettings, matchesInspectorShortcut, PADDING_MAX, PADDING_MIN, setDevSpotlightProps, setInspectorSettings, subscribeInspectorSettings, type InspectUIProps } from "./lib/index.ts"
 import { applyOverlayStyles, getPopoverComponentAncestors, findChildInspectable, findChildInspectableWhere, findEdgeSiblingInspectable, findParentInspectable, findSiblingInspectable, formatPageLabel, getClimbStepDisplaySource, getComponentName, getDirectClimbOwner, getDomHoverName, getFiber, getInspectElementAtPoint, getHostAuthorSource, getInstantDefinedSource, getInstantUsedSource, getNamedTarget, getOwnStackFrames, isBundledOrExternalPath, isClimbUsageBoundary, isCompositeComponentFiber, isDirectFiberChildOf, isDistinctUsedSource, isFrameworkInspectorName, isHostComponentFiber, isInspectorChrome, openInEditor, preferredSourceFromFrames, readFiberComponentName, resolveDebugInfoPair, resolveDebugInfoPairSync, resolveFirstMappedFrame, resolveHostAuthorSource, resolveInspectElement, resolveInstanceSource, resolveNearestAncestorSource, resolveSource, sourceFromFiberDebugSource, sourceFromStackFrame, type ReactFiber, type ServerDebugInfo, type SourceLocation, type SourceMap } from "./lib/engine.ts"
+import { createFiberSourceCache } from "./lib/source-cache.ts"
 import { getElementTreeRows, getElementMarkup, getElementText } from "./lib/popover.ts"
 import { createOpenSourceIcon } from "./lib/icons.ts"
 import overlayCss from "./styles/overlay.css"
@@ -53,9 +54,10 @@ export const InspectUI = ({
     ensureInspectorStyles(overlayCss)
 
     const sourceMapCache = new Map<string, Promise<SourceMap>>()
-    const sourceCache = new WeakMap<ReactFiber, Promise<SourceLocation | null>>()
+    const sourceCache = createFiberSourceCache()
+    const hostSourceCache = createFiberSourceCache()
 
-    const instanceSourceCache = new WeakMap<ReactFiber, Promise<SourceLocation | null>>()
+    const instanceSourceCache = createFiberSourceCache()
 
     const instantDefinedPathCache = new WeakMap<ReactFiber, string>()
     const instantUsedPathCache = new WeakMap<ReactFiber, string>()
@@ -754,7 +756,7 @@ export const InspectUI = ({
       infoTreeChain = chain
       const componentNodes: InfoTreeNode[] = [
         { name: hostTag, isDom: true, source: hostSource, climbIndex: -1, depth: 0,
-          pendingSource: fiber ? resolveHostAuthorSource(fiber, projectRoot, sourceMapCache) : Promise.resolve(null) },
+          pendingSource: fiber ? getHostSource(fiber) : Promise.resolve(null) },
         ...chain.map((step, climbIndex) => ({
           name: step.name, isDom: false, source: getClimbStepDisplaySource(step), climbIndex,
           depth: climbIndex + 1,
@@ -766,7 +768,7 @@ export const InspectUI = ({
         return {
           element, name: element.tagName.toLowerCase(), isDom: true, climbIndex: -1, depth, relation,
           source: elementFiber ? getHostAuthorSource(elementFiber, projectRoot) : null,
-          pendingSource: elementFiber ? resolveHostAuthorSource(elementFiber, projectRoot, sourceMapCache) : Promise.resolve(null),
+          pendingSource: elementFiber ? getHostSource(elementFiber) : Promise.resolve(null),
         }
       })
       if (!infoVisible || infoTarget !== target) return
@@ -872,11 +874,12 @@ export const InspectUI = ({
     }
 
 
-    const refineOwnerChain = async (fiber: ReactFiber, host: SourceLocation | null) => {
+    const refineOwnerChain = async (fiber: ReactFiber, host: SourceLocation | null | Promise<SourceLocation | null>) => {
       const chain = buildOwnerChain(fiber)
       await Promise.all(chain.map((step) => refineClimbStep(step)))
+      const resolvedHost = await host
       const boundary = chain.findIndex((step) => isRouteFileBoundary(step.source, step.name) || isClimbUsageBoundary({
-        usage: step.source, definition: step.definition, host,
+        usage: step.source, definition: step.definition, host: resolvedHost,
       }))
       if (boundary >= 0) chain.splice(boundary + 1)
       return chain
@@ -912,7 +915,7 @@ export const InspectUI = ({
 
     const refineActiveStep = (fiber: ReactFiber, step: OwnerChainStep, depthAtRequest: number, checkBundled = false) => {
       void refineClimbStep(step).then(() => {
-        if (!optionHeld || ownerChainDepth !== depthAtRequest) return
+        if (!optionHeld || ownerChainDepth !== depthAtRequest || !hoveredElement || getFiber(hoveredElement) !== fiber) return
         const display = getClimbStepDisplaySource(step)
         if (!display || (checkBundled && isBundledOrExternalPath(display.filePath))) return
         paintTooltipForFiber(fiber)
@@ -951,31 +954,35 @@ export const InspectUI = ({
       updateOpenHint()
     }
 
-    const cachedResolve = (
-      fiber: ReactFiber,
-      cache: WeakMap<ReactFiber, Promise<SourceLocation | null>>,
-      resolve: (f: ReactFiber) => Promise<SourceLocation | null>
-    ) => {
-      let p = cache.get(fiber)
-      if (!p) { p = resolve(fiber); cache.set(fiber, p) }
-      return p
-    }
+    const getHostSource = (fiber: ReactFiber) =>
+      hostSourceCache(fiber, () => resolveHostAuthorSource(fiber, projectRoot, sourceMapCache))
     const getSource = (fiber: ReactFiber) =>
-      cachedResolve(fiber, sourceCache, (f) => resolveSource(f, projectRoot, sourceMapCache))
+      sourceCache(fiber, () => resolveSource(fiber, projectRoot, sourceMapCache))
     const getInstanceSource = (fiber: ReactFiber) =>
-      cachedResolve(fiber, instanceSourceCache, (f) => resolveInstanceSource(f, projectRoot, sourceMapCache))
+      instanceSourceCache(fiber, () => resolveInstanceSource(fiber, projectRoot, sourceMapCache))
 
     const inspect = async (target: Element, fiber: ReactFiber, generation: number) => {
       const stale = () => generation !== inspectGeneration || hoveredElement !== target
       try {
-        const [hostSource, definition, usage] = await Promise.all([
-          resolveHostAuthorSource(fiber, projectRoot, sourceMapCache), getSource(fiber), getInstanceSource(fiber),
-        ])
+        const hostSource = await getHostSource(fiber)
         if (stale()) return
         const setPath = (cache: WeakMap<ReactFiber, string>, loc: SourceLocation | null) => {
           if (loc) cache.set(fiber, formatPageLabel(loc, projectRoot)); else cache.delete(fiber)
         }
-        setPath(instantHostPathCache, hostSource); setPath(instantDefinedPathCache, definition); setPath(instantUsedPathCache, usage)
+        setPath(instantHostPathCache, hostSource)
+        if (hostSource) {
+          // Publish the hovered source first; resolve only the owner requested by Option.
+          paintTooltipForFiber(fiber)
+          const step = optionHeld ? getActiveChainStep(fiber) : null
+          if (step) {
+            await refineClimbStep(step)
+            if (!stale()) paintTooltipForFiber(fiber)
+          }
+          return
+        }
+        const [definition, usage] = await Promise.all([getSource(fiber), getInstanceSource(fiber)])
+        if (stale()) return
+        setPath(instantDefinedPathCache, definition); setPath(instantUsedPathCache, usage)
         const chain = await refineOwnerChain(fiber, hostSource)
         if (stale()) return
         if (!hostSource && !definition && !usage && chain.every((s) => !s.source)) {
@@ -1129,7 +1136,7 @@ export const InspectUI = ({
           openSourceLoc = getClimbStepDisplaySource(chainStep)
           if (openSourceLoc && isBundledOrExternalPath(openSourceLoc.filePath)) openSourceLoc = null
         } else {
-          openSourceLoc = (await resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)) ?? getHostAuthorSource(fiber, projectRoot)
+          openSourceLoc = (await getHostSource(fiber)) ?? getHostAuthorSource(fiber, projectRoot)
         }
         if (openSourceLoc) {
           openInEditor(openSourceLoc, settings.ide)
@@ -1151,7 +1158,7 @@ export const InspectUI = ({
 
 
     const warmOpenSource = (fiber: ReactFiber) => {
-      void resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)
+      void getHostSource(fiber)
       const step = optionHeld ? getActiveChainStep(fiber) : null
       if (step) void getInstanceSource(step.parentFiber)
     }
@@ -1327,15 +1334,24 @@ export const InspectUI = ({
       passive: true,
     })
 
-    const inspectProbe = async (input: Element | string) => {
+    const inspectProbe = async (input: Element | string, profile = false) => {
       const hit = typeof input === "string" ? document.querySelector(input) : input
       if (!(hit instanceof Element)) return null
       const resolved = resolveInspectElement(hit)
       if (isInspectorChrome(resolved)) return null
       const fiber = getFiber(resolved)
       if (!fiber) return null
-      const hostSource = (await resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)) ?? getHostAuthorSource(fiber, projectRoot)
-      const chain = await refineOwnerChain(fiber, hostSource)
+      const started = profile ? performance.now() : 0
+      let hostFinished = 0, chainFinished = 0
+      const hostPromise = getHostSource(fiber).then(source => {
+        hostFinished = profile ? performance.now() : 0
+        return source ?? getHostAuthorSource(fiber, projectRoot)
+      })
+      const chainPromise = refineOwnerChain(fiber, hostPromise).then(chain => {
+        chainFinished = profile ? performance.now() : 0
+        return chain
+      })
+      const [hostSource, chain] = await Promise.all([hostPromise, chainPromise])
       const hostTag = getDomHoverName(fiber) ?? resolved.tagName.toLowerCase()
       const labelOf = (source: SourceLocation | null) => (source ? formatPageLabel(source, projectRoot) : null)
       const nodes = [
@@ -1343,6 +1359,7 @@ export const InspectUI = ({
         { name: hostTag, source: labelOf(hostSource) },
       ]
       return {
+        ...(profile ? { timings: { hostMs: hostFinished - started, chainMs: chainFinished - started } } : {}),
         element: resolved,
         host: { name: hostTag, source: labelOf(hostSource), filePath: hostSource?.filePath ?? null, line: hostSource?.line ?? null, column: hostSource?.column ?? null },
         nodes,

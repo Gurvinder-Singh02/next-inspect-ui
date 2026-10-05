@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-10-04T06:26:09.080Z",
+  "measuredAt": "2026-10-04T23:36:32.402Z",
   "method": "Actual click handler; endpoint interception and final editor-protocol transport stub; controlled DOM hit; definition-file expectations only",
   "summary": [
     {
       "mode": "click",
       "total": 330,
-      "expectedDefinitionFile": 274,
+      "expectedDefinitionFile": 275,
       "missing": 6,
       "noCapturedDestination": 0
     },
     {
       "mode": "optionClick",
       "total": 330,
-      "expectedDefinitionFile": 271,
+      "expectedDefinitionFile": 272,
       "missing": 6,
       "noCapturedDestination": 0
     }
@@ -382,7 +382,7 @@
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/styled/styled-button.tsx",
           "line1": "56",
-          "column1": "5",
+          "column1": "6",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -5715,19 +5715,21 @@
       "expectedDefinition": "components/challenge/shapeshifter.tsx",
       "click": {
         "destination": {
-          "file": "app/page.tsx",
-          "line1": "21",
-          "column1": "7"
+          "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/challenge/shapeshifter.tsx",
+          "line1": "26",
+          "column1": "7",
+          "transport": "editor-protocol"
         },
-        "expectedDefinitionFile": false
+        "expectedDefinitionFile": true
       },
       "optionClick": {
         "destination": {
-          "file": "app/page.tsx",
-          "line1": "21",
-          "column1": "7"
+          "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/challenge/shapeshifter.tsx",
+          "line1": "26",
+          "column1": "8",
+          "transport": "editor-protocol"
         },
-        "expectedDefinitionFile": false
+        "expectedDefinitionFile": true
       }
     },
     {

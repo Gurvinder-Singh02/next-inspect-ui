@@ -24,11 +24,11 @@ Cursor / VS Code
 
 Hover selects the topmost visible DOM element at the pointer, including SVG parts and classless or inline-styled children. It checks elementsFromPoint, descends open shadow roots, and skips inspector UI, document roots, hidden elements, and transparent page-covering surfaces. It does not promote icons, button children, or classless elements to a parent. Hit testing temporarily clears an inherited body pointer lock and restores it immediately, so modal-library locks do not force selection to the document root. Moving between children immediately updates selection; Option remains the explicit component-climb action.
 
-The DOM element is what you see on the page. Its React Fiber connects it to the React tree. The tool follows that tree to find the element’s source or the selected parent component’s source. React 19 lookups use `bippy/source`, the source resolver also used by React Grab, to recover trusted owner stacks or component frames and map them to project files. React 18 JSX metadata remains the first path when present. Component definitions and component usage locations stay separate so Option-climb keeps its existing behavior.
+The DOM element is what you see on the page. Its React Fiber connects it to the React tree. The tool follows that tree to find the element’s source or the selected parent component’s source. React 19 lookups use `bippy/source`, the source resolver also used by React Grab, to recover trusted owner stacks or component frames and map them to project files. Browser creation frames reuse `bippy/source` decoded source maps before asking the Next.js stack endpoint. Framework runtime and vendor map entries are excluded. React 18 JSX metadata remains the first path when present. Component definitions and component usage locations stay separate so Option-climb keeps its existing behavior.
 
 React’s debug fields can contain a file location or a stack trace. They are internal fields, so their availability depends on the React version and build tool.
 
-A source map connects built JavaScript to the original TSX file. It is separate from React’s metadata. Next.js browser chunks use the development stack-frame endpoint with browser mode; other browser builds use source maps when needed; server code can use Next.js’s development stack-frame endpoint. Once the tool finds the file, line, and column, an editor link opens that location.
+A source map connects built JavaScript to the original TSX file. It is separate from React’s metadata. Next.js browser chunks use the development stack-frame endpoint with browser mode; other browser builds use source maps when needed; server code can use Next.js’s development stack-frame endpoint. Concurrent Next.js frame requests are grouped by browser/server mode and identical pending requests share one result. Failed requests can retry. Once the tool finds the file, line, and column, an editor link opens that location.
 
 Webpack’s browser and server stack URLs also use Next.js’s development stack-frame endpoint, with the matching browser or server mode. Vendor host builders with the same name as a project wrapper are skipped so the wrapper keeps its usage location. React 18 reads a component’s own JSX source for that usage, including wrappers defined in the same file. When a React 18 host is built with `createElement` or `useRender` and has no JSX source, its location falls back to the component’s caller.
 
@@ -115,3 +115,11 @@ Next.js can also load `<Script src="/inspect-ui.js" strategy="afterInteractive" 
 Source labels in the tooltip and panel show project-relative paths, never the machine’s absolute path. When no projectRoot is set, recovered absolute paths are shortened at the workspace app/package or a source folder; root files show their filename. Editor opening still uses the original full source path.
 
 Unavailable source or navigation targets do not shake or flash the highlight or tooltip.
+
+## Source lookup performance
+
+`Hover → cached host source → tooltip`. A successful host lookup updates the tooltip immediately, without waiting for component definitions or the complete owner chain. Option resolves its selected owner; the tree resolves row sources when opened. Missing host locations retain the definition and owner fallback paths.
+
+Hover, panel, pointer-down warming, and editor opening share per-fiber source promises. Cache revisions include React source metadata so edits trigger a new lookup; missing sources and failed requests are evicted. Outdated Option requests cannot repaint a different hovered element. Caches belong to the mounted inspector and are discarded when it unmounts.
+
+The development inspection probe still waits for the full owner chain. Host and chain work run concurrently, and the optional profiling flag reports both durations from their common start; the durations overlap and must not be added. The source benchmark retains its complete context and exact-file scoring.
