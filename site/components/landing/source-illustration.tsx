@@ -43,7 +43,7 @@ export const SourceIllustration = () => (
         strokeDasharray="8 10"
       />
     </svg>
-    <figcaption className="absolute -top-3 left-1/2 w-max max-w-[90%] -translate-x-1/2 bg-background px-3 text-center text-xs tracking-widest text-accent sm:text-sm">
+    <figcaption className="absolute -top-2 left-1/2 w-max max-w-[90%] -translate-x-1/2 bg-background px-3 text-center text-xs tracking-widest text-accent">
       <span className="inline-flex items-center gap-2">
         [ BROWSER{" "}
         <ArrowRight aria-hidden="true" className="size-4" strokeWidth={1.5} />{" "}
