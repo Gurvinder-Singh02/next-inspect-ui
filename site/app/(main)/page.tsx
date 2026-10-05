@@ -29,7 +29,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Does this affect production?",
-    a: "Use the development-only dynamic import shown in Usage. Your bundler excludes the library from production. A static import disables the inspector but may retain a small wrapper. Serve the standalone script only in development.",
+    a: "Use the development-only dynamic import shown in Usage. Your bundler tree-shakes the whole library, leaving 0 B of inspector code in production. A static import disables the inspector but may retain a small wrapper. Serve the standalone script only in development.",
   },
   {
     q: "Does it rely on any other libraries internally?",
@@ -49,7 +49,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Which editors does it support?",
-    a: "Cursor, VS Code, and VS Code Insiders. Choose your editor in the inspector settings. The inspector opens source through an editor URL or your framework’s development endpoint.",
+    a: "Cursor, VS Code, VS Code Insiders, Windsurf, and Zed. Choose your editor in the inspector settings. The inspector opens source through an editor URL or your framework’s development endpoint.",
   },
   {
     q: "What kind of elements can I inspect?",

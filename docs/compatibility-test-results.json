@@ -1,0 +1,413 @@
+{
+  "measuredAt": "2026-10-05T13:12:08.113Z",
+  "browser": "Chromium",
+  "metric": "Exact node names, source files and lines; original fixture expectations",
+  "suites": [
+    {
+      "app": "Next.js Turbopack",
+      "port": 3001,
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "cases": [
+        {
+          "id": "basic-html-heading",
+          "status": "Pass",
+          "log": "# plain heading\nid: basic-html-heading\nstatus: Pass\nmap: 65.4ms\n\nexpected:\n  <h1> · app/(dev)/test/page.tsx:73\n\nresult:\n  ✓ <h1> · app/(dev)/test/page.tsx:73"
+        },
+        {
+          "id": "svg-plain",
+          "status": "Pass",
+          "log": "# plain svg\nid: svg-plain\nstatus: Pass\nmap: 29.9ms\n\nexpected:\n  <rect> · app/(dev)/test/page.tsx:92\n\nresult:\n  ✓ <rect> · app/(dev)/test/page.tsx:92"
+        },
+        {
+          "id": "svg-parent",
+          "status": "Pass",
+          "log": "# svg parent climb\nid: svg-parent\nstatus: Pass\nmap: 39.7ms\n\nexpected:\n  <SvgBars/> · app/(dev)/test/page.tsx:103\n  <svg> · components/algo-test/svg-fixture.tsx:5\n\nresult:\n  ✓ <SvgBars/> · app/(dev)/test/page.tsx:103\n  ✓ <svg> · components/algo-test/svg-fixture.tsx:5"
+        },
+        {
+          "id": "shadcn-plain",
+          "status": "Pass",
+          "log": "# plain button\nid: shadcn-plain\nstatus: Pass\nmap: 72.2ms\n\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:115\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:115\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "shadcn-variants",
+          "status": "Pass",
+          "log": "# button variants\nid: shadcn-variants\nstatus: Pass\nmap: 40.1ms\n\n## Secondary (secondary)\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:126\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:126\n  ✓ <button> · components/ui/button.tsx:51\nmap: 24.1ms\n\n## Ghost (ghost)\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:129\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:129\n  ✓ <button> · components/ui/button.tsx:51\nmap: 7.60ms\n\n## Destructive (destructive)\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:132\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:132\n  ✓ <button> · components/ui/button.tsx:51\nmap: 8.40ms"
+        },
+        {
+          "id": "shadcn-nested",
+          "status": "Pass",
+          "log": "# button inside card\nid: shadcn-nested\nstatus: Pass\nmap: 21.8ms\n\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:150\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:150\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "baseui-badge",
+          "status": "Pass",
+          "log": "# badge useRender host\nid: baseui-badge\nstatus: Pass\nmap: 25.7ms\n\n## Default (default)\nexpected:\n  <Badge/> · app/(dev)/test/page.tsx:165\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · app/(dev)/test/page.tsx:165\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 19.5ms\n\n## Secondary (secondary)\nexpected:\n  <Badge/> · app/(dev)/test/page.tsx:166\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · app/(dev)/test/page.tsx:166\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 2.80ms\n\n## Destructive (destructive)\nexpected:\n  <Badge/> · app/(dev)/test/page.tsx:169\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · app/(dev)/test/page.tsx:169\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 3.40ms"
+        },
+        {
+          "id": "motion-simple",
+          "status": "Pass",
+          "log": "# motion.div bare + nested\nid: motion-simple\nstatus: Pass\nmap: 40.5ms\n\n## Bare (bare)\nexpected:\n  <MotionSimple/> · components/algo-test/motion-fixture.tsx:33\n  <motion.div> · components/algo-test/motion-fixture.tsx:22\nresult:\n  ✓ <MotionSimple/> · components/algo-test/motion-fixture.tsx:33\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:22\nmap: 32.0ms\n\n## Nested (nested)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:36\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:36\nmap: 8.50ms"
+        },
+        {
+          "id": "motion-boxes",
+          "status": "Pass",
+          "log": "# motion.div list\nid: motion-boxes\nstatus: Pass\nmap: 62.4ms\n\n## Box 0 (box-0)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 22.2ms\n\n## Box 1 (box-1)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 19.9ms\n\n## Box 2 (box-2)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 20.3ms"
+        },
+        {
+          "id": "motion-svg",
+          "status": "Pass",
+          "log": "# motion.rect svg\nid: motion-svg\nstatus: Pass\nmap: 25.4ms\n\nexpected:\n  <motion.rect> · components/algo-test/motion-fixture.tsx:68\n\nresult:\n  ✓ <motion.rect> · components/algo-test/motion-fixture.tsx:68"
+        },
+        {
+          "id": "motion-wrapped",
+          "status": "Pass",
+          "log": "# wrapped motion climb\nid: motion-wrapped\nstatus: Pass\nmap: 30.3ms\n\n## alpha (alpha)\nexpected:\n  <Chip/> · components/algo-test/motion-fixture.tsx:141\n  <motion.div> · components/algo-test/motion-fixture.tsx:130\nresult:\n  ✓ <Chip/> · components/algo-test/motion-fixture.tsx:141\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:130\nmap: 23.9ms\n\n## beta (beta)\nexpected:\n  <Chip/> · components/algo-test/motion-fixture.tsx:142\n  <motion.div> · components/algo-test/motion-fixture.tsx:130\nresult:\n  ✓ <Chip/> · components/algo-test/motion-fixture.tsx:142\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:130\nmap: 6.40ms"
+        },
+        {
+          "id": "library-own-host",
+          "status": "Pass",
+          "log": "# library-built host\nid: library-own-host\nstatus: Pass\nmap: 20.1ms\n\n## First (first)\nexpected:\n  <RendersOwnHost/> · app/(dev)/test/page.tsx:227\n  <svg> · components/algo-test/library-rendered-fixture.tsx:28\nresult:\n  ✓ <RendersOwnHost/> · app/(dev)/test/page.tsx:227\n  ✓ <svg> · components/algo-test/library-rendered-fixture.tsx:28\nmap: 17.8ms\n\n## Second (second)\nexpected:\n  <RendersOwnHost/> · app/(dev)/test/page.tsx:228\n  <svg> · components/algo-test/library-rendered-fixture.tsx:28\nresult:\n  ✓ <RendersOwnHost/> · app/(dev)/test/page.tsx:228\n  ✓ <svg> · components/algo-test/library-rendered-fixture.tsx:28\nmap: 2.30ms"
+        },
+        {
+          "id": "radix-slot",
+          "status": "Pass",
+          "log": "# radix Slot / asChild\nid: radix-slot\nstatus: Pass\nmap: 20.7ms\n\n## Own button (button)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:39\n  <button> · components/algo-test/radix-fixture.tsx:31\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:39\n  ✓ <button> · components/algo-test/radix-fixture.tsx:31\nmap: 0.20ms\n\n## Slot anchor (anchor)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:41\n  <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  <a> · components/algo-test/radix-fixture.tsx:42\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:41\n  ✓ <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  ✓ <a> · components/algo-test/radix-fixture.tsx:42\nmap: 0.10ms\n\n## Slot link (link)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:47\n  <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  <LinkComponent/> · components/algo-test/radix-fixture.tsx:48\n  <a> · components/algo-test/radix-fixture.tsx:48\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:47\n  ✓ <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  ✓ <LinkComponent/> · components/algo-test/radix-fixture.tsx:48\n  ✓ <a> · components/algo-test/radix-fixture.tsx:48\nmap: 20.4ms"
+        },
+        {
+          "id": "kinds-forward-ref",
+          "status": "Pass",
+          "log": "# forwardRef + memo\nid: kinds-forward-ref\nstatus: Pass\nmap: 23.3ms\n\n## forwardRef (forward-ref)\nexpected:\n  <ForwardedInput/> · app/(dev)/test/page.tsx:254\n  <input> · components/algo-test/kinds-fixture.tsx:57\nresult:\n  ✓ <ForwardedInput/> · app/(dev)/test/page.tsx:254\n  ✓ <input> · components/algo-test/kinds-fixture.tsx:57\nmap: 19.4ms\n\n## memo (memo)\nexpected:\n  <MemoPill/> · app/(dev)/test/page.tsx:255\n  <span> · components/algo-test/kinds-fixture.tsx:74\nresult:\n  ✓ <MemoPill/> · app/(dev)/test/page.tsx:255\n  ✓ <span> · components/algo-test/kinds-fixture.tsx:74\nmap: 1.70ms\n\n## compound (compound)\nexpected:\n  <CompoundDemo/> · app/(dev)/test/page.tsx:256\n  <Panel/> · components/algo-test/kinds-fixture.tsx:127\n  <div> · components/algo-test/kinds-fixture.tsx:103\nresult:\n  ✓ <CompoundDemo/> · app/(dev)/test/page.tsx:256\n  ✓ <Panel/> · components/algo-test/kinds-fixture.tsx:127\n  ✓ <div> · components/algo-test/kinds-fixture.tsx:103\nmap: 2.20ms"
+        },
+        {
+          "id": "composition-map",
+          "status": "Pass",
+          "log": "# list map children\nid: composition-map\nstatus: Pass\nmap: 22.5ms\n\n## alpha (alpha)\nexpected:\n  <span> · app/(dev)/test/page.tsx:271\nresult:\n  ✓ <span> · app/(dev)/test/page.tsx:271\nmap: 14.1ms\n\n## beta (beta)\nexpected:\n  <span> · app/(dev)/test/page.tsx:271\nresult:\n  ✓ <span> · app/(dev)/test/page.tsx:271\nmap: 6.90ms\n\n## gamma (gamma)\nexpected:\n  <span> · app/(dev)/test/page.tsx:271\nresult:\n  ✓ <span> · app/(dev)/test/page.tsx:271\nmap: 1.50ms"
+        },
+        {
+          "id": "third-party-icons",
+          "status": "Pass",
+          "log": "# lucide icons\nid: third-party-icons\nstatus: Pass\nmap: 54.0ms\n\n## Sparkles (sparkles)\nexpected:\n  <svg> · app/(dev)/test/page.tsx:292\nresult:\n  ✓ <svg> · app/(dev)/test/page.tsx:292\nmap: 32.6ms\n\n## Circle (circle)\nexpected:\n  <svg> · app/(dev)/test/page.tsx:293\nresult:\n  ✓ <svg> · app/(dev)/test/page.tsx:293\nmap: 8.50ms\n\n## Arrow (arrow)\nexpected:\n  <svg> · app/(dev)/test/page.tsx:294\nresult:\n  ✓ <svg> · app/(dev)/test/page.tsx:294\nmap: 6.50ms\n\n## Docs link (docs)\nexpected:\n  <LinkComponent/> · app/(dev)/test/page.tsx:295\n  <a> · app/(dev)/test/page.tsx:295\nresult:\n  ✓ <LinkComponent/> · app/(dev)/test/page.tsx:295\n  ✓ <a> · app/(dev)/test/page.tsx:295\nmap: 6.40ms"
+        },
+        {
+          "id": "server-direct",
+          "status": "Pass",
+          "log": "# server component host\nid: server-direct\nstatus: Pass\nmap: 21.1ms\n\nexpected:\n  <ServerCard/> · app/(dev)/test/page.tsx:315\n  <div> · components/algo-test/server-fixture.tsx:17\n\nresult:\n  ✓ <ServerCard/> · app/(dev)/test/page.tsx:315\n  ✓ <div> · components/algo-test/server-fixture.tsx:17"
+        },
+        {
+          "id": "server-nested",
+          "status": "Pass",
+          "log": "# nested server cards\nid: server-nested\nstatus: Pass\nmap: 31.5ms\n\n## First (first)\nexpected:\n  <ServerCard/> · app/(dev)/test/page.tsx:327\n  <div> · components/algo-test/server-fixture.tsx:17\nresult:\n  ✓ <ServerCard/> · app/(dev)/test/page.tsx:327\n  ✓ <div> · components/algo-test/server-fixture.tsx:17\nmap: 22.2ms\n\n## Second (second)\nexpected:\n  <ServerCard/> · app/(dev)/test/page.tsx:328\n  <div> · components/algo-test/server-fixture.tsx:17\nresult:\n  ✓ <ServerCard/> · app/(dev)/test/page.tsx:328\n  ✓ <div> · components/algo-test/server-fixture.tsx:17\nmap: 9.30ms"
+        },
+        {
+          "id": "server-client-button",
+          "status": "Pass",
+          "log": "# server-wrapped client button\nid: server-client-button\nstatus: Pass\nmap: 29.5ms\n\nexpected:\n  <Button/> · components/algo-test/server-button-fixture.tsx:9\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · components/algo-test/server-button-fixture.tsx:9\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "parent-inspectable-card",
+          "status": "Pass",
+          "log": "# card parent / child\nid: parent-inspectable-card\nstatus: Pass\nmap: 92.0ms\n\n## Badge (badge)\nexpected:\n  <Badge/> · app/(dev)/test/page.tsx:362\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · app/(dev)/test/page.tsx:362\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 6.70ms\n\n## CardAction (action)\nexpected:\n  <CardAction/> · app/(dev)/test/page.tsx:361\n  <div> · components/ui/card.tsx:61\nresult:\n  ✓ <CardAction/> · app/(dev)/test/page.tsx:361\n  ✓ <div> · components/ui/card.tsx:61\nmap: 5.60ms\n\n## CardHeader (header)\nexpected:\n  <CardHeader/> · app/(dev)/test/page.tsx:353\n  <div> · components/ui/card.tsx:25\nresult:\n  ✓ <CardHeader/> · app/(dev)/test/page.tsx:353\n  ✓ <div> · components/ui/card.tsx:25\nmap: 18.9ms\n\n## Card (card)\nexpected:\n  <Card/> · app/(dev)/test/page.tsx:352\n  <div> · components/ui/card.tsx:11\nresult:\n  ✓ <Card/> · app/(dev)/test/page.tsx:352\n  ✓ <div> · components/ui/card.tsx:11\nmap: 25.8ms\n\n## CardTitle (title)\nexpected:\n  <CardTitle/> · app/(dev)/test/page.tsx:355\n  <div> · components/ui/card.tsx:38\nresult:\n  ✓ <CardTitle/> · app/(dev)/test/page.tsx:355\n  ✓ <div> · components/ui/card.tsx:38\nmap: 6.10ms\n\n## CardDescription (description)\nexpected:\n  <CardDescription/> · app/(dev)/test/page.tsx:354\n  <div> · components/ui/card.tsx:51\nresult:\n  ✓ <CardDescription/> · app/(dev)/test/page.tsx:354\n  ✓ <div> · components/ui/card.tsx:51\nmap: 6.90ms\n\n## Button (button)\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:369\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:369\n  ✓ <button> · components/ui/button.tsx:51\nmap: 11.3ms\n\n## CardContent (content)\nexpected:\n  <CardContent/> · app/(dev)/test/page.tsx:368\n  <div> · components/ui/card.tsx:71\nresult:\n  ✓ <CardContent/> · app/(dev)/test/page.tsx:368\n  ✓ <div> · components/ui/card.tsx:71\nmap: 6.20ms\n\n## CardFooter (footer)\nexpected:\n  <CardFooter/> · app/(dev)/test/page.tsx:373\n  <div> · components/ui/card.tsx:77\nresult:\n  ✓ <CardFooter/> · app/(dev)/test/page.tsx:373\n  ✓ <div> · components/ui/card.tsx:77\nmap: 4.50ms"
+        }
+      ]
+    },
+    {
+      "app": "Next.js Webpack",
+      "port": 3002,
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "cases": [
+        {
+          "id": "basic-html-heading",
+          "status": "Pass",
+          "log": "# plain heading\nid: basic-html-heading\nstatus: Pass\nmap: 60.8ms\n\nexpected:\n  <h1> · app/(dev)/test/page.tsx:73\n\nresult:\n  ✓ <h1> · app/(dev)/test/page.tsx:73"
+        },
+        {
+          "id": "svg-plain",
+          "status": "Pass",
+          "log": "# plain svg\nid: svg-plain\nstatus: Pass\nmap: 31.0ms\n\nexpected:\n  <rect> · app/(dev)/test/page.tsx:92\n\nresult:\n  ✓ <rect> · app/(dev)/test/page.tsx:92"
+        },
+        {
+          "id": "svg-parent",
+          "status": "Pass",
+          "log": "# svg parent climb\nid: svg-parent\nstatus: Pass\nmap: 33.0ms\n\nexpected:\n  <SvgBars/> · app/(dev)/test/page.tsx:103\n  <svg> · components/algo-test/svg-fixture.tsx:5\n\nresult:\n  ✓ <SvgBars/> · app/(dev)/test/page.tsx:103\n  ✓ <svg> · components/algo-test/svg-fixture.tsx:5"
+        },
+        {
+          "id": "shadcn-plain",
+          "status": "Pass",
+          "log": "# plain button\nid: shadcn-plain\nstatus: Pass\nmap: 31.7ms\n\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:115\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:115\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "shadcn-variants",
+          "status": "Pass",
+          "log": "# button variants\nid: shadcn-variants\nstatus: Pass\nmap: 29.0ms\n\n## Secondary (secondary)\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:126\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:126\n  ✓ <button> · components/ui/button.tsx:51\nmap: 24.5ms\n\n## Ghost (ghost)\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:129\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:129\n  ✓ <button> · components/ui/button.tsx:51\nmap: 2.30ms\n\n## Destructive (destructive)\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:132\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:132\n  ✓ <button> · components/ui/button.tsx:51\nmap: 2.20ms"
+        },
+        {
+          "id": "shadcn-nested",
+          "status": "Pass",
+          "log": "# button inside card\nid: shadcn-nested\nstatus: Pass\nmap: 19.8ms\n\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:150\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:150\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "baseui-badge",
+          "status": "Pass",
+          "log": "# badge useRender host\nid: baseui-badge\nstatus: Pass\nmap: 21.7ms\n\n## Default (default)\nexpected:\n  <Badge/> · app/(dev)/test/page.tsx:165\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · app/(dev)/test/page.tsx:165\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 16.4ms\n\n## Secondary (secondary)\nexpected:\n  <Badge/> · app/(dev)/test/page.tsx:166\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · app/(dev)/test/page.tsx:166\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 2.90ms\n\n## Destructive (destructive)\nexpected:\n  <Badge/> · app/(dev)/test/page.tsx:169\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · app/(dev)/test/page.tsx:169\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 2.40ms"
+        },
+        {
+          "id": "motion-simple",
+          "status": "Pass",
+          "log": "# motion.div bare + nested\nid: motion-simple\nstatus: Pass\nmap: 21.8ms\n\n## Bare (bare)\nexpected:\n  <MotionSimple/> · components/algo-test/motion-fixture.tsx:33\n  <motion.div> · components/algo-test/motion-fixture.tsx:22\nresult:\n  ✓ <MotionSimple/> · components/algo-test/motion-fixture.tsx:33\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:22\nmap: 20.2ms\n\n## Nested (nested)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:36\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:36\nmap: 1.60ms"
+        },
+        {
+          "id": "motion-boxes",
+          "status": "Pass",
+          "log": "# motion.div list\nid: motion-boxes\nstatus: Pass\nmap: 18.2ms\n\n## Box 0 (box-0)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 11.6ms\n\n## Box 1 (box-1)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 5.40ms\n\n## Box 2 (box-2)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 1.20ms"
+        },
+        {
+          "id": "motion-svg",
+          "status": "Pass",
+          "log": "# motion.rect svg\nid: motion-svg\nstatus: Pass\nmap: 20.8ms\n\nexpected:\n  <motion.rect> · components/algo-test/motion-fixture.tsx:68\n\nresult:\n  ✓ <motion.rect> · components/algo-test/motion-fixture.tsx:68"
+        },
+        {
+          "id": "motion-wrapped",
+          "status": "Pass",
+          "log": "# wrapped motion climb\nid: motion-wrapped\nstatus: Pass\nmap: 19.2ms\n\n## alpha (alpha)\nexpected:\n  <Chip/> · components/algo-test/motion-fixture.tsx:141\n  <motion.div> · components/algo-test/motion-fixture.tsx:130\nresult:\n  ✓ <Chip/> · components/algo-test/motion-fixture.tsx:141\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:130\nmap: 17.0ms\n\n## beta (beta)\nexpected:\n  <Chip/> · components/algo-test/motion-fixture.tsx:142\n  <motion.div> · components/algo-test/motion-fixture.tsx:130\nresult:\n  ✓ <Chip/> · components/algo-test/motion-fixture.tsx:142\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:130\nmap: 2.20ms"
+        },
+        {
+          "id": "library-own-host",
+          "status": "Pass",
+          "log": "# library-built host\nid: library-own-host\nstatus: Pass\nmap: 21.6ms\n\n## First (first)\nexpected:\n  <RendersOwnHost/> · app/(dev)/test/page.tsx:227\n  <svg> · components/algo-test/library-rendered-fixture.tsx:28\nresult:\n  ✓ <RendersOwnHost/> · app/(dev)/test/page.tsx:227\n  ✓ <svg> · components/algo-test/library-rendered-fixture.tsx:28\nmap: 18.1ms\n\n## Second (second)\nexpected:\n  <RendersOwnHost/> · app/(dev)/test/page.tsx:228\n  <svg> · components/algo-test/library-rendered-fixture.tsx:28\nresult:\n  ✓ <RendersOwnHost/> · app/(dev)/test/page.tsx:228\n  ✓ <svg> · components/algo-test/library-rendered-fixture.tsx:28\nmap: 3.50ms"
+        },
+        {
+          "id": "radix-slot",
+          "status": "Pass",
+          "log": "# radix Slot / asChild\nid: radix-slot\nstatus: Pass\nmap: 22.1ms\n\n## Own button (button)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:39\n  <button> · components/algo-test/radix-fixture.tsx:31\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:39\n  ✓ <button> · components/algo-test/radix-fixture.tsx:31\nmap: 17.7ms\n\n## Slot anchor (anchor)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:41\n  <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  <a> · components/algo-test/radix-fixture.tsx:42\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:41\n  ✓ <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  ✓ <a> · components/algo-test/radix-fixture.tsx:42\nmap: 2.70ms\n\n## Slot link (link)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:47\n  <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  <LinkComponent/> · components/algo-test/radix-fixture.tsx:48\n  <a> · components/algo-test/radix-fixture.tsx:48\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:47\n  ✓ <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  ✓ <LinkComponent/> · components/algo-test/radix-fixture.tsx:48\n  ✓ <a> · components/algo-test/radix-fixture.tsx:48\nmap: 1.70ms"
+        },
+        {
+          "id": "kinds-forward-ref",
+          "status": "Pass",
+          "log": "# forwardRef + memo\nid: kinds-forward-ref\nstatus: Pass\nmap: 23.7ms\n\n## forwardRef (forward-ref)\nexpected:\n  <ForwardedInput/> · app/(dev)/test/page.tsx:254\n  <input> · components/algo-test/kinds-fixture.tsx:57\nresult:\n  ✓ <ForwardedInput/> · app/(dev)/test/page.tsx:254\n  ✓ <input> · components/algo-test/kinds-fixture.tsx:57\nmap: 20.3ms\n\n## memo (memo)\nexpected:\n  <MemoPill/> · app/(dev)/test/page.tsx:255\n  <span> · components/algo-test/kinds-fixture.tsx:74\nresult:\n  ✓ <MemoPill/> · app/(dev)/test/page.tsx:255\n  ✓ <span> · components/algo-test/kinds-fixture.tsx:74\nmap: 1.90ms\n\n## compound (compound)\nexpected:\n  <CompoundDemo/> · app/(dev)/test/page.tsx:256\n  <Panel/> · components/algo-test/kinds-fixture.tsx:127\n  <div> · components/algo-test/kinds-fixture.tsx:103\nresult:\n  ✓ <CompoundDemo/> · app/(dev)/test/page.tsx:256\n  ✓ <Panel/> · components/algo-test/kinds-fixture.tsx:127\n  ✓ <div> · components/algo-test/kinds-fixture.tsx:103\nmap: 1.50ms"
+        },
+        {
+          "id": "composition-map",
+          "status": "Pass",
+          "log": "# list map children\nid: composition-map\nstatus: Pass\nmap: 26.2ms\n\n## alpha (alpha)\nexpected:\n  <span> · app/(dev)/test/page.tsx:271\nresult:\n  ✓ <span> · app/(dev)/test/page.tsx:271\nmap: 23.9ms\n\n## beta (beta)\nexpected:\n  <span> · app/(dev)/test/page.tsx:271\nresult:\n  ✓ <span> · app/(dev)/test/page.tsx:271\nmap: 1.30ms\n\n## gamma (gamma)\nexpected:\n  <span> · app/(dev)/test/page.tsx:271\nresult:\n  ✓ <span> · app/(dev)/test/page.tsx:271\nmap: 1.00ms"
+        },
+        {
+          "id": "third-party-icons",
+          "status": "Pass",
+          "log": "# lucide icons\nid: third-party-icons\nstatus: Pass\nmap: 26.3ms\n\n## Sparkles (sparkles)\nexpected:\n  <svg> · app/(dev)/test/page.tsx:292\nresult:\n  ✓ <svg> · app/(dev)/test/page.tsx:292\nmap: 20.6ms\n\n## Circle (circle)\nexpected:\n  <svg> · app/(dev)/test/page.tsx:293\nresult:\n  ✓ <svg> · app/(dev)/test/page.tsx:293\nmap: 2.10ms\n\n## Arrow (arrow)\nexpected:\n  <svg> · app/(dev)/test/page.tsx:294\nresult:\n  ✓ <svg> · app/(dev)/test/page.tsx:294\nmap: 1.60ms\n\n## Docs link (docs)\nexpected:\n  <LinkComponent/> · app/(dev)/test/page.tsx:295\n  <a> · app/(dev)/test/page.tsx:295\nresult:\n  ✓ <LinkComponent/> · app/(dev)/test/page.tsx:295\n  ✓ <a> · app/(dev)/test/page.tsx:295\nmap: 2.00ms"
+        },
+        {
+          "id": "server-direct",
+          "status": "Pass",
+          "log": "# server component host\nid: server-direct\nstatus: Pass\nmap: 22.1ms\n\nexpected:\n  <ServerCard/> · app/(dev)/test/page.tsx:315\n  <div> · components/algo-test/server-fixture.tsx:17\n\nresult:\n  ✓ <ServerCard/> · app/(dev)/test/page.tsx:315\n  ✓ <div> · components/algo-test/server-fixture.tsx:17"
+        },
+        {
+          "id": "server-nested",
+          "status": "Pass",
+          "log": "# nested server cards\nid: server-nested\nstatus: Pass\nmap: 23.5ms\n\n## First (first)\nexpected:\n  <ServerCard/> · app/(dev)/test/page.tsx:327\n  <div> · components/algo-test/server-fixture.tsx:17\nresult:\n  ✓ <ServerCard/> · app/(dev)/test/page.tsx:327\n  ✓ <div> · components/algo-test/server-fixture.tsx:17\nmap: 21.2ms\n\n## Second (second)\nexpected:\n  <ServerCard/> · app/(dev)/test/page.tsx:328\n  <div> · components/algo-test/server-fixture.tsx:17\nresult:\n  ✓ <ServerCard/> · app/(dev)/test/page.tsx:328\n  ✓ <div> · components/algo-test/server-fixture.tsx:17\nmap: 2.30ms"
+        },
+        {
+          "id": "server-client-button",
+          "status": "Pass",
+          "log": "# server-wrapped client button\nid: server-client-button\nstatus: Pass\nmap: 21.5ms\n\nexpected:\n  <Button/> · components/algo-test/server-button-fixture.tsx:9\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · components/algo-test/server-button-fixture.tsx:9\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "parent-inspectable-card",
+          "status": "Pass",
+          "log": "# card parent / child\nid: parent-inspectable-card\nstatus: Pass\nmap: 44.1ms\n\n## Badge (badge)\nexpected:\n  <Badge/> · app/(dev)/test/page.tsx:362\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · app/(dev)/test/page.tsx:362\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 2.80ms\n\n## CardAction (action)\nexpected:\n  <CardAction/> · app/(dev)/test/page.tsx:361\n  <div> · components/ui/card.tsx:61\nresult:\n  ✓ <CardAction/> · app/(dev)/test/page.tsx:361\n  ✓ <div> · components/ui/card.tsx:61\nmap: 3.30ms\n\n## CardHeader (header)\nexpected:\n  <CardHeader/> · app/(dev)/test/page.tsx:353\n  <div> · components/ui/card.tsx:25\nresult:\n  ✓ <CardHeader/> · app/(dev)/test/page.tsx:353\n  ✓ <div> · components/ui/card.tsx:25\nmap: 3.20ms\n\n## Card (card)\nexpected:\n  <Card/> · app/(dev)/test/page.tsx:352\n  <div> · components/ui/card.tsx:11\nresult:\n  ✓ <Card/> · app/(dev)/test/page.tsx:352\n  ✓ <div> · components/ui/card.tsx:11\nmap: 21.7ms\n\n## CardTitle (title)\nexpected:\n  <CardTitle/> · app/(dev)/test/page.tsx:355\n  <div> · components/ui/card.tsx:38\nresult:\n  ✓ <CardTitle/> · app/(dev)/test/page.tsx:355\n  ✓ <div> · components/ui/card.tsx:38\nmap: 2.60ms\n\n## CardDescription (description)\nexpected:\n  <CardDescription/> · app/(dev)/test/page.tsx:354\n  <div> · components/ui/card.tsx:51\nresult:\n  ✓ <CardDescription/> · app/(dev)/test/page.tsx:354\n  ✓ <div> · components/ui/card.tsx:51\nmap: 2.50ms\n\n## Button (button)\nexpected:\n  <Button/> · app/(dev)/test/page.tsx:369\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · app/(dev)/test/page.tsx:369\n  ✓ <button> · components/ui/button.tsx:51\nmap: 3.00ms\n\n## CardContent (content)\nexpected:\n  <CardContent/> · app/(dev)/test/page.tsx:368\n  <div> · components/ui/card.tsx:71\nresult:\n  ✓ <CardContent/> · app/(dev)/test/page.tsx:368\n  ✓ <div> · components/ui/card.tsx:71\nmap: 2.40ms\n\n## CardFooter (footer)\nexpected:\n  <CardFooter/> · app/(dev)/test/page.tsx:373\n  <div> · components/ui/card.tsx:77\nresult:\n  ✓ <CardFooter/> · app/(dev)/test/page.tsx:373\n  ✓ <div> · components/ui/card.tsx:77\nmap: 2.60ms"
+        }
+      ]
+    },
+    {
+      "app": "Vite React 19",
+      "port": 5173,
+      "total": 17,
+      "passed": 17,
+      "failed": 0,
+      "cases": [
+        {
+          "id": "basic-html-heading",
+          "status": "Pass",
+          "log": "# plain heading\nid: basic-html-heading\nstatus: Pass\nmap: 61.0ms\n\nexpected:\n  <h1> · src/App.tsx:75\n\nresult:\n  ✓ <h1> · src/App.tsx:75"
+        },
+        {
+          "id": "svg-plain",
+          "status": "Pass",
+          "log": "# plain svg\nid: svg-plain\nstatus: Pass\nmap: 0.20ms\n\nexpected:\n  <rect> · src/App.tsx:94\n\nresult:\n  ✓ <rect> · src/App.tsx:94"
+        },
+        {
+          "id": "svg-parent",
+          "status": "Pass",
+          "log": "# svg parent climb\nid: svg-parent\nstatus: Pass\nmap: 32.5ms\n\nexpected:\n  <SvgBars/> · src/App.tsx:105\n  <svg> · components/algo-test/svg-fixture.tsx:5\n\nresult:\n  ✓ <SvgBars/> · src/App.tsx:105\n  ✓ <svg> · components/algo-test/svg-fixture.tsx:5"
+        },
+        {
+          "id": "shadcn-plain",
+          "status": "Pass",
+          "log": "# plain button\nid: shadcn-plain\nstatus: Pass\nmap: 24.9ms\n\nexpected:\n  <Button/> · src/App.tsx:117\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · src/App.tsx:117\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "shadcn-variants",
+          "status": "Pass",
+          "log": "# button variants\nid: shadcn-variants\nstatus: Pass\nmap: 0.50ms\n\n## Secondary (secondary)\nexpected:\n  <Button/> · src/App.tsx:128\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · src/App.tsx:128\n  ✓ <button> · components/ui/button.tsx:51\nmap: 0.20ms\n\n## Ghost (ghost)\nexpected:\n  <Button/> · src/App.tsx:131\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · src/App.tsx:131\n  ✓ <button> · components/ui/button.tsx:51\nmap: 0.10ms\n\n## Destructive (destructive)\nexpected:\n  <Button/> · src/App.tsx:134\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · src/App.tsx:134\n  ✓ <button> · components/ui/button.tsx:51\nmap: 0.20ms"
+        },
+        {
+          "id": "shadcn-nested",
+          "status": "Pass",
+          "log": "# button inside card\nid: shadcn-nested\nstatus: Pass\nmap: 0.00ms\n\nexpected:\n  <Button/> · src/App.tsx:152\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · src/App.tsx:152\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "baseui-badge",
+          "status": "Pass",
+          "log": "# badge useRender host\nid: baseui-badge\nstatus: Pass\nmap: 33.9ms\n\n## Default (default)\nexpected:\n  <Badge/> · src/App.tsx:167\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · src/App.tsx:167\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 33.5ms\n\n## Secondary (secondary)\nexpected:\n  <Badge/> · src/App.tsx:168\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · src/App.tsx:168\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 0.20ms\n\n## Destructive (destructive)\nexpected:\n  <Badge/> · src/App.tsx:171\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · src/App.tsx:171\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 0.20ms"
+        },
+        {
+          "id": "motion-simple",
+          "status": "Pass",
+          "log": "# motion.div bare + nested\nid: motion-simple\nstatus: Pass\nmap: 32.1ms\n\n## Bare (bare)\nexpected:\n  <MotionSimple/> · components/algo-test/motion-fixture.tsx:33\n  <motion.div> · components/algo-test/motion-fixture.tsx:22\nresult:\n  ✓ <MotionSimple/> · components/algo-test/motion-fixture.tsx:33\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:22\nmap: 32.1ms\n\n## Nested (nested)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:36\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:36\nmap: 0.00ms"
+        },
+        {
+          "id": "motion-boxes",
+          "status": "Pass",
+          "log": "# motion.div list\nid: motion-boxes\nstatus: Pass\nmap: 0.10ms\n\n## Box 0 (box-0)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 0.10ms\n\n## Box 1 (box-1)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 0.00ms\n\n## Box 2 (box-2)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 0.00ms"
+        },
+        {
+          "id": "motion-svg",
+          "status": "Pass",
+          "log": "# motion.rect svg\nid: motion-svg\nstatus: Pass\nmap: 0.10ms\n\nexpected:\n  <motion.rect> · components/algo-test/motion-fixture.tsx:68\n\nresult:\n  ✓ <motion.rect> · components/algo-test/motion-fixture.tsx:68"
+        },
+        {
+          "id": "motion-wrapped",
+          "status": "Pass",
+          "log": "# wrapped motion climb\nid: motion-wrapped\nstatus: Pass\nmap: 0.10ms\n\n## alpha (alpha)\nexpected:\n  <Chip/> · components/algo-test/motion-fixture.tsx:141\n  <motion.div> · components/algo-test/motion-fixture.tsx:130\nresult:\n  ✓ <Chip/> · components/algo-test/motion-fixture.tsx:141\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:130\nmap: 0.00ms\n\n## beta (beta)\nexpected:\n  <Chip/> · components/algo-test/motion-fixture.tsx:142\n  <motion.div> · components/algo-test/motion-fixture.tsx:130\nresult:\n  ✓ <Chip/> · components/algo-test/motion-fixture.tsx:142\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:130\nmap: 0.10ms"
+        },
+        {
+          "id": "library-own-host",
+          "status": "Pass",
+          "log": "# library-built host\nid: library-own-host\nstatus: Pass\nmap: 19.0ms\n\n## First (first)\nexpected:\n  <RendersOwnHost/> · src/App.tsx:229\n  <svg> · components/algo-test/library-rendered-fixture.tsx:28\nresult:\n  ✓ <RendersOwnHost/> · src/App.tsx:229\n  ✓ <svg> · components/algo-test/library-rendered-fixture.tsx:28\nmap: 18.9ms\n\n## Second (second)\nexpected:\n  <RendersOwnHost/> · src/App.tsx:230\n  <svg> · components/algo-test/library-rendered-fixture.tsx:28\nresult:\n  ✓ <RendersOwnHost/> · src/App.tsx:230\n  ✓ <svg> · components/algo-test/library-rendered-fixture.tsx:28\nmap: 0.10ms"
+        },
+        {
+          "id": "radix-slot",
+          "status": "Pass",
+          "log": "# radix Slot / asChild\nid: radix-slot\nstatus: Pass\nmap: 17.0ms\n\n## Own button (button)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:39\n  <button> · components/algo-test/radix-fixture.tsx:31\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:39\n  ✓ <button> · components/algo-test/radix-fixture.tsx:31\nmap: 15.0ms\n\n## Slot anchor (anchor)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:41\n  <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  <a> · components/algo-test/radix-fixture.tsx:42\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:41\n  ✓ <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  ✓ <a> · components/algo-test/radix-fixture.tsx:42\nmap: 0.30ms\n\n## Slot link (link)\nexpected:\n  <LinkComponent/> · components/algo-test/radix-fixture.tsx:48\n  <a> · src/link.tsx:4\nresult:\n  ✓ <LinkComponent/> · components/algo-test/radix-fixture.tsx:48\n  ✓ <a> · src/link.tsx:4\nmap: 1.70ms"
+        },
+        {
+          "id": "kinds-forward-ref",
+          "status": "Pass",
+          "log": "# forwardRef + memo\nid: kinds-forward-ref\nstatus: Pass\nmap: 17.2ms\n\n## forwardRef (forward-ref)\nexpected:\n  <ForwardedInput/> · src/App.tsx:256\n  <input> · components/algo-test/kinds-fixture.tsx:57\nresult:\n  ✓ <ForwardedInput/> · src/App.tsx:256\n  ✓ <input> · components/algo-test/kinds-fixture.tsx:57\nmap: 16.9ms\n\n## memo (memo)\nexpected:\n  <MemoPill/> · src/App.tsx:257\n  <span> · components/algo-test/kinds-fixture.tsx:74\nresult:\n  ✓ <MemoPill/> · src/App.tsx:257\n  ✓ <span> · components/algo-test/kinds-fixture.tsx:74\nmap: 0.10ms\n\n## compound (compound)\nexpected:\n  <CompoundDemo/> · src/App.tsx:258\n  <Panel/> · components/algo-test/kinds-fixture.tsx:127\n  <div> · components/algo-test/kinds-fixture.tsx:103\nresult:\n  ✓ <CompoundDemo/> · src/App.tsx:258\n  ✓ <Panel/> · components/algo-test/kinds-fixture.tsx:127\n  ✓ <div> · components/algo-test/kinds-fixture.tsx:103\nmap: 0.20ms"
+        },
+        {
+          "id": "composition-map",
+          "status": "Pass",
+          "log": "# list map children\nid: composition-map\nstatus: Pass\nmap: —\n\n## alpha (alpha)\nexpected:\n  <span> · src/App.tsx:273\nresult:\n  ✓ <span> · src/App.tsx:273\nmap: 0.00ms\n\n## beta (beta)\nexpected:\n  <span> · src/App.tsx:273\nresult:\n  ✓ <span> · src/App.tsx:273\nmap: 0.00ms\n\n## gamma (gamma)\nexpected:\n  <span> · src/App.tsx:273\nresult:\n  ✓ <span> · src/App.tsx:273\nmap: 0.00ms"
+        },
+        {
+          "id": "third-party-icons",
+          "status": "Pass",
+          "log": "# lucide icons\nid: third-party-icons\nstatus: Pass\nmap: 0.50ms\n\n## Sparkles (sparkles)\nexpected:\n  <svg> · src/App.tsx:294\nresult:\n  ✓ <svg> · src/App.tsx:294\nmap: 0.30ms\n\n## Circle (circle)\nexpected:\n  <svg> · src/App.tsx:295\nresult:\n  ✓ <svg> · src/App.tsx:295\nmap: 0.10ms\n\n## Arrow (arrow)\nexpected:\n  <svg> · src/App.tsx:296\nresult:\n  ✓ <svg> · src/App.tsx:296\nmap: 0.00ms\n\n## Docs link (docs)\nexpected:\n  <LinkComponent/> · src/App.tsx:297\n  <a> · src/link.tsx:4\nresult:\n  ✓ <LinkComponent/> · src/App.tsx:297\n  ✓ <a> · src/link.tsx:4\nmap: 0.10ms"
+        },
+        {
+          "id": "parent-inspectable-card",
+          "status": "Pass",
+          "log": "# card parent / child\nid: parent-inspectable-card\nstatus: Pass\nmap: 29.6ms\n\n## Badge (badge)\nexpected:\n  <Badge/> · src/App.tsx:327\n  <span> · components/ui/badge.tsx:33\nresult:\n  ✓ <Badge/> · src/App.tsx:327\n  ✓ <span> · components/ui/badge.tsx:33\nmap: 0.10ms\n\n## CardAction (action)\nexpected:\n  <CardAction/> · src/App.tsx:326\n  <div> · components/ui/card.tsx:61\nresult:\n  ✓ <CardAction/> · src/App.tsx:326\n  ✓ <div> · components/ui/card.tsx:61\nmap: 0.00ms\n\n## CardHeader (header)\nexpected:\n  <CardHeader/> · src/App.tsx:318\n  <div> · components/ui/card.tsx:25\nresult:\n  ✓ <CardHeader/> · src/App.tsx:318\n  ✓ <div> · components/ui/card.tsx:25\nmap: 0.10ms\n\n## Card (card)\nexpected:\n  <Card/> · src/App.tsx:317\n  <div> · components/ui/card.tsx:11\nresult:\n  ✓ <Card/> · src/App.tsx:317\n  ✓ <div> · components/ui/card.tsx:11\nmap: 28.9ms\n\n## CardTitle (title)\nexpected:\n  <CardTitle/> · src/App.tsx:320\n  <div> · components/ui/card.tsx:38\nresult:\n  ✓ <CardTitle/> · src/App.tsx:320\n  ✓ <div> · components/ui/card.tsx:38\nmap: 0.10ms\n\n## CardDescription (description)\nexpected:\n  <CardDescription/> · src/App.tsx:319\n  <div> · components/ui/card.tsx:51\nresult:\n  ✓ <CardDescription/> · src/App.tsx:319\n  ✓ <div> · components/ui/card.tsx:51\nmap: 0.20ms\n\n## Button (button)\nexpected:\n  <Button/> · src/App.tsx:334\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · src/App.tsx:334\n  ✓ <button> · components/ui/button.tsx:51\nmap: 0.20ms\n\n## CardContent (content)\nexpected:\n  <CardContent/> · src/App.tsx:333\n  <div> · components/ui/card.tsx:71\nresult:\n  ✓ <CardContent/> · src/App.tsx:333\n  ✓ <div> · components/ui/card.tsx:71\nmap: 0.00ms\n\n## CardFooter (footer)\nexpected:\n  <CardFooter/> · src/App.tsx:338\n  <div> · components/ui/card.tsx:77\nresult:\n  ✓ <CardFooter/> · src/App.tsx:338\n  ✓ <div> · components/ui/card.tsx:77\nmap: 0.00ms"
+        }
+      ]
+    },
+    {
+      "app": "Vite React 18",
+      "port": 5174,
+      "total": 17,
+      "passed": 17,
+      "failed": 0,
+      "cases": [
+        {
+          "id": "basic-html-heading",
+          "status": "Pass",
+          "log": "# plain heading\nid: basic-html-heading\nstatus: Pass\nmap: 8.70ms\n\nexpected:\n  <h1> · src/App.tsx:75\n\nresult:\n  ✓ <h1> · src/App.tsx:75"
+        },
+        {
+          "id": "svg-plain",
+          "status": "Pass",
+          "log": "# plain svg\nid: svg-plain\nstatus: Pass\nmap: 5.40ms\n\nexpected:\n  <rect> · src/App.tsx:94\n\nresult:\n  ✓ <rect> · src/App.tsx:94"
+        },
+        {
+          "id": "svg-parent",
+          "status": "Pass",
+          "log": "# svg parent climb\nid: svg-parent\nstatus: Pass\nmap: 5.10ms\n\nexpected:\n  <SvgBars/> · src/App.tsx:105\n  <svg> · components/algo-test/svg-fixture.tsx:5\n\nresult:\n  ✓ <SvgBars/> · src/App.tsx:105\n  ✓ <svg> · components/algo-test/svg-fixture.tsx:5"
+        },
+        {
+          "id": "shadcn-plain",
+          "status": "Pass",
+          "log": "# plain button\nid: shadcn-plain\nstatus: Pass\nmap: 5.00ms\n\nexpected:\n  <Button/> · src/App.tsx:117\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · src/App.tsx:117\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "shadcn-variants",
+          "status": "Pass",
+          "log": "# button variants\nid: shadcn-variants\nstatus: Pass\nmap: 4.50ms\n\n## Secondary (secondary)\nexpected:\n  <Button/> · src/App.tsx:128\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · src/App.tsx:128\n  ✓ <button> · components/ui/button.tsx:51\nmap: 4.40ms\n\n## Ghost (ghost)\nexpected:\n  <Button/> · src/App.tsx:131\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · src/App.tsx:131\n  ✓ <button> · components/ui/button.tsx:51\nmap: 0.10ms\n\n## Destructive (destructive)\nexpected:\n  <Button/> · src/App.tsx:134\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · src/App.tsx:134\n  ✓ <button> · components/ui/button.tsx:51\nmap: 0.00ms"
+        },
+        {
+          "id": "shadcn-nested",
+          "status": "Pass",
+          "log": "# button inside card\nid: shadcn-nested\nstatus: Pass\nmap: 5.80ms\n\nexpected:\n  <Button/> · src/App.tsx:152\n  <button> · components/ui/button.tsx:51\n\nresult:\n  ✓ <Button/> · src/App.tsx:152\n  ✓ <button> · components/ui/button.tsx:51"
+        },
+        {
+          "id": "baseui-badge",
+          "status": "Pass",
+          "log": "# badge useRender host\nid: baseui-badge\nstatus: Pass\nmap: 3.80ms\n\n## Default (default)\nexpected:\n  <Badge/> · src/App.tsx:167\n  <span> · src/App.tsx:167\nresult:\n  ✓ <Badge/> · src/App.tsx:167\n  ✓ <span> · src/App.tsx:167\nmap: 3.70ms\n\n## Secondary (secondary)\nexpected:\n  <Badge/> · src/App.tsx:168\n  <span> · src/App.tsx:168\nresult:\n  ✓ <Badge/> · src/App.tsx:168\n  ✓ <span> · src/App.tsx:168\nmap: 0.10ms\n\n## Destructive (destructive)\nexpected:\n  <Badge/> · src/App.tsx:171\n  <span> · src/App.tsx:171\nresult:\n  ✓ <Badge/> · src/App.tsx:171\n  ✓ <span> · src/App.tsx:171\nmap: 0.00ms"
+        },
+        {
+          "id": "motion-simple",
+          "status": "Pass",
+          "log": "# motion.div bare + nested\nid: motion-simple\nstatus: Pass\nmap: 4.20ms\n\n## Bare (bare)\nexpected:\n  <MotionSimple/> · components/algo-test/motion-fixture.tsx:33\n  <motion.div> · components/algo-test/motion-fixture.tsx:22\nresult:\n  ✓ <MotionSimple/> · components/algo-test/motion-fixture.tsx:33\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:22\nmap: 4.20ms\n\n## Nested (nested)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:36\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:36\nmap: 0.00ms"
+        },
+        {
+          "id": "motion-boxes",
+          "status": "Pass",
+          "log": "# motion.div list\nid: motion-boxes\nstatus: Pass\nmap: 5.00ms\n\n## Box 0 (box-0)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 5.00ms\n\n## Box 1 (box-1)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 0.00ms\n\n## Box 2 (box-2)\nexpected:\n  <motion.div> · components/algo-test/motion-fixture.tsx:52\nresult:\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:52\nmap: 0.00ms"
+        },
+        {
+          "id": "motion-svg",
+          "status": "Pass",
+          "log": "# motion.rect svg\nid: motion-svg\nstatus: Pass\nmap: 6.90ms\n\nexpected:\n  <motion.rect> · components/algo-test/motion-fixture.tsx:68\n\nresult:\n  ✓ <motion.rect> · components/algo-test/motion-fixture.tsx:68"
+        },
+        {
+          "id": "motion-wrapped",
+          "status": "Pass",
+          "log": "# wrapped motion climb\nid: motion-wrapped\nstatus: Pass\nmap: 3.90ms\n\n## alpha (alpha)\nexpected:\n  <Chip/> · components/algo-test/motion-fixture.tsx:141\n  <motion.div> · components/algo-test/motion-fixture.tsx:130\nresult:\n  ✓ <Chip/> · components/algo-test/motion-fixture.tsx:141\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:130\nmap: 3.90ms\n\n## beta (beta)\nexpected:\n  <Chip/> · components/algo-test/motion-fixture.tsx:142\n  <motion.div> · components/algo-test/motion-fixture.tsx:130\nresult:\n  ✓ <Chip/> · components/algo-test/motion-fixture.tsx:142\n  ✓ <motion.div> · components/algo-test/motion-fixture.tsx:130\nmap: 0.00ms"
+        },
+        {
+          "id": "library-own-host",
+          "status": "Pass",
+          "log": "# library-built host\nid: library-own-host\nstatus: Pass\nmap: 4.10ms\n\n## First (first)\nexpected:\n  <RendersOwnHost/> · src/App.tsx:229\n  <svg> · src/App.tsx:229\nresult:\n  ✓ <RendersOwnHost/> · src/App.tsx:229\n  ✓ <svg> · src/App.tsx:229\nmap: 4.10ms\n\n## Second (second)\nexpected:\n  <RendersOwnHost/> · src/App.tsx:230\n  <svg> · src/App.tsx:230\nresult:\n  ✓ <RendersOwnHost/> · src/App.tsx:230\n  ✓ <svg> · src/App.tsx:230\nmap: 0.00ms"
+        },
+        {
+          "id": "radix-slot",
+          "status": "Pass",
+          "log": "# radix Slot / asChild\nid: radix-slot\nstatus: Pass\nmap: 4.50ms\n\n## Own button (button)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:39\n  <button> · components/algo-test/radix-fixture.tsx:31\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:39\n  ✓ <button> · components/algo-test/radix-fixture.tsx:31\nmap: 4.40ms\n\n## Slot anchor (anchor)\nexpected:\n  <Clickable/> · components/algo-test/radix-fixture.tsx:41\n  <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  <a> · components/algo-test/radix-fixture.tsx:42\nresult:\n  ✓ <Clickable/> · components/algo-test/radix-fixture.tsx:41\n  ✓ <Slot.Slot/> · components/algo-test/radix-fixture.tsx:31\n  ✓ <a> · components/algo-test/radix-fixture.tsx:42\nmap: 0.10ms\n\n## Slot link (link)\nexpected:\n  <LinkComponent/> · components/algo-test/radix-fixture.tsx:48\n  <a> · src/link.tsx:4\nresult:\n  ✓ <LinkComponent/> · components/algo-test/radix-fixture.tsx:48\n  ✓ <a> · src/link.tsx:4\nmap: 0.00ms"
+        },
+        {
+          "id": "kinds-forward-ref",
+          "status": "Pass",
+          "log": "# forwardRef + memo\nid: kinds-forward-ref\nstatus: Pass\nmap: 4.40ms\n\n## forwardRef (forward-ref)\nexpected:\n  <ForwardedInput/> · src/App.tsx:256\n  <input> · components/algo-test/kinds-fixture.tsx:57\nresult:\n  ✓ <ForwardedInput/> · src/App.tsx:256\n  ✓ <input> · components/algo-test/kinds-fixture.tsx:57\nmap: 4.40ms\n\n## memo (memo)\nexpected:\n  <MemoPill/> · src/App.tsx:257\n  <span> · components/algo-test/kinds-fixture.tsx:74\nresult:\n  ✓ <MemoPill/> · src/App.tsx:257\n  ✓ <span> · components/algo-test/kinds-fixture.tsx:74\nmap: 0.00ms\n\n## compound (compound)\nexpected:\n  <CompoundDemo/> · src/App.tsx:258\n  <Panel/> · components/algo-test/kinds-fixture.tsx:127\n  <div> · components/algo-test/kinds-fixture.tsx:103\nresult:\n  ✓ <CompoundDemo/> · src/App.tsx:258\n  ✓ <Panel/> · components/algo-test/kinds-fixture.tsx:127\n  ✓ <div> · components/algo-test/kinds-fixture.tsx:103\nmap: 0.00ms"
+        },
+        {
+          "id": "composition-map",
+          "status": "Pass",
+          "log": "# list map children\nid: composition-map\nstatus: Pass\nmap: 4.80ms\n\n## alpha (alpha)\nexpected:\n  <span> · src/App.tsx:273\nresult:\n  ✓ <span> · src/App.tsx:273\nmap: 4.80ms\n\n## beta (beta)\nexpected:\n  <span> · src/App.tsx:273\nresult:\n  ✓ <span> · src/App.tsx:273\nmap: 0.00ms\n\n## gamma (gamma)\nexpected:\n  <span> · src/App.tsx:273\nresult:\n  ✓ <span> · src/App.tsx:273\nmap: 0.00ms"
+        },
+        {
+          "id": "third-party-icons",
+          "status": "Pass",
+          "log": "# lucide icons\nid: third-party-icons\nstatus: Pass\nmap: 5.20ms\n\n## Sparkles (sparkles)\nexpected:\n  <svg> · src/App.tsx:294\nresult:\n  ✓ <svg> · src/App.tsx:294\nmap: 5.20ms\n\n## Circle (circle)\nexpected:\n  <svg> · src/App.tsx:295\nresult:\n  ✓ <svg> · src/App.tsx:295\nmap: 0.00ms\n\n## Arrow (arrow)\nexpected:\n  <svg> · src/App.tsx:296\nresult:\n  ✓ <svg> · src/App.tsx:296\nmap: 0.00ms\n\n## Docs link (docs)\nexpected:\n  <LinkComponent/> · src/App.tsx:297\n  <a> · src/link.tsx:4\nresult:\n  ✓ <LinkComponent/> · src/App.tsx:297\n  ✓ <a> · src/link.tsx:4\nmap: 0.00ms"
+        },
+        {
+          "id": "parent-inspectable-card",
+          "status": "Pass",
+          "log": "# card parent / child\nid: parent-inspectable-card\nstatus: Pass\nmap: 5.90ms\n\n## Badge (badge)\nexpected:\n  <Badge/> · src/App.tsx:327\n  <span> · src/App.tsx:327\nresult:\n  ✓ <Badge/> · src/App.tsx:327\n  ✓ <span> · src/App.tsx:327\nmap: 0.00ms\n\n## CardAction (action)\nexpected:\n  <CardAction/> · src/App.tsx:326\n  <div> · components/ui/card.tsx:61\nresult:\n  ✓ <CardAction/> · src/App.tsx:326\n  ✓ <div> · components/ui/card.tsx:61\nmap: 0.00ms\n\n## CardHeader (header)\nexpected:\n  <CardHeader/> · src/App.tsx:318\n  <div> · components/ui/card.tsx:25\nresult:\n  ✓ <CardHeader/> · src/App.tsx:318\n  ✓ <div> · components/ui/card.tsx:25\nmap: 0.00ms\n\n## Card (card)\nexpected:\n  <Card/> · src/App.tsx:317\n  <div> · components/ui/card.tsx:11\nresult:\n  ✓ <Card/> · src/App.tsx:317\n  ✓ <div> · components/ui/card.tsx:11\nmap: 5.80ms\n\n## CardTitle (title)\nexpected:\n  <CardTitle/> · src/App.tsx:320\n  <div> · components/ui/card.tsx:38\nresult:\n  ✓ <CardTitle/> · src/App.tsx:320\n  ✓ <div> · components/ui/card.tsx:38\nmap: 0.00ms\n\n## CardDescription (description)\nexpected:\n  <CardDescription/> · src/App.tsx:319\n  <div> · components/ui/card.tsx:51\nresult:\n  ✓ <CardDescription/> · src/App.tsx:319\n  ✓ <div> · components/ui/card.tsx:51\nmap: 0.00ms\n\n## Button (button)\nexpected:\n  <Button/> · src/App.tsx:334\n  <button> · components/ui/button.tsx:51\nresult:\n  ✓ <Button/> · src/App.tsx:334\n  ✓ <button> · components/ui/button.tsx:51\nmap: 0.10ms\n\n## CardContent (content)\nexpected:\n  <CardContent/> · src/App.tsx:333\n  <div> · components/ui/card.tsx:71\nresult:\n  ✓ <CardContent/> · src/App.tsx:333\n  ✓ <div> · components/ui/card.tsx:71\nmap: 0.00ms\n\n## CardFooter (footer)\nexpected:\n  <CardFooter/> · src/App.tsx:338\n  <div> · components/ui/card.tsx:77\nresult:\n  ✓ <CardFooter/> · src/App.tsx:338\n  ✓ <div> · components/ui/card.tsx:77\nmap: 0.00ms"
+        }
+      ]
+    }
+  ]
+}

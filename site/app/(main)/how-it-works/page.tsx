@@ -79,6 +79,11 @@ export default function HowItWorksPage() {
           inspector also uses the built-in development endpoints to resolve
           source locations and open your editor.
         </p>
+        <p>
+          Stack parsing and source-map decoding are built in. React and ReactDOM
+          are peer dependencies; no additional source-resolution library is
+          required.
+        </p>
       </section>
 
       <section className="flex flex-col gap-3">
@@ -110,8 +115,8 @@ export default function HowItWorksPage() {
         <h2>Shortcuts</h2>
         <p>
           Press Option / Alt + X to enable inspect mode. Press Space to open the
-          tree, use the arrow keys to navigate, and press Enter to select or
-          open source.
+          tree, use the arrow keys to navigate, and press Enter to open the
+          selected source.
         </p>
         <p>
           See{" "}
@@ -125,10 +130,10 @@ export default function HowItWorksPage() {
       <section className="flex flex-col gap-3">
         <h2>Keep the inspector out of production</h2>
         <p>
-          Load Next Inspect UI only in development. With a guarded import, your
-          bundler removes the entire library from production, adding
-          <strong> 0 B</strong> to your app. A static import turns off the
-          inspector but may retain a small wrapper.
+          A development-only import guard lets your bundler{" "}
+          <strong>tree-shake the whole library</strong>, leaving 0 B of inspector
+          code in production. A static import turns off the inspector but may
+          retain a small wrapper.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">

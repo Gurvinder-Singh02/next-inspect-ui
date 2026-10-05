@@ -3,7 +3,7 @@
     "raw": 262691,
     "gzip": 83171
   },
-  "measuredAt": "2026-10-05T01:22:43.237Z",
+  "measuredAt": "2026-10-05T13:09:46.728Z",
   "method": "Standalone minified esbuild ESM; React/ReactDOM external; gzip bytes. Development is minified for comparison. Not application build delta or runtime benchmark.",
   "results": [
     {

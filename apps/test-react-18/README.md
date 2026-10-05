@@ -7,3 +7,5 @@ The same suite UI as every other test app: groups, status dots, Run all, Show so
 Run `bun run sync:test-ui` after updating the canonical UI in `apps/test-next-js`. Keep fixtures and exact source expectations local.
 
 React 18 is experimental; the library still declares React 19+ support.
+
+The latest local Chromium run passes all 17/17 exact-source cases with the internal resolver. Fixture expectations were unchanged. See [source benchmarks](../../docs/source-benchmarks.md) for the verification scope and comparison results.
