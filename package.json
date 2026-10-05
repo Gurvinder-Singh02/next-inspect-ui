@@ -26,9 +26,6 @@
     "dev:test-vite-react-19": "bun run --cwd apps/test-vite-react-19 dev",
     "build:test-vite-react-19": "bun run --cwd apps/test-vite-react-19 build",
     "sync:test-ui": "bun run scripts/sync-test-ui.ts",
-    "dev:competitor": "bun run --cwd apps/competitor dev",
-    "build:competitor": "bun run --cwd apps/competitor build",
-    "typecheck:competitor": "bun run --cwd apps/competitor typecheck",
     "dev:bench": "bun run --cwd apps/react-grab-bench dev",
     "benchmark:source": "bun run scripts/benchmark-source.ts",
     "benchmark:open": "bun run scripts/benchmark-open.ts"
