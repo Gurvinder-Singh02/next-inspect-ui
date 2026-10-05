@@ -33,7 +33,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Does it rely on any other libraries internally?",
-    a: "Yes. It uses bippy/source, the source resolver also used by React Grab, to recover component stacks. Your package manager installs it automatically. React and ReactDOM are peer dependencies.",
+    a: "No additional runtime libraries are required. Source resolution, stack parsing, and source-map decoding are built in. React and ReactDOM are peer dependencies.",
   },
   {
     q: "Is this a build plugin?",

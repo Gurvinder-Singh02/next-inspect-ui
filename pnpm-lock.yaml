@@ -747,9 +747,6 @@ importers:
 
   packages/next-inspect-ui:
     dependencies:
-      bippy:
-        specifier: 0.6.1
-        version: 0.6.1(react@19.2.4)
       react:
         specifier: '>=19'
         version: 19.2.4
