@@ -1,3 +1,5 @@
+import { ArrowDown, ArrowRight } from "lucide-react"
+
 const steps = [
   ["Browser click", "Pick an element on the page"],
   ["DOM element", "Find the exact visible element"],
@@ -41,8 +43,12 @@ export const SourceIllustration = () => (
         strokeDasharray="8 10"
       />
     </svg>
-    <figcaption className="absolute -top-3 left-1/2 w-max max-w-[90%] -translate-x-1/2 bg-background px-3 text-center text-xs tracking-widest text-primary sm:text-sm">
-      [ BROWSER → EDITOR ]
+    <figcaption className="absolute -top-3 left-1/2 w-max max-w-[90%] -translate-x-1/2 bg-background px-3 text-center text-xs tracking-widest text-accent sm:text-sm">
+      <span className="inline-flex items-center gap-2">
+        [ BROWSER{" "}
+        <ArrowRight aria-hidden="true" className="size-4" strokeWidth={1.5} />{" "}
+        EDITOR ]
+      </span>
     </figcaption>
     <span
       aria-hidden="true"
@@ -69,7 +75,7 @@ export const SourceIllustration = () => (
             <span className="text-muted-foreground">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <span className={index === 5 ? "text-primary" : "text-foreground"}>
+            <span className={index === 5 ? "text-accent" : "text-foreground"}>
               {stage}
             </span>
             <span className="col-start-2 text-xs leading-relaxed text-muted-foreground sm:col-start-auto">
@@ -81,7 +87,7 @@ export const SourceIllustration = () => (
               aria-hidden="true"
               className="ml-[2.75rem] py-1 text-muted-foreground"
             >
-              ↓
+              <ArrowDown className="size-4" strokeWidth={1.5} />
             </div>
           )}
         </li>
@@ -90,7 +96,7 @@ export const SourceIllustration = () => (
     <div className="relative mt-5 flex items-center justify-between gap-3 pt-4 text-xs text-muted-foreground">
       <DashedRule edge="top" />
       <span>One click. Exact source.</span>
-      <span className="text-primary">08 steps</span>
+      <span className="text-accent">08 steps</span>
     </div>
     <span
       aria-hidden="true"
