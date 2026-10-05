@@ -1,0 +1,201 @@
+{
+  "measuredAt": "2026-10-05T13:13:20.773350+00:00",
+  "scope": "Local Chromium; definition-file benchmark, exact-source UI suites, unit tests, type checks and intercepted editor destinations",
+  "unitTests": {
+    "passed": 84,
+    "total": 84
+  },
+  "typeChecks": {
+    "workspace": "pass",
+    "compatibility": "pass"
+  },
+  "hoverAndKeyboardNavigation": "pass",
+  "compatibility": [
+    {
+      "app": "Next.js Turbopack",
+      "total": 20,
+      "passed": 20,
+      "failed": 0
+    },
+    {
+      "app": "Next.js Webpack",
+      "total": 20,
+      "passed": 20,
+      "failed": 0
+    },
+    {
+      "app": "Vite React 19",
+      "total": 17,
+      "passed": 17,
+      "failed": 0
+    },
+    {
+      "app": "Vite React 18",
+      "total": 17,
+      "passed": 17,
+      "failed": 0
+    }
+  ],
+  "sourceLookup": {
+    "totalFixtures": 330,
+    "renderedTargets": 324,
+    "missingTargets": 6,
+    "returnedFile": 324,
+    "returnedFilePercentOfRendered": 100.0,
+    "expectedDefinitionMatches": 305,
+    "definitionMatchPercentOfRendered": 94.14,
+    "definitionMatchPercentOfAllFixtures": 92.42,
+    "treeContainsDefinition": 311,
+    "differentDefinitionFile": 19,
+    "lookupErrors": 0,
+    "medianMs": 1.1000000089406967,
+    "p95Ms": 3.7999999970197678
+  },
+  "editorOpening": [
+    {
+      "mode": "click",
+      "total": 330,
+      "expectedDefinitionFile": 305,
+      "missing": 6,
+      "noCapturedDestination": 0
+    },
+    {
+      "mode": "optionClick",
+      "total": 330,
+      "expectedDefinitionFile": 299,
+      "missing": 6,
+      "noCapturedDestination": 0
+    }
+  ],
+  "definitionDifferences": [
+    {
+      "testId": "adapter-changelog-entry",
+      "expected": "components/adapter-wrapped/changelog-entry.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/render-adapter.tsx",
+      "treeContainsDefinition": true
+    },
+    {
+      "testId": "adapter-deployment-status",
+      "expected": "components/adapter-wrapped/deployment-status.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/render-adapter.tsx",
+      "treeContainsDefinition": true
+    },
+    {
+      "testId": "adapter-incident-banner",
+      "expected": "components/adapter-wrapped/incident-banner.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/render-adapter.tsx",
+      "treeContainsDefinition": true
+    },
+    {
+      "testId": "adapter-quota-gauge",
+      "expected": "components/adapter-wrapped/quota-gauge.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/render-adapter.tsx",
+      "treeContainsDefinition": true
+    },
+    {
+      "testId": "adapter-team-member-row",
+      "expected": "components/adapter-wrapped/team-member-row.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/render-adapter.tsx",
+      "treeContainsDefinition": true
+    },
+    {
+      "testId": "client-island-button",
+      "expected": "components/server/client-island.tsx",
+      "returned": "components/server/server-with-client-island.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "factory-delete-action",
+      "expected": "lib/create-action.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/styled/styled-layout.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "projected-action-bar",
+      "expected": "components/projected/projected-action-bar.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/content-projection.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "projected-alert-strip",
+      "expected": "components/projected/projected-alert-strip.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/content-projection.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "projected-breadcrumb",
+      "expected": "components/projected/projected-breadcrumb.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/content-projection.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "projected-stats-row",
+      "expected": "components/projected/projected-stats-row.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/content-projection.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "projected-user-card",
+      "expected": "components/projected/projected-user-card.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/lib/content-projection.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "radix-accordion-content",
+      "expected": "components/radix/radix-accordion.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/app/client-benchmarks.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "shadcn-profile-card",
+      "expected": "components/shadcn/shadcn-profile-card.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/ui/card.tsx",
+      "treeContainsDefinition": true
+    },
+    {
+      "testId": "shadcn-tooltip-button",
+      "expected": "components/shadcn/shadcn-data-display.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/ui/button.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "tunnel-sidebar-actions",
+      "expected": "components/tunnel/tunnel-sidebar.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/tunnel/tunnel-provider.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "tunnel-sidebar-body",
+      "expected": "components/tunnel/tunnel-sidebar.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/tunnel/tunnel-provider.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "tunnel-sidebar-header",
+      "expected": "components/tunnel/tunnel-sidebar.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/tunnel/tunnel-provider.tsx",
+      "treeContainsDefinition": false
+    },
+    {
+      "testId": "tunnel-sidebar-status",
+      "expected": "components/tunnel/tunnel-sidebar.tsx",
+      "returned": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/tunnel/tunnel-provider.tsx",
+      "treeContainsDefinition": false
+    }
+  ],
+  "missingFixtures": [
+    "fractal-innermost",
+    "inline-list-first-item",
+    "module-table-badge",
+    "module-tw-hybrid-item",
+    "recursive-tree-leaf",
+    "shadcn-skeleton"
+  ],
+  "limits": [
+    "Returned file paths are not proof of correct source.",
+    "Expected benchmark files are component definitions; a different file can be a valid JSX usage location.",
+    "The comparison uses shared React Grab instrumentation.",
+    "Editor destinations are intercepted; no OS editor launch is tested.",
+    "Six benchmark targets did not render and cannot be inspected."
+  ]
+}

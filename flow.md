@@ -11,7 +11,9 @@ DOM element
      ↓
 React Fiber
      ↓
-Fiber debug metadata (React adds this in development)
+Fiber debug metadata
+     ↓
+Internal stack reader
      ↓
 Source maps (when needed, e.g. Next.js server components)
      ↓
@@ -24,13 +26,33 @@ Cursor / VS Code
 
 Hover selects the topmost visible DOM element at the pointer, including SVG parts and classless or inline-styled children. It checks elementsFromPoint, descends open shadow roots, and skips inspector UI, document roots, hidden elements, and transparent page-covering surfaces. It does not promote icons, button children, or classless elements to a parent. Hit testing temporarily clears an inherited body pointer lock and restores it immediately, so modal-library locks do not force selection to the document root. Moving between children immediately updates selection; Option remains the explicit component-climb action.
 
-The DOM element is what you see on the page. Its React Fiber connects it to the React tree. The tool follows that tree to find the element’s source or the selected parent component’s source. React 19 lookups use an internal stack reader to recover creation frames and child-owned component frames. V8 supplies enclosing function locations; other browsers use parsed stack strings. When React provides only an UnknownOwner stack, a cached React DevTools-style recovery samples the component with the hook dispatcher disabled and restores it immediately. Browser frames use cached, decoded source maps before asking the Next.js stack endpoint. Inline maps, map URL comments, indexed sections, ignored sources, and unmapped segments are supported. Failed map requests are evicted so they can retry. The library has no source-resolution dependency. Framework runtime and vendor map entries are excluded. React 18 JSX metadata remains the first path when present. Component definitions and component usage locations stay separate so Option-climb keeps its existing behavior.
+## Source resolution
 
-React’s debug fields can contain a file location or a stack trace. They are internal fields, so their availability depends on the React version and build tool.
+The DOM element connects to React through its Fiber. The resolver reads development metadata to find the element’s author, a component’s usage, or its definition. Those locations stay separate so Option-climb opens the intended source.
 
-A source map connects built JavaScript to the original TSX file. It is separate from React’s metadata. Next.js browser chunks use the development stack-frame endpoint with browser mode; other browser builds use source maps when needed; server code can use Next.js’s development stack-frame endpoint. Concurrent Next.js frame requests are grouped by browser/server mode and identical pending requests share one result. Failed requests can retry. Once the tool finds the file, line, and column, an editor link opens that location.
+```text
+React Fiber
+     ↓
+JSX source / creation stack / server debug info
+     ↓
+Internal stack reader
+     ↓
+Project frame found? ── yes → file, line, column
+     ↓ no
+Browser source map / Next.js development endpoint
+     ↓
+file, line, column
+```
 
-Webpack’s browser and server stack URLs also use Next.js’s development stack-frame endpoint, with the matching browser or server mode. Vendor host builders with the same name as a project wrapper are skipped so the wrapper keeps its usage location. React 18 reads a component’s own JSX source for that usage, including wrappers defined in the same file. When a React 18 host is built with `createElement` or `useRender` and has no JSX source, its location falls back to the component’s caller.
+React 18 JSX locations take priority when present. Generated hosts without their own JSX source use the component’s caller metadata. React 19 creation stacks locate authors and usage; frames from children owned by a component can locate its definition. V8 provides enclosing function locations, while other engines use parsed stack strings. React’s debug fields are internal, so their availability depends on the React version and development build.
+
+When React supplies only an `UnknownOwner` stack, cached React DevTools-style recovery samples component types along the render ancestry. It disables the hook dispatcher during the sample and restores dispatcher and console state immediately. Known vendor wrappers keep the owner/debug-info fallback instead of selecting unrelated parents. The source resolver, stack reader, and map decoder are internal; `bippy/source` is no longer a library dependency. React and ReactDOM remain peer dependencies.
+
+Browser frames try a downloadable source map first. The decoder handles map URL comments, inline maps, indexed sections, ignored sources, and unmapped segments. It decodes each map once and uses binary search for generated columns. Framework runtime and vendor entries are excluded. Failed downloads are evicted so they can retry.
+
+Next.js server frames and Webpack stack URLs use `/__nextjs_original-stack-frames` with the matching server/browser mode. Next.js browser chunks use that endpoint when a downloadable map cannot resolve the location. Concurrent endpoint requests are grouped by mode; identical pending frames share a result. Failed requests can retry.
+
+Absolute source paths open through the configured editor URL. Relative paths use `/__nextjs_launch-editor` or `/__open-in-editor`, with an editor URL fallback. The dev server uses its configured editor. Source labels show a project-relative path or filename; opening the editor still uses the original source location.
 
 ## UI flow
 
@@ -78,6 +100,8 @@ Left / Right switches tabs; Up / Down selects rows without changing the pinned t
 
 All test apps use the same suite UI: choose groups, press **Run all**, then open **Logs** to compare expected and found source locations. **Show source** opens the fixture snippets. Vite runs the browser cases; Next.js also runs the Server Component cases.
 
+The latest Chromium verification passes all 74 cases: Next/Turbopack 20/20, Next/Webpack 20/20, Vite React 19 17/17, and React 18 17/17. Fixture expectations were unchanged. React 18 remains experimental; the package declares React 19+ peer support.
+
 Names, files, lines, and node counts must match exactly. Each app keeps its own expectations: Vite’s local Link has its host in `src/link.tsx`, and React 18’s generated hosts use the caller fallback described above.
 
 ## Competitor app flow
@@ -100,7 +124,27 @@ Show full URL (`tooltipProps.showFullUrl`) controls the source label in the tool
 
 ## Production flow
 
-`Development check → dynamic import → InspectUI`. In production the import branch is removed. Keep the component as a sibling of the app. Use an async Next.js layout; Vite checks `import.meta.env.DEV`. Run `bun run benchmark` for repeatable standalone bundle sizes; see `docs/benchmarks.md`. This benchmark measures bytes, not interaction speed.
+`Development check → dynamic import → InspectUI`. Guard the import itself so the bundler removes the development-only branch and excludes the whole library in production. The production result contains **0 B of inspector code**. Guarding only the rendered component while keeping a static import can retain a small wrapper; the internal development check disables the inspector but does not guarantee the whole package is excluded.
+
+Next.js uses an async layout:
+
+```tsx
+const InspectUI = process.env.NODE_ENV === "development"
+  ? (await import("next-inspect-ui")).InspectUI
+  : null
+```
+
+Vite uses its build-time development flag:
+
+```tsx
+const InspectUI = import.meta.env.DEV
+  ? (await import("next-inspect-ui")).InspectUI
+  : null
+```
+
+Mount `{InspectUI && <InspectUI />}` once beside the app. Keep existing fonts, providers, styles, and metadata. The guard works for npm, workspace, and local-path installs.
+
+Run `bun run benchmark` for the repeatable bundle check. The current component is 23.1 kB gzip in development; the standalone script is 81.2 kB. These are standalone measurements, not the total app size. See [Bundle benchmarks](docs/benchmarks.md).
 
 ## Dev-only script setup
 
@@ -120,6 +164,8 @@ Unavailable source or navigation targets do not shake or flash the highlight or 
 
 `Hover → cached host source → tooltip`. A successful host lookup updates the tooltip immediately, without waiting for component definitions or the complete owner chain. Option resolves its selected owner; the tree resolves row sources when opened. Missing host locations retain the definition and owner fallback paths.
 
-Hover, panel, pointer-down warming, and editor opening share per-fiber source promises. Cache revisions include React source metadata so edits trigger a new lookup; missing sources and failed requests are evicted. Outdated Option requests cannot repaint a different hovered element. Caches belong to the mounted inspector and are discarded when it unmounts.
+Hover, panel, pointer-down warming, and editor opening share per-fiber source promises. Cache revisions include React source metadata so edits trigger a new lookup; missing sources and failed requests are evicted. Outdated Option requests cannot repaint a different hovered element. Host promises and map requests belong to the mounted inspector. Parsed stacks and component samples use weak caches keyed by Error or component type, so they can be collected when those objects are no longer referenced.
 
 The development inspection probe still waits for the full owner chain. Host and chain work run concurrently, and the optional profiling flag reports both durations from their common start; the durations overlap and must not be added. The source benchmark retains its complete context and exact-file scoring.
+
+The latest source report measures 1.1 ms median and 3.8 ms p95 for lookup plus tree/context gathering. It finds 305/330 expected definition files, including six missing targets in the denominator. This is not an exact-line score, hover FPS, or editor launch time. All 84 unit tests and workspace/compatibility type checks pass. See [Source benchmarks](docs/source-benchmarks.md) for the full report.
