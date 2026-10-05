@@ -23,8 +23,8 @@ export default function BenchHarness() {
   useEffect(() => {
     (window as any).__SOURCE_BENCH__ = async (library: string, element: Element) => {
       if (library === "next-inspect-ui") {
-        const result = await (window as any).__inspectUI.inspect(element);
-        return { filePath: result.host.filePath, nodes: result.nodes };
+        const result = await (window as any).__inspectUI.inspect(element, true);
+        return { filePath: result.host.filePath, nodes: result.nodes, timings: result.timings };
       }
       if (library === "react-grab") {
         const result = await getElementContext(element);

@@ -1,4 +1,4 @@
-import { getSource as getFiberSource, getOwnerStack, getParentStack, isSourceFile, normalizeFileName } from "bippy/source"
+import { getSource as getFiberSource, getOwnerStack, getParentStack, symbolicateStack, isSourceFile, normalizeFileName } from "bippy/source"
 import {
   INSPECTOR_IDES,
   toAbsolutePath,
@@ -845,7 +845,8 @@ export const resolveFirstMappedFrame = async (
   frames: StackFrame[], projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>, componentName?: string | null
 ) => {
   const mapped: NamedSourceFrame[] = []
-  const ordered = componentName && frames.some((f) => f.methodName.includes(componentName))
+  const hasNamedFrame = !!componentName && frames.some((f) => f.methodName.includes(componentName))
+  const ordered = hasNamedFrame
     ? [...frames.filter((f) => f.methodName.includes(componentName)), ...frames.filter((f) => !f.methodName.includes(componentName))]
     : frames
   for (const frame of ordered) {
@@ -854,7 +855,7 @@ export const resolveFirstMappedFrame = async (
       if (!source) continue
       mapped.push({ methodName: frame.methodName, source })
       if (componentName && pickPreferredStackSource(mapped, componentName) === source && frame.methodName.includes(componentName)) return source
-      if (!componentName) return source
+      if (!hasNamedFrame) return source
     } catch { continue }
   }
   return pickPreferredStackSource(mapped, componentName)
@@ -1112,16 +1113,47 @@ const getSourceMapSection = (sections: SourceMapSection[], generatedLine: number
   return null
 }
 
-const resolveNextStackFrame = async (frame: StackFrame, projectRoot: string) => {
-  const response = await fetch("/__nextjs_original-stack-frames", {
-    method: "POST",
-    body: JSON.stringify({ frames: [{ file: frame.file, methodName: frame.methodName, arguments: frame.arguments, line1: frame.line1, column1: frame.column1 }], isServer: frame.isServer, isEdgeServer: false, isAppDirectory: true }),
-  })
-  if (!response.ok) return null
-  const [result] = (await response.json()) as OriginalFrameResult[]
-  const originalFrame = result?.status === "fulfilled" ? result.value.originalStackFrame : null
-  if (!originalFrame?.file || isBundledOrExternalPath(originalFrame.file)) return null
-  return { filePath: toAbsolutePath(originalFrame.file, projectRoot), line: originalFrame.line1 ?? 1, column: originalFrame.column1 ?? 1 }
+type PendingFrame = { frame: StackFrame; projectRoot: string; resolve: (source: SourceLocation | null) => void; reject: (error: unknown) => void }
+const pendingFrameBatches = new WeakMap<Map<string, Promise<SourceMap>>, Map<boolean, PendingFrame[]>>()
+const inFlightFrames = new WeakMap<Map<string, Promise<SourceMap>>, Map<string, Promise<SourceLocation | null>>>()
+
+// Share concurrent symbolication and batch browser/server frames separately.
+// Only in-flight requests are retained: edits and transient failures can retry.
+const resolveNextStackFrame = (frame: StackFrame, projectRoot: string, cache: Map<string, Promise<SourceMap>>) => {
+  let requests = inFlightFrames.get(cache)
+  if (!requests) { requests = new Map(); inFlightFrames.set(cache, requests) }
+  const key = JSON.stringify([projectRoot, frame.file, frame.methodName, frame.arguments, frame.line1, frame.column1, frame.isServer])
+  const existing = requests.get(key)
+  if (existing) return existing
+  let batches = pendingFrameBatches.get(cache)
+  if (!batches) { batches = new Map(); pendingFrameBatches.set(cache, batches) }
+  const isServer = !!frame.isServer
+  let batch = batches.get(isServer)
+  if (!batch) {
+    batch = []
+    batches.set(isServer, batch)
+    const pending = batch
+    queueMicrotask(async () => {
+      batches!.delete(isServer)
+      try {
+        const response = await fetch("/__nextjs_original-stack-frames", {
+          method: "POST", priority: "high",
+          body: JSON.stringify({ frames: pending.map(({ frame }) => ({ file: frame.file, methodName: frame.methodName, arguments: frame.arguments, line1: frame.line1, column1: frame.column1 })), isServer, isEdgeServer: false, isAppDirectory: true }),
+        })
+        const results = response.ok ? await response.json() as OriginalFrameResult[] : []
+        pending.forEach((request, index) => {
+          const result = results[index]
+          const original = result?.status === "fulfilled" ? result.value.originalStackFrame : null
+          request.resolve(original?.file && !isBundledOrExternalPath(original.file)
+            ? { filePath: toAbsolutePath(original.file, request.projectRoot), line: original.line1 ?? 1, column: original.column1 ?? 1 } : null)
+        })
+      } catch (error) { pending.forEach(request => request.reject(error)) }
+    })
+  }
+  const promise = new Promise<SourceLocation | null>((resolve, reject) => batch!.push({ frame, projectRoot, resolve, reject }))
+  requests.set(key, promise)
+  void promise.then(() => requests!.delete(key), () => requests!.delete(key))
+  return promise
 }
 
 const resolveFiberDebugSource = async (debugSource: FiberDebugSource | null | undefined, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
@@ -1139,8 +1171,20 @@ const resolveFiberDebugSource = async (debugSource: FiberDebugSource | null | un
 const resolveStackFrame = async (frame: StackFrame, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
   const direct = sourceFromStackFrame(frame, projectRoot)
   if (direct) return direct
+  if (!frame.isServer && /^https?:\/\/[^/]+\/_next\//.test(frame.file)) {
+    // Reuse bippy's decoded browser maps, as React Grab does, before an endpoint round-trip.
+    try {
+      const [mapped] = await symbolicateStack([{ fileName: frame.file, functionName: frame.methodName,
+        lineNumber: frame.line1, columnNumber: frame.column1 }], true)
+      if (mapped?.fileName && isSourceFile(mapped.fileName) &&
+        !isVendorModulePath(mapped.fileName) && !/\[turbopack\]|\[next\]|(?:^|\/)webpack\/runtime\//.test(mapped.fileName)) {
+        const file = normalizeFileName(mapped.fileName)
+        if (!isBundledOrExternalPath(file)) return { filePath: toAbsolutePath(file, projectRoot), line: mapped.lineNumber ?? 1, column: (mapped.columnNumber ?? 0) + 1 }
+      }
+    } catch { /* Next.js can still map chunks without a downloadable browser map. */ }
+  }
   if (frame.isServer || frame.file.startsWith("webpack-internal:") || frame.file.startsWith("webpack://") || /^https?:\/\/[^/]+\/_next\//.test(frame.file)) {
-    return resolveNextStackFrame(frame, projectRoot)
+    return resolveNextStackFrame(frame, projectRoot, sourceMapCache)
   }
   const sourceMapUrl = new URL(frame.file)
   sourceMapUrl.pathname = `${sourceMapUrl.pathname}.map`
@@ -1249,9 +1293,15 @@ export const resolveInstanceSource = async (
   projectRoot: string,
   sourceMapCache: Map<string, Promise<SourceMap>>
 ) => {
-  const definition = await resolveSource(fiber, projectRoot, sourceMapCache)
   const target = getNamedTarget(fiber)
   if (!target) return null
+  const component = target.fiber
+  // React Grab's bippy owner-source path can resolve usage without a definition walk.
+  if (!component._debugSource) {
+    const recovered = await resolveRecoveredFiberSource(component, projectRoot)
+    if (recovered) return recovered
+  }
+  const definition = await resolveSource(fiber, projectRoot, sourceMapCache)
   const accept = (candidate: SourceLocation | null) => {
     if (!candidate) return null
     if (definition && candidate.filePath === definition.filePath) return null
@@ -1263,11 +1313,6 @@ export const resolveInstanceSource = async (
         ? await resolveFiberDebugSource(node._debugSource, projectRoot, sourceMapCache)
         : null
     )
-  const component = target.fiber
-  if (!component._debugSource) {
-    const recovered = await resolveRecoveredFiberSource(component, projectRoot)
-    if (recovered) return recovered
-  }
   const fromComponent = component._debugSource
     ? await resolveFiberDebugSource(component._debugSource, projectRoot, sourceMapCache)
     : null

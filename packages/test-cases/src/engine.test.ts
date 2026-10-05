@@ -335,3 +335,67 @@ test("source labels hide machine paths without a project root", () => {
   assert.equal(formatPageLabel({ filePath: "/home/me/project/config.ts", line: 2, column: 1 }, ""), "config.ts:2")
   assert.equal(formatPageLabel({ filePath: "components/card.tsx", line: 8, column: 1 }, ""), "components/card.tsx:8")
 })
+
+test("batches concurrent Next frames, deduplicates identical requests, and separates server mode", async (t) => {
+  const batches: { frames: { line1: number }[]; isServer: boolean }[] = []
+  t.mock.method(globalThis, "fetch", async (_url: string, init?: RequestInit) => {
+    if (_url !== "/__nextjs_original-stack-frames") return new Response(null, { status: 404 })
+    const body = JSON.parse(init!.body as string)
+    batches.push(body)
+    return Response.json(body.frames.map((frame: { line1: number }) => ({ status: "fulfilled", value: { originalStackFrame: {
+      file: `components/frame-${frame.line1}.tsx`, line1: frame.line1, column1: 3,
+    } } })))
+  })
+  const cache = new Map()
+  const frame = (line1: number, isServer = false) => ({ file: "http://localhost:3000/_next/static/chunks/app.js", methodName: "Button", arguments: [], line1, column1: 1, isServer })
+  const sources = await Promise.all([
+    resolveFirstMappedFrame([frame(1)], "/repo", cache),
+    resolveFirstMappedFrame([frame(2)], "/repo", cache),
+    resolveFirstMappedFrame([frame(1)], "/repo", cache),
+    resolveFirstMappedFrame([frame(3, true)], "/repo", cache),
+  ])
+  assert.equal(batches.length, 2)
+  assert.deepEqual(batches.sort((a, b) => Number(a.isServer) - Number(b.isServer)).map(batch => [batch.isServer, batch.frames.length]), [[false, 2], [true, 1]])
+  assert.deepEqual(sources.map(source => source?.filePath), ["/repo/components/frame-1.tsx", "/repo/components/frame-2.tsx", "/repo/components/frame-1.tsx", "/repo/components/frame-3.tsx"])
+})
+
+test("failed Next frame requests retry rather than poisoning the cache", async (t) => {
+  let calls = 0
+  t.mock.method(globalThis, "fetch", async (url: string) => {
+    if (url !== "/__nextjs_original-stack-frames") return new Response(null, { status: 404 })
+    calls++
+    if (calls === 1) throw new Error("temporary failure")
+    return Response.json([{ status: "fulfilled", value: { originalStackFrame: { file: "button.tsx", line1: 7, column1: 2 } } }])
+  })
+  const cache = new Map()
+  const frames = [{ file: "http://localhost:3000/_next/static/chunks/app.js", methodName: "Button", arguments: [], line1: 1, column1: 1, isServer: false }]
+  assert.equal(await resolveFirstMappedFrame(frames, "/repo", cache), null)
+  assert.deepEqual(await resolveFirstMappedFrame(frames, "/repo", cache), { filePath: "/repo/button.tsx", line: 7, column: 2 })
+  assert.equal(calls, 2)
+})
+
+test("uses a decoded browser source map before the Next stack endpoint", async (t) => {
+  const requests: string[] = []
+  t.mock.method(globalThis, "fetch", async (url: string) => {
+    requests.push(url)
+    if (url === "/__nextjs_original-stack-frames") throw new Error("endpoint should not be needed")
+    if (url.endsWith(".js")) return new Response("//# sourceMappingURL=perf-map.js.map")
+    return Response.json({ version: 3, sources: ["/repo/browser.tsx"], names: [], mappings: "AAIE" })
+  })
+  const source = await resolveFirstMappedFrame([{
+    file: "http://localhost:3000/_next/static/chunks/perf-map.js", methodName: "Button", arguments: [], line1: 1, column1: 1, isServer: false,
+  }], "/repo", new Map())
+  assert.deepEqual(source, { filePath: "/repo/browser.tsx", line: 5, column: 3 })
+  assert(!requests.includes("/__nextjs_original-stack-frames"))
+})
+
+test("stops at the first mapped source when the requested component is absent from the stack", async (t) => {
+  let calls = 0
+  t.mock.method(globalThis, "fetch", async () => {
+    calls++
+    return Response.json([{ status: "fulfilled", value: { originalStackFrame: { file: "page.tsx", line1: 11, column1: 2 } } }])
+  })
+  const frame = (methodName: string, line1: number) => ({ file: "webpack-internal:///(rsc)/./app/page.tsx", methodName, arguments: [], line1, column1: 1, isServer: true })
+  assert.deepEqual(await resolveFirstMappedFrame([frame("Page", 1), frame("Layout", 2)], "/repo", new Map(), "Button"), { filePath: "/repo/page.tsx", line: 11, column: 2 })
+  assert.equal(calls, 1)
+})
