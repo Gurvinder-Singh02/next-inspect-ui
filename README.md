@@ -81,4 +81,4 @@ For the 330-case component source comparison, see [source-benchmarks](docs/sourc
 
 Hover selects the exact visible element under the pointer, including SVG parts and classless children. Hold Option / Alt to climb to a component; hover does not automatically select its group.
 
-Source lookup uses `bippy/source` (also used by React Grab) to recover React component frames when JSX debug metadata is unavailable. The inspector keeps its own UI, editor opening, and component navigation; no AI or clipboard feature is involved.
+Source lookup uses the built-in React stack reader and source-map decoder. It reads JSX debug metadata when available and recovers component frames when creation stacks are missing. No additional source-resolution library is required. The inspector keeps its own UI, editor opening, and component navigation; no AI or clipboard feature is involved.

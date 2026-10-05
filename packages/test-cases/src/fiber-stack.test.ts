@@ -94,3 +94,13 @@ test("component recovery restores globals, unwraps wrappers and caches samples",
   assert.deepEqual(recoverComponentFrame("div"),[])
   assert.deepEqual(recoverComponentFrame(null),[])
 })
+
+test("keeps React 18 JSX caller metadata for generated hosts without sampling the component", async () => {
+  const { resolveHostAuthorSource } = await import("../../next-inspect-ui/src/lib/engine.ts")
+  let calls = 0
+  function Badge() { calls++; throw new Error("must not sample") }
+  const owner = { tag:0, type:Object.assign(Badge, { displayName:"Badge" }), _debugSource:{fileName:"/repo/src/App.tsx",lineNumber:167,columnNumber:9} }
+  const host = { tag:5, return:owner }
+  assert.deepEqual(await resolveHostAuthorSource(host,"/repo",new Map()),{filePath:"/repo/src/App.tsx",line:167,column:9})
+  assert.equal(calls,0)
+})

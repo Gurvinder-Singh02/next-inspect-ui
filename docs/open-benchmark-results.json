@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-10-05T01:16:14.070Z",
+  "measuredAt": "2026-10-05T01:23:39.735Z",
   "method": "Actual click handler; endpoint interception and final editor-protocol transport stub; controlled DOM hit; definition-file expectations only",
   "summary": [
     {
       "mode": "click",
       "total": 330,
-      "expectedDefinitionFile": 306,
+      "expectedDefinitionFile": 305,
       "missing": 6,
       "noCapturedDestination": 0
     },
     {
       "mode": "optionClick",
       "total": 330,
-      "expectedDefinitionFile": 301,
+      "expectedDefinitionFile": 299,
       "missing": 6,
       "noCapturedDestination": 0
     }
@@ -376,8 +376,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/styled/styled-button.tsx",
-          "line1": "45",
-          "column1": "3",
+          "line1": "56",
+          "column1": "5",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -397,21 +397,19 @@
       "expectedDefinition": "components/server/client-island.tsx",
       "click": {
         "destination": {
-          "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/server/client-island.tsx",
-          "line1": "7",
-          "column1": "37",
-          "transport": "editor-protocol"
+          "file": "components/server/server-with-client-island.tsx",
+          "line1": "22",
+          "column1": "7"
         },
-        "expectedDefinitionFile": true
+        "expectedDefinitionFile": false
       },
       "optionClick": {
         "destination": {
-          "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/server/client-island.tsx",
-          "line1": "7",
-          "column1": "37",
-          "transport": "editor-protocol"
+          "file": "components/server/server-with-client-island.tsx",
+          "line1": "22",
+          "column1": "7"
         },
-        "expectedDefinitionFile": true
+        "expectedDefinitionFile": false
       }
     },
     {
@@ -2048,8 +2046,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/dynamic-import/panels/billing-panel.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -2070,8 +2068,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/dynamic-import/panels/general-panel.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -2092,8 +2090,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/dynamic-import/panels/integrations-panel.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -2114,8 +2112,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/dynamic-import/panels/notifications-panel.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -2136,8 +2134,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/dynamic-import/panels/security-panel.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -4514,8 +4512,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/lazy-named/lazy-calendar-source.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -4536,8 +4534,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/lazy-named/lazy-chart-source.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -4558,8 +4556,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/lazy-named/lazy-editor-source.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -4580,8 +4578,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/lazy-named/lazy-table-source.tsx",
-          "line1": "9",
-          "column1": "3",
+          "line1": "5",
+          "column1": "18",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -5132,20 +5130,19 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/motion/animated-modal.tsx",
-          "line1": "7",
-          "column1": "3",
+          "line1": "35",
+          "column1": "11",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
       },
       "optionClick": {
         "destination": {
-          "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/motion/animated-modal.tsx",
-          "line1": "7",
-          "column1": "3",
-          "transport": "editor-protocol"
+          "file": "app/page.tsx",
+          "line1": "21",
+          "column1": "7"
         },
-        "expectedDefinitionFile": true
+        "expectedDefinitionFile": false
       }
     },
     {
@@ -5154,8 +5151,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/portals/overlay-stack.tsx",
-          "line1": "18",
-          "column1": "5",
+          "line1": "6",
+          "column1": "3",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -5418,8 +5415,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/radix/radix-dropdown.tsx",
-          "line1": "6",
-          "column1": "3",
+          "line1": "44",
+          "column1": "13",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -5427,8 +5424,8 @@
       "optionClick": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/radix/radix-dropdown.tsx",
-          "line1": "6",
-          "column1": "3",
+          "line1": "44",
+          "column1": "13",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -5764,8 +5761,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/challenge/shapeshifter.tsx",
-          "line1": "33",
-          "column1": "34",
+          "line1": "41",
+          "column1": "9",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -6468,8 +6465,8 @@
       "click": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/wrappers/suspense-lazy-loader.tsx",
-          "line1": "16",
-          "column1": "17",
+          "line1": "11",
+          "column1": "30",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
@@ -6477,8 +6474,8 @@
       "optionClick": {
         "destination": {
           "file": "/Users/gxuri/Gxuri_Web/Gxuri_2025/next-inspect-ui/apps/react-grab-bench/components/wrappers/suspense-lazy-loader.tsx",
-          "line1": "46",
-          "column1": "7",
+          "line1": "11",
+          "column1": "30",
           "transport": "editor-protocol"
         },
         "expectedDefinitionFile": true
