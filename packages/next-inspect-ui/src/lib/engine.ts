@@ -1,4 +1,5 @@
-import { getSource as getFiberSource, getOwnerStack, getParentStack, symbolicateStack, isSourceFile, normalizeFileName } from "bippy/source"
+import { recoverComponentFrame } from "./component-frame.ts"
+import { readFiberStack, readDefinitionStack } from "./fiber-stack.ts"
 import {
   INSPECTOR_IDES,
   toAbsolutePath,
@@ -270,7 +271,7 @@ export type ServerDebugInfo = {
 export type ReactFiber = {
   _debugInfo?: ServerDebugInfo[] | null; _debugOwner?: ReactFiber | null
   _debugSource?: { fileName?: string; lineNumber?: number; columnNumber?: number }
-  _debugStack?: Error | string; return?: ReactFiber | null; child?: ReactFiber | null; tag?: number
+  _debugStack?: Error | string; return?: ReactFiber | null; child?: ReactFiber | null; sibling?: ReactFiber | null; alternate?: ReactFiber | null; tag?: number
   stateNode?: unknown; memoizedProps?: { className?: unknown; class?: unknown } | null
   type?: { displayName?: string; name?: string }
   elementType?: { displayName?: string; name?: string }
@@ -751,12 +752,8 @@ const getStackFrames = (fiber: ReactFiber | null, stop?: ReactFiber | null) => {
 }
 
 export const getOwnStackFrames = (fiber: ReactFiber) => {
-  const stack =
-    fiber._debugStack instanceof Error
-      ? fiber._debugStack.stack
-      : fiber._debugStack
-
-  return typeof stack === "string" ? parseDebugStack(stack) : []
+  return readFiberStack(fiber._debugStack).map(frame => ({ ...frame, arguments: [],
+    isServer: isReactServerStackFile(frame.file) }))
 }
 
 const stackStr = (v: unknown): v is string => typeof v === "string"
@@ -831,7 +828,7 @@ const getDebugInfoFrames = (info: ServerDebugInfo) => {
   return frames
 }
 
-type SourceMapData = { mappings: string; sourceRoot?: string; sources: string[] }
+type SourceMapData = { mappings: string; sourceRoot?: string; sources: string[]; ignoreList?: number[]; x_google_ignoreList?: number[] }
 type SourceMapSection = { offset: { line: number; column: number }; map: SourceMapData }
 export type SourceMap = SourceMapData & { sections?: SourceMapSection[] }
 type OriginalFrameResult =
@@ -1087,20 +1084,31 @@ export const decodeVlq = (segment: string) => {
   return values
 }
 
-const decodeOriginalPosition = (mappings: string, targetLine: number, targetColumn: number) => {
-  const lines = mappings.split(";")
-  let sourceIndex = 0, originalLine = 0, originalColumn = 0
-  let match: { sourceIndex: number; originalLine: number; originalColumn: number } | null = null
-  for (let lineIndex = 0; lineIndex <= targetLine; lineIndex += 1) {
-    let generatedColumn = 0
-    for (const segment of lines[lineIndex]?.split(",") ?? []) {
-      const values = decodeVlq(segment)
-      if (!values?.length) continue
-      generatedColumn += values[0]
-      if (values.length < 4) continue
-      sourceIndex += values[1]; originalLine += values[2]; originalColumn += values[3]
-      if (lineIndex === targetLine && generatedColumn <= targetColumn) match = { sourceIndex, originalLine, originalColumn }
-    }
+type OriginalPosition = { sourceIndex: number; originalLine: number; originalColumn: number }
+const decodedMaps = new WeakMap<SourceMapData, Array<Array<{ column: number; position: OriginalPosition | null }>>>()
+const decodeOriginalPosition = (map: SourceMapData, targetLine: number, targetColumn: number) => {
+  let lines = decodedMaps.get(map)
+  if (!lines) {
+    let sourceIndex = 0, originalLine = 0, originalColumn = 0
+    lines = map.mappings.split(";").map(line => {
+      let column = 0
+      return line.split(",").flatMap<{ column: number; position: OriginalPosition | null }>(segment => {
+        const values = decodeVlq(segment)
+        if (!values?.length) return []
+        column += values[0]
+        if (values.length < 4) return [{ column, position: null }]
+        sourceIndex += values[1]; originalLine += values[2]; originalColumn += values[3]
+        return [{ column, position: { sourceIndex, originalLine, originalColumn } }]
+      })
+    })
+    decodedMaps.set(map, lines)
+  }
+  const segments = lines[targetLine] ?? []
+  let low = 0, high = segments.length - 1, match: OriginalPosition | null = null
+  while (low <= high) {
+    const mid = (low + high) >>> 1
+    if (segments[mid].column <= targetColumn) { match = segments[mid].position; low = mid + 1 }
+    else high = mid - 1
   }
   return match
 }
@@ -1171,58 +1179,90 @@ const resolveFiberDebugSource = async (debugSource: FiberDebugSource | null | un
 const resolveStackFrame = async (frame: StackFrame, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
   const direct = sourceFromStackFrame(frame, projectRoot)
   if (direct) return direct
-  if (!frame.isServer && /^https?:\/\/[^/]+\/_next\//.test(frame.file)) {
-    // Reuse bippy's decoded browser maps, as React Grab does, before an endpoint round-trip.
-    try {
-      const [mapped] = await symbolicateStack([{ fileName: frame.file, functionName: frame.methodName,
-        lineNumber: frame.line1, columnNumber: frame.column1 }], true)
-      if (mapped?.fileName && isSourceFile(mapped.fileName) &&
-        !isVendorModulePath(mapped.fileName) && !/\[turbopack\]|\[next\]|(?:^|\/)webpack\/runtime\//.test(mapped.fileName)) {
-        const file = normalizeFileName(mapped.fileName)
-        if (!isBundledOrExternalPath(file)) return { filePath: toAbsolutePath(file, projectRoot), line: mapped.lineNumber ?? 1, column: (mapped.columnNumber ?? 0) + 1 }
-      }
-    } catch { /* Next.js can still map chunks without a downloadable browser map. */ }
-  }
-  if (frame.isServer || frame.file.startsWith("webpack-internal:") || frame.file.startsWith("webpack://") || /^https?:\/\/[^/]+\/_next\//.test(frame.file)) {
+  if (frame.isServer || frame.file.startsWith("webpack-internal:") || frame.file.startsWith("webpack://")) {
     return resolveNextStackFrame(frame, projectRoot, sourceMapCache)
   }
-  const sourceMapUrl = new URL(frame.file)
-  sourceMapUrl.pathname = `${sourceMapUrl.pathname}.map`
-  let sourceMapPromise = sourceMapCache.get(sourceMapUrl.href)
-  if (!sourceMapPromise) {
-    sourceMapPromise = fetch(sourceMapUrl.href).then(async (response) => {
-      if (!response.ok) throw new Error("Source map unavailable")
-      return (await response.json()) as SourceMap
-    })
-    sourceMapCache.set(sourceMapUrl.href, sourceMapPromise)
-  }
-  const sourceMap = await sourceMapPromise
+  const nextChunk = /^https?:\/\/[^/]+\/_next\//.test(frame.file)
+  try {
+    const mapped = await resolveBrowserStackFrame(frame, projectRoot, sourceMapCache)
+    if (mapped) return mapped
+  } catch { /* Development endpoints can recover unavailable browser maps. */ }
+  return nextChunk ? resolveNextStackFrame(frame, projectRoot, sourceMapCache) : null
+}
+
+const browserMapRequests = new WeakMap<Map<string, Promise<SourceMap>>, Map<string, Promise<{ map: SourceMap; url: URL }>>>()
+const loadBrowserSourceMap = (file: string, cache: Map<string, Promise<SourceMap>>) => {
+  let requests = browserMapRequests.get(cache)
+  if (!requests) { requests = new Map(); browserMapRequests.set(cache, requests) }
+  const cached = requests.get(file)
+  if (cached) return cached
+  const promise = (async () => {
+    const response = await fetch(file)
+    if (!response.ok) throw new Error("Bundle unavailable")
+    const code = await response.text()
+    const declarations = [...code.matchAll(/(?:\/\/[@#]\s*sourceMappingURL=([^\s]+)|\/\*[@#]\s*sourceMappingURL=([^*]+)\*\/)/g)]
+    const last = declarations.at(-1)
+    const reference = (last?.[1] ?? last?.[2])?.trim()
+    const url = reference ? new URL(reference, file) : new URL(`${new URL(file).pathname}.map`, file)
+    if (!/^https?:$/.test(url.protocol) && !/^data:application\/json[;,]/.test(url.href)) throw new Error("Unsupported source map URL")
+    let pending = cache.get(url.href)
+    if (!pending) {
+      pending = fetch(url.href).then(async response => {
+        if (!response.ok) throw new Error("Source map unavailable")
+        return await response.json() as SourceMap
+      })
+      cache.set(url.href, pending)
+      void pending.catch(() => { if (cache.get(url.href) === pending) cache.delete(url.href) })
+    }
+    return { map: await pending, url: url.protocol === "data:" ? new URL(file) : url }
+  })()
+  requests.set(file, promise)
+  void promise.catch(() => { if (requests!.get(file) === promise) requests!.delete(file) })
+  return promise
+}
+
+export const resolveBrowserStackFrame = async (frame: StackFrame, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
+  const { map: sourceMap, url: sourceMapUrl } = await loadBrowserSourceMap(frame.file, sourceMapCache)
   const generatedLine = Math.max(0, frame.line1 - 1), generatedColumn = Math.max(0, frame.column1 - 1)
   const section = sourceMap.sections ? getSourceMapSection(sourceMap.sections, generatedLine, generatedColumn) : null
+  if (sourceMap.sections && !section) return null
   const map = section?.map ?? sourceMap
   const relativeLine = generatedLine - (section?.offset.line ?? 0)
   const relativeColumn = generatedColumn - (relativeLine === 0 ? (section?.offset.column ?? 0) : 0)
-  const position = decodeOriginalPosition(map.mappings, relativeLine, relativeColumn)
-  if (!position) return null
-  const source = map.sources[position.sourceIndex]
-  if (!source || isBundledOrExternalPath(source)) return null
-  const filePath = resolveSourceMapSourcePath({ source, sourceRoot: map.sourceRoot, sourceMapUrl, projectRoot })
+  const position = decodeOriginalPosition(map, relativeLine, relativeColumn)
+  if (!position || (map.ignoreList?.includes(position.sourceIndex) || map.x_google_ignoreList?.includes(position.sourceIndex))) return null
+  let source = map.sources[position.sourceIndex]
+  if (!source || isVendorModulePath(source) || /\[turbopack\]|\[next\]|(?:^|\/)webpack\/runtime\//.test(source)) return null
+  // Bundler schemes denote original project files in maps, not generated chunks.
+  const projectSource = /^(?:turbopack|webpack):\/\//.test(source)
+  source = source.replace(/^(?:turbopack|webpack):\/\/[^/]*\//, "").replace(/^\[project\]\//, "").replace(/\s+\[.*$/, "").replace(/\?.*$/, "")
+  if (isBundledOrExternalPath(source)) return null
+  const filePath = projectSource ? toAbsolutePath(source, projectRoot) : resolveSourceMapSourcePath({ source, sourceRoot: map.sourceRoot, sourceMapUrl, projectRoot })
   if (isBundledOrExternalPath(filePath)) return null
   return { filePath, line: position.originalLine + 1, column: position.originalColumn + 1 }
 }
 
-const resolveRecoveredFiberSource = async (fiber: ReactFiber, projectRoot: string, definition = false): Promise<SourceLocation | null> => {
-  try {
-    const input = fiber as unknown as Parameters<typeof getFiberSource>[0]
-    const [direct, stack] = await Promise.all([definition ? Promise.resolve(null) : getFiberSource(input), definition ? getParentStack(input) : getOwnerStack(input)])
-    const candidates = [direct, ...stack]
-    for (const candidate of candidates) {
-      if (!candidate?.fileName || !isSourceFile(candidate.fileName)) continue
-      const file = normalizeFileName(candidate.fileName)
-      if (isBundledOrExternalPath(file)) continue
-      return { filePath: toAbsolutePath(file, projectRoot), line: candidate.lineNumber ?? 1, column: candidate.columnNumber ?? 1 }
+const resolveRecoveredFiberSource = async (fiber: ReactFiber, projectRoot: string,
+  sourceMapCache: Map<string, Promise<SourceMap>>, definition = false): Promise<SourceLocation | null> => {
+  const map = (frames: ReturnType<typeof readFiberStack>, name?: string | null) =>
+    resolveFirstMappedFrame(frames.map(frame => ({ ...frame, arguments: [],
+      isServer: isReactServerStackFile(frame.file) })), projectRoot, sourceMapCache, name)
+  const mapped = await map(definition ? readDefinitionStack(fiber) : readFiberStack(fiber._debugStack),
+    definition ? readFiberComponentName(fiber) : null)
+  if (mapped) return mapped
+  const visited = new Set<ReactFiber>()
+  for (let current: ReactFiber | null = fiber; current && !visited.has(current); current = current.return ?? null) {
+    visited.add(current)
+    if (typeof current.type !== "function" && (!current.type || typeof current.type !== "object")) continue
+    if (!definition && current !== fiber) {
+      const creation = await map(readFiberStack(current._debugStack))
+      if (creation) return creation
     }
-  } catch { /* Older React and unsupported builds retain the metadata path. */ }
+    const recovered = await map(recoverComponentFrame(current.type), readFiberComponentName(current))
+    if (recovered) return recovered
+    // Let the normal owner/debug-info path handle vendor and opaque wrappers.
+    return null
+  }
   return null
 }
 
@@ -1232,7 +1272,7 @@ export const resolveHostAuthorSource = async (
   sourceMapCache: Map<string, Promise<SourceMap>>
 ) => {
   if (!fiber._debugSource) {
-    const recovered = await resolveRecoveredFiberSource(fiber, projectRoot)
+    const recovered = await resolveRecoveredFiberSource(fiber, projectRoot, sourceMapCache)
     if (recovered) return recovered
   }
   const target = getNamedTarget(fiber)
@@ -1264,7 +1304,7 @@ export const resolveSource = async (
 ) => {
   const target = getNamedTarget(fiber)
   if (target && !target.fiber._debugSource) {
-    const recovered = await resolveRecoveredFiberSource(target.fiber, projectRoot, true)
+    const recovered = await resolveRecoveredFiberSource(target.fiber, projectRoot, sourceMapCache, true)
     if (recovered) return recovered
   }
   const parts = definedSourceParts(
@@ -1296,9 +1336,9 @@ export const resolveInstanceSource = async (
   const target = getNamedTarget(fiber)
   if (!target) return null
   const component = target.fiber
-  // React Grab's bippy owner-source path can resolve usage without a definition walk.
+  // Read the component creation site before resolving its definition.
   if (!component._debugSource) {
-    const recovered = await resolveRecoveredFiberSource(component, projectRoot)
+    const recovered = await resolveRecoveredFiberSource(component, projectRoot, sourceMapCache)
     if (recovered) return recovered
   }
   const definition = await resolveSource(fiber, projectRoot, sourceMapCache)
