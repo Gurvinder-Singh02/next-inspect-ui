@@ -104,13 +104,7 @@ The latest Chromium verification passes all 74 cases: Next/Turbopack 20/20, Next
 
 Names, files, lines, and node counts must match exactly. Each app keeps its own expectations: Vite’s local Link has its host in `src/link.tsx`, and React 18’s generated hosts use the caller fallback described above.
 
-## Competitor app flow
-
-Run `bun run dev:competitor` → open port 3104 → choose a library → the page reloads → try that library’s shortcut on the same dashboard. The selection is stored in a cookie. **Off** loads no inspector.
-
-Agentation and InterfaceKit also mount in development, independently of the inspector switch. Use their own buttons to annotate elements or adjust styles; both remain available when the inspector selection is **Off**.
-
-The comparison toolbar stays usable while inspecting. Only the selected inspector loads in development. React Grab’s installed script loads before React; the other inspectors mount as client components. Show Component uses Option + right-click (add Shift for its tree). React Grab uses ⌘C / Ctrl+C. Click to React Component uses Option + click and depends on older React source metadata, so lookup may fail on this React 19 page.
+## Inspector presentation
 
 The selected row updates the panel title and its source link. Opening the panel and resolving row sources leave the tooltip unchanged; only deliberate row navigation can update it. The first Component row shows the hovered element and preserves its Option icon (`⌥`) when an owner is available. Only when the hovered host supports Option climbing (such as a Button host), the second row shows the immediate owner and source, matching Option-click. A plain nested HTML element such as `<h1>` shows no climb icon and ancestor rows do not change its tooltip. Further ancestor rows keep that tooltip fixed while the panel title, source link, and ghost change. Element selection also keeps the tooltip fixed. The title source uses the same short path and line as the tooltip. Continuous left rails show row depth; component rows show only file name and line. The footer shows keyboard hints: Left / Right switches tabs, Up / Down previews rows, Enter selects or opens, and Space closes. An Option icon (`⌥`) on the hover tooltip means Option can select an owning component. Holding Option shows the React icon instead.
 

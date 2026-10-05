@@ -6,8 +6,8 @@ const req = createRequire(fs.realpathSync(`${root}/packages/next-inspect-ui/node
 const { build } = req('esbuild');
 const entries = [
   ['Next Inspect UI', 'packages/next-inspect-ui/dist/index.js', 'InspectUI'],
-  ['Show Component 2.3.0', 'apps/competitor/node_modules/show-component/dist/index.mjs', 'ShowComponent'],
-  ['Click to React Component 1.1.3', 'apps/competitor/node_modules/click-to-react-component/src/index.js', 'ClickToComponent'],
+  ['Show Component 2.3.0', 'apps/react-grab-bench/node_modules/show-component/dist/index.mjs', 'ShowComponent'],
+  ['Click to React Component 1.1.3', 'apps/react-grab-bench/node_modules/click-to-react-component/src/index.js', 'ClickToComponent'],
 ];
 async function measure(contents, mode) {
   const result = await build({ stdin: { contents, resolveDir: root }, bundle: true, write: false, minify: true, format: 'esm', platform: 'browser', external: ['react', 'react/*', 'react-dom', 'react-dom/*'], define: { 'process.env.NODE_ENV': JSON.stringify(mode) }, metafile: true, logLevel: 'silent' });
@@ -23,7 +23,7 @@ async function measure(contents, mode) {
     const guarded = await measure(`export const load = async () => process.env.NODE_ENV === "development" ? (await import(${path})).${symbol} : null`, 'production');
     results.push({ name, production, development, guarded: { inputs: guarded.inputs, excluded: guarded.inputs === 0 } });
   }
-  const grab = fs.readFileSync(`${root}/apps/competitor/node_modules/react-grab/dist/index.global.js`);
+  const grab = fs.readFileSync(`${root}/apps/react-grab-bench/node_modules/react-grab/dist/index.global.js`);
   const oursScript = fs.readFileSync(`${root}/packages/next-inspect-ui/dist/index.global.js`);
   const report = { inspectUiScript: { raw: oursScript.length, gzip: gzipSync(oursScript).length }, measuredAt: new Date().toISOString(), method: 'Standalone minified esbuild ESM; React/ReactDOM external; gzip bytes. Development is minified for comparison. Not application build delta or runtime benchmark.', results, reactGrab: { version: '0.2.0', raw: grab.length, gzip: gzipSync(grab).length } };
   fs.writeFileSync(`${root}/docs/benchmark-results.json`, JSON.stringify(report, null, 2) + '\n');
