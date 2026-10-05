@@ -1250,6 +1250,8 @@ const resolveRecoveredFiberSource = async (fiber: ReactFiber, projectRoot: strin
   const mapped = await map(definition ? readDefinitionStack(fiber) : readFiberStack(fiber._debugStack),
     definition ? readFiberComponentName(fiber) : null)
   if (mapped) return mapped
+  const stack = fiber._debugStack instanceof Error ? fiber._debugStack.stack : fiber._debugStack
+  const unknownOwner = typeof stack === "string" && stack.includes("UnknownOwner")
   const visited = new Set<ReactFiber>()
   for (let current: ReactFiber | null = fiber; current && !visited.has(current); current = current.return ?? null) {
     visited.add(current)
@@ -1260,8 +1262,9 @@ const resolveRecoveredFiberSource = async (fiber: ReactFiber, projectRoot: strin
     }
     const recovered = await map(recoverComponentFrame(current.type), readFiberComponentName(current))
     if (recovered) return recovered
-    // Let the normal owner/debug-info path handle vendor and opaque wrappers.
-    return null
+    // Known creation stacks retain the normal vendor/debug-info fallback.
+    // UnknownOwner needs the render ancestry because it contains no author frame.
+    if (!unknownOwner) return null
   }
   return null
 }
@@ -1271,11 +1274,11 @@ export const resolveHostAuthorSource = async (
   projectRoot: string,
   sourceMapCache: Map<string, Promise<SourceMap>>
 ) => {
-  if (!fiber._debugSource) {
+  const target = getNamedTarget(fiber)
+  if (!fiber._debugSource && !target?.fiber._debugSource) {
     const recovered = await resolveRecoveredFiberSource(fiber, projectRoot, sourceMapCache)
     if (recovered) return recovered
   }
-  const target = getNamedTarget(fiber)
   const hostDebug = await resolveFiberDebugSource(fiber._debugSource, projectRoot, sourceMapCache)
   const fromHost = pickOpenSource(hostDebug, absBoundedSource(fiber, target, projectRoot))
   if (fromHost) return fromHost ?? findNearestAuthorCallSiteSync(fiber, projectRoot)

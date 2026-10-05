@@ -22,12 +22,12 @@ Next.js 16.2.6, React 19.2.4, Turbopack, local Chromium. Six of 330 targets were
 
 | Tool | Definition file matches | Tree/context contains file | Median | p95 |
 |---|---:|---:|---:|---:|
-| next-inspect-ui | 299/330 | 301/330 | 2.1 ms | 18.6 ms |
-| react-grab | 270/330 | 9/330 | 1.7 ms | 4.0 ms |
-| show-component | 5/330 | 9/330 | 0.1 ms | 0.2 ms |
-| click-to-react-component | 0/330 | 0/330 | 6.9 ms | 7.9 ms |
+| next-inspect-ui | 305/330 | 311/330 | 1.2 ms | 3.7 ms |
+| react-grab | 270/330 | 9/330 | 1.2 ms | 3.2 ms |
+| show-component | 5/330 | 8/330 | 0.0 ms | 0.2 ms |
+| click-to-react-component | 0/330 | 0/330 | 4.7 ms | 5.6 ms |
 
-Next Inspect UI now uses `bippy/source` for recovered component frames, the same source-resolution package used by React Grab. Ours matches 29 additional definition files in this run. The full owner chain is still gathered for this comparison; hover can paint sooner after its host source resolves. Show Component’s near-zero timings mostly reflect cached framework locations, not correct resolution.
+Next Inspect UI uses its internal stack reader and source-map decoder, with no source-resolution dependency. It matches 305 definition files in this run; the previous bippy-based report matched 299. The full owner chain is still gathered for this comparison; hover can paint sooner after its host source resolves. Show Component’s near-zero timings mostly reflect cached framework locations, not correct resolution.
 
 The earlier surrounding-page results came from parent promotion and unreliable debug stacks. Exact hover no longer promotes classless children to groups. Source recovery now prefers a project source from trusted debug information or a recovered component stack, before falling back to a page. React 18 JSX metadata remains supported. Component usage and definition sources remain separate for the existing UI and Option-climb flow.
 
@@ -37,17 +37,19 @@ Run `bun run benchmark:open`. This loads only our inspector and exercises its re
 
 | Mode | Requested expected definition file | Missing target | No captured destination |
 |---|---:|---:|---:|
-| click | 275/330 | 6 | 0 |
-| optionClick | 272/330 | 6 | 0 |
+| click | 305/330 | 6 | 0 |
+| optionClick | 299/330 | 6 | 0 |
 
 `open-benchmark-results.json` contains the requested file, line, and column for every available target. This does not verify the editor application launches, and upstream does not supply expected lines. A definition-file mismatch can be a valid component usage location, especially with Option-click; keep the local exact-line suite too.
 
-There are still 31 source-lookup mismatches including the six missing targets. Many involve adapters, inline components, projected children, and render tunnels; those remain in the report rather than being counted as successes. Real mouse checks also verify exact spotlight bounds and info-panel navigation (`bun run scripts/verify-exact-hover.ts`).
+There are still 25 source-lookup mismatches including the six missing targets. Many involve adapters, inline components, projected children, and render tunnels; those remain in the report rather than being counted as successes. Real mouse checks also verify exact spotlight bounds and info-panel navigation (`bun run scripts/verify-exact-hover.ts`).
 
-## Lookup optimization
+## Internal resolver
 
-A fresh baseline before this change measured 7.2 ms median and 42.5 ms p95 (275 definition files, 284 tree/context files). The final four-tool run measures 2.1 ms median and 18.6 ms p95: about 71% less median lookup time. Timing varies with dev-server load and cache state; this is not a hover FPS measurement.
+The previous bippy-based report measured 2.1 ms median and 18.6 ms p95. The internal resolver measures 1.2 ms median and 3.7 ms p95 in this run. Timing varies with dev-server load and cache state; this is not a hover FPS measurement. Development component gzip falls from 30,510 B to 23,624 B; standalone script gzip falls from 89,516 B to 83,171 B. A guarded production import still excludes the library.
 
-The implementation follows React Grab's source strategy: reuse bippy decoded maps, share pending per-fiber resolution, and resolve independent host/owner work concurrently. Next.js endpoint requests are deduplicated and batched separately for browser/server frames. Frame scanning stops after the first usable source when no preferred component frame exists. Normal hover resolves the host first and postpones parent details until Option or the panel needs them. Failed source requests remain retryable.
+The stack reader uses V8 enclosing locations when available and parses formatted stacks on other engines. Creation frames take priority over fallback recovery. When React supplies only an UnknownOwner stack, a cached React DevTools-style component sample recovers a frame with the hook dispatcher disabled and restores dispatcher and console state immediately. Known vendor stacks retain the owner/debug-info fallback instead of selecting an unrelated parent. React 18 JSX metadata takes priority for generated hosts.
 
-Validation: 75 unit tests and workspace type checks pass; exact hover bounds and info-panel navigation pass in Chromium. The existing exact-line app suites still have failures: Next/Turbopack 19/20, Next/Webpack 2/20, Vite React 19 0/17. These same counts reproduce with the pre-optimization engine and inspector. React 18's current suite also has failures (6/17); its baseline rerun was unavailable after that server stopped. These failures are not counted as passing or fixed by this performance change.
+Browser source maps are fetched once per inspector cache, decoded once per map, and searched by generated column with binary search. Map comments, inline maps, indexed sections, ignored sources, and unmapped segments are supported. Failed map requests are evicted. Next.js endpoint requests remain deduplicated and batched by browser/server mode. Hover resolves the host first; parent details wait until Option or the panel needs them.
+
+Validation: all 74 exact-source cases pass in local Chromium: Next/Turbopack 20/20, Next/Webpack 20/20, Vite React 19 17/17, React 18 17/17. Fixture expectations were not changed. All 84 unit tests and workspace/compatibility type checks pass. Exact hover bounds and info-panel navigation also pass in Chromium. The benchmark still has unmatched definition files and missing targets, as reported above.

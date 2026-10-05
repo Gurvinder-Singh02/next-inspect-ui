@@ -1,9 +1,9 @@
 {
   "inspectUiScript": {
-    "raw": 262349,
-    "gzip": 83070
+    "raw": 262691,
+    "gzip": 83171
   },
-  "measuredAt": "2026-10-05T01:17:25.251Z",
+  "measuredAt": "2026-10-05T01:22:43.237Z",
   "method": "Standalone minified esbuild ESM; React/ReactDOM external; gzip bytes. Development is minified for comparison. Not application build delta or runtime benchmark.",
   "results": [
     {
@@ -14,8 +14,8 @@
         "inputs": 1
       },
       "development": {
-        "raw": 69033,
-        "gzip": 23517,
+        "raw": 69375,
+        "gzip": 23624,
         "inputs": 2
       },
       "guarded": {
