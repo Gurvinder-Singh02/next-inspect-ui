@@ -6,7 +6,7 @@ async function verifyComponentsGallery() {
   
   try {
     console.log('Navigating to components gallery...');
-    await page.goto('http://localhost:3002/components');
+    await page.goto('http://localhost:3102/components');
     await page.waitForLoadState('networkidle');
     
     // Verify header exists
