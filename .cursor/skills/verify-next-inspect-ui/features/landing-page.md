@@ -5,16 +5,16 @@ The home page that explains what next-inspect-ui is, how to install it, and how 
 ## Sub-features
 
 - Package name and version display
-- Installation instructions with npm/pnpm commands
-- Usage code examples
-- FAQ section
+- Installation instructions with npm/pnpm/yarn/bun commands
+- Usage code examples for Next.js, React (Vite), React, and React 18
+- FAQ section (8 collapsible items)
 - Link to walkthrough ("See it in action" → `/walkthrough`)
-- Navigation sidebar with links to other sections (shortcuts, API reference)
+- Navigation with links to Overview, Walkthrough, How it works, Works with, API reference, Shortcuts
 
 ## How to get to it (user POV)
 
 1. Visit `http://localhost:3000` (root URL)
-2. Or click the logo/home link from any other page
+2. Or click "Overview" in the navigation to return home
 
 ## Driving it with Playwright
 
@@ -68,7 +68,7 @@ async function verifyLandingPage() {
     await page.waitForLoadState('networkidle');
     
     await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-demo-navigation.png',
+      path: '/tmp/verify-evidence/landing-page-walkthrough-navigation.png',
       fullPage: true
     });
     
@@ -93,7 +93,8 @@ verifyLandingPage();
 ## Gotchas
 
 - The page includes code blocks with syntax highlighting which may take time to render. Wait for `networkidle`.
-- Navigation sidebar is visible on larger screens but may be hidden on mobile viewports.
+- Navigation is visible as a top horizontal sticky scroll on small screens, left column on larger viewports.
 - Walkthrough link text is "See it in action", not "live demo". Goes to `/walkthrough`, not `/components`.
 - The version number is dynamic (from package.json), so don't assert specific version values.
 - The "Usage" section is rendered by the InstallSection component, not directly in page.tsx.
+- File path is `site/app/(main)/page.tsx` (route group), not bare `site/app/page.tsx`.

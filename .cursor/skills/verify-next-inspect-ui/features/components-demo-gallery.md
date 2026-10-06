@@ -11,11 +11,9 @@ The main showcase page displaying interactive example components that demonstrat
 
 ## How to get to it (user POV)
 
-1. Visit home page at `http://localhost:3000`
-2. Click "See it in action" link (goes to `/walkthrough`)
-3. Or navigate directly to `http://localhost:3002/components` (dashboard app)
+1. Navigate directly to `http://localhost:3102/components` (nextjs app)
 
-**Note**: The components gallery is hosted by the `shadcn-dashboard-001-example` app on port 3002, not the site app on port 3000.
+**Note**: The components gallery is hosted by the `apps/nextjs` app on port 3102, not the site app on port 3000. The "See it in action" link on the home page goes to `/walkthrough`, not `/components`.
 
 ## Driving it with Playwright
 
@@ -29,7 +27,7 @@ async function verifyComponentsGallery() {
   
   try {
     console.log('Navigating to components gallery...');
-    await page.goto('http://localhost:3002/components');
+    await page.goto('http://localhost:3102/components');
     await page.waitForLoadState('networkidle');
     
     // Verify header exists

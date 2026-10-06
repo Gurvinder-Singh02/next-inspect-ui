@@ -1,6 +1,6 @@
 # API Reference
 
-Documentation page for InspectUI component props and API surface, including required projectRoot and optional configuration props for shortcut, editor, tooltip, and spotlight settings.
+Documentation page for InspectUI component props and API surface. Basic setup requires no props. All props are optional including projectRoot, shortcut, ide, tooltipProps, popoverProps, and devSpotlightProps.
 
 ## Sub-features
 
@@ -91,7 +91,9 @@ verifyApiReferencePage();
 ## Gotchas
 
 - The page content is relatively simple compared to components gallery or works-with pages.
-- The ApiReference component may be a client component that requires JavaScript for interactive features.
+- The ApiReference component is static (not a client component).
 - The Playground link uses Next.js Link component with href="/lab" and includes an ArrowRight icon.
-- The page mentions optional props (shortcut, ide, tooltip, spotlight) that "seed the overlay settings panel", meaning they provide initial values.
+- **projectRoot is optional**, not required. Basic setup works without any props.
+- Prop names are **tooltipProps** and **devSpotlightProps** (not bare "tooltip" / "spotlight").
 - Focus is on documentation, not interactive demos (unlike the components or works-with pages).
+- File path is `site/app/(main)/api-reference/page.tsx`, not bare `site/app/api-reference/`.

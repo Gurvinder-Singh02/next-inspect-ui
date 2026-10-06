@@ -28,7 +28,7 @@ A comprehensive test page at `/test` that displays various component patterns an
 
 1. Navigate directly to `http://localhost:3001/test` (example app)
 
-**Note**: The test suite is hosted by the `next-js-example` app on port 3001, not the site app on port 3000.
+**Note**: The test suite is hosted by the `apps/test-next-js` app on port 3001, not the site app on port 3000. Route file is `apps/test-next-js/app/(dev)/test/page.tsx`.
 
 ## Driving it with Playwright
 

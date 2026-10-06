@@ -4,11 +4,12 @@ The core functionality of the InspectUI: activating the overlay with the keyboar
 
 ## Sub-features
 
-- Keyboard shortcut ⌥ + X toggles the overlay on/off
-- When active, overlay state is indicated visually with overlay and tooltip elements
-- Overlay adds `data-dev-inspector-overlay` and `data-dev-inspector-tooltip` attributes to the DOM
+- Keyboard shortcut ⌥ + X (Alt+X) toggles the overlay on/off (configurable via shortcut prop)
+- When active, body cursor changes to crosshair and overlay/tooltip become visible
+- Overlay elements have `data-dev-inspector-overlay` and `data-dev-inspector-tooltip` attributes (present from mount, even when inactive)
 - When active, hovering elements shows tooltips with source file information
 - Pressing Esc or ⌥ + X again deactivates the overlay
+- Also deactivates on window blur
 
 ## How to get to it (user POV)
 
@@ -119,7 +120,7 @@ verifyOverlayToggle();
   - Running in headed mode (`headless: false`)
   - Using `page.evaluate()` to trigger the toggle programmatically if there's a JS API
   - Checking if the InspectUI component exposes a test hook or data attribute for programmatic activation
-- The overlay state is marked with `data-dev-inspector-overlay` and `data-dev-inspector-tooltip` attributes (not `data-inspect-active`).
+- The overlay state is marked with `data-dev-inspector-overlay` and `data-dev-inspector-tooltip` attributes, but **these attributes exist from mount** (not just when active). Check `document.body.style.cursor === 'crosshair'` or overlay visibility instead.
 - The tooltip requires both overlay activation AND hovering, so test both states.
 - Timing is critical: wait after keyboard press before checking state or capturing screenshots.
 - If activation fails silently, check browser console logs for errors with `page.on('console')`.
