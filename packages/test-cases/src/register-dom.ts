@@ -1,10 +1,40 @@
 type AttrMap = Record<string, string>
 
-const createNode = (tag: string, namespaceURI: string | null = null) => {
+type TestNode = {
+  tagName: string
+  namespaceURI: string | null
+  parentElement: TestNode | null
+  children: TestNode[]
+  attrs: AttrMap
+  style: Pick<CSSStyleDeclaration, "setProperty" | "getPropertyValue">
+  textContent: string
+  className: string
+  classList: {
+    toggle(name: string, force?: boolean): boolean
+    contains(name: string): boolean
+  }
+  readonly outerHTML: string
+  readonly childElementCount: number
+  readonly previousElementSibling: TestNode | null
+  readonly nextElementSibling: TestNode | null
+  setAttribute(name: string, value: string): void
+  getAttributeNames(): string[]
+  getAttribute(name: string): string | null
+  hasAttribute(name: string): boolean
+  toggleAttribute(name: string, force?: boolean): void
+  append(...nodes: TestNode[]): void
+  querySelector(selector: string): TestNode | null
+  querySelectorAll(selector: string): TestNode[]
+  closest(selector: string): TestNode | null
+  replaceChildren(): void
+  remove(): void
+}
+
+const createNode = (tag: string, namespaceURI: string | null = null): TestNode => {
   const attrs: AttrMap = {}
   const children: ReturnType<typeof createNode>[] = []
   const props: Record<string, string> = {}
-  const node = {
+  const node: TestNode = {
     tagName: tag.toUpperCase(),
     namespaceURI,
     parentElement: null as ReturnType<typeof createNode> | null,
@@ -39,9 +69,18 @@ const createNode = (tag: string, namespaceURI: string | null = null) => {
     get childElementCount() {
       return children.length
     },
+    get previousElementSibling() {
+      const siblings = node.parentElement?.children ?? []
+      return siblings[siblings.indexOf(node) - 1] ?? null
+    },
+    get nextElementSibling() {
+      const siblings = node.parentElement?.children ?? []
+      return siblings[siblings.indexOf(node) + 1] ?? null
+    },
     setAttribute(name: string, value: string) {
       attrs[name] = value
     },
+    getAttributeNames() { return Object.keys(attrs) },
     getAttribute(name: string) {
       return attrs[name] ?? null
     },

@@ -25,32 +25,42 @@ export const metadata: Metadata = {
 const FAQ: { q: string; a: ReactNode }[] = [
   {
     q: "How does this work?",
-    a: "Hover a node. The overlay finds that DOM node’s React fiber, reads the debug source, and shows the file. Click or Enter opens that line in your editor. Hold Option to climb to the component that rendered it.",
+    a: "Press Option / Alt + X to enable inspect mode, then hover an element. The inspector reads React Fiber metadata and source maps to find its source. Click or press Enter to open it. Hold Option / Alt to inspect the owning component’s usage.",
   },
   {
     q: "Does this affect production?",
-    a: "Not if you mount InspectUI only when NODE_ENV is development. The overlay is omitted from production builds; gated that way the measured cost is about 0.2 KB gzipped. Keep the guard, or React serializes projectRoot into the page payload.",
+    a: "Use the development-only dynamic import shown in Usage. Your bundler tree-shakes the whole library, leaving 0 B of inspector code in production. A static import disables the inspector but may retain a small wrapper. Serve the standalone script only in development.",
   },
   {
     q: "Does it rely on any other libraries internally?",
-    a: "No. You don’t install anything else under the hood. It only needs React, which a React 19+ app already has, and it works by reading the React fiber tree.",
+    a: "No additional runtime libraries are required. Source resolution, stack parsing, and source-map decoding are built in. React and ReactDOM are peer dependencies.",
   },
   {
     q: "Is this a build plugin?",
-    a: "No. There is no Webpack, Vite, Turbopack, Babel, or SWC plugin. You mount InspectUI in development. It reads the React fiber tree at runtime. projectRoot is just a prop so relative debug paths resolve to real files.",
+    a: "No. There is no Webpack, Vite, Turbopack, Babel, or SWC plugin. You mount InspectUI in development. It reads the React fiber tree at runtime. No props are required. projectRoot can optionally resolve relative paths explicitly.",
   },
   {
     q: "Does this only work with Next.js?",
-    a: "No. It works with any React 19+ app. Next.js is a common setup, not a requirement. Right now async Server Components are not inspectable.",
+    a: "No. It supports React 19+ apps, including Next.js and Vite. React 18 compatibility is experimental. Source accuracy depends on your framework’s development metadata and source maps; Next.js Server Component locations use available server debug metadata.",
+  },
+  {
+    q: "How do I navigate the tree?",
+    a: "Press Space to open the popover. Component shows immediate parents up to the page boundary. Element shows nearby HTML, stopping at body. Left / Right switches tabs; Up / Down moves between rows and previews their elements. Enter opens the selected source. Press Space to close the popover or Escape to exit inspect mode.",
+  },
+  {
+    q: "Which editors does it support?",
+    a: "Cursor, VS Code, VS Code Insiders, Windsurf, and Zed. Choose your editor in the inspector settings. The inspector opens source through an editor URL or your framework’s development endpoint.",
   },
   {
     q: "What kind of elements can I inspect?",
     a: (
       <div className="flex flex-col gap-2">
-        <p>Anything with a client fiber, including:</p>
+        <p>Elements connected to React’s rendered tree, including:</p>
         <ul className="flex list-disc flex-col gap-1 pl-4">
           <li>HTML : headings, buttons, links, cards</li>
-          <li>SVG : <code>svg</code>, <code>rect</code>, and SVG components</li>
+          <li>
+            SVG : <code>svg</code>, <code>rect</code>, and SVG components
+          </li>
           <li>shadcn : Button, Card, Badge, nested composition</li>
           <li>
             Base UI : useRender hosts, and nested children like Collapsible
@@ -63,7 +73,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
           <li>React kinds : forwardRef, memo, compound components</li>
           <li>Lists : children created in .map()</li>
           <li>Icons : Lucide and other third-party SVG</li>
-          <li>Server hosts : sync server components that emit DOM</li>
+          <li>Server-rendered HTML when Next.js exposes source metadata</li>
         </ul>
         <p>
           <Link
@@ -83,9 +93,7 @@ export default function OverviewPage() {
     <>
       <header className="flex flex-col gap-6">
         <div className="flex items-center gap-2.5">
-          <h1>
-            next-inspect-ui
-          </h1>
+          <h1>next-inspect-ui</h1>
           <span className="font-inter text-[12px] text-muted-foreground">
             v{inspectUIPackage.version}
           </span>
@@ -106,35 +114,30 @@ export default function OverviewPage() {
             <kbd className={shortcutKeyClassName}>
               <Option />
             </kbd>{" "}
-            and press <kbd className={shortcutKeyClassName}>⇧</kbd> to move up
-            the hierarchy.
+            to inspect the owning component’s usage.
           </p>
         </div>
       </header>
 
       <section className="flex flex-col gap-3">
-        <h2>
-          Installation
-        </h2>
+        <h2>Installation</h2>
         <InstallSection />
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2>
-          FAQ
-        </h2>
+        <h2>FAQ</h2>
         <FaqList items={FAQ} />
-        <p className="pt-4 text-sm" >
+        <p className="pt-4 text-sm">
           <Link
             href="/walkthrough"
-            className="text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
+            className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             See it in action
           </Link>
           {" · "}
           <Link
             href="/api-reference"
-            className="text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
+            className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             API reference
           </Link>

@@ -54,7 +54,7 @@ export const UsageVideo = ({
             "touch-action-manipulation [-webkit-tap-highlight-color:transparent]",
             "transition-colors duration-200 ease-[cubic-bezier(0.2,0,0,1)]",
             "hover:bg-black/10 focus-visible:bg-black/10",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+            "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset"
           )}
         >
           <span
@@ -65,10 +65,7 @@ export const UsageVideo = ({
               "active:scale-96"
             )}
           >
-            <PlayIcon
-              className="size-6 fill-current pl-px"
-              aria-hidden
-            />
+            <PlayIcon className="size-6 fill-current pl-px" aria-hidden />
           </span>
         </button>
       ) : null}

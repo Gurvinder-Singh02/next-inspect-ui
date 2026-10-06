@@ -21,7 +21,7 @@ const API_SECTIONS: ApiSection[] = [
         name: "projectRoot",
         type: "string",
         description:
-          "Required. Absolute path your source is under. Used to resolve files and strip the root from labels.",
+          "Optional. Explicit root for resolving relative paths and shortening labels. Basic setup needs no props.",
       },
       {
         name: "shortcut",
@@ -42,6 +42,11 @@ const API_SECTIONS: ApiSection[] = [
           "Optional seed for tooltip appearance. Settings-panel edits override these for the session.",
       },
       {
+        name: "popoverProps",
+        type: '{ defaultTab?: "component" | "element" }',
+        description: 'Initial tree tab when Space opens the popover. Default "component".',
+      },
+      {
         name: "devSpotlightProps",
         type: "Partial<DevSpotlightProps>",
         description:
@@ -57,12 +62,7 @@ const API_SECTIONS: ApiSection[] = [
       {
         name: "background",
         type: "string",
-        description: 'Label background color. Default `"#FF6100"`.',
-      },
-      {
-        name: "border",
-        type: "string",
-        description: 'Label border color. Default `"transparent"`.',
+        description: 'Label background color. Default `"#006efe"`.',
       },
       {
         name: "text",
@@ -76,10 +76,10 @@ const API_SECTIONS: ApiSection[] = [
           "Show the component tag (e.g. `<Button/>`) in the label. Default `true`.",
       },
       {
-        name: "showPageName",
+        name: "showFullUrl",
         type: "boolean",
         description:
-          "Show the resolved file path in the label. Default `true`.",
+          "Show the current source path and line. Off shows only the filename and line. Default `true`.",
       },
       {
         name: "side",
@@ -128,17 +128,17 @@ const API_SECTIONS: ApiSection[] = [
       {
         name: "background",
         type: "string",
-        description: 'Spotlight fill color. Default `"#f97316"`.',
+        description: 'Spotlight fill color. Default `"#006efe"`.',
       },
       {
         name: "border",
         type: "string",
-        description: 'Spotlight stroke color. Default `"#f97316"`.',
+        description: 'Spotlight stroke color. Default `"#006efe"`.',
       },
       {
         name: "bgOpacity",
         type: "number",
-        description: "Fill opacity from `0` to `1`. Default `0.09`.",
+        description: "Fill opacity from `0` to `1`. Default `0.1`.",
       },
       {
         name: "strokeOpacity",
@@ -148,29 +148,12 @@ const API_SECTIONS: ApiSection[] = [
       {
         name: "strokeWidth",
         type: "number",
-        description: "Stroke width in px. Default `1`.",
+        description: "Stroke width in px. Default `0.5`.",
       },
       {
         name: "strokeStyle",
         type: '"solid" | "dashed" | "dotted"',
-        description: 'Stroke style. Default `"dashed"`.',
-      },
-      {
-        name: "borderRadius",
-        type: "number",
-        description: "Spotlight corner radius, in px. Default `4`.",
-      },
-      {
-        name: "paddingX",
-        type: "number",
-        description:
-          "Horizontal expansion around the target, in px. Default `0`.",
-      },
-      {
-        name: "paddingY",
-        type: "number",
-        description:
-          "Vertical expansion around the target, in px. Default `0`.",
+        description: 'Stroke style. Default `"solid"`.',
       },
       {
         name: "animated",

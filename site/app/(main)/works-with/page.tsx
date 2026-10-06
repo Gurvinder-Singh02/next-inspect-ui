@@ -37,9 +37,7 @@ export default async function WorksWithPage() {
   return (
     <>
       <header className="flex flex-col gap-2">
-        <h1>
-          Works with
-        </h1>
+        <h1>Works with</h1>
         <p>
           Works with almost every pattern you use in React today: HTML, SVG,
           shadcn, Base UI, Motion, Slot, compound components, and the rest of

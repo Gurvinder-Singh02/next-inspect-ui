@@ -5,6 +5,8 @@ import {
   decodeVlq,
   formatPageLabel,
   getDirectClimbOwner,
+  getInstantUsedSource,
+  getNamedTarget,
   isBundledOrExternalPath,
   isClimbUsageBoundary,
   isDirectFiberChildOf,
@@ -12,6 +14,9 @@ import {
   isPointInRect,
   isReactServerStackFile,
   isVendorModulePath,
+  parseDebugStack,
+  readFiberComponentName,
+  resolveFirstMappedFrame,
   resolveSourceMapSourcePath,
   sourceFromFiberDebugSource,
   type ReactFiber,
@@ -19,6 +24,10 @@ import {
 import { underStackTransform } from "../../next-inspect-ui/src/lib/tooltip.ts"
 
 const loc = (filePath: string) => ({ filePath, line: 1, column: 1 })
+
+test("does not send browser chunks through server stack-frame resolution", () => {
+  assert.equal(isReactServerStackFile("http://localhost:3000/_next/static/chunks/app.js"), false)
+})
 
 test("stops once usage is a project file distinct from the definition", () => {
   assert.equal(
@@ -135,6 +144,79 @@ const BASE_UI_HOST_STACK = `Error: react-stack-top-frame
 const link = (partial: Partial<ReactFiber> & { tag: number }): ReactFiber =>
   partial as ReactFiber
 
+test("parses Webpack browser and RSC frames with parentheses in their paths", () => {
+  const frames = parseDebugStack(`Error\n    at SvgBars (webpack-internal:///(app-pages-browser)/./components/svg.tsx:7:159)\n    at TestSuitePage (about://React/Server/webpack-internal:///(rsc)/./app/(dev)/test/page.tsx?49:128:110)`)
+  assert.equal(frames.length, 2)
+  assert.equal(frames[0].file, "webpack-internal:///(app-pages-browser)/./components/svg.tsx")
+  assert.equal(frames[0].isServer, false)
+  assert.equal(frames[1].file, "about://React/Server/webpack-internal:///(rsc)/./app/(dev)/test/page.tsx?49")
+  assert.equal(frames[1].isServer, true)
+  assert.equal(isReactServerStackFile("webpack-internal:///(rsc)/./app/page.tsx"), true)
+})
+
+test("resolves Next browser chunks and Webpack frames in the correct mode", async (t) => {
+  const modes: boolean[] = []
+  t.mock.method(globalThis, "fetch", async (url: string, init: RequestInit) => {
+    assert.equal(url, "/__nextjs_original-stack-frames")
+    modes.push(JSON.parse(init.body as string).isServer)
+    return Response.json([{ status: "fulfilled", value: { originalStackFrame: {
+      file: "components/svg.tsx", line1: 5, column1: 1,
+    } } }])
+  })
+  for (const file of ["webpack-internal:///(app-pages-browser)/./components/svg.tsx", "webpack-internal:///(rsc)/./components/svg.tsx", "http://localhost:3000/_next/static/chunks/app.js"]) {
+    const source = await resolveFirstMappedFrame([{
+      file, methodName: "SvgBars", arguments: [], line1: 7, column1: 159,
+      isServer: isReactServerStackFile(file),
+    }], "/repo", new Map())
+    assert.deepEqual(source, { filePath: "/repo/components/svg.tsx", line: 5, column: 1 })
+  }
+  assert.deepEqual(modes, [false, true, false])
+})
+
+test("uses React 18 component JSX metadata before its owner's caller", () => {
+  const descriptor = Object.getOwnPropertyDescriptor(globalThis, "Element")
+  Object.defineProperty(globalThis, "Element", { value: class {}, configurable: true })
+  try {
+    const component = link({ tag: 0, type: { name: "Chip" },
+      _debugSource: { fileName: "/repo/chips.tsx", lineNumber: 147, columnNumber: 5 },
+      _debugOwner: link({ tag: 0, type: { name: "Chips" },
+        _debugSource: { fileName: "/repo/page.tsx", lineNumber: 234 } }),
+    })
+    assert.deepEqual(getInstantUsedSource(component, "/repo"), {
+      filePath: "/repo/chips.tsx", line: 147, column: 5,
+    })
+  } finally {
+    if (descriptor) Object.defineProperty(globalThis, "Element", descriptor)
+    else Reflect.deleteProperty(globalThis, "Element")
+  }
+})
+
+test("keeps a memo wrapper's displayName when the compiled function is renamed", () => {
+  assert.equal(readFiberComponentName(link({ tag: 15, type: { name: "MemoPill2" },
+    elementType: { displayName: "MemoPill" } })), "MemoPill")
+})
+
+test("skips same-name vendor host builders in Vite and React 18", () => {
+  for (const stack of [undefined, `Error\n    at exports.createElement (http://localhost:5173/node_modules/.vite/deps/react.js:1:1)\n    at renderTag (http://localhost:5173/node_modules/.vite/deps/base-ui.js:300:43)`]) {
+    const project = link({ tag: 0, type: { name: "Button" } })
+    const vendor = link({ tag: 11, type: { name: "Button" }, return: project, _debugOwner: project })
+    const host = link({ tag: 5, return: vendor, _debugOwner: vendor, _debugStack: stack })
+    vendor.child = host
+    project.child = vendor
+    assert.equal(getDirectClimbOwner(host)?.fiber, project)
+    assert.equal(getNamedTarget(host)?.fiber, project)
+  }
+})
+
+test("a debug owner cannot bypass a wrapping host when climbing", () => {
+  const owner = link({ tag: 0, type: { name: "Card" } })
+  const wrapper = link({ tag: 5, return: owner })
+  const child = link({ tag: 0, type: { name: "Button" }, return: wrapper, _debugOwner: owner })
+  assert.equal(isDirectFiberChildOf(child, owner), false)
+  child.return = owner
+  assert.equal(isDirectFiberChildOf(child, owner), true)
+})
+
 test("climbs past a vendor Button primitive to the project Button wrapper", () => {
   const host = link({
     tag: 5,
@@ -245,4 +327,75 @@ test("hit-tests the spotlight rect inclusively", () => {
 test("offsets under-chips down and right by stack depth", () => {
   assert.equal(underStackTransform(1), "translate(29px, calc(100% * 1 + 5px))")
   assert.equal(underStackTransform(2), "translate(58px, calc(100% * 2 + 10px))")
+})
+
+test("source labels hide machine paths without a project root", () => {
+  assert.equal(formatPageLabel({ filePath: "/Users/me/repo/apps/react-grab-bench/components/tailwind/tw-card.tsx", line: 5, column: 1 }, ""), "components/tailwind/tw-card.tsx:5")
+  assert.equal(formatPageLabel({ filePath: "/home/me/project/src/components/card.tsx", line: 8, column: 1 }, ""), "src/components/card.tsx:8")
+  assert.equal(formatPageLabel({ filePath: "/home/me/project/config.ts", line: 2, column: 1 }, ""), "config.ts:2")
+  assert.equal(formatPageLabel({ filePath: "components/card.tsx", line: 8, column: 1 }, ""), "components/card.tsx:8")
+})
+
+test("batches concurrent Next frames, deduplicates identical requests, and separates server mode", async (t) => {
+  const batches: { frames: { line1: number }[]; isServer: boolean }[] = []
+  t.mock.method(globalThis, "fetch", async (_url: string, init?: RequestInit) => {
+    if (_url !== "/__nextjs_original-stack-frames") return new Response(null, { status: 404 })
+    const body = JSON.parse(init!.body as string)
+    batches.push(body)
+    return Response.json(body.frames.map((frame: { line1: number }) => ({ status: "fulfilled", value: { originalStackFrame: {
+      file: `components/frame-${frame.line1}.tsx`, line1: frame.line1, column1: 3,
+    } } })))
+  })
+  const cache = new Map()
+  const frame = (line1: number, isServer = false) => ({ file: "http://localhost:3000/_next/static/chunks/app.js", methodName: "Button", arguments: [], line1, column1: 1, isServer })
+  const sources = await Promise.all([
+    resolveFirstMappedFrame([frame(1)], "/repo", cache),
+    resolveFirstMappedFrame([frame(2)], "/repo", cache),
+    resolveFirstMappedFrame([frame(1)], "/repo", cache),
+    resolveFirstMappedFrame([frame(3, true)], "/repo", cache),
+  ])
+  assert.equal(batches.length, 2)
+  assert.deepEqual(batches.sort((a, b) => Number(a.isServer) - Number(b.isServer)).map(batch => [batch.isServer, batch.frames.length]), [[false, 2], [true, 1]])
+  assert.deepEqual(sources.map(source => source?.filePath), ["/repo/components/frame-1.tsx", "/repo/components/frame-2.tsx", "/repo/components/frame-1.tsx", "/repo/components/frame-3.tsx"])
+})
+
+test("failed Next frame requests retry rather than poisoning the cache", async (t) => {
+  let calls = 0
+  t.mock.method(globalThis, "fetch", async (url: string) => {
+    if (url !== "/__nextjs_original-stack-frames") return new Response(null, { status: 404 })
+    calls++
+    if (calls === 1) throw new Error("temporary failure")
+    return Response.json([{ status: "fulfilled", value: { originalStackFrame: { file: "button.tsx", line1: 7, column1: 2 } } }])
+  })
+  const cache = new Map()
+  const frames = [{ file: "http://localhost:3000/_next/static/chunks/app.js", methodName: "Button", arguments: [], line1: 1, column1: 1, isServer: false }]
+  assert.equal(await resolveFirstMappedFrame(frames, "/repo", cache), null)
+  assert.deepEqual(await resolveFirstMappedFrame(frames, "/repo", cache), { filePath: "/repo/button.tsx", line: 7, column: 2 })
+  assert.equal(calls, 2)
+})
+
+test("uses a decoded browser source map before the Next stack endpoint", async (t) => {
+  const requests: string[] = []
+  t.mock.method(globalThis, "fetch", async (url: string) => {
+    requests.push(url)
+    if (url === "/__nextjs_original-stack-frames") throw new Error("endpoint should not be needed")
+    if (url.endsWith(".js")) return new Response("//# sourceMappingURL=perf-map.js.map")
+    return Response.json({ version: 3, sources: ["/repo/browser.tsx"], names: [], mappings: "AAIE" })
+  })
+  const source = await resolveFirstMappedFrame([{
+    file: "http://localhost:3000/_next/static/chunks/perf-map.js", methodName: "Button", arguments: [], line1: 1, column1: 1, isServer: false,
+  }], "/repo", new Map())
+  assert.deepEqual(source, { filePath: "/repo/browser.tsx", line: 5, column: 3 })
+  assert(!requests.includes("/__nextjs_original-stack-frames"))
+})
+
+test("stops at the first mapped source when the requested component is absent from the stack", async (t) => {
+  let calls = 0
+  t.mock.method(globalThis, "fetch", async () => {
+    calls++
+    return Response.json([{ status: "fulfilled", value: { originalStackFrame: { file: "page.tsx", line1: 11, column1: 2 } } }])
+  })
+  const frame = (methodName: string, line1: number) => ({ file: "webpack-internal:///(rsc)/./app/page.tsx", methodName, arguments: [], line1, column1: 1, isServer: true })
+  assert.deepEqual(await resolveFirstMappedFrame([frame("Page", 1), frame("Layout", 2)], "/repo", new Map(), "Button"), { filePath: "/repo/page.tsx", line: 11, column: 2 })
+  assert.equal(calls, 1)
 })

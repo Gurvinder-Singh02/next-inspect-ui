@@ -1,4 +1,4 @@
-import { createUsedIcon } from "./icons.ts"
+import { createUsedIcon, createReactIcon, createOptionIcon } from "./icons.ts"
 import type { TooltipAlign, TooltipProps, TooltipSide } from "./index.ts"
 import { markInspectNode, paintUsedIcon } from "../styles/styles.ts"
 
@@ -184,7 +184,7 @@ export const formatTooltipLabel = ({
       tagStyle === "dom" ? formatDomTag(title) : formatComponentTag(title)
     )
   }
-  if (tooltipProps.showPageName && pageName) parts.push(pageName)
+  if (pageName) parts.push(tooltipProps.showFullUrl ? pageName : pageName.split(/[\\/]/).pop()!)
   return parts.join(" · ")
 }
 
@@ -287,6 +287,10 @@ export const createInspectTooltip = () => {
     },
     setLabel,
     showUsedIcon,
+    showSourceIcon: (used: boolean, canClimb: boolean) => {
+      iconWrap.replaceChildren(used ? createReactIcon() : createOptionIcon())
+      paintUsedIcon(iconWrap, used || canClimb)
+    },
     pushUnder,
     clearStack,
     place,

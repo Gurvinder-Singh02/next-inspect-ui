@@ -24,3 +24,29 @@ const createStrokeIcon = (size: number, strokeWidth: string) => {
 export const createUsedIcon = () => createStrokeIcon(12, "2.4")
 
 export const createOpenSourceIcon = () => createStrokeIcon(14, "2.2")
+
+export const createReactIcon = () => {
+  const svg = document.createElementNS(SVG_NS, "svg")
+  for (const [key, value] of Object.entries({ width: "12", height: "12", viewBox: "-12 -12 24 24", fill: "none", stroke: "currentColor", "stroke-width": "1", "aria-hidden": "true" })) svg.setAttribute(key, value)
+  for (const angle of [0, 60, 120]) {
+    const ring = document.createElementNS(SVG_NS, "ellipse")
+    ring.setAttribute("rx", "11")
+    ring.setAttribute("ry", "4")
+    ring.setAttribute("transform", `rotate(${angle})`)
+    svg.append(ring)
+  }
+  const dot = document.createElementNS(SVG_NS, "circle")
+  dot.setAttribute("r", "2")
+  dot.setAttribute("fill", "currentColor")
+  svg.append(dot)
+  return svg
+}
+
+export const createOptionIcon = () => {
+  const svg = document.createElementNS(SVG_NS, "svg")
+  for (const [key, value] of Object.entries({ width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" })) svg.setAttribute(key, value)
+  const path = document.createElementNS(SVG_NS, "path")
+  path.setAttribute("d", "M3 5h5l8 14h5M14 5h7")
+  svg.append(path)
+  return svg
+}

@@ -13,7 +13,7 @@ export const MainShell = ({ children }: { children: React.ReactNode }) => {
           >
             {children}
           </main>
-          <div className="mx-auto w-full px-6 space-y-3 max-w-3xl">
+          <div className="mx-auto w-full max-w-3xl space-y-3 px-6">
             <div className="mt-15 border-t border-border"></div>
             <SiteFooter />
           </div>

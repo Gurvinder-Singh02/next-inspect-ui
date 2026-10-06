@@ -57,7 +57,7 @@
   max-width: min(36rem, calc(100vw - 16px));
   overflow: hidden;
   background: var(--inspect-tooltip-bg);
-  border: 1px solid var(--inspect-tooltip-border);
+  border: none;
   color: var(--inspect-tooltip-text);
   border-radius: var(--inspect-tooltip-radius);
   padding: var(--inspect-tooltip-padding);
@@ -65,6 +65,11 @@
 }
 
 .next-inspect-ui-tooltip-front {
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  padding: 0;
   position: relative;
   z-index: 2;
 }
@@ -82,8 +87,13 @@
 .next-inspect-ui-tooltip-icon {
   display: inline-flex;
   flex: none;
+  align-self: stretch;
   align-items: center;
   justify-content: center;
+  background: var(--inspect-tooltip-bg);
+  color: var(--inspect-tooltip-text);
+  border: none;
+  border-radius: var(--inspect-tooltip-radius);
   overflow: hidden;
   width: 0;
   margin-right: 0;
@@ -111,10 +121,17 @@
   display: none;
   pointer-events: none;
   max-width: min(26rem, calc(100vw - 16px));
+  width: 26rem;
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+  overscroll-behavior: contain;
   box-sizing: border-box;
-  background: var(--card, #18181b);
-  border: 1px solid var(--border, rgb(255 255 255 / 12%));
-  color: var(--card-foreground, #e4e4e7);
+  color-scheme: dark;
+  --inspect-fg: #e4e4e7;
+  --inspect-muted: #8b949e;
+  background: #18181b;
+  border: 1px solid rgb(255 255 255 / 12%);
+  color: #e4e4e7;
   padding: 12px 14px;
   border-radius: 12px;
   font: 12px / 1.5 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -159,6 +176,12 @@
 }
 
 .next-inspect-ui-source-path {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  text-align: left;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -187,7 +210,56 @@
 }
 
 .next-inspect-ui-owner-tree {
+  margin-top: 8px;
+}
+
+.next-inspect-ui-info-tabs {
+  display: flex;
+  gap: 20px;
+  margin-top: 12px;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.next-inspect-ui-info-tab {
+  appearance: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin: 0 0 -1px;
+  padding: 7px 0;
+  background: transparent;
+  color: var(--inspect-muted, var(--muted-foreground, #8b949e));
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.next-inspect-ui-info-tab[aria-selected="true"] {
+  color: var(--inspect-fg, var(--foreground, #e4e4e7));
+  border-bottom-color: currentColor;
+}
+
+.next-inspect-ui-info-hint {
   margin-top: 10px;
+  font-size: 10px;
+  color: var(--inspect-muted, var(--muted-foreground, #8b949e));
+}
+
+.next-inspect-ui-info-panel {
+  max-height: min(22rem, calc(100vh - 180px));
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.next-inspect-ui-tree-relation {
+  font: 9px / 1.4 ui-sans-serif, system-ui, sans-serif;
+  opacity: 0.6;
+}
+
+.next-inspect-ui-info :focus,
+.next-inspect-ui-info :focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .next-inspect-ui-tree-heading {
@@ -208,6 +280,7 @@
 }
 
 .next-inspect-ui-tree-row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -226,8 +299,21 @@
 
 .next-inspect-ui-tree-indent {
   display: inline-block;
-  white-space: pre;
+  align-self: stretch;
+  flex: none;
   width: calc(var(--inspect-tree-depth, 0) * 12px);
+}
+
+.next-inspect-ui-tree-indent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2px;
+  width: calc(var(--inspect-tree-depth, 0) * 12px);
+  background: repeating-linear-gradient(to right, transparent 0 5px, var(--inspect-muted, #8b949e) 5px 6px, transparent 6px 12px);
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .next-inspect-ui-tree-twisty {
@@ -248,9 +334,12 @@
 }
 
 .next-inspect-ui-tree-name {
-  flex: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: 600;
-  color: var(--inspect-fg, var(--foreground, #e4e4e7));
+  color: #8bb9fe;
   opacity: 0.9;
 }
 
@@ -306,4 +395,77 @@
   white-space: pre-wrap;
   word-break: break-word;
   font: 11px / 1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.next-inspect-ui-ghost-overlay {
+  opacity: 1;
+  pointer-events: none;
+}
+
+.next-inspect-ui-html-row .next-inspect-ui-tree-name {
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  flex: none;
+  color: #8bb9fe;
+}
+
+.next-inspect-ui-html-close {
+  color: #8bb9fe;
+  flex-shrink: 0;
+}
+
+.next-inspect-ui-element-select {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0 3px;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  color: #8bb9fe;
+  cursor: pointer;
+}
+
+.next-inspect-ui-html-row {
+  min-width: max-content;
+}
+
+.next-inspect-ui-html-row .next-inspect-ui-tree-indent {
+  flex-shrink: 0;
+}
+
+.next-inspect-ui-html-close {
+  font: inherit;
+  padding-block: 3px;
+}
+
+.next-inspect-ui-info-panel + .next-inspect-ui-source-box {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--inspect-muted, #8b949e);
+}
+
+.next-inspect-ui-info-panel + .next-inspect-ui-source-box .next-inspect-ui-source-row {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.next-inspect-ui-info-panel + .next-inspect-ui-source-box .next-inspect-ui-source-path {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.next-inspect-ui-tree:has(.next-inspect-ui-html-row) {
+  width: max-content;
+  min-width: 100%;
+}
+
+.next-inspect-ui-tooltip-label {
+  background: var(--inspect-tooltip-bg);
+  border-radius: var(--inspect-tooltip-radius);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--inspect-tooltip-padding);
 }
