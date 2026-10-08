@@ -10,10 +10,10 @@ Verification skill for next-inspect-ui surfaces. The overlay lets developers hov
 Surfaces across three apps:
 
 - `pnpm dev` — `site` marketing (port 3000): `/`, `/shortcuts`, `/walkthrough`, `/works-with`, `/api-reference`
-- `pnpm dev:example` — `next-js-example` (port 3001): `/test` accuracy suite
-- `pnpm dev:dashboard` — `shadcn-dashboard-001-example` (port 3002): `/components` gallery
+- `pnpm dev:test-next-js` — `test-next-js` (port 3001): `/test` accuracy suite
+- `pnpm dev:nextjs` — `nextjs` (port 3102): `/components` gallery
 
-Each app defaults to port 3000. Run multiple servers concurrently using `PORT=<port>` env var.
+Each app has its own default port configured in its package.json. The site app defaults to 3000, test-next-js to 3001, and nextjs to 3102.
 
 ## When to use this skill
 
@@ -42,16 +42,16 @@ cd /workspace
 pnpm run dev
 ```
 
-For example app (port 3001):
+For test-next-js app (port 3001):
 ```bash
 cd /workspace
-PORT=3001 pnpm dev:example
+pnpm dev:test-next-js
 ```
 
-For dashboard app (port 3002):
+For nextjs app (port 3102):
 ```bash
 cd /workspace
-PORT=3002 pnpm dev:dashboard
+pnpm dev:nextjs
 ```
 
 To verify all features, all three servers must be running concurrently on their respective ports.
@@ -68,7 +68,7 @@ Kill all three dev server processes. If launched via PIDs:
 kill <SITE_PID> <EXAMPLE_PID> <DASHBOARD_PID>
 ```
 
-If running in tmux sessions, kill those sessions. Always verify all ports (3000, 3001, 3002) are freed before declaring cleanup complete.
+If running in tmux sessions, kill those sessions. Always verify all ports (3000, 3001, 3102) are freed before declaring cleanup complete.
 
 ## Doctor
 
@@ -99,7 +99,7 @@ curl -o /dev/null -s -w "%{http_code}" http://localhost:3000/components
 
 Expect `404` on the site. Those routes live on other apps.
 
-### 4. Example app hosts /test
+### 4. Test-next-js app hosts /test
 
 ```bash
 curl -I http://localhost:3001/test
@@ -107,10 +107,10 @@ curl -I http://localhost:3001/test
 
 Expect `200 OK`.
 
-### 5. Dashboard app hosts /components
+### 5. Nextjs app hosts /components
 
 ```bash
-curl -I http://localhost:3002/components
+curl -I http://localhost:3102/components
 ```
 
 Expect `200 OK`.
@@ -336,7 +336,7 @@ node /workspace/.cursor/skills/verify-next-inspect-ui/verify-shortcuts-documenta
 
 #### `verify-components-demo-gallery.js`
 
-Verifies dashboard components showcase at `:3002/components` with Traffic channels example.
+Verifies nextjs components showcase at `:3102/components` with Traffic channels example.
 
 **Invocation**:
 
@@ -346,7 +346,7 @@ node /workspace/.cursor/skills/verify-next-inspect-ui/verify-components-demo-gal
 
 #### `verify-accuracy-test-suite.js`
 
-Verifies example app test suite at `:3001/test` including all test groups (basic html, svg, shadcn, motion, server).
+Verifies test-next-js app test suite at `:3001/test` including all test groups (basic html snippet, svg, shadcn, base-ui, motion, library, radix, kinds, composition, third-party, server, parent inspectable).
 
 **Invocation**:
 

@@ -6,7 +6,7 @@ Documentation page for InspectUI component props and API surface. Basic setup re
 
 - Page header with title "API Reference"
 - Description explaining InspectUI props
-- Mentions required projectRoot prop
+- Mentions optional projectRoot prop
 - Mentions optional props: shortcut, ide, tooltip, spotlight
 - Link to Playground (/lab) for live testing
 - ApiReference component displaying full API documentation
