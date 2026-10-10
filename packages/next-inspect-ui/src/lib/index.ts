@@ -105,10 +105,10 @@ export const INSPECTOR_COLORS: Record<
     label: "Orange",
   },
   sky: {
-    stroke: "#0ea5e9",
-    fill: "14 165 233",
-    tooltip: "#00A6FF",
-    label: "Sky",
+    stroke: "#006efe",
+    fill: "0 110 254",
+    tooltip: "#006efe",
+    label: "Blue",
   },
   red: {
     stroke: "#ef4444",
@@ -333,9 +333,14 @@ export {
   toRgbChannels,
   toRgba,
   getOverlayPaint,
+  applyOverlayPaint,
+  ensureInspectorStyles,
 } from "../styles/styles.ts"
 
+export { ensureInspectOverlayStyles } from "./overlay-styles.ts"
+
 export {
+  createInspectTooltip,
   expandRectWithPadding,
   formatComponentTag,
   formatDomTag,
