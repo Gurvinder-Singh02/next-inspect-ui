@@ -4,6 +4,9 @@
   "scripts": {
     "benchmark": "bun run build && node scripts/benchmark-inspectors.cjs",
     "format": "oxfmt --write -c .oxfmtrc.jsonc --disable-nested-config apps packages site '!**/dist/**' '!**/.next/**' '!**/node_modules/**' '!**/coverage/**' '!**/.turbo/**'",
+    "fallow": "fallow dead-code",
+    "fallow:audit": "fallow audit --base main",
+    "fallow:baseline": "fallow dead-code --baseline fallow-baselines/dead-code.json",
     "dev": "pnpm --filter site dev",
     "dev:test": "bun run scripts/dev-tests.ts",
     "dev:example": "bun run dev:nextjs",
@@ -32,13 +35,14 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
+    "fallow": "^3.33.1",
     "oxfmt": "^0.68.0",
     "oxlint": "^1.83.0",
     "playwright": "^1.62.1"
   },
   "workspaces": [
-    "packages/**",
-    "apps/**",
+    "packages/*",
+    "apps/*",
     "site"
   ]
 }

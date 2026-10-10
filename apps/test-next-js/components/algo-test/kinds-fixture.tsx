@@ -23,7 +23,7 @@ import { createPortal } from "react-dom"
  */
 
 /** Class component — still valid React, and a distinct fiber tag. */
-export class ClassBox extends Component<{ label: string }> {
+class ClassBox extends Component<{ label: string }> {
   render() {
     return (
       <div className="rounded-lg border border-border p-4 font-inter text-[14px]">
@@ -34,10 +34,7 @@ export class ClassBox extends Component<{ label: string }> {
 }
 
 /** Class error boundary — the only place a class is still unavoidable. */
-export class Boundary extends Component<
-  { children: ReactNode },
-  { failed: boolean }
-> {
+class Boundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false }
 
   static getDerivedStateFromError() {
@@ -84,9 +81,7 @@ export const MemoPill = memo(function MemoPill({
 })
 
 /** Higher-order component — the wrapper renders the wrapped one. */
-export const withBorder = <P extends object>(
-  Wrapped: React.ComponentType<P>
-) => {
+const withBorder = <P extends object>(Wrapped: React.ComponentType<P>) => {
   const WithBorder = (props: P) => (
     <div className="rounded-lg border border-dashed border-border p-3">
       <Wrapped {...props} />
@@ -100,10 +95,10 @@ const PlainNote = ({ text }: { text: string }) => (
   <p className="font-inter text-[14px]">{text}</p>
 )
 
-export const BorderedNote = withBorder(PlainNote)
+const BorderedNote = withBorder(PlainNote)
 
 /** Compound component — dot notation, a JSXMemberExpression at the call site. */
-export const Panel = ({
+const Panel = ({
   children,
   ...props
 }: {
@@ -142,17 +137,17 @@ export const CompoundDemo = (props: { "data-accuracy-target"?: string }) => (
 
 const ToneContext = createContext("muted")
 
-export const ToneProvider = ({ children }: { children: ReactNode }) => (
+const ToneProvider = ({ children }: { children: ReactNode }) => (
   <ToneContext.Provider value="loud">{children}</ToneContext.Provider>
 )
 
-export const ToneReader = () => {
+const ToneReader = () => {
   const tone = useContext(ToneContext)
   return <span className="font-mono text-[13px]">tone: {tone}</span>
 }
 
 /** Portal — DOM rendered outside this subtree entirely. */
-export const PortalBox = () => {
+const PortalBox = () => {
   const [mounted, setMounted] = useState(false)
 
   return (
@@ -181,7 +176,7 @@ const LazyNote = lazy(async () => ({
   default: () => <p className="font-inter text-[14px]">Loaded lazily.</p>,
 }))
 
-export const LazyBox = () => (
+const LazyBox = () => (
   <Suspense
     fallback={<p className="font-inter text-[14px] text-muted-foreground">…</p>}
   >
