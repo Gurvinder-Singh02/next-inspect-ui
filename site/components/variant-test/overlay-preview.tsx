@@ -7,9 +7,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type MouseEvent,
   type MutableRefObject,
-  type PointerEvent,
   type ReactNode,
 } from "react"
 
@@ -185,113 +183,26 @@ const TARGET_BY_ID = Object.fromEntries(
 
 const STEP_MS = 1200
 
-const eventElement = (target: EventTarget | null) => {
-  if (target instanceof Element) return target
-  if (target instanceof Text) return target.parentElement
-  return null
-}
-
-const isPointInRect = (
-  clientX: number,
-  clientY: number,
-  box: DOMRect,
-  paddingX = 0,
-  paddingY = 0
-) =>
-  clientX >= box.left - paddingX &&
-  clientX <= box.right + paddingX &&
-  clientY >= box.top - paddingY &&
-  clientY <= box.bottom + paddingY
-
-const isTargetDescendant = (
-  childId: string,
-  ancestorId: string,
-  refs: Record<string, HTMLElement | null>
-) => {
-  const child = refs[childId]
-  const ancestor = refs[ancestorId]
-  return Boolean(
-    child && ancestor && child !== ancestor && ancestor.contains(child)
-  )
-}
-
-/** Smallest unpadded hit, sticky within the current target's padded spotlight. */
-const resolvePreviewTargetAtPoint = ({
-  clientX,
-  clientY,
-  refs,
-  preferId,
-  paddingX,
-  paddingY,
-}: {
-  clientX: number
-  clientY: number
-  refs: Record<string, HTMLElement | null>
-  preferId: string | null
-  paddingX: number
-  paddingY: number
-}) => {
-  let geometricId: string | null = null
-  let bestArea = Number.POSITIVE_INFINITY
-
-  for (const [id, el] of Object.entries(refs)) {
-    if (!el) continue
-    const box = el.getBoundingClientRect()
-    if (!isPointInRect(clientX, clientY, box)) continue
-    const area = box.width * box.height
-    if (area < bestArea) {
-      bestArea = area
-      geometricId = id
-    }
-  }
-
-  if (!preferId) return geometricId
-
-  const preferredEl = refs[preferId]
-  if (
-    !preferredEl ||
-    !isPointInRect(
-      clientX,
-      clientY,
-      preferredEl.getBoundingClientRect(),
-      paddingX,
-      paddingY
-    )
-  ) {
-    return geometricId
-  }
-
-  if (!geometricId || geometricId === preferId) return preferId
-  if (isTargetDescendant(geometricId, preferId, refs)) return geometricId
-  if (isTargetDescendant(preferId, geometricId, refs)) return preferId
-  return geometricId
-}
-
 export const OverlayPreview = ({ className }: { className?: string }) => {
   const settings = useInspectorSettings()
   const stageRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const targetRefs = useRef<Record<string, HTMLElement | null>>({})
-  const overlayBoxRef = useRef<HTMLDivElement>(null)
-  const tooltipBoxRef = useRef<HTMLDivElement>(null)
+  const chromeRef = useRef<{
+    overlay: HTMLDivElement
+    tooltip: InspectTooltip
+  } | null>(null)
+  const settingsRef = useRef(settings)
+  const measureRef = useRef<() => void>(() => {})
   const playIdRef = useRef(TARGETS[0]?.id ?? "section-1")
-  const hoverIdRef = useRef<string | null>(null)
+  settingsRef.current = settings
   const [playId, setPlayId] = useState(TARGETS[0]?.id ?? "section-1")
-  const [hoverId, setHoverId] = useState<string | null>(null)
-  const [mode, setMode] = useState<"autoplay" | "mouse" | "none">("autoplay")
+  const [mode, setMode] = useState<"autoplay" | "none">("autoplay")
   const [isPlaying, setIsPlaying] = useState(true)
-  const [labelMeta, setLabelMeta] = useState({
-    name: TARGETS[0]?.name ?? "Component",
-    pageName: TARGETS[0]?.pageName ?? loc(PAGE, 1, 1),
-    tagStyle: "component" as "dom" | "component",
-    canClimb: Boolean(TARGETS[0]?.canClimb),
-  })
   const [waveformActive, setWaveformActive] = useState(false)
   const [waveformProcessing, setWaveformProcessing] = useState(true)
 
-  const isMouseMode = mode === "mouse"
-  const visibleId = mode === "none" ? null : isMouseMode ? hoverId : playId
-  const showOverlay = Boolean(visibleId)
+  const visibleId = mode === "none" ? null : playId
   const paddingX = 0
   const paddingY = 0
   const activeIndex = TARGETS.findIndex((item) => item.id === playId)
@@ -306,28 +217,22 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
     })
   }, [])
 
-  const resolveTargetAtPoint = useCallback(
-    (clientX: number, clientY: number, preferId: string | null) =>
-      resolvePreviewTargetAtPoint({
-        clientX,
-        clientY,
-        refs: targetRefs.current,
-        preferId,
-        paddingX,
-        paddingY,
-      }),
-    [paddingX, paddingY]
-  )
-
   const measure = useCallback(() => {
     const stage = stageRef.current
-    const id = mode === "mouse" ? hoverIdRef.current : playIdRef.current
+    const chrome = chromeRef.current
+    if (!stage || !chrome) return
+
+    const id = playIdRef.current
     const target = id ? TARGET_BY_ID[id] : null
     const el = id
       ? targetRefs.current[target?.measureId ?? id] || targetRefs.current[id]
       : null
-    const boxEl = overlayBoxRef.current
-    if (!stage || !el || !boxEl) return
+
+    if (!id || !el || !target) {
+      chrome.overlay.style.display = "none"
+      chrome.tooltip.hide()
+      return
+    }
 
     const stageBox = stage.getBoundingClientRect()
     const box = el.getBoundingClientRect()
@@ -346,45 +251,103 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
       }
     )
 
-    boxEl.style.left = `${rect.left}px`
-    boxEl.style.top = `${rect.top}px`
-    boxEl.style.width = `${rect.width}px`
-    boxEl.style.height = `${rect.height}px`
+    const corners = getComputedStyle(el)
+    chrome.overlay.style.borderRadius = corners.borderRadius
+    chrome.overlay.style.setProperty(
+      "corner-shape",
+      corners.getPropertyValue("corner-shape")
+    )
+    chrome.overlay.style.display = "block"
+    chrome.overlay.style.left = `${rect.left}px`
+    chrome.overlay.style.top = `${rect.top}px`
+    chrome.overlay.style.width = `${rect.width}px`
+    chrome.overlay.style.height = `${rect.height}px`
 
-    const tooltipEl = tooltipBoxRef.current
-    if (tooltipEl) {
-      const { tooltipProps } = settings
-      const pos = getTooltipPosition({
-        target: rect,
-        tooltipWidth: tooltipEl.offsetWidth,
-        tooltipHeight: tooltipEl.offsetHeight,
-        side: tooltipProps.side,
-        align: tooltipProps.align,
-        sideOffset: tooltipProps.sideOffset,
-        alignOffset: tooltipProps.alignOffset,
-        viewport: {
-          width: window.innerWidth,
-          height: window.innerHeight,
-        },
-      })
-      tooltipEl.style.left = `${pos.left}px`
-      tooltipEl.style.top = `${pos.top}px`
-    }
+    const label =
+      formatTooltipLabel({
+        title: target.name,
+        pageName: target.pageName,
+        tooltipProps: settings.tooltipProps,
+        tagStyle: target.tagStyle ?? "component",
+      }) || formatComponentTag("Component")
+
+    chrome.tooltip.setLabel(label)
+    chrome.tooltip.showSourceIcon(false, Boolean(target.canClimb))
+    chrome.tooltip.show()
+
+    const front = chrome.tooltip.root.querySelector(
+      ".next-inspect-ui-tooltip-front"
+    ) as HTMLElement | null
+    const { tooltipProps } = settings
+    const pos = getTooltipPosition({
+      target: rect,
+      tooltipWidth: front?.offsetWidth || chrome.tooltip.root.offsetWidth,
+      tooltipHeight: front?.offsetHeight || chrome.tooltip.root.offsetHeight,
+      side: tooltipProps.side,
+      align: tooltipProps.align,
+      sideOffset: tooltipProps.sideOffset,
+      alignOffset: tooltipProps.alignOffset,
+      viewport: {
+        width: stageBox.width,
+        height: stageBox.height,
+      },
+    })
+    chrome.tooltip.root.style.left = `${pos.left}px`
+    chrome.tooltip.root.style.top = `${pos.top}px`
   }, [mode, paddingX, paddingY, settings])
+
+  useEffect(() => {
+    ensureInspectOverlayStyles()
+    const stage = stageRef.current
+    if (!stage) return
+
+    const overlay = document.createElement("div")
+    overlay.className = "next-inspect-ui-overlay"
+    overlay.setAttribute("data-dev-inspector-overlay", "")
+    overlay.setAttribute("aria-hidden", "true")
+    overlay.style.position = "absolute"
+    overlay.style.zIndex = "20"
+    overlay.style.display = "none"
+
+    const tooltip = createInspectTooltip()
+    tooltip.root.style.position = "absolute"
+    tooltip.root.style.zIndex = "30"
+
+    stage.append(overlay, tooltip.root)
+    chromeRef.current = { overlay, tooltip }
+    applyOverlayPaint(overlay, tooltip.root, settingsRef.current)
+    measureRef.current()
+
+    return () => {
+      overlay.remove()
+      tooltip.root.remove()
+      chromeRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    measureRef.current = measure
+  }, [measure])
+
+  useEffect(() => {
+    const chrome = chromeRef.current
+    if (!chrome) return
+    applyOverlayPaint(chrome.overlay, chrome.tooltip.root, settings)
+    measure()
+  }, [settings, measure])
 
   useLayoutEffect(() => {
     playIdRef.current = playId
-    hoverIdRef.current = hoverId
-    if (!visibleId) return
-    const target = TARGET_BY_ID[visibleId]
-    setLabelMeta({
-      name: target?.name ?? "Component",
-      pageName: target?.pageName ?? loc(PAGE, 1, 1),
-      tagStyle: target?.tagStyle ?? "component",
-      canClimb: Boolean(target?.canClimb),
-    })
+    if (!visibleId) {
+      const chrome = chromeRef.current
+      if (chrome) {
+        chrome.overlay.style.display = "none"
+        chrome.tooltip.hide()
+      }
+      return
+    }
     measure()
-  }, [playId, hoverId, visibleId, measure])
+  }, [playId, visibleId, measure])
 
   useEffect(() => {
     const stage = stageRef.current
@@ -431,44 +394,10 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
     targetRefs.current[id] = node
   }
 
-  const onContentPointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (mode !== "mouse") return
-    const id = resolveTargetAtPoint(
-      event.clientX,
-      event.clientY,
-      hoverIdRef.current
-    )
-    if (id === hoverIdRef.current) return
-    hoverIdRef.current = id
-    setHoverId(id)
-  }
-
-  const onContentPointerLeave = () => {
-    if (mode !== "mouse") return
-    hoverIdRef.current = null
-    setHoverId(null)
-  }
-
-  const onContentClick = (event: MouseEvent<HTMLDivElement>) => {
-    if (mode !== "mouse") return
-    if (eventElement(event.target)?.closest("button, a")) return
-    const id = resolveTargetAtPoint(
-      event.clientX,
-      event.clientY,
-      hoverIdRef.current
-    )
-    if (!id) return
-    const target = TARGET_BY_ID[id]
-    if (!target) return
-    window.alert(`${target.name}\n${target.pageName}`)
-  }
-
   const onModeChange = (value: string | number | null) => {
     const next =
-      value === "mouse" ? "mouse" : value === "none" ? "none" : "autoplay"
+      value === "none" ? "none" : "autoplay"
     setMode(next)
-    hoverIdRef.current = null
-    setHoverId(null)
     setIsPlaying(next === "autoplay")
   }
 
@@ -482,9 +411,6 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
           <div
             ref={contentRef}
             className="relative z-10 flex flex-col gap-12 p-6 md:p-8"
-            onPointerMove={onContentPointerMove}
-            onPointerLeave={onContentPointerLeave}
-            onClick={onContentClick}
           >
             <PreviewTarget
               targetId="section-1"
@@ -800,23 +726,10 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
           </div>
         </ScrollArea>
 
-        {showOverlay ? (
-          <PreviewOverlay
-            overlayBoxRef={overlayBoxRef}
-            tooltipBoxRef={tooltipBoxRef}
-            name={labelMeta.name}
-            pageName={labelMeta.pageName}
-            tagStyle={labelMeta.tagStyle}
-            canClimb={labelMeta.canClimb}
-            settings={settings}
-          />
-        ) : null}
-
         <Tabs value={mode} onValueChange={onModeChange}>
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/50 p-3">
             <TabsList>
               <TabsTrigger value="autoplay">Autoplay</TabsTrigger>
-              <TabsTrigger value="mouse">Trigger mouse</TabsTrigger>
               <TabsTrigger value="none">None</TabsTrigger>
             </TabsList>
 
@@ -858,14 +771,6 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
               </div>
             </TabsContent>
 
-            <TabsContent value="mouse" className="mt-0 flex-none">
-              <p className="font-mono text-[12px] text-muted-foreground">
-                {hoverId
-                  ? formatComponentTag(labelMeta.name)
-                  : "Hover an element…"}
-              </p>
-            </TabsContent>
-
             <TabsContent value="none" className="mt-0 flex-none" />
           </div>
         </Tabs>
@@ -895,89 +800,3 @@ const PreviewTarget = ({
     {children}
   </div>
 )
-
-const FOLLOW_S = 0.16
-
-const PreviewOverlay = ({
-  overlayBoxRef,
-  tooltipBoxRef,
-  name,
-  pageName,
-  tagStyle = "component",
-  canClimb = false,
-  settings,
-}: {
-  overlayBoxRef: MutableRefObject<HTMLDivElement | null>
-  tooltipBoxRef: MutableRefObject<HTMLDivElement | null>
-  name: string
-  pageName: string
-  tagStyle?: "dom" | "component"
-  canClimb?: boolean
-  settings: InspectorSettings
-}) => {
-  const paint = getOverlayPaint(settings)
-  const follow = paint.animated
-    ? `left ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), top ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), width ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), height ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1)`
-    : "none"
-  const label =
-    formatTooltipLabel({
-      title: name,
-      pageName,
-      tooltipProps: settings.tooltipProps,
-      tagStyle,
-    }) || formatComponentTag("Component")
-  const chipStyle = {
-    background: paint.tooltipBackground,
-    border: "none",
-    color: paint.tooltipText,
-    padding: paint.tooltipPadding,
-    borderRadius: paint.tooltipBorderRadius,
-    boxShadow: "0 4px 12px rgb(0 0 0 / 30%)",
-    font: '12px / 1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-  }
-
-  return (
-    <>
-      <div
-        ref={overlayBoxRef}
-        aria-hidden
-        className="pointer-events-none absolute z-20 box-border"
-        style={{
-          backgroundColor: paint.fill,
-          border: paint.border,
-          borderRadius: paint.borderRadius,
-          transition: follow,
-        }}
-      />
-      {label ? (
-        <div
-          ref={tooltipBoxRef}
-          aria-hidden
-          className="pointer-events-none absolute z-30 overflow-visible"
-          style={{ transition: follow }}
-        >
-          <div className="relative z-2 flex w-fit items-center gap-0.5 overflow-visible">
-            {canClimb ? (
-              <span
-                aria-hidden
-                className="inline-flex size-5 shrink-0 items-center justify-center"
-                style={chipStyle}
-              >
-                <Option size={12} strokeWidth={2} />
-              </span>
-            ) : null}
-            <span
-              className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
-              style={{
-                ...chipStyle,
-                maxWidth: "min(36rem, calc(100vw - 16px))",
-              }}
-            >
-              {label}
-            </span>
-          </div>
-        </div>
-      ) : null}
-    </>
-  )
-}

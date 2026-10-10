@@ -463,13 +463,26 @@ export const spotlightDefaultsForColor = (
   }
 }
 
-export const formatInspectorComponentSnippet = (
-  settings: InspectorSettings
-) => `<InspectUI
-  shortcut=${JSON.stringify(settings.shortcut)}
-  tooltipProps={${JSON.stringify(settings.tooltipProps, null, 2)}}
-  devSpotlightProps={${JSON.stringify(settings.devSpotlightProps, null, 2)}}
-/>`
+export const formatInspectorComponentSnippet = (settings: InspectorSettings) => {
+  const props: string[] = []
+  if (settings.shortcut !== DEFAULT_INSPECTOR_SETTINGS.shortcut) {
+    props.push(`  shortcut=${JSON.stringify(settings.shortcut)}`)
+  }
+  if (settings.ide !== DEFAULT_INSPECTOR_SETTINGS.ide) {
+    props.push(`  ide=${JSON.stringify(settings.ide)}`)
+  }
+  const addChangedProps = (name: string, values: object, defaults: object) => {
+    const changed = Object.fromEntries(
+      Object.entries(values).filter(([key, value]) => value !== Reflect.get(defaults, key))
+    )
+    if (!Object.keys(changed).length) return
+    const json = JSON.stringify(changed, null, 2).replace(/\n/g, "\n  ")
+    props.push(`  ${name}={${json}}`)
+  }
+  addChangedProps("tooltipProps", settings.tooltipProps, DEFAULT_TOOLTIP_PROPS)
+  addChangedProps("devSpotlightProps", settings.devSpotlightProps, DEFAULT_DEV_SPOTLIGHT_PROPS)
+  return props.length ? `<InspectUI\n${props.join("\n")}\n/>` : "<InspectUI />"
+}
 
 let settings = DEFAULT_INSPECTOR_SETTINGS
 
