@@ -39,7 +39,7 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 | `[` / `{` · `]` / `}` | move to the parent / child element |
 | `Space` | toggle the Component and Element popover |
 | `↑` `↓` | select tree rows when the popover is open; otherwise move between siblings |
-| `←` `→` | switch tabs when the popover is open; otherwise move between siblings |
+| `←` `→` | open Component / Element when the popover is open; otherwise move between siblings |
 | Command / Ctrl + `↑` / `↓` | jump to the first / last row in the open tab |
 | `Esc` | exit |
 
@@ -54,7 +54,7 @@ Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 | `devSpotlightProps` | `Partial<DevSpotlightProps>` | Spotlight color, fill, border, and animation. |
 | `popoverProps` | `{ defaultTab?: "component" \| "element" }` | initial tree tab; defaults to `"component"` |
 
-The Component tab shows immediate ancestors through the page, stopping before layouts and the app shell. The Element tab shows 1–15 nested HTML nodes, prioritizing siblings, then parents, then children. Use `popoverProps={{ defaultTab: "element" }}` to start on Element. Shift does not climb.
+The Component tab nests immediate ancestors from the page down to the hovered element, stopping before layouts and the app shell. The Element tab shows 1–15 nested HTML nodes, prioritizing siblings, then parents, then children. Use `popoverProps={{ defaultTab: "element" }}` to start on Element. Shift does not climb.
 
 Choose your editor, colors, spotlight, and tooltip styling in the inspector settings.
 
@@ -115,9 +115,9 @@ To try the package in another local project, install it from its directory and b
 
 Run `bun run benchmark` for [bundle measurements](../../docs/benchmarks.md): 23.1 kB gzip for the development component, 81.2 kB for the standalone script, and 0 B of inspector code with a guarded production import.
 
-Run `bun run dev:bench`, then `bun run benchmark:source` for the [330-case source comparison](../../docs/source-benchmarks.md). The latest run measures 1.1 ms median and 3.8 ms p95, finding 305 expected definition files. This score does not verify exact JSX lines or editor launch time.
+Run `bun run benchmark:source` for the [330-case source comparison](../../docs/source-benchmarks.md). The command builds the library, installs the private benchmark checkout’s dependencies, and starts and stops its server when needed. The October 11, 2026 run measures 1.3 ms median and 3.8 ms p95, finding 305 expected definition files. This score does not verify exact JSX lines or editor launch time.
 
-The local compatibility suites pass all 74 exact-source cases in Chromium. All 84 unit tests and workspace type checks pass. React 18 remains experimental despite those passing fixtures.
+On October 5, 2026, the local compatibility suites passed all 74 exact-source cases in Chromium; all 84 unit tests and workspace type checks also passed. React 18 remains experimental despite those passing fixtures.
 
 ## Dev-only script (like React Grab)
 
