@@ -20,11 +20,11 @@ The upstream compound table renders text directly inside a table row, producing 
 
 ## Measured results
 
-Next.js 16.2.6, React 19.2.4, Turbopack, local Chromium. Six of 330 targets were missing for every tool. Expected files are component definitions; this is not an agent accuracy score or an exact-line score.
+Next Inspect UI was measured October 11, 2026; the comparison-library rows are from October 5, 2026 and were not rerun. Next.js 16.2.6, React 19.2.4, Turbopack, local Chromium. Six of 330 targets were missing for every tool. Expected files are component definitions; this is not an agent accuracy score or an exact-line score.
 
 | Tool | Definition file matches | Tree/context contains file | Median | p95 |
 |---|---:|---:|---:|---:|
-| next-inspect-ui | 305/330 | 311/330 | 1.0 ms | 5.2 ms |
+| next-inspect-ui | 305/330 | 311/330 | 1.3 ms | 3.8 ms |
 | react-grab | 269/330 | 8/330 | 0.9 ms | 3.0 ms |
 | show-component | 5/330 | 8/330 | 0.0 ms | 0.2 ms |
 | click-to-react-component | 0/330 | 0/330 | 4.4 ms | 6.5 ms |
@@ -48,13 +48,13 @@ There are still 25 source-lookup mismatches including the six missing targets. M
 
 ## Internal resolver
 
-The previous bippy-based report measured 2.1 ms median and 18.6 ms p95. The internal resolver measures 1.0 ms median and 5.2 ms p95 in this run. Timing varies with dev-server load and cache state; this is not a hover FPS measurement. Development component gzip falls from 30,510 B to 23,624 B; standalone script gzip falls from 89,516 B to 83,171 B. A guarded production import still excludes the library.
+The previous bippy-based report measured 2.1 ms median and 18.6 ms p95. The internal resolver measures 1.3 ms median and 3.8 ms p95 in this run. Timing varies with dev-server load and cache state; this is not a hover FPS measurement. Development component gzip falls from 30,510 B to 23,624 B; standalone script gzip falls from 89,516 B to 83,171 B. A guarded production import still excludes the library.
 
 The stack reader uses V8 enclosing locations when available and parses formatted stacks on other engines. Creation frames take priority over fallback recovery. When React supplies only an UnknownOwner stack, a cached React DevTools-style component sample recovers a frame with the hook dispatcher disabled and restores dispatcher and console state immediately. Known vendor stacks retain the owner/debug-info fallback instead of selecting an unrelated parent. React 18 JSX metadata takes priority for generated hosts.
 
 Browser source maps are fetched once per inspector cache, decoded once per map, and searched by generated column with binary search. Map comments, inline maps, indexed sections, ignored sources, and unmapped segments are supported. Failed map requests are evicted. Next.js endpoint requests remain deduplicated and batched by browser/server mode. Hover resolves the host first; parent details wait until Option or the panel needs them.
 
-Validation: all 74 exact-source cases pass in local Chromium: Next/Turbopack 20/20, Next/Webpack 20/20, Vite React 19 17/17, React 18 17/17. Fixture expectations were not changed. All 84 unit tests and workspace/compatibility type checks pass. Exact hover bounds and info-panel navigation also pass in Chromium. The benchmark still has unmatched definition files and missing targets, as reported above.
+Validation on October 5, 2026: all 74 exact-source cases passed in local Chromium: Next/Turbopack 20/20, Next/Webpack 20/20, Vite React 19 17/17, React 18 17/17. Fixture expectations were not changed. On October 5, 2026, all 84 unit tests and workspace/compatibility type checks passed. Exact hover bounds and info-panel navigation also passed in Chromium. The benchmark still has unmatched definition files and missing targets, as reported above.
 
 ## Source availability
 
@@ -62,4 +62,4 @@ The fresh run returns a file path for all 324 rendered targets. Of those, 305 ma
 
 The tree/context includes the expected file for 311 targets. Real click and Option-click each capture a destination for all 324 rendered targets; definition matches are 305 and 298 respectively. No editor application is launched.
 
-[Source status](source-status.json) records the counts, percentages, 19 different-file cases, and six missing targets. [Compatibility results](compatibility-test-results.json) includes the original expected/result logs for all 74 passing cases.
+The October 5, 2026 [source status](source-status.json) records the counts, percentages, 19 different-file cases, and six missing targets. [Compatibility results](compatibility-test-results.json) includes the original expected/result logs for all 74 passing cases.

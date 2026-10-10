@@ -198,7 +198,7 @@ No. It supports React 19+ apps, including Next.js and Vite. React 18 compatibili
 
 ### How do I navigate the tree?
 
-Press Space to open the popover. Component shows immediate parents up to the page boundary. Element shows nearby HTML, stopping at body. Left / Right switches tabs; Up / Down moves between rows and previews their elements. Enter opens the selected source. Press Space to close the popover or Escape to exit inspect mode.
+Press Space to open the popover. Component nests from the page boundary down to the hovered element. Element shows nearby HTML, stopping at body. Left opens Component and Right opens Element; Up / Down moves between rows and previews their elements. Enter opens the selected source. Press Space to close the popover or Escape to exit inspect mode.
 
 ### Which editors does it support?
 
@@ -281,17 +281,17 @@ Open `/test` in any test app. Every suite uses the same header, group controls, 
 
 `apps/test-next-js` is the canonical UI. Run `bun run sync:test-ui` after changing its suite components or styles to update all test apps. Fixture files and exact source expectations remain local to each app.
 
-React 18 remains experimental; the package declares React 19+ peer support. The latest Chromium run passes all 74 exact-source cases: 20 in each Next.js app and 17 in each Vite app. Fixture expectations were unchanged.
+React 18 remains experimental; the package declares React 19+ peer support. The October 5, 2026 Chromium run passed all 74 exact-source cases: 20 in each Next.js app and 17 in each Vite app. Fixture expectations were unchanged.
 
 Run `bun run typecheck:compat` to check all test apps. Each app has a matching `build:<app-name>` command. `bun run dev:test` starts all four test apps on ports 3001, 3002, 5173, and 5174. Press Ctrl+C to stop them together. If a port is busy, the launcher stops before starting any apps. `dev:example` remains an alias for `dev:nextjs`.
 
-In the Element tab, Up/Down previews HTML elements with a highlight that follows the current preset, without a ghost tooltip. Enter or clicking a row opens its source while the original element stays pinned. The Component tree starts at the hovered element and follows its immediate parents to the page boundary. See [App flow](flow.md) for the full control table.
+In the Element tab, Up/Down previews HTML elements with a highlight that follows the current preset, without a ghost tooltip. Enter or clicking a row opens its source while the original element stays pinned. The Component tree nests from the page boundary down to the hovered element. See [App flow](flow.md) for the full control table.
 
 ## Benchmarks
 
 Run `bun run benchmark` for [bundle sizes](docs/benchmarks.md). The development component is 23.1 kB gzip and the standalone script is 81.2 kB gzip. A development-only dynamic import excludes the whole library from production, leaving 0 B of inspector code. A static import disables the inspector but can retain a small wrapper.
 
-The latest [source benchmark](docs/source-benchmarks.md) measures 1.0 ms median and 5.2 ms p95, with 305 of 330 expected definition files found. These measurements include source lookup and tree/context gathering; they do not measure hover FPS or editor launch time.
+The October 11, 2026 [source benchmark](docs/source-benchmarks.md) measures 1.3 ms median and 3.8 ms p95, with 305 of 330 expected definition files found. These measurements include source lookup and tree/context gathering; they do not measure hover FPS or editor launch time.
 
 A dev-only standalone script is also available, like React Grab. The Next.js dashboard uses a guarded `/inspect-ui.js` script; the route returns 404 in production. See the [script setup](packages/next-inspect-ui/README.md#dev-only-script-like-react-grab).
 
