@@ -29,7 +29,7 @@ export default function HowItWorksPage() {
       </header>
 
       <section className="flex flex-col gap-3">
-        <h2>Inspired by</h2>
+        <h2>Inspiration</h2>
         <p>
           Inspired by{" "}
           <a

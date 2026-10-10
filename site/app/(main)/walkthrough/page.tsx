@@ -8,7 +8,7 @@ import { Kbd } from "@/components/ui/kbd"
 export const metadata: Metadata = {
   title: "Walkthrough",
   description:
-    "Hover any node to see the component name. Click or Enter opens the code where it’s defined. Hold Option to select the owning component. Press Space to browse the trees. Learn more in Shortcuts.",
+    "Hover any node to see the component name. Click or Enter opens its source in your editor. Hold Option to select the owning component. Press Space to browse the trees. Learn more in Shortcuts.",
   alternates: { canonical: "/walkthrough" },
 }
 
@@ -25,7 +25,7 @@ export default function WalkthroughPage() {
               Enter
               <CornerDownLeft />
             </Kbd>{" "}
-            opens the code where it’s defined.
+            opens its source in your editor.
           </p>
           <p>
             Hold{" "}

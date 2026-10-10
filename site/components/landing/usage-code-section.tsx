@@ -21,7 +21,7 @@ const USAGE_TABS = [
   {
     id: "open",
     label: "Open",
-    code: `// Click → open where it's defined
+    code: `// Click → open the element’s source
 // Hold ⌥ + click → open where it's used
 
 // Opens the file in your editor

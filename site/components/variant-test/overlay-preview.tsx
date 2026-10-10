@@ -13,9 +13,7 @@ import {
   type ReactNode,
 } from "react"
 
-import { motion, useReducedMotion } from "motion/react"
 import {
-  ArrowUpRight,
   Calendar,
   ChevronDown,
   LayoutGrid,
@@ -37,22 +35,25 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useInspectorSettings } from "@/components/inspector-toolbar"
 import {
+  applyOverlayPaint,
+  createInspectTooltip,
+  ensureInspectOverlayStyles,
   expandRectWithPadding,
   formatComponentTag,
   formatTooltipLabel,
-  getOverlayPaint,
   getTooltipPosition,
-  underStackTransform,
-  type InspectorSettings,
 } from "next-inspect-ui/lib"
 import { cn } from "@/lib/utils"
+
+type InspectTooltip = ReturnType<typeof createInspectTooltip>
 
 type PreviewTargetDef = {
   id: string
   name: string
   pageName: string
   tagStyle?: "dom" | "component"
-  used?: boolean
+  /** Show ⌥ badge when the host can Option-climb. */
+  canClimb?: boolean
   measureId?: string
 }
 
@@ -130,28 +131,7 @@ const TARGETS: PreviewTargetDef[] = [
     name: "p",
     pageName: loc(GHOST_PAGE, 29, 3),
     tagStyle: "dom",
-  },
-  {
-    id: "ghost-subtitle",
-    name: "CardSubtitle",
-    pageName: loc(GHOST_PAGE, 29, 3),
-    tagStyle: "component",
-    used: true,
-    measureId: "ghost-description",
-  },
-  {
-    id: "ghost-header",
-    name: "CardHeader",
-    pageName: loc(GHOST_PAGE, 12, 1),
-    tagStyle: "component",
-    used: true,
-  },
-  {
-    id: "ghost-card",
-    name: "Card",
-    pageName: loc(GHOST_PAGE, 5, 1),
-    tagStyle: "component",
-    used: true,
+    canClimb: true,
   },
   { id: "section-3", name: "Section3", pageName: loc(PAGE, 661, 13) },
   {
@@ -159,6 +139,7 @@ const TARGETS: PreviewTargetDef[] = [
     name: "h3",
     pageName: loc(PAGE, 667, 17),
     tagStyle: "dom",
+    canClimb: true,
   },
   {
     id: "metric-inspect-label",
@@ -201,27 +182,6 @@ const TARGETS: PreviewTargetDef[] = [
 const TARGET_BY_ID = Object.fromEntries(
   TARGETS.map((target) => [target.id, target])
 ) as Record<string, PreviewTargetDef>
-
-const climbStackFor = (
-  id: string,
-  tooltipProps: InspectorSettings["tooltipProps"]
-) => {
-  const index = TARGETS.findIndex((target) => target.id === id)
-  const current = TARGETS[index]
-  if (!current?.used || index < 0) return []
-  const start = TARGETS.findIndex((target) => target.id === "ghost-description")
-  if (start < 0 || index <= start) return []
-  return TARGETS.slice(start, index).map((step) => {
-    return (
-      formatTooltipLabel({
-        title: step.name,
-        pageName: step.pageName,
-        tooltipProps,
-        tagStyle: step.tagStyle ?? "component",
-      }) || formatComponentTag(step.name)
-    )
-  })
-}
 
 const STEP_MS = 1200
 
@@ -324,8 +284,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
     name: TARGETS[0]?.name ?? "Component",
     pageName: TARGETS[0]?.pageName ?? loc(PAGE, 1, 1),
     tagStyle: "component" as "dom" | "component",
-    used: false,
-    stack: [] as string[],
+    canClimb: Boolean(TARGETS[0]?.canClimb),
   })
   const [waveformActive, setWaveformActive] = useState(false)
   const [waveformProcessing, setWaveformProcessing] = useState(true)
@@ -335,6 +294,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
   const showOverlay = Boolean(visibleId)
   const paddingX = 0
   const paddingY = 0
+  const activeIndex = TARGETS.findIndex((item) => item.id === playId)
 
   const stepBy = useCallback((delta: number) => {
     setPlayId((current) => {
@@ -363,7 +323,9 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
     const stage = stageRef.current
     const id = mode === "mouse" ? hoverIdRef.current : playIdRef.current
     const target = id ? TARGET_BY_ID[id] : null
-    const el = id ? targetRefs.current[target?.measureId ?? id] : null
+    const el = id
+      ? targetRefs.current[target?.measureId ?? id] || targetRefs.current[id]
+      : null
     const boxEl = overlayBoxRef.current
     if (!stage || !el || !boxEl) return
 
@@ -419,11 +381,10 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
       name: target?.name ?? "Component",
       pageName: target?.pageName ?? loc(PAGE, 1, 1),
       tagStyle: target?.tagStyle ?? "component",
-      used: Boolean(target?.used),
-      stack: visibleId ? climbStackFor(visibleId, settings.tooltipProps) : [],
+      canClimb: Boolean(target?.canClimb),
     })
     measure()
-  }, [playId, hoverId, visibleId, measure, settings])
+  }, [playId, hoverId, visibleId, measure])
 
   useEffect(() => {
     const stage = stageRef.current
@@ -453,22 +414,17 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
 
   useEffect(() => {
     if (mode !== "autoplay" || !isPlaying) return
-
-    const timer = window.setInterval(() => {
-      stepBy(1)
-    }, STEP_MS)
-
+    const timer = window.setInterval(() => stepBy(1), STEP_MS)
     return () => window.clearInterval(timer)
   }, [mode, isPlaying, stepBy])
 
   useEffect(() => {
     if (mode !== "autoplay") return
     const target = TARGET_BY_ID[playId]
-    const el = targetRefs.current[target?.measureId ?? playId]
-    el?.scrollIntoView({
-      block: "nearest",
-      behavior: "smooth",
-    })
+    const el =
+      targetRefs.current[target?.measureId ?? playId] ||
+      targetRefs.current[playId]
+    el?.scrollIntoView({ block: "nearest", behavior: "smooth" })
   }, [mode, playId])
 
   const setTarget = (id: string) => (node: HTMLElement | null) => {
@@ -496,23 +452,16 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
   const onContentClick = (event: MouseEvent<HTMLDivElement>) => {
     if (mode !== "mouse") return
     if (eventElement(event.target)?.closest("button, a")) return
-
-    // Resolve from click coords (not event.target) so padded spotlight + nested
-    // wrappers stay in sync with what the overlay is showing.
     const id = resolveTargetAtPoint(
       event.clientX,
       event.clientY,
       hoverIdRef.current
     )
     if (!id) return
-
     const target = TARGET_BY_ID[id]
     if (!target) return
-
     window.alert(`${target.name}\n${target.pageName}`)
   }
-
-  const activeIndex = TARGETS.findIndex((item) => item.id === playId)
 
   const onModeChange = (value: string | number | null) => {
     const next =
@@ -858,8 +807,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
             name={labelMeta.name}
             pageName={labelMeta.pageName}
             tagStyle={labelMeta.tagStyle}
-            used={labelMeta.used}
-            stack={labelMeta.stack}
+            canClimb={labelMeta.canClimb}
             settings={settings}
           />
         ) : null}
@@ -948,7 +896,6 @@ const PreviewTarget = ({
   </div>
 )
 
-const FOLLOW_EASE = [0.22, 1, 0.36, 1] as const
 const FOLLOW_S = 0.16
 
 const PreviewOverlay = ({
@@ -957,8 +904,7 @@ const PreviewOverlay = ({
   name,
   pageName,
   tagStyle = "component",
-  used = false,
-  stack = [],
+  canClimb = false,
   settings,
 }: {
   overlayBoxRef: MutableRefObject<HTMLDivElement | null>
@@ -966,13 +912,10 @@ const PreviewOverlay = ({
   name: string
   pageName: string
   tagStyle?: "dom" | "component"
-  used?: boolean
-  stack?: string[]
+  canClimb?: boolean
   settings: InspectorSettings
 }) => {
-  const reduceMotion = useReducedMotion()
   const paint = getOverlayPaint(settings)
-  const duration = reduceMotion ? 0 : FOLLOW_S
   const follow = paint.animated
     ? `left ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), top ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), width ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1), height ${FOLLOW_S * 1000}ms cubic-bezier(0.22, 1, 0.36, 1)`
     : "none"
@@ -991,7 +934,6 @@ const PreviewOverlay = ({
     borderRadius: paint.tooltipBorderRadius,
     boxShadow: "0 4px 12px rgb(0 0 0 / 30%)",
     font: '12px / 1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    maxWidth: "min(36rem, calc(100vw - 16px))",
   }
 
   return (
@@ -1014,48 +956,23 @@ const PreviewOverlay = ({
           className="pointer-events-none absolute z-30 overflow-visible"
           style={{ transition: follow }}
         >
-          {stack.map((under, index) => {
-            const depth = stack.length - index
-            return (
-              <motion.div
-                key={`${under}-${index}`}
+          <div className="relative z-2 flex w-fit items-center gap-0.5 overflow-visible">
+            {canClimb ? (
+              <span
                 aria-hidden
-                className="pointer-events-none absolute right-auto bottom-0 left-0 overflow-hidden text-ellipsis whitespace-nowrap"
-                initial={false}
-                animate={{
-                  transform: underStackTransform(depth),
-                  opacity: 0.92,
-                }}
-                transition={{ duration, ease: FOLLOW_EASE }}
-                style={{
-                  ...chipStyle,
-                  zIndex: 2 - depth,
-                }}
+                className="inline-flex size-5 shrink-0 items-center justify-center"
+                style={chipStyle}
               >
-                {under}
-              </motion.div>
-            )
-          })}
-          <div
-            className="relative z-2 flex w-fit items-center overflow-hidden"
-            style={chipStyle}
-          >
-            <motion.span
-              aria-hidden
-              className="inline-flex shrink-0 items-center justify-center overflow-hidden"
-              initial={false}
-              animate={{
-                width: used ? 12 : 0,
-                marginRight: used ? 3 : 0,
-              }}
-              transition={{
-                duration: reduceMotion ? 0 : FOLLOW_S,
-                ease: "easeInOut",
+                <Option size={12} strokeWidth={2} />
+              </span>
+            ) : null}
+            <span
+              className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+              style={{
+                ...chipStyle,
+                maxWidth: "min(36rem, calc(100vw - 16px))",
               }}
             >
-              <ArrowUpRight size={12} strokeWidth={2.4} />
-            </motion.span>
-            <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
               {label}
             </span>
           </div>

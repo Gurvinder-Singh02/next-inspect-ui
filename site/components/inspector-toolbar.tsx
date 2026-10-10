@@ -848,7 +848,7 @@ export const InspectorSettingsControls = ({
             <span className="text-[13px] font-medium text-muted-foreground">
               Preset
             </span>
-            <div className="flex h-7 items-center gap-0.5 rounded-md p-0.5">
+            <div className="flex h-7 items-center gap-0 rounded-md p-0.5">
               {COLOR_OPTIONS.map((color) => {
                 const swatch = INSPECTOR_COLORS[color]
                 const isActive =

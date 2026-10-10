@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 
+import sourceBenchmark from "../../../../docs/source-benchmark-results.json"
+
 import { WorksWithPattern } from "@/components/landing/works-with-pattern"
 import {
   WorksWithBaseUi,
-  WorksWithHtml,
   WorksWithIcons,
   WorksWithKinds,
   WorksWithLibraryHost,
@@ -24,6 +25,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/works-with" },
 }
 
+const benchmark = sourceBenchmark.summary.find((result) => result.library === "next-inspect-ui")!
+const benchmarkLink = "text-foreground no-underline hover:underline underline-offset-4"
+
 export default async function WorksWithPage() {
   const highlighted = Object.fromEntries(
     await Promise.all(
@@ -39,28 +43,55 @@ export default async function WorksWithPage() {
       <header className="flex flex-col gap-2">
         <h1>Works with</h1>
         <p>
-          Works with almost every pattern you use in React today: HTML, SVG,
-          shadcn, Base UI, Motion, Slot, compound components, and the rest of
-          the usual stack. Hover a preview in inspect mode to jump to the
-          source. Async Server Components are not inspectable yet.
+          Works with almost all React patterns represented in the benchmark,
+          from native elements to wrapped and compound components. The fixtures
+          come from{" "}
+          <a className={benchmarkLink} href="https://github.com/millionco/react-grab-bench" target="_blank" rel="noopener noreferrer">React Grab Bench</a>.
+          Our direct source checks live in the{" "}
+          <a className={benchmarkLink} href="https://github.com/Gurvinder-Singh02/next-inspect-bench" target="_blank" rel="noopener noreferrer">Next Inspect UI benchmark repository</a>{" "}
+          (private).
         </p>
       </header>
 
+      <section className="flex flex-col gap-3" aria-label="Benchmark results">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <caption className="sr-only">Next Inspect UI source lookup benchmark</caption>
+            <thead className="text-muted-foreground">
+              <tr className="border-b border-border">
+                {["Definition files", "In component tree", "Median", "p95"].map((heading) => (
+                  <th key={heading} scope="col" className="whitespace-nowrap py-2 pr-6 font-normal">{heading}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="font-mono">
+              <tr>
+                <td className="whitespace-nowrap py-3 pr-6">{benchmark.exactFile}/{benchmark.total}</td>
+                <td className="whitespace-nowrap py-3 pr-6">{benchmark.chainContainsFile}/{benchmark.total}</td>
+                <td className="whitespace-nowrap py-3 pr-6">{benchmark.medianMs.toFixed(1)} ms</td>
+                <td className="whitespace-nowrap py-3 pr-6">{benchmark.p95Ms.toFixed(1)} ms</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Direct definition-file lookup across {benchmark.total} fixtures, with {benchmark.missing} missing targets and {benchmark.errors} lookup errors.
+          Timing includes source lookup and component context, not editor launch time.
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2>More patterns in the benchmark</h2>
+        <ul className="grid list-disc gap-x-8 gap-y-2 pl-5 font-inter text-[15px] leading-relaxed text-muted-foreground sm:grid-cols-2">
+          <li>Higher-order components and render adapters</li>
+          <li>Aliased imports and re-exported components</li>
+          <li>Styled components and polymorphic hosts</li>
+          <li>Deeply nested compound components</li>
+        </ul>
+      </section>
+
       <div className="flex flex-col gap-12">
-        <WorksWithPattern
-          title="HTML"
-          description="Native markup authored on the page."
-          preview={<WorksWithHtml />}
-          code={WORKS_WITH_SNIPPETS.html}
-          html={highlighted.html}
-        />
-        <WorksWithPattern
-          title="SVG"
-          description="svg and nested hosts like rect."
-          preview={<WorksWithSvg />}
-          code={WORKS_WITH_SNIPPETS.svg}
-          html={highlighted.svg}
-        />
+        <p>In addition to the benchmark patterns, Next Inspect UI works especially well with shadcn, Base UI, Motion, and SVG.</p>
         <WorksWithPattern
           title="shadcn"
           description="Button, variants, and a Button nested in Card."
@@ -81,6 +112,13 @@ export default async function WorksWithPage() {
           preview={<WorksWithMotion />}
           code={WORKS_WITH_SNIPPETS.motion}
           html={highlighted.motion}
+        />
+        <WorksWithPattern
+          title="SVG"
+          description="svg and nested hosts like rect."
+          preview={<WorksWithSvg />}
+          code={WORKS_WITH_SNIPPETS.svg}
+          html={highlighted.svg}
         />
         <WorksWithPattern
           title="Library host"
@@ -118,8 +156,8 @@ export default async function WorksWithPage() {
           html={highlighted.icons}
         />
         <WorksWithPattern
-          title="Server host"
-          description="A sync server component that emits DOM. Async Server Components are not inspectable yet."
+          title="Server Component"
+          description="Find the source of HTML rendered by a React Server Component."
           preview={<WorksWithServerCard title="Direct" />}
           code={WORKS_WITH_SNIPPETS.server}
           html={highlighted.server}
