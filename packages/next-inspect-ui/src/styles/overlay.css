@@ -256,10 +256,18 @@
   opacity: 0.6;
 }
 
-.next-inspect-ui-info :focus,
-.next-inspect-ui-info :focus-visible {
-  outline: none;
-  box-shadow: none;
+/* Join host @layer base so !important outline resets beat page button:focus-visible. */
+@layer base {
+  .next-inspect-ui-info :focus,
+  .next-inspect-ui-info :focus-visible,
+  .next-inspect-ui-info-tab:focus,
+  .next-inspect-ui-info-tab:focus-visible {
+    outline: none !important;
+    outline-width: 0 !important;
+    outline-style: none !important;
+    outline-color: transparent !important;
+    box-shadow: none !important;
+  }
 }
 
 .next-inspect-ui-tree-heading {

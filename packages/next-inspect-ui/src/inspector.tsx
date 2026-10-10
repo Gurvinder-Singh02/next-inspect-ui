@@ -754,14 +754,16 @@ export const InspectUI = ({
         name, parentFiber, ...resolveClimbStepSync(parentFiber, fiber!, debugInfo),
       }))
       infoTreeChain = chain
+      // Nest like Element: outermost parent first, hovered host last.
       const componentNodes: InfoTreeNode[] = [
-        { name: hostTag, isDom: true, source: hostSource, climbIndex: -1, depth: 0,
-          pendingSource: fiber ? getHostSource(fiber) : Promise.resolve(null) },
-        ...chain.map((step, climbIndex) => ({
-          name: step.name, isDom: false, source: getClimbStepDisplaySource(step), climbIndex,
-          depth: climbIndex + 1,
+        ...[...chain].reverse().map((step, depth) => ({
+          name: step.name, isDom: false, source: getClimbStepDisplaySource(step),
+          climbIndex: chain.length - 1 - depth,
+          depth,
           pendingSource: refineInfoStep(step).then(() => getClimbStepDisplaySource(step)),
         })),
+        { name: hostTag, isDom: true, source: hostSource, climbIndex: -1, depth: chain.length,
+          pendingSource: fiber ? getHostSource(fiber) : Promise.resolve(null) },
       ]
       const elementNodes: InfoTreeNode[] = getElementTreeRows(target).map(({ element, depth, relation }) => {
         const elementFiber = getFiber(element)
@@ -799,8 +801,11 @@ export const InspectUI = ({
         let tree = trees.get(tab)
         if (!tree) {
           const nodes = tab === "component" ? componentNodes : elementNodes
+          const hostIndex = componentNodes.length - 1
           const initial = tab === "component"
-            ? optionHeld && fiber && buildOwnerChain(fiber).length && chain.length ? 1 : 0
+            ? optionHeld && fiber && buildOwnerChain(fiber).length && chain.length
+              ? hostIndex - 1
+              : hostIndex
             : elementNodes.findIndex(node => node.relation === "current")
           tree = createInfoTreeSection(nodes, initial, tab === "component" ? "Component tree" : "Element tree")
           trees.set(tab, tree)
@@ -830,7 +835,7 @@ export const InspectUI = ({
         tabs.append(button)
       }
       info.append(tabs, panel)
-      info.append(mk("div", "data-dev-inspector-info-hint", "← → tabs · ↑ ↓ preview · Enter open · Space close"))
+      info.append(mk("div", "data-dev-inspector-info-hint", "← Component · → Element · ↑ ↓ preview · Enter open · Space close"))
       infoTabChange = showTab
       info.style.display = "block"
       info.style.pointerEvents = "auto"
@@ -1283,7 +1288,8 @@ export const InspectUI = ({
       const prev = up || event.key === "ArrowLeft", nextKey = down || event.key === "ArrowRight"
       if (infoVisible) {
         if (up || down) infoTreeMove?.(isModArrow ? (up ? -Infinity : Infinity) : (up ? -1 : 1))
-        else infoTabChange?.(infoTab === "component" ? "element" : "component", true)
+        else if (event.key === "ArrowLeft") infoTabChange?.("component", true)
+        else if (event.key === "ArrowRight") infoTabChange?.("element", true)
         return
       }
       if (!hoveredElement) { return }

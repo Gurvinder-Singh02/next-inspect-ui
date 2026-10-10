@@ -21,7 +21,11 @@ export const markInspectNode = <T extends HTMLElement>(el: T, hook: string) => {
 }
 
 export const ensureInspectorStyles = (css: string, doc = document) => {
-  if (doc.querySelector(`style[${STYLE_ATTR}]`)) return
+  const existing = doc.querySelector<HTMLStyleElement>(`style[${STYLE_ATTR}]`)
+  if (existing) {
+    existing.textContent = css
+    return
+  }
   const style = doc.createElement("style")
   style.setAttribute(STYLE_ATTR, "")
   style.textContent = css
