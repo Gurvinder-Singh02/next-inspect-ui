@@ -237,7 +237,7 @@ html {
   }
 
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background font-inter text-foreground;
   }
 
   html {

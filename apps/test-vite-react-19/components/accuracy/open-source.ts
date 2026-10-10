@@ -33,7 +33,7 @@ const resolveIde = (ide?: InspectorIde): InspectorIde =>
  * Same handoff Inspect UI uses — `window.location.href = cursor://file…`
  * (not `<a href>`, which mishandles editor protocol URLs in some browsers).
  */
-export const openAccuracySource = ({
+const openAccuracySource = ({
   projectRoot,
   file,
   line = 1,

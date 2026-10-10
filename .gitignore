@@ -8,3 +8,4 @@ packages/next-inspect-ui/.tmp/
 .pnpm-store/
 .cursor/skills/verify-next-inspect-ui/.run/
 .cursor/skills/verify-next-inspect-ui/artifacts/
+.fallow/

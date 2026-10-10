@@ -1,0 +1,71 @@
+{
+  // This file is JSONC: fallow reads these comments; generic JSON tools may not.
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "workspaces": {
+    // One level only — `**` matches nested dirs without package.json and
+    // marks the import graph incomplete.
+    "patterns": [
+      "packages/*",
+      "apps/*",
+      "!apps/example-01",
+      "!apps/test",
+      "site",
+    ],
+  },
+  // Published library: treat its package exports as public API.
+  "publicPackages": ["next-inspect-ui"],
+  // Used inside ignored `components/ui/**` (and root Playwright scripts).
+  // Without this, `fallow fix` would strip real UI / test tooling deps.
+  "ignoreDependencies": [
+    "@base-ui/react",
+    "@phosphor-icons/react",
+    "@shadcn/react",
+    "@tabler/icons-react",
+    "class-variance-authority",
+    "cmdk",
+    "date-fns",
+    "embla-carousel-react",
+    "input-otp",
+    "react-day-picker",
+    "react-resizable-panels",
+    "playwright",
+  ],
+  "ignorePatterns": [
+    "**/.next/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "**/.turbo/**",
+    "**/node_modules/**",
+    // Agent/tooling trees (not app source). Ignoring stops incomplete-graph caveats.
+    ".cursor/**",
+    ".agents/**",
+    ".claude/**",
+    "apps/example-01/**",
+    "apps/test/**",
+    // shadcn / design-system inventory kept for reuse
+    "**/components/ui/**",
+    // unused preview card variants in the example app
+    "apps/nextjs/components/create-preview/preview/**",
+    "scripts/**",
+  ],
+  "duplicates": {
+    // Hide pair-only clones; focus on widespread copy-paste.
+    "minOccurrences": 3,
+    "ignore": [
+      "**/components/ui/**",
+      "**/test-cases/**",
+    ],
+  },
+  "rules": {
+    // Large existing backlog — gate on regressions via baseline, not raw counts.
+    "unused-files": "warn",
+    "unused-exports": "warn",
+    "unused-types": "warn",
+    "unused-dependencies": "warn",
+    "unused-dev-dependencies": "warn",
+    "circular-dependencies": "error",
+    // Not configured yet — off until we add boundaries/rule packs.
+    "boundary-violation": "off",
+    "policy-violation": "off",
+  },
+}

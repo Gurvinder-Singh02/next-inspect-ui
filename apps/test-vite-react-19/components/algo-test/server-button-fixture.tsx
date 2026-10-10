@@ -18,6 +18,6 @@ const MinistryCard = ({
   </div>
 )
 
-export const ServerButtonCard = (props: {
-  "data-accuracy-target"?: string
-}) => <MinistryCard label="Learn More" {...props} />
+const ServerButtonCard = (props: { "data-accuracy-target"?: string }) => (
+  <MinistryCard label="Learn More" {...props} />
+)

@@ -14,7 +14,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 
-export const WorksWithHtml = () => (
+const WorksWithHtml = () => (
   <p className="text-xl font-medium tracking-tight">title</p>
 )
 
@@ -174,21 +174,20 @@ export const WorksWithRadixSlot = () => (
   </div>
 )
 
-export const WorksWithForwardedInput = forwardRef<
-  HTMLInputElement,
-  { hint: string }
->(function WorksWithForwardedInput({ hint, ...props }, ref) {
-  return (
-    <input
-      ref={ref}
-      placeholder={hint}
-      className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
-      {...props}
-    />
-  )
-})
+const WorksWithForwardedInput = forwardRef<HTMLInputElement, { hint: string }>(
+  function WorksWithForwardedInput({ hint, ...props }, ref) {
+    return (
+      <input
+        ref={ref}
+        placeholder={hint}
+        className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
+        {...props}
+      />
+    )
+  }
+)
 
-export const WorksWithMemoPill = memo(function WorksWithMemoPill({
+const WorksWithMemoPill = memo(function WorksWithMemoPill({
   label,
 }: {
   label: string
@@ -215,7 +214,7 @@ const Panel = Object.assign(PanelRoot, {
   ),
 })
 
-export const WorksWithCompound = () => (
+const WorksWithCompound = () => (
   <Panel>
     <Panel.Header>Header</Panel.Header>
     <Panel.Body>Body</Panel.Body>
