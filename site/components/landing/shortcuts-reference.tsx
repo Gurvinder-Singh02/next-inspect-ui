@@ -47,7 +47,7 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["Space"],
     type: "panel",
-    description: "Toggle the Component and Element trees. In Element, arrows preview, Enter selects then opens, and … selects directly.",
+    description: "Open or close the Component and Element trees. Arrows preview rows; Enter opens their source while the original target stays pinned.",
   },
   {
     keys: ["↑", "↓"],
@@ -57,51 +57,48 @@ const SHORTCUTS: KeyboardShortcut[] = [
       "Popover open: select the previous / next tree row. Closed: previous / next sibling.",
   },
   {
-    keys: ["["],
+    keys: ["[", "{"],
+    join: "/",
     type: "nav",
     description: "Move the spotlight to the parent inspectable element.",
   },
   {
-    keys: ["]"],
+    keys: ["]", "}"],
+    join: "/",
     type: "nav",
     description: "Move the spotlight to the first child inspectable element.",
   },
   {
     keys: ["←"],
     type: "nav",
-    description: "Popover open: switch tabs. Closed: move to the previous sibling element.",
+    description: "Popover open: Component tab. Closed: previous sibling element.",
   },
   {
     keys: ["→"],
     type: "nav",
-    description: "Popover open: switch tabs. Closed: move to the next sibling element.",
+    description: "Popover open: Element tab. Closed: next sibling element.",
   },
   {
     keys: ["⌘", "←"],
     type: "nav",
     description:
-      "Jump to the first sibling inspectable element (Ctrl on Windows).",
+      "Popover closed: jump to the first sibling inspectable element (Ctrl on Windows/Linux).",
   },
   {
     keys: ["⌘", "→"],
     type: "nav",
     description:
-      "Jump to the last sibling inspectable element (Ctrl on Windows).",
+      "Popover closed: jump to the last sibling inspectable element (Ctrl on Windows/Linux).",
   },
   {
-    keys: [<Option key="opt-minus" />, "−"],
-    type: "padding",
-    description: "Shrink spotlight padding by 4px on each axis.",
+    keys: ["⌘", "↑"],
+    type: "panel",
+    description: "Popover open: jump to the first row in the current tab (Ctrl on Windows/Linux).",
   },
   {
-    keys: [<Option key="opt-plus" />, "+"],
-    type: "padding",
-    description: "Grow spotlight padding by 4px on each axis.",
-  },
-  {
-    keys: ["⌘", "\\"],
-    type: "padding",
-    description: "Reset spotlight padding to the defaults (Ctrl on Windows).",
+    keys: ["⌘", "↓"],
+    type: "panel",
+    description: "Popover open: jump to the last row in the current tab (Ctrl on Windows/Linux).",
   },
 ]
 

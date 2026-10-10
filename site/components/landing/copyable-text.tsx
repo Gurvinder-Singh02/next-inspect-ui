@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { play } from "cuelume"
+import { TextMorph } from "torph/react"
 
 import { cn } from "@/lib/utils"
 
@@ -39,7 +40,9 @@ export const CopyableText = ({
         className="absolute top-3.5 right-4 font-inter text-[13px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline"
         aria-label={hasCopied ? "Copied" : "Copy prompt"}
       >
-        {hasCopied ? "Copied" : "Copy"}
+        <TextMorph className="transform-gpu">
+          {hasCopied ? "Copied" : "Copy"}
+        </TextMorph>
       </button>
       <div className="pr-14 font-mono text-[13px] leading-relaxed [overflow-wrap:anywhere] whitespace-pre-wrap text-muted-foreground">
         {text}

@@ -1,6 +1,7 @@
 "use client"
 
 import { useId, useState } from "react"
+import { motion, useReducedMotion } from "motion/react"
 
 import { CodeBlock } from "@/components/landing/code-block"
 import { CopyableText } from "@/components/landing/copyable-text"
@@ -41,6 +42,7 @@ const FrameworkIcon = ({ framework }: { framework: string }) => {
 export const UsageTabs = ({ tabs }: { tabs: UsageTab[] }) => {
   const [selected, setSelected] = useState(0)
   const id = useId()
+  const reduceMotion = useReducedMotion()
   const active = tabs[selected]
   if (!active) return null
   const entryFile =
@@ -58,7 +60,7 @@ export const UsageTabs = ({ tabs }: { tabs: UsageTab[] }) => {
       <div
         role="tablist"
         aria-label="Framework"
-        className="flex w-fit max-w-full flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1"
+        className="relative flex w-fit max-w-full flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1"
       >
         {tabs.map((tab, index) => (
           <button
@@ -84,14 +86,28 @@ export const UsageTabs = ({ tabs }: { tabs: UsageTab[] }) => {
               document.getElementById(`${id}-${tabs[next].id}`)?.focus()
             }}
             className={cn(
-              "inline-flex min-h-9 items-center gap-2 rounded-lg px-3 font-inter text-[13px] tracking-tight transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring",
+              "relative inline-flex min-h-9 items-center gap-2 rounded-lg px-3 font-inter text-[13px] tracking-tight transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring",
               selected === index
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
+                ? "text-foreground"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <FrameworkIcon framework={tab.id} />
-            {tab.label}
+            {selected === index ? (
+              <motion.span
+                layoutId={`${id}-pill`}
+                className="absolute inset-0 -z-0 bg-background shadow-sm"
+                style={{ borderRadius: 8 }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : { type: "spring", duration: 0.35, bounce: 0.12 }
+                }
+              />
+            ) : null}
+            <span className="relative z-10 inline-flex items-center gap-2">
+              <FrameworkIcon framework={tab.id} />
+              {tab.label}
+            </span>
           </button>
         ))}
       </div>

@@ -45,7 +45,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
   },
   {
     q: "How do I navigate the tree?",
-    a: "Press Space to open the popover. Component shows immediate parents up to the page boundary. Element shows nearby HTML, stopping at body. Left / Right switches tabs; Up / Down moves between rows and previews their elements. Enter opens the selected source. Press Space to close the popover or Escape to exit inspect mode.",
+    a: "Press Space to open the popover. Component nests from the page boundary down to the hovered element. Element shows nearby HTML, stopping at body. Left opens Component and Right opens Element; Up / Down moves between rows and previews their elements. Enter opens the selected source. Press Space to close the popover or Escape to exit inspect mode.",
   },
   {
     q: "Which editors does it support?",
@@ -54,36 +54,16 @@ const FAQ: { q: string; a: ReactNode }[] = [
   {
     q: "What kind of elements can I inspect?",
     a: (
-      <div className="flex flex-col gap-2">
-        <p>Elements connected to React’s rendered tree, including:</p>
-        <ul className="flex list-disc flex-col gap-1 pl-4">
-          <li>HTML : headings, buttons, links, cards</li>
-          <li>
-            SVG : <code>svg</code>, <code>rect</code>, and SVG components
-          </li>
-          <li>shadcn : Button, Card, Badge, nested composition</li>
-          <li>
-            Base UI : useRender hosts, and nested children like Collapsible
-            Trigger / Panel
-          </li>
-          <li>
-            Motion : <code>motion.div</code>, <code>motion.rect</code>
-          </li>
-          <li>Radix : Slot / asChild</li>
-          <li>React kinds : forwardRef, memo, compound components</li>
-          <li>Lists : children created in .map()</li>
-          <li>Icons : Lucide and other third-party SVG</li>
-          <li>Server-rendered HTML when Next.js exposes source metadata</li>
-        </ul>
-        <p>
-          <Link
-            href="/works-with"
-            className="text-foreground underline-offset-4 hover:underline"
-          >
-            See the patterns
-          </Link>
-        </p>
-      </div>
+      <>
+        Any React element in the rendered tree — HTML, SVG, shadcn, compound
+        components, and the rest of the usual patterns.{" "}
+        <Link
+          href="/works-with"
+          className="text-foreground underline-offset-4 hover:underline"
+        >
+          See the patterns
+        </Link>
+      </>
     ),
   },
 ]
