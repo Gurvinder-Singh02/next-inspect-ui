@@ -1,8 +1,13 @@
-"use client";
+"use client"
 
-import { Avatar, AvatarFallback, AvatarGroup, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarImage,
+} from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Empty,
   EmptyContent,
@@ -10,7 +15,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
+} from "@/components/ui/empty"
 
 export function NoTeamMembers() {
   return (
@@ -21,21 +26,32 @@ export function NoTeamMembers() {
             <EmptyMedia>
               <AvatarGroup className="grayscale">
                 <Avatar size="lg">
-                  <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                  />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <Avatar size="lg">
-                  <AvatarImage src="https://github.com/maxleiter.png" alt="@maxleiter" />
+                  <AvatarImage
+                    src="https://github.com/maxleiter.png"
+                    alt="@maxleiter"
+                  />
                   <AvatarFallback>LR</AvatarFallback>
                 </Avatar>
                 <Avatar size="lg">
-                  <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
+                  <AvatarImage
+                    src="https://github.com/evilrabbit.png"
+                    alt="@evilrabbit"
+                  />
                   <AvatarFallback>ER</AvatarFallback>
                 </Avatar>
               </AvatarGroup>
             </EmptyMedia>
             <EmptyTitle>No Team Members</EmptyTitle>
-            <EmptyDescription>Invite your team to collaborate on this project.</EmptyDescription>
+            <EmptyDescription>
+              Invite your team to collaborate on this project.
+            </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <Button size="sm">Invite Members</Button>
@@ -43,5 +59,5 @@ export function NoTeamMembers() {
         </Empty>
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Empty,
   EmptyContent,
@@ -7,8 +7,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { Spinner } from "@/components/ui/spinner";
+} from "@/components/ui/empty"
+import { Spinner } from "@/components/ui/spinner"
 
 export function SyncingState() {
   return (
@@ -21,7 +21,8 @@ export function SyncingState() {
             </EmptyMedia>
             <EmptyTitle>Syncing your accounts</EmptyTitle>
             <EmptyDescription>
-              We&apos;re pulling in your latest transactions. This usually takes a few seconds.
+              We&apos;re pulling in your latest transactions. This usually takes
+              a few seconds.
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
@@ -30,5 +31,5 @@ export function SyncingState() {
         </Empty>
       </CardContent>
     </Card>
-  );
+  )
 }

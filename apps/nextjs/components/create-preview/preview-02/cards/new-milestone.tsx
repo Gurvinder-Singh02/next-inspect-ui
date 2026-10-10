@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,9 +8,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/card"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 
 export function NewMilestone() {
   return (
@@ -18,14 +18,18 @@ export function NewMilestone() {
       <CardHeader>
         <CardTitle>Set a new milestone</CardTitle>
         <CardDescription>
-          Define your financial target and we&apos;ll help you pace your savings.
+          Define your financial target and we&apos;ll help you pace your
+          savings.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="goal-name">Goal Name</FieldLabel>
-            <Input id="goal-name" placeholder="e.g. New Car, Home Downpayment" />
+            <Input
+              id="goal-name"
+              placeholder="e.g. New Car, Home Downpayment"
+            />
           </Field>
           <div className="grid grid-cols-2 gap-3">
             <Field>
@@ -46,5 +50,5 @@ export function NewMilestone() {
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

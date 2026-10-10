@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 
 const FITNESS_WEEKLY_LOAD = [
   { day: "M", load: 84 },
@@ -20,7 +20,7 @@ const FITNESS_WEEKLY_LOAD = [
   { day: "F", load: 91 },
   { day: "S", load: 48 },
   { day: "S", load: 61 },
-];
+]
 
 export function WeeklyFitnessSummary() {
   return (
@@ -55,5 +55,5 @@ export function WeeklyFitnessSummary() {
         <Button className="w-full">View details</Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

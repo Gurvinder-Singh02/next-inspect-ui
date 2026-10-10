@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -10,16 +10,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+} from "@/components/ui/dropdown-menu"
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 export function RecentTransactions() {
   return (
@@ -52,16 +52,24 @@ export function RecentTransactions() {
               <TableCell>
                 <div className="flex flex-col">
                   <span className="font-medium">Blue Bottle Coffee</span>
-                  <span className="text-sm text-muted-foreground">Food & Drink</span>
+                  <span className="text-sm text-muted-foreground">
+                    Food & Drink
+                  </span>
                 </div>
               </TableCell>
-              <TableCell className="text-sm text-muted-foreground">Today, 10:24 AM</TableCell>
+              <TableCell className="text-sm text-muted-foreground">
+                Today, 10:24 AM
+              </TableCell>
               <TableCell className="text-right">
-                <span className="text-sm font-semibold tabular-nums">-$6.50</span>
+                <span className="text-sm font-semibold tabular-nums">
+                  -$6.50
+                </span>
               </TableCell>
               <TableCell className="w-8">
                 <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" />}>
+                  <DropdownMenuTrigger
+                    render={<Button variant="ghost" size="icon-sm" />}
+                  >
                     <IconPlaceholder
                       lucide="MoreHorizontalIcon"
                       tabler="IconDotsVertical"
@@ -96,16 +104,24 @@ export function RecentTransactions() {
               <TableCell>
                 <div className="flex flex-col">
                   <span className="font-medium">Whole Foods Market</span>
-                  <span className="text-sm text-muted-foreground">Groceries</span>
+                  <span className="text-sm text-muted-foreground">
+                    Groceries
+                  </span>
                 </div>
               </TableCell>
-              <TableCell className="text-sm text-muted-foreground">Yesterday</TableCell>
+              <TableCell className="text-sm text-muted-foreground">
+                Yesterday
+              </TableCell>
               <TableCell className="text-right">
-                <span className="text-sm font-semibold tabular-nums">-$142.30</span>
+                <span className="text-sm font-semibold tabular-nums">
+                  -$142.30
+                </span>
               </TableCell>
               <TableCell className="w-8">
                 <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" />}>
+                  <DropdownMenuTrigger
+                    render={<Button variant="ghost" size="icon-sm" />}
+                  >
                     <IconPlaceholder
                       lucide="MoreHorizontalIcon"
                       tabler="IconDotsVertical"
@@ -143,7 +159,9 @@ export function RecentTransactions() {
                   <span className="text-sm text-muted-foreground">Income</span>
                 </div>
               </TableCell>
-              <TableCell className="text-sm text-muted-foreground">Oct 12</TableCell>
+              <TableCell className="text-sm text-muted-foreground">
+                Oct 12
+              </TableCell>
               <TableCell className="text-right">
                 <span className="text-sm font-semibold text-emerald-500 tabular-nums">
                   +$4,200.00
@@ -151,7 +169,9 @@ export function RecentTransactions() {
               </TableCell>
               <TableCell className="w-8">
                 <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" />}>
+                  <DropdownMenuTrigger
+                    render={<Button variant="ghost" size="icon-sm" />}
+                  >
                     <IconPlaceholder
                       lucide="MoreHorizontalIcon"
                       tabler="IconDotsVertical"
@@ -186,16 +206,24 @@ export function RecentTransactions() {
               <TableCell>
                 <div className="flex flex-col">
                   <span className="font-medium">Uber Technologies</span>
-                  <span className="text-sm text-muted-foreground">Transport</span>
+                  <span className="text-sm text-muted-foreground">
+                    Transport
+                  </span>
                 </div>
               </TableCell>
-              <TableCell className="text-sm text-muted-foreground">Oct 11</TableCell>
+              <TableCell className="text-sm text-muted-foreground">
+                Oct 11
+              </TableCell>
               <TableCell className="text-right">
-                <span className="text-sm font-semibold tabular-nums">-$24.10</span>
+                <span className="text-sm font-semibold tabular-nums">
+                  -$24.10
+                </span>
               </TableCell>
               <TableCell className="w-8">
                 <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" />}>
+                  <DropdownMenuTrigger
+                    render={<Button variant="ghost" size="icon-sm" />}
+                  >
                     <IconPlaceholder
                       lucide="MoreHorizontalIcon"
                       tabler="IconDotsVertical"
@@ -230,16 +258,24 @@ export function RecentTransactions() {
               <TableCell>
                 <div className="flex flex-col">
                   <span className="font-medium">Netflix Subscription</span>
-                  <span className="text-sm text-muted-foreground">Entertainment</span>
+                  <span className="text-sm text-muted-foreground">
+                    Entertainment
+                  </span>
                 </div>
               </TableCell>
-              <TableCell className="text-sm text-muted-foreground">Oct 10</TableCell>
+              <TableCell className="text-sm text-muted-foreground">
+                Oct 10
+              </TableCell>
               <TableCell className="text-right">
-                <span className="text-sm font-semibold tabular-nums">-$19.99</span>
+                <span className="text-sm font-semibold tabular-nums">
+                  -$19.99
+                </span>
               </TableCell>
               <TableCell className="w-8">
                 <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" />}>
+                  <DropdownMenuTrigger
+                    render={<Button variant="ghost" size="icon-sm" />}
+                  >
                     <IconPlaceholder
                       lucide="MoreHorizontalIcon"
                       tabler="IconDotsVertical"
@@ -262,5 +298,5 @@ export function RecentTransactions() {
         </Table>
       </CardContent>
     </Card>
-  );
+  )
 }

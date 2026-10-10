@@ -30,7 +30,10 @@ type TestNode = {
   remove(): void
 }
 
-const createNode = (tag: string, namespaceURI: string | null = null): TestNode => {
+const createNode = (
+  tag: string,
+  namespaceURI: string | null = null
+): TestNode => {
   const attrs: AttrMap = {}
   const children: ReturnType<typeof createNode>[] = []
   const props: Record<string, string> = {}
@@ -80,7 +83,9 @@ const createNode = (tag: string, namespaceURI: string | null = null): TestNode =
     setAttribute(name: string, value: string) {
       attrs[name] = value
     },
-    getAttributeNames() { return Object.keys(attrs) },
+    getAttributeNames() {
+      return Object.keys(attrs)
+    },
     getAttribute(name: string) {
       return attrs[name] ?? null
     },
@@ -169,7 +174,8 @@ export const registerDom = () => {
     head,
     body,
     createElement: (tag: string) => createNode(tag),
-    createElementNS: (namespace: string, tag: string) => createNode(tag, namespace),
+    createElementNS: (namespace: string, tag: string) =>
+      createNode(tag, namespace),
     querySelector: (selector: string) => html.querySelector(selector),
     querySelectorAll: (selector: string) => html.querySelectorAll(selector),
   }

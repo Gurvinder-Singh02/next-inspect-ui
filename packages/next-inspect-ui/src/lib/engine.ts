@@ -1,15 +1,15 @@
 import { recoverComponentFrame } from "./component-frame.ts"
 import { readFiberStack, readDefinitionStack } from "./fiber-stack.ts"
-import {
-  INSPECTOR_IDES,
-  toAbsolutePath,
-  type InspectorIde,
-} from "./index.ts"
+import { INSPECTOR_IDES, toAbsolutePath, type InspectorIde } from "./index.ts"
 import { markInspectNode, paintStyleTab } from "../styles/styles.ts"
 
 const getElementFiber = <T = unknown>(element: Element): T | null => {
-  const fiberKey = Object.keys(element).find((key) => key.startsWith("__reactFiber$"))
-  return fiberKey ? ((element as unknown as Record<string, T>)[fiberKey] ?? null) : null
+  const fiberKey = Object.keys(element).find((key) =>
+    key.startsWith("__reactFiber$")
+  )
+  return fiberKey
+    ? ((element as unknown as Record<string, T>)[fiberKey] ?? null)
+    : null
 }
 
 export const isInspectorChrome = (element: Element) =>
@@ -21,7 +21,9 @@ export const isInspectorChrome = (element: Element) =>
 
 const isSkippedNavHost = (element: Element) => {
   const tag = element.tagName.toLowerCase()
-  if (["script","style","template","link","meta","noscript"].includes(tag)) {
+  if (
+    ["script", "style", "template", "link", "meta", "noscript"].includes(tag)
+  ) {
     return true
   }
 
@@ -41,7 +43,13 @@ const isInspectable = (element: Element) =>
   getElementFiber(element) !== null
 
 export const findParentInspectable = (element: Element): Element | null => {
-  for (let current = element.parentElement; current && current !== document.body && current !== document.documentElement; current = current.parentElement) {
+  for (
+    let current = element.parentElement;
+    current &&
+    current !== document.body &&
+    current !== document.documentElement;
+    current = current.parentElement
+  ) {
     if (isInspectable(current)) return current
   }
   return null
@@ -51,7 +59,8 @@ export const findChildInspectable = (element: Element): Element | null => {
   const walk = (onlySkipped: boolean): Element | null => {
     for (const child of element.children) {
       if (isInspectorChrome(child)) continue
-      if (onlySkipped ? !isSkippedNavHost(child) : isSkippedNavHost(child)) continue
+      if (onlySkipped ? !isSkippedNavHost(child) : isSkippedNavHost(child))
+        continue
       if (!onlySkipped && getElementFiber(child) !== null) return child
       const nested = findChildInspectable(child)
       if (nested) return nested
@@ -83,8 +92,21 @@ export const findChildInspectableWhere = (
   return null
 }
 
-export const findSiblingInspectable = (element: Element, direction: "prev" | "next"): Element | null => {
-  for (let current = direction === "prev" ? element.previousElementSibling : element.nextElementSibling; current; current = direction === "prev" ? current.previousElementSibling : current.nextElementSibling) {
+export const findSiblingInspectable = (
+  element: Element,
+  direction: "prev" | "next"
+): Element | null => {
+  for (
+    let current =
+      direction === "prev"
+        ? element.previousElementSibling
+        : element.nextElementSibling;
+    current;
+    current =
+      direction === "prev"
+        ? current.previousElementSibling
+        : current.nextElementSibling
+  ) {
     if (isInspectable(current)) return current
   }
   return null
@@ -109,11 +131,17 @@ export const findEdgeSiblingInspectable = (
 
 export type SourceLocation = { filePath: string; line: number; column: number }
 
-type FiberDebugSource = { fileName?: string; lineNumber?: number; columnNumber?: number }
+type FiberDebugSource = {
+  fileName?: string
+  lineNumber?: number
+  columnNumber?: number
+}
 
 export const isBundledOrExternalPath = (filePath: string) => {
   const file = filePath.replace(/\\/g, "/")
-  return /(?:^|\/)node_modules\/|\/(?:\.next|_next)\/|^\.next\/|webpack-internal:|webpack:\/\/|turbopack:\/\/|about:\/\/React\//.test(file)
+  return /(?:^|\/)node_modules\/|\/(?:\.next|_next)\/|^\.next\/|webpack-internal:|webpack:\/\/|turbopack:\/\/|about:\/\/React\//.test(
+    file
+  )
 }
 
 /** RSC / Next server chunks — including Turbopack `.next/dev/server`. */
@@ -198,36 +226,65 @@ export const resolveSourceMapSourcePath = ({
     return `${projectRoot.replace(/\/$/, "")}${urlPathname}`
   }
 
-  return toAbsolutePath(urlPathname.startsWith("/") ? urlPathname : withRoot, projectRoot)
+  return toAbsolutePath(
+    urlPathname.startsWith("/") ? urlPathname : withRoot,
+    projectRoot
+  )
 }
 
-export const formatPageLabel = (source: SourceLocation, projectRoot: string) => {
+export const formatPageLabel = (
+  source: SourceLocation,
+  projectRoot: string
+) => {
   const file = source.filePath.replace(/\\/g, "/")
   const root = projectRoot.replace(/\\/g, "/").replace(/\/$/, "")
-  let relativePath = root && file.startsWith(`${root}/`) ? file.slice(root.length + 1) : file
+  let relativePath =
+    root && file.startsWith(`${root}/`) ? file.slice(root.length + 1) : file
   if (/^(?:\/|[A-Za-z]:\/|file:\/\/)/.test(relativePath)) {
     // Recovered stacks can have absolute paths even without a projectRoot prop.
     const workspace = relativePath.match(/\/(?:apps|packages)\/[^/]+\/(.+)$/)
-    const sourceFolder = relativePath.match(/\/((?:src|app|pages|components|lib|hooks|test-cases|styles|public)\/.+)$/)
-    relativePath = workspace?.[1] ?? sourceFolder?.[1] ?? relativePath.split("/").pop() ?? relativePath
+    const sourceFolder = relativePath.match(
+      /\/((?:src|app|pages|components|lib|hooks|test-cases|styles|public)\/.+)$/
+    )
+    relativePath =
+      workspace?.[1] ??
+      sourceFolder?.[1] ??
+      relativePath.split("/").pop() ??
+      relativePath
   }
   return `${relativePath}:${source.line}`
 }
 
 const isLikelySourceFile = (filePath: string) =>
-  /\.(tsx|ts|jsx|js|mdx)$/.test(filePath.split("?")[0] ?? "");
+  /\.(tsx|ts|jsx|js|mdx)$/.test(filePath.split("?")[0] ?? "")
 
-export const sourceFromFiberDebugSource = (debugSource: FiberDebugSource | null | undefined, projectRoot: string): SourceLocation | null => {
-  if (!debugSource?.fileName || isBundledOrExternalPath(debugSource.fileName)) return null
-  return { filePath: toAbsolutePath(debugSource.fileName, projectRoot), line: debugSource.lineNumber ?? 1, column: debugSource.columnNumber ?? 1 }
+export const sourceFromFiberDebugSource = (
+  debugSource: FiberDebugSource | null | undefined,
+  projectRoot: string
+): SourceLocation | null => {
+  if (!debugSource?.fileName || isBundledOrExternalPath(debugSource.fileName))
+    return null
+  return {
+    filePath: toAbsolutePath(debugSource.fileName, projectRoot),
+    line: debugSource.lineNumber ?? 1,
+    column: debugSource.columnNumber ?? 1,
+  }
 }
 
-export const isDistinctUsedSource = (usage: SourceLocation | null | undefined, definition: SourceLocation | null | undefined) =>
-  Boolean(usage && definition && usage.filePath !== definition.filePath)
+export const isDistinctUsedSource = (
+  usage: SourceLocation | null | undefined,
+  definition: SourceLocation | null | undefined
+) => Boolean(usage && definition && usage.filePath !== definition.filePath)
 
 export const isClimbUsageBoundary = ({
-  usage, definition, host,
-}: { usage: SourceLocation | null | undefined; definition: SourceLocation | null | undefined; host?: SourceLocation | null | undefined }) => {
+  usage,
+  definition,
+  host,
+}: {
+  usage: SourceLocation | null | undefined
+  definition: SourceLocation | null | undefined
+  host?: SourceLocation | null | undefined
+}) => {
   if (!usage || isBundledOrExternalPath(usage.filePath)) return false
   if (definition && usage.filePath !== definition.filePath) return true
   if (host && usage.filePath !== host.filePath) return true
@@ -238,61 +295,123 @@ type NamedSourceFrame = { methodName: string; source: SourceLocation }
 
 const frameMatchesComponent = (methodName: string, componentName: string) => {
   const method = methodName.trim()
-  return !!method && method !== "<unknown>" && (method === componentName || method.endsWith(`.${componentName}`) || method.startsWith(`${componentName}.`))
+  return (
+    !!method &&
+    method !== "<unknown>" &&
+    (method === componentName ||
+      method.endsWith(`.${componentName}`) ||
+      method.startsWith(`${componentName}.`))
+  )
 }
 
-const pickPreferredStackSource = (frames: NamedSourceFrame[], componentName?: string | null): SourceLocation | null => {
+const pickPreferredStackSource = (
+  frames: NamedSourceFrame[],
+  componentName?: string | null
+): SourceLocation | null => {
   if (!frames.length) return null
-  if (componentName) return frames.find((frame) => frameMatchesComponent(frame.methodName, componentName))?.source ?? frames[0]?.source ?? null
+  if (componentName)
+    return (
+      frames.find((frame) =>
+        frameMatchesComponent(frame.methodName, componentName)
+      )?.source ??
+      frames[0]?.source ??
+      null
+    )
   return frames[0]?.source ?? null
 }
 
 const pickOpenSource = (
   host: SourceLocation | null | undefined,
-  stack: SourceLocation | null | undefined,
-): SourceLocation | null => host ?? stack ?? null;
+  stack: SourceLocation | null | undefined
+): SourceLocation | null => host ?? stack ?? null
 
-export type ClimbSourcePair = { source: SourceLocation | null; definition: SourceLocation | null }
+export type ClimbSourcePair = {
+  source: SourceLocation | null
+  definition: SourceLocation | null
+}
 
 export const getClimbStepDisplaySource = (
-  step: ClimbSourcePair,
+  step: ClimbSourcePair
 ): SourceLocation | null => step.source ?? step.definition
 
 const pickDefinedSource = ({
-  host, componentDefinition, labelIsComponent,
-}: { host: SourceLocation | null | undefined; componentDefinition: SourceLocation | null | undefined; labelIsComponent: boolean }) =>
-  labelIsComponent ? (componentDefinition ?? host ?? null) : (host ?? componentDefinition ?? null)
+  host,
+  componentDefinition,
+  labelIsComponent,
+}: {
+  host: SourceLocation | null | undefined
+  componentDefinition: SourceLocation | null | undefined
+  labelIsComponent: boolean
+}) =>
+  labelIsComponent
+    ? (componentDefinition ?? host ?? null)
+    : (host ?? componentDefinition ?? null)
 
 export type ServerDebugInfo = {
-  name?: string; env?: string; key?: string; stack?: unknown; debugStack?: unknown
-  debugLocation?: unknown; owner?: ServerDebugInfo | null
+  name?: string
+  env?: string
+  key?: string
+  stack?: unknown
+  debugStack?: unknown
+  debugLocation?: unknown
+  owner?: ServerDebugInfo | null
 }
 
 export type ReactFiber = {
-  _debugInfo?: ServerDebugInfo[] | null; _debugOwner?: ReactFiber | null
-  _debugSource?: { fileName?: string; lineNumber?: number; columnNumber?: number }
-  _debugStack?: Error | string; return?: ReactFiber | null; child?: ReactFiber | null; sibling?: ReactFiber | null; alternate?: ReactFiber | null; tag?: number
-  stateNode?: unknown; memoizedProps?: { className?: unknown; class?: unknown } | null
+  _debugInfo?: ServerDebugInfo[] | null
+  _debugOwner?: ReactFiber | null
+  _debugSource?: {
+    fileName?: string
+    lineNumber?: number
+    columnNumber?: number
+  }
+  _debugStack?: Error | string
+  return?: ReactFiber | null
+  child?: ReactFiber | null
+  sibling?: ReactFiber | null
+  alternate?: ReactFiber | null
+  tag?: number
+  stateNode?: unknown
+  memoizedProps?: { className?: unknown; class?: unknown } | null
   type?: { displayName?: string; name?: string }
   elementType?: { displayName?: string; name?: string }
 }
 
-type NamedTarget = { name: string; fiber: ReactFiber; debugInfo?: ServerDebugInfo }
-
-type StackFrame = {
-  file: string; methodName: string; arguments: string[]; line1: number; column1: number; isServer: boolean
+type NamedTarget = {
+  name: string
+  fiber: ReactFiber
+  debugInfo?: ServerDebugInfo
 }
 
-export const getFiber = (element: Element) => getElementFiber<ReactFiber>(element)
+type StackFrame = {
+  file: string
+  methodName: string
+  arguments: string[]
+  line1: number
+  column1: number
+  isServer: boolean
+}
 
-export const readComponentTypeName = (type: ReactFiber["type"]): string | null => {
+export const getFiber = (element: Element) =>
+  getElementFiber<ReactFiber>(element)
+
+export const readComponentTypeName = (
+  type: ReactFiber["type"]
+): string | null => {
   if (!type || typeof type === "string") return null
   const w = type as {
-    displayName?: string; name?: string
+    displayName?: string
+    name?: string
     render?: { displayName?: string; name?: string }
     type?: { displayName?: string; name?: string }
   }
-  const candidate = w.displayName ?? w.name ?? w.render?.displayName ?? w.render?.name ?? w.type?.displayName ?? w.type?.name
+  const candidate =
+    w.displayName ??
+    w.name ??
+    w.render?.displayName ??
+    w.render?.name ??
+    w.type?.displayName ??
+    w.type?.name
   return typeof candidate === "string" && candidate ? candidate : null
 }
 
@@ -305,14 +424,35 @@ export const isCompositeComponentFiber = (fiber: ReactFiber) =>
 export const isHostComponentFiber = (fiber: ReactFiber) => fiber.tag === 5
 
 const FRAMEWORK_EXACT = new Set([
-  "SegmentViewNode", "SegmentTrieNode", "ClientSegmentRoot", "RenderFromTemplateContext",
-  "OuterLayoutRouter", "InnerLayoutRouter", "AppRouter", "Router", "HotReload",
-  "ReactDevOverlay", "ErrorBoundaryHandler", "LoadingBoundary", "RedirectBoundary",
-  "HTTPAccessFallbackBoundary", "DevRootHTTPAccessFallbackBoundary", "ScrollAndFocusHandler",
-  "RedirectErrorBoundary", "NotFoundBoundary", "NotFoundErrorBoundary", "RootErrorBoundary",
-  "ReactStrictMode", "StrictMode", "ClientPageRoot", "ServerRoot", "AppDevOverlay",
+  "SegmentViewNode",
+  "SegmentTrieNode",
+  "ClientSegmentRoot",
+  "RenderFromTemplateContext",
+  "OuterLayoutRouter",
+  "InnerLayoutRouter",
+  "AppRouter",
+  "Router",
+  "HotReload",
+  "ReactDevOverlay",
+  "ErrorBoundaryHandler",
+  "LoadingBoundary",
+  "RedirectBoundary",
+  "HTTPAccessFallbackBoundary",
+  "DevRootHTTPAccessFallbackBoundary",
+  "ScrollAndFocusHandler",
+  "RedirectErrorBoundary",
+  "NotFoundBoundary",
+  "NotFoundErrorBoundary",
+  "RootErrorBoundary",
+  "ReactStrictMode",
+  "StrictMode",
+  "ClientPageRoot",
+  "ServerRoot",
+  "AppDevOverlay",
   "AppDevOverlayErrorBoundary",
-  "ScrollAndMaybeFocusHandler", "InnerScrollAndFocusHandlerOld", "DevLayout",
+  "ScrollAndMaybeFocusHandler",
+  "InnerScrollAndFocusHandlerOld",
+  "DevLayout",
 ])
 
 export const isFrameworkInspectorName = (name: string) =>
@@ -329,10 +469,7 @@ const getHostTagName = (fiber: ReactFiber | null): string | null => {
   let current = fiber
 
   while (current) {
-    if (
-      isHostComponentFiber(current) &&
-      current.stateNode instanceof Element
-    ) {
+    if (isHostComponentFiber(current) && current.stateNode instanceof Element) {
       return current.stateNode.tagName.toLowerCase()
     }
 
@@ -351,17 +488,21 @@ const getHostTagName = (fiber: ReactFiber | null): string | null => {
   return null
 }
 
-export const getNamedTarget = (fiber: ReactFiber | null): NamedTarget | null => {
+export const getNamedTarget = (
+  fiber: ReactFiber | null
+): NamedTarget | null => {
   for (let current = fiber; current; current = current.return ?? null) {
     if (isTransparentClimbFiber(current)) continue
     if (isCompositeComponentFiber(current)) {
       const name = readFiberComponentName(current)
-      if (name && !isFrameworkInspectorName(name)) return { name, fiber: current }
+      if (name && !isFrameworkInspectorName(name))
+        return { name, fiber: current }
     }
     if (current._debugInfo?.length) {
       for (let index = current._debugInfo.length - 1; index >= 0; index -= 1) {
         const info = current._debugInfo[index]
-        if (info.name && !isFrameworkInspectorName(info.name)) return { name: info.name, fiber: current, debugInfo: info }
+        if (info.name && !isFrameworkInspectorName(info.name))
+          return { name: info.name, fiber: current, debugInfo: info }
       }
     }
   }
@@ -369,27 +510,39 @@ export const getNamedTarget = (fiber: ReactFiber | null): NamedTarget | null => 
 }
 
 // A route's page is the last content component; layouts own the app shell.
-const isPopoverLayout = (name: string) => name === "Layout" || /Layout$/.test(name)
+const isPopoverLayout = (name: string) =>
+  name === "Layout" || /Layout$/.test(name)
 const isPopoverPage = (name: string) => name === "Page" || /Page$/.test(name)
 
 /** Immediate ancestry within the route, without walking into the app shell. */
-export const getPopoverComponentAncestors = (fiber: ReactFiber): NamedTarget[] => {
+export const getPopoverComponentAncestors = (
+  fiber: ReactFiber
+): NamedTarget[] => {
   const ancestors: NamedTarget[] = []
   const seenFibers = new Set<ReactFiber>()
   const seenInfo = new Set<ServerDebugInfo>()
-  for (let current: ReactFiber | null = fiber; current && !seenFibers.has(current); current = current.return ?? current._debugOwner ?? null) {
+  for (
+    let current: ReactFiber | null = fiber;
+    current && !seenFibers.has(current);
+    current = current.return ?? current._debugOwner ?? null
+  ) {
     seenFibers.add(current)
-    const rawName = isCompositeComponentFiber(current) ? readFiberComponentName(current) : null
+    const rawName = isCompositeComponentFiber(current)
+      ? readFiberComponentName(current)
+      : null
     if (rawName && isPopoverLayout(rawName)) break
     const name = !isTransparentClimbFiber(current) ? rawName : null
-    const component = name && !isFrameworkInspectorName(name) ? { name, fiber: current } : null
+    const component =
+      name && !isFrameworkInspectorName(name) ? { name, fiber: current } : null
     if (component) ancestors.push(component)
     for (const info of [...(current._debugInfo ?? [])].reverse()) {
       if (seenInfo.has(info)) continue
       seenInfo.add(info)
       if (info.name && isPopoverLayout(info.name)) return ancestors
       if (!info.name || isFrameworkInspectorName(info.name)) continue
-      const existing = ancestors.find(ancestor => ancestor.fiber === current && ancestor.name === info.name)
+      const existing = ancestors.find(
+        (ancestor) => ancestor.fiber === current && ancestor.name === info.name
+      )
       if (existing) existing.debugInfo = info
       else ancestors.push({ name: info.name, fiber: current, debugInfo: info })
       if (isPopoverPage(info.name)) return ancestors
@@ -417,11 +570,16 @@ const isMotionFactoryName = (name: string) => name.startsWith("motion.")
 /** Turbopack/webpack vendor chunks and node_modules paths — not project sources. */
 export const isVendorModulePath = (filePath: string) => {
   const file = filePath.replace(/\\/g, "/")
-  return /node_modules|(?:^|[/_])(?:@|%40)[a-z0-9.-]+[_/]|next[_-]dist/i.test(file)
+  return /node_modules|(?:^|[/_])(?:@|%40)[a-z0-9.-]+[_/]|next[_-]dist/i.test(
+    file
+  )
 }
 
 const readStackText = (fiber: ReactFiber) => {
-  const stack = fiber._debugStack instanceof Error ? fiber._debugStack.stack : fiber._debugStack
+  const stack =
+    fiber._debugStack instanceof Error
+      ? fiber._debugStack.stack
+      : fiber._debugStack
   return typeof stack === "string" ? stack : ""
 }
 
@@ -437,7 +595,11 @@ const hostStackBuiltByVendor = (host: ReactFiber) => {
   for (const line of stack.split("\n")) {
     const match = line.match(/at\s+(?:Object\.)?(\S+)\s+\((.+)\)$/)
     if (!match) continue
-    if (/^(?:exports\.)?(?:createElement|jsxDEV|jsx|jsxs)$/.test(match[1]) || /react[_-]stack/.test(match[1])) continue
+    if (
+      /^(?:exports\.)?(?:createElement|jsxDEV|jsx|jsxs)$/.test(match[1]) ||
+      /react[_-]stack/.test(match[1])
+    )
+      continue
     const file = match[2].replace(/:\d+:\d+$/, "")
     return isVendorModulePath(file)
   }
@@ -451,8 +613,13 @@ const isVendorHostBuilder = (fiber: ReactFiber) => {
   const child = firstNonWrapperChild(fiber)
   if (!child || !isHostComponentFiber(child)) return false
   // React 18 has no creation stacks for hosts made by vendor createElement calls.
-  if (!readStackText(child) && !child._debugSource && fiber._debugOwner &&
-    readFiberComponentName(fiber._debugOwner) === name) return true
+  if (
+    !readStackText(child) &&
+    !child._debugSource &&
+    fiber._debugOwner &&
+    readFiberComponentName(fiber._debugOwner) === name
+  )
+    return true
   return hostStackBuiltByVendor(child)
 }
 
@@ -535,7 +702,12 @@ const isHostNestedUnderHost = (hostFiber: ReactFiber): boolean => {
   return false
 }
 
-type ClimbOwner = { name: string; fiber: ReactFiber; debugInfo?: ServerDebugInfo; isSelfDebugOwner: boolean }
+type ClimbOwner = {
+  name: string
+  fiber: ReactFiber
+  debugInfo?: ServerDebugInfo
+  isSelfDebugOwner: boolean
+}
 
 const readDebugInfoOwner = (fiber: ReactFiber): ClimbOwner | null => {
   if (!fiber._debugInfo?.length) return null
@@ -586,7 +758,9 @@ const getLabelOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
   return { name, fiber: composite, isSelfDebugOwner: false }
 }
 
-export const getDirectClimbOwner = (hostFiber: ReactFiber): ClimbOwner | null => {
+export const getDirectClimbOwner = (
+  hostFiber: ReactFiber
+): ClimbOwner | null => {
   const strict = getLabelOwner(hostFiber)
   if (strict) return strict
 
@@ -614,8 +788,15 @@ const getOwningCompositeName = (hostFiber: ReactFiber): string | null => {
   return getLabelOwner(hostFiber)?.name ?? null
 }
 
-export const isOwnerAncestorOf = (child: ReactFiber, parent: ReactFiber): boolean => {
-  for (let current = child._debugOwner ?? null, hops = 0; current && hops < 32; hops += 1, current = current._debugOwner ?? null) {
+export const isOwnerAncestorOf = (
+  child: ReactFiber,
+  parent: ReactFiber
+): boolean => {
+  for (
+    let current = child._debugOwner ?? null, hops = 0;
+    current && hops < 32;
+    hops += 1, current = current._debugOwner ?? null
+  ) {
     if (current === parent) return true
   }
   return false
@@ -679,11 +860,18 @@ const getMotionFactoryName = (fiber: ReactFiber | null): string | null => {
 export const getDomHoverName = (fiber: ReactFiber | null) =>
   getMotionFactoryName(fiber) ?? getHostTagName(fiber)
 
-const getDebugSourceUntil = (start: ReactFiber | null, stop: ReactFiber | null): SourceLocation | null => {
+const getDebugSourceUntil = (
+  start: ReactFiber | null,
+  stop: ReactFiber | null
+): SourceLocation | null => {
   for (let current = start; current; current = current.return ?? null) {
     const source = current._debugSource
     if (source?.fileName && !isBundledOrExternalPath(source.fileName)) {
-      return { filePath: source.fileName, line: source.lineNumber ?? 1, column: source.columnNumber ?? 1 }
+      return {
+        filePath: source.fileName,
+        line: source.lineNumber ?? 1,
+        column: source.columnNumber ?? 1,
+      }
     }
     if (stop && current === stop) break
   }
@@ -700,7 +888,11 @@ export const parseDebugStack = (stack: string) => {
     frames.push(frame)
   }
   for (const line of stack.split("\n")) {
-    if (/node_modules|react-dom|jsxDEV|fakeJSXCallSite|react-stack|react_stack_bottom_frame/.test(line)) {
+    if (
+      /node_modules|react-dom|jsxDEV|fakeJSXCallSite|react-stack|react_stack_bottom_frame/.test(
+        line
+      )
+    ) {
       continue
     }
     let match = line.match(
@@ -725,25 +917,36 @@ export const parseDebugStack = (stack: string) => {
     push({
       file: match[1],
       methodName:
-        line.slice(0, line.indexOf(match[0])).replace(/^\s*at\s+/, "").replace(/\s+\($/, "") ||
-        "<unknown>",
+        line
+          .slice(0, line.indexOf(match[0]))
+          .replace(/^\s*at\s+/, "")
+          .replace(/\s+\($/, "") || "<unknown>",
       arguments: [],
       line1: Number(match[2]),
       column1: Number(match[3]),
-      isServer: match[1].startsWith("about://React/Server/") || isReactServerStackFile(match[1]),
+      isServer:
+        match[1].startsWith("about://React/Server/") ||
+        isReactServerStackFile(match[1]),
     })
   }
   return frames
 }
 
 const getStackFrames = (fiber: ReactFiber | null, stop?: ReactFiber | null) => {
-  const frames: StackFrame[] = [], frameKeys = new Set<string>()
+  const frames: StackFrame[] = [],
+    frameKeys = new Set<string>()
   for (let current = fiber; current; current = current.return ?? null) {
-    const stack = current._debugStack instanceof Error ? current._debugStack.stack : current._debugStack
+    const stack =
+      current._debugStack instanceof Error
+        ? current._debugStack.stack
+        : current._debugStack
     if (typeof stack === "string") {
       for (const frame of parseDebugStack(stack)) {
         const frameKey = `${frame.file}:${frame.line1}:${frame.column1}`
-        if (!frameKeys.has(frameKey)) { frameKeys.add(frameKey); frames.push(frame) }
+        if (!frameKeys.has(frameKey)) {
+          frameKeys.add(frameKey)
+          frames.push(frame)
+        }
       }
     }
     if (stop && current === stop) break
@@ -752,23 +955,32 @@ const getStackFrames = (fiber: ReactFiber | null, stop?: ReactFiber | null) => {
 }
 
 export const getOwnStackFrames = (fiber: ReactFiber) => {
-  return readFiberStack(fiber._debugStack).map(frame => ({ ...frame, arguments: [],
-    isServer: isReactServerStackFile(frame.file) }))
+  return readFiberStack(fiber._debugStack).map((frame) => ({
+    ...frame,
+    arguments: [],
+    isServer: isReactServerStackFile(frame.file),
+  }))
 }
 
 const stackStr = (v: unknown): v is string => typeof v === "string"
 const stackNum = (v: unknown): v is number => typeof v === "number"
 const stackFile = (r: Record<string, unknown>) =>
-  (["fileName", "filename", "file", "source"] as const).map((k) => r[k]).find(stackStr) ?? null
+  (["fileName", "filename", "file", "source"] as const)
+    .map((k) => r[k])
+    .find(stackStr) ?? null
 const stackLine = (r: Record<string, unknown>) =>
-  (["lineNumber", "line1", "line"] as const).map((k) => r[k]).find(stackNum) ?? null
+  (["lineNumber", "line1", "line"] as const).map((k) => r[k]).find(stackNum) ??
+  null
 const stackCol = (r: Record<string, unknown>, fallback = 1) =>
-  (["columnNumber", "column1", "column"] as const).map((k) => r[k]).find(stackNum) ?? fallback
+  (["columnNumber", "column1", "column"] as const)
+    .map((k) => r[k])
+    .find(stackNum) ?? fallback
 const stackServer = (file: string) =>
-  file.startsWith("about://React/Server/") ||
-  file.includes(".next/server")
+  file.startsWith("about://React/Server/") || file.includes(".next/server")
 
-const frameFromRecord = (record: Record<string, unknown>): StackFrame | null => {
+const frameFromRecord = (
+  record: Record<string, unknown>
+): StackFrame | null => {
   const file = stackFile(record)
   const line1 = stackLine(record)
   if (!file || line1 == null) return null
@@ -789,11 +1001,17 @@ const frameFromRecord = (record: Record<string, unknown>): StackFrame | null => 
 const framesFromUnknownStack = (stack: unknown): StackFrame[] => {
   if (!stack) return []
   if (stackStr(stack)) return parseDebugStack(stack)
-  if (stack instanceof Error && stackStr(stack.stack)) return parseDebugStack(stack.stack)
+  if (stack instanceof Error && stackStr(stack.stack))
+    return parseDebugStack(stack.stack)
   if (!Array.isArray(stack)) return []
   const frames: StackFrame[] = []
   for (const entry of stack) {
-    if (Array.isArray(entry) && entry.length >= 4 && stackStr(entry[1]) && stackNum(entry[2])) {
+    if (
+      Array.isArray(entry) &&
+      entry.length >= 4 &&
+      stackStr(entry[1]) &&
+      stackNum(entry[2])
+    ) {
       frames.push({
         file: entry[1],
         methodName: stackStr(entry[0]) ? entry[0] : "<unknown>",
@@ -828,46 +1046,88 @@ const getDebugInfoFrames = (info: ServerDebugInfo) => {
   return frames
 }
 
-type SourceMapData = { mappings: string; sourceRoot?: string; sources: string[]; ignoreList?: number[]; x_google_ignoreList?: number[] }
-type SourceMapSection = { offset: { line: number; column: number }; map: SourceMapData }
+type SourceMapData = {
+  mappings: string
+  sourceRoot?: string
+  sources: string[]
+  ignoreList?: number[]
+  x_google_ignoreList?: number[]
+}
+type SourceMapSection = {
+  offset: { line: number; column: number }
+  map: SourceMapData
+}
 export type SourceMap = SourceMapData & { sections?: SourceMapSection[] }
 type OriginalFrameResult =
-  | { status: "fulfilled"; value: { originalStackFrame: (Omit<StackFrame, "isServer"> & { ignored: boolean }) | null } }
+  | {
+      status: "fulfilled"
+      value: {
+        originalStackFrame:
+          | (Omit<StackFrame, "isServer"> & { ignored: boolean })
+          | null
+      }
+    }
   | { status: "rejected"; reason: string }
 
 export const BASE64_CHARS =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 export const resolveFirstMappedFrame = async (
-  frames: StackFrame[], projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>, componentName?: string | null
+  frames: StackFrame[],
+  projectRoot: string,
+  sourceMapCache: Map<string, Promise<SourceMap>>,
+  componentName?: string | null
 ) => {
   const mapped: NamedSourceFrame[] = []
-  const hasNamedFrame = !!componentName && frames.some((f) => f.methodName.includes(componentName))
+  const hasNamedFrame =
+    !!componentName && frames.some((f) => f.methodName.includes(componentName))
   const ordered = hasNamedFrame
-    ? [...frames.filter((f) => f.methodName.includes(componentName)), ...frames.filter((f) => !f.methodName.includes(componentName))]
+    ? [
+        ...frames.filter((f) => f.methodName.includes(componentName)),
+        ...frames.filter((f) => !f.methodName.includes(componentName)),
+      ]
     : frames
   for (const frame of ordered) {
     try {
       const source = await resolveStackFrame(frame, projectRoot, sourceMapCache)
       if (!source) continue
       mapped.push({ methodName: frame.methodName, source })
-      if (componentName && pickPreferredStackSource(mapped, componentName) === source && frame.methodName.includes(componentName)) return source
+      if (
+        componentName &&
+        pickPreferredStackSource(mapped, componentName) === source &&
+        frame.methodName.includes(componentName)
+      )
+        return source
       if (!hasNamedFrame) return source
-    } catch { continue }
+    } catch {
+      continue
+    }
   }
   return pickPreferredStackSource(mapped, componentName)
 }
 
-export const sourceFromStackFrame = (frame: StackFrame, projectRoot: string): SourceLocation | null => {
+export const sourceFromStackFrame = (
+  frame: StackFrame,
+  projectRoot: string
+): SourceLocation | null => {
   let file = frame.file
   if (!file) return null
-  if (file.startsWith("about://React/Server/")) file = file.slice("about://React/Server/".length)
-  if (isBundledOrExternalPath(file) || ((file.startsWith("http://") || file.startsWith("https://")) && (!projectRoot || !file.includes(projectRoot)))) {
+  if (file.startsWith("about://React/Server/"))
+    file = file.slice("about://React/Server/".length)
+  if (
+    isBundledOrExternalPath(file) ||
+    ((file.startsWith("http://") || file.startsWith("https://")) &&
+      (!projectRoot || !file.includes(projectRoot)))
+  ) {
     return null
   }
   const filePath = toAbsolutePath(file, projectRoot)
   if (isBundledOrExternalPath(filePath)) return null
-  if (!isLikelySourceFile(filePath) && (!projectRoot || !filePath.startsWith(projectRoot))) return null
+  if (
+    !isLikelySourceFile(filePath) &&
+    (!projectRoot || !filePath.startsWith(projectRoot))
+  )
+    return null
   return { filePath, line: frame.line1, column: frame.column1 }
 }
 
@@ -884,16 +1144,24 @@ export const preferredSourceFromFrames = (
   return pickPreferredStackSource(mapped, componentName)
 }
 
-const findNearestAuthorCallSiteSync = (fiber: ReactFiber, projectRoot: string): SourceLocation | null => {
-  const seen = new Set<ReactFiber>(), queue: ReactFiber[] = []
+const findNearestAuthorCallSiteSync = (
+  fiber: ReactFiber,
+  projectRoot: string
+): SourceLocation | null => {
+  const seen = new Set<ReactFiber>(),
+    queue: ReactFiber[] = []
   if (fiber._debugOwner) queue.push(fiber._debugOwner)
-  let stackFallback: SourceLocation | null = null, debugInfoFallback: SourceLocation | null = null
+  let stackFallback: SourceLocation | null = null,
+    debugInfoFallback: SourceLocation | null = null
   const rememberDebugInfo = (node: ReactFiber) => {
     if (debugInfoFallback || !node._debugInfo?.length) return
     for (let i = node._debugInfo.length - 1; i >= 0; i -= 1) {
       const pair = resolveDebugInfoPairSync(node._debugInfo[i]!, projectRoot)
       const candidate = pair.source ?? pair.renderedBy
-      if (candidate) { debugInfoFallback = candidate; return }
+      if (candidate) {
+        debugInfoFallback = candidate
+        return
+      }
     }
   }
   rememberDebugInfo(fiber)
@@ -901,11 +1169,20 @@ const findNearestAuthorCallSiteSync = (fiber: ReactFiber, projectRoot: string): 
     const current = queue.shift()!
     if (seen.has(current)) continue
     seen.add(current)
-    const fromDebug = sourceFromFiberDebugSource(current._debugSource, projectRoot)
+    const fromDebug = sourceFromFiberDebugSource(
+      current._debugSource,
+      projectRoot
+    )
     if (fromDebug) return fromDebug
     rememberDebugInfo(current)
-    if (!stackFallback) stackFallback = preferredSourceFromFrames(getOwnStackFrames(current), projectRoot, null)
-    if (current._debugOwner && !seen.has(current._debugOwner)) queue.push(current._debugOwner)
+    if (!stackFallback)
+      stackFallback = preferredSourceFromFrames(
+        getOwnStackFrames(current),
+        projectRoot,
+        null
+      )
+    if (current._debugOwner && !seen.has(current._debugOwner))
+      queue.push(current._debugOwner)
   }
   return stackFallback ?? debugInfoFallback
 }
@@ -917,9 +1194,14 @@ const mappedDebugInfoSource = async (
 ) => {
   if (!node._debugInfo?.length) return null
   for (let i = node._debugInfo.length - 1; i >= 0; i -= 1) {
-    const pair = await resolveDebugInfoPair(node._debugInfo[i]!, projectRoot, sourceMapCache)
+    const pair = await resolveDebugInfoPair(
+      node._debugInfo[i]!,
+      projectRoot,
+      sourceMapCache
+    )
     const candidate = pair.source ?? pair.renderedBy
-    if (candidate && !isBundledOrExternalPath(candidate.filePath)) return candidate
+    if (candidate && !isBundledOrExternalPath(candidate.filePath))
+      return candidate
   }
   return null
 }
@@ -943,7 +1225,11 @@ const findNearestAuthorCallSite = async (
       null
     )
     if (mapped) return mapped
-    const fromDebugInfo = await mappedDebugInfoSource(owner, projectRoot, sourceMapCache)
+    const fromDebugInfo = await mappedDebugInfoSource(
+      owner,
+      projectRoot,
+      sourceMapCache
+    )
     if (fromDebugInfo) return fromDebugInfo
     owner = owner._debugOwner ?? null
   }
@@ -972,8 +1258,13 @@ const definedSourceParts = (
   return {
     target,
     componentName,
-    labelIsComponent: Boolean(componentName && label && label === componentName),
-    fromHost: pickOpenSource(hostDebug, absBoundedSource(fiber, target, projectRoot)),
+    labelIsComponent: Boolean(
+      componentName && label && label === componentName
+    ),
+    fromHost: pickOpenSource(
+      hostDebug,
+      absBoundedSource(fiber, target, projectRoot)
+    ),
   }
 }
 
@@ -1005,16 +1296,25 @@ const resolveUsageSourceSync = (
   }
   const debug = (node: ReactFiber | null) =>
     accept(sourceFromFiberDebugSource(node?._debugSource, projectRoot))
-  const frame = (stackFrame: StackFrame) => sourceFromStackFrame(stackFrame, projectRoot)
+  const frame = (stackFrame: StackFrame) =>
+    sourceFromStackFrame(stackFrame, projectRoot)
   const component = target.fiber
-  const fromComponent = sourceFromFiberDebugSource(component._debugSource, projectRoot)
+  const fromComponent = sourceFromFiberDebugSource(
+    component._debugSource,
+    projectRoot
+  )
   if (fromComponent) return fromComponent
   for (const stackFrame of getOwnStackFrames(component)) {
     const usage = frame(stackFrame)
     if (usage && !isBundledOrExternalPath(usage.filePath)) return usage
   }
-  let owner: ReactFiber | null = component._debugOwner ?? fiber._debugOwner ?? null
-  for (let hops = 0; owner && hops < 10; hops += 1, owner = owner._debugOwner ?? null) {
+  let owner: ReactFiber | null =
+    component._debugOwner ?? fiber._debugOwner ?? null
+  for (
+    let hops = 0;
+    owner && hops < 10;
+    hops += 1, owner = owner._debugOwner ?? null
+  ) {
     const fromOwner = debug(owner)
     if (fromOwner) return fromOwner
     for (const stackFrame of getOwnStackFrames(owner)) {
@@ -1031,13 +1331,22 @@ export const getHostAuthorSource = (fiber: ReactFiber, projectRoot: string) => {
     sourceFromFiberDebugSource(fiber._debugSource, projectRoot),
     absBoundedSource(fiber, target, projectRoot)
   )
-  if (fromHost) return fromHost ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
-  const fromOwnStack = preferredSourceFromFrames(getOwnStackFrames(fiber), projectRoot, null)
-  if (fromOwnStack) return fromOwnStack ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
+  if (fromHost)
+    return fromHost ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
+  const fromOwnStack = preferredSourceFromFrames(
+    getOwnStackFrames(fiber),
+    projectRoot,
+    null
+  )
+  if (fromOwnStack)
+    return fromOwnStack ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
   return findNearestAuthorCallSiteSync(fiber, projectRoot)
 }
 
-export const getInstantDefinedSource = (fiber: ReactFiber, projectRoot: string) => {
+export const getInstantDefinedSource = (
+  fiber: ReactFiber,
+  projectRoot: string
+) => {
   const parts = definedSourceParts(
     fiber,
     projectRoot,
@@ -1046,16 +1355,23 @@ export const getInstantDefinedSource = (fiber: ReactFiber, projectRoot: string) 
   const map = (frames: StackFrame[], name?: string | null) =>
     preferredSourceFromFrames(frames, projectRoot, name)
   const fromComponentDef = parts.target
-    ? map(getOwnStackFrames(parts.target.fiber), parts.componentName) ??
+    ? (map(getOwnStackFrames(parts.target.fiber), parts.componentName) ??
       map(getStackFrames(fiber, parts.target.fiber), parts.componentName) ??
       (parts.target.debugInfo
         ? map(getDebugInfoFrames(parts.target.debugInfo), parts.componentName)
-        : null)
+        : null))
     : null
-  return finishDefinedSource(parts, fromComponentDef, map(getOwnStackFrames(fiber), parts.componentName))
+  return finishDefinedSource(
+    parts,
+    fromComponentDef,
+    map(getOwnStackFrames(fiber), parts.componentName)
+  )
 }
 
-export const getInstantUsedSource = (fiber: ReactFiber, projectRoot: string) => {
+export const getInstantUsedSource = (
+  fiber: ReactFiber,
+  projectRoot: string
+) => {
   const target = getNamedTarget(fiber)
   if (!target) return null
   return resolveUsageSourceSync(
@@ -1070,7 +1386,9 @@ export const decodeVlq = (segment: string) => {
   const values: number[] = []
   let index = 0
   while (index < segment.length) {
-    let value = 0, shift = 0, hasMore = true
+    let value = 0,
+      shift = 0,
+      hasMore = true
     while (hasMore && index < segment.length) {
       const digit = BASE64_CHARS.indexOf(segment[index++])
       if (digit < 0) return null
@@ -1084,57 +1402,122 @@ export const decodeVlq = (segment: string) => {
   return values
 }
 
-type OriginalPosition = { sourceIndex: number; originalLine: number; originalColumn: number }
-const decodedMaps = new WeakMap<SourceMapData, Array<Array<{ column: number; position: OriginalPosition | null }>>>()
-const decodeOriginalPosition = (map: SourceMapData, targetLine: number, targetColumn: number) => {
+type OriginalPosition = {
+  sourceIndex: number
+  originalLine: number
+  originalColumn: number
+}
+const decodedMaps = new WeakMap<
+  SourceMapData,
+  Array<Array<{ column: number; position: OriginalPosition | null }>>
+>()
+const decodeOriginalPosition = (
+  map: SourceMapData,
+  targetLine: number,
+  targetColumn: number
+) => {
   let lines = decodedMaps.get(map)
   if (!lines) {
-    let sourceIndex = 0, originalLine = 0, originalColumn = 0
-    lines = map.mappings.split(";").map(line => {
+    let sourceIndex = 0,
+      originalLine = 0,
+      originalColumn = 0
+    lines = map.mappings.split(";").map((line) => {
       let column = 0
-      return line.split(",").flatMap<{ column: number; position: OriginalPosition | null }>(segment => {
-        const values = decodeVlq(segment)
-        if (!values?.length) return []
-        column += values[0]
-        if (values.length < 4) return [{ column, position: null }]
-        sourceIndex += values[1]; originalLine += values[2]; originalColumn += values[3]
-        return [{ column, position: { sourceIndex, originalLine, originalColumn } }]
-      })
+      return line
+        .split(",")
+        .flatMap<{ column: number; position: OriginalPosition | null }>(
+          (segment) => {
+            const values = decodeVlq(segment)
+            if (!values?.length) return []
+            column += values[0]
+            if (values.length < 4) return [{ column, position: null }]
+            sourceIndex += values[1]
+            originalLine += values[2]
+            originalColumn += values[3]
+            return [
+              {
+                column,
+                position: { sourceIndex, originalLine, originalColumn },
+              },
+            ]
+          }
+        )
     })
     decodedMaps.set(map, lines)
   }
   const segments = lines[targetLine] ?? []
-  let low = 0, high = segments.length - 1, match: OriginalPosition | null = null
+  let low = 0,
+    high = segments.length - 1,
+    match: OriginalPosition | null = null
   while (low <= high) {
     const mid = (low + high) >>> 1
-    if (segments[mid].column <= targetColumn) { match = segments[mid].position; low = mid + 1 }
-    else high = mid - 1
+    if (segments[mid].column <= targetColumn) {
+      match = segments[mid].position
+      low = mid + 1
+    } else high = mid - 1
   }
   return match
 }
 
-const getSourceMapSection = (sections: SourceMapSection[], generatedLine: number, generatedColumn: number) => {
+const getSourceMapSection = (
+  sections: SourceMapSection[],
+  generatedLine: number,
+  generatedColumn: number
+) => {
   for (let index = sections.length - 1; index >= 0; index -= 1) {
     const { offset } = sections[index]
-    if (offset.line < generatedLine || (offset.line === generatedLine && offset.column <= generatedColumn)) return sections[index]
+    if (
+      offset.line < generatedLine ||
+      (offset.line === generatedLine && offset.column <= generatedColumn)
+    )
+      return sections[index]
   }
   return null
 }
 
-type PendingFrame = { frame: StackFrame; projectRoot: string; resolve: (source: SourceLocation | null) => void; reject: (error: unknown) => void }
-const pendingFrameBatches = new WeakMap<Map<string, Promise<SourceMap>>, Map<boolean, PendingFrame[]>>()
-const inFlightFrames = new WeakMap<Map<string, Promise<SourceMap>>, Map<string, Promise<SourceLocation | null>>>()
+type PendingFrame = {
+  frame: StackFrame
+  projectRoot: string
+  resolve: (source: SourceLocation | null) => void
+  reject: (error: unknown) => void
+}
+const pendingFrameBatches = new WeakMap<
+  Map<string, Promise<SourceMap>>,
+  Map<boolean, PendingFrame[]>
+>()
+const inFlightFrames = new WeakMap<
+  Map<string, Promise<SourceMap>>,
+  Map<string, Promise<SourceLocation | null>>
+>()
 
 // Share concurrent symbolication and batch browser/server frames separately.
 // Only in-flight requests are retained: edits and transient failures can retry.
-const resolveNextStackFrame = (frame: StackFrame, projectRoot: string, cache: Map<string, Promise<SourceMap>>) => {
+const resolveNextStackFrame = (
+  frame: StackFrame,
+  projectRoot: string,
+  cache: Map<string, Promise<SourceMap>>
+) => {
   let requests = inFlightFrames.get(cache)
-  if (!requests) { requests = new Map(); inFlightFrames.set(cache, requests) }
-  const key = JSON.stringify([projectRoot, frame.file, frame.methodName, frame.arguments, frame.line1, frame.column1, frame.isServer])
+  if (!requests) {
+    requests = new Map()
+    inFlightFrames.set(cache, requests)
+  }
+  const key = JSON.stringify([
+    projectRoot,
+    frame.file,
+    frame.methodName,
+    frame.arguments,
+    frame.line1,
+    frame.column1,
+    frame.isServer,
+  ])
   const existing = requests.get(key)
   if (existing) return existing
   let batches = pendingFrameBatches.get(cache)
-  if (!batches) { batches = new Map(); pendingFrameBatches.set(cache, batches) }
+  if (!batches) {
+    batches = new Map()
+    pendingFrameBatches.set(cache, batches)
+  }
   const isServer = !!frame.isServer
   let batch = batches.get(isServer)
   if (!batch) {
@@ -1145,122 +1528,282 @@ const resolveNextStackFrame = (frame: StackFrame, projectRoot: string, cache: Ma
       batches!.delete(isServer)
       try {
         const response = await fetch("/__nextjs_original-stack-frames", {
-          method: "POST", priority: "high",
-          body: JSON.stringify({ frames: pending.map(({ frame }) => ({ file: frame.file, methodName: frame.methodName, arguments: frame.arguments, line1: frame.line1, column1: frame.column1 })), isServer, isEdgeServer: false, isAppDirectory: true }),
+          method: "POST",
+          priority: "high",
+          body: JSON.stringify({
+            frames: pending.map(({ frame }) => ({
+              file: frame.file,
+              methodName: frame.methodName,
+              arguments: frame.arguments,
+              line1: frame.line1,
+              column1: frame.column1,
+            })),
+            isServer,
+            isEdgeServer: false,
+            isAppDirectory: true,
+          }),
         })
-        const results = response.ok ? await response.json() as OriginalFrameResult[] : []
+        const results = response.ok
+          ? ((await response.json()) as OriginalFrameResult[])
+          : []
         pending.forEach((request, index) => {
           const result = results[index]
-          const original = result?.status === "fulfilled" ? result.value.originalStackFrame : null
-          request.resolve(original?.file && !isBundledOrExternalPath(original.file)
-            ? { filePath: toAbsolutePath(original.file, request.projectRoot), line: original.line1 ?? 1, column: original.column1 ?? 1 } : null)
+          const original =
+            result?.status === "fulfilled"
+              ? result.value.originalStackFrame
+              : null
+          request.resolve(
+            original?.file && !isBundledOrExternalPath(original.file)
+              ? {
+                  filePath: toAbsolutePath(original.file, request.projectRoot),
+                  line: original.line1 ?? 1,
+                  column: original.column1 ?? 1,
+                }
+              : null
+          )
         })
-      } catch (error) { pending.forEach(request => request.reject(error)) }
+      } catch (error) {
+        pending.forEach((request) => request.reject(error))
+      }
     })
   }
-  const promise = new Promise<SourceLocation | null>((resolve, reject) => batch!.push({ frame, projectRoot, resolve, reject }))
+  const promise = new Promise<SourceLocation | null>((resolve, reject) =>
+    batch!.push({ frame, projectRoot, resolve, reject })
+  )
   requests.set(key, promise)
-  void promise.then(() => requests!.delete(key), () => requests!.delete(key))
+  void promise.then(
+    () => requests!.delete(key),
+    () => requests!.delete(key)
+  )
   return promise
 }
 
-const resolveFiberDebugSource = async (debugSource: FiberDebugSource | null | undefined, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
+const resolveFiberDebugSource = async (
+  debugSource: FiberDebugSource | null | undefined,
+  projectRoot: string,
+  sourceMapCache: Map<string, Promise<SourceMap>>
+) => {
   if (!debugSource?.fileName) return null
   const direct = sourceFromFiberDebugSource(debugSource, projectRoot)
   if (direct) return direct
   const file = debugSource.fileName
   if (!isBundledOrExternalPath(file)) return null
-  const isServer = /\/server\/|\.next\/server|\/ssr\/|about:\/\/React\/Server\//.test(file) || !(file.startsWith("http://") || file.startsWith("https://"))
+  const isServer =
+    /\/server\/|\.next\/server|\/ssr\/|about:\/\/React\/Server\//.test(file) ||
+    !(file.startsWith("http://") || file.startsWith("https://"))
   try {
-    return await resolveStackFrame({ file, methodName: "<unknown>", arguments: [], line1: debugSource.lineNumber ?? 1, column1: debugSource.columnNumber ?? 1, isServer }, projectRoot, sourceMapCache)
-  } catch { return null }
+    return await resolveStackFrame(
+      {
+        file,
+        methodName: "<unknown>",
+        arguments: [],
+        line1: debugSource.lineNumber ?? 1,
+        column1: debugSource.columnNumber ?? 1,
+        isServer,
+      },
+      projectRoot,
+      sourceMapCache
+    )
+  } catch {
+    return null
+  }
 }
 
-const resolveStackFrame = async (frame: StackFrame, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
+const resolveStackFrame = async (
+  frame: StackFrame,
+  projectRoot: string,
+  sourceMapCache: Map<string, Promise<SourceMap>>
+) => {
   const direct = sourceFromStackFrame(frame, projectRoot)
   if (direct) return direct
-  if (frame.isServer || frame.file.startsWith("webpack-internal:") || frame.file.startsWith("webpack://")) {
+  if (
+    frame.isServer ||
+    frame.file.startsWith("webpack-internal:") ||
+    frame.file.startsWith("webpack://")
+  ) {
     return resolveNextStackFrame(frame, projectRoot, sourceMapCache)
   }
   const nextChunk = /^https?:\/\/[^/]+\/_next\//.test(frame.file)
   try {
-    const mapped = await resolveBrowserStackFrame(frame, projectRoot, sourceMapCache)
+    const mapped = await resolveBrowserStackFrame(
+      frame,
+      projectRoot,
+      sourceMapCache
+    )
     if (mapped) return mapped
-  } catch { /* Development endpoints can recover unavailable browser maps. */ }
-  return nextChunk ? resolveNextStackFrame(frame, projectRoot, sourceMapCache) : null
+  } catch {
+    /* Development endpoints can recover unavailable browser maps. */
+  }
+  return nextChunk
+    ? resolveNextStackFrame(frame, projectRoot, sourceMapCache)
+    : null
 }
 
-const browserMapRequests = new WeakMap<Map<string, Promise<SourceMap>>, Map<string, Promise<{ map: SourceMap; url: URL }>>>()
-const loadBrowserSourceMap = (file: string, cache: Map<string, Promise<SourceMap>>) => {
+const browserMapRequests = new WeakMap<
+  Map<string, Promise<SourceMap>>,
+  Map<string, Promise<{ map: SourceMap; url: URL }>>
+>()
+const loadBrowserSourceMap = (
+  file: string,
+  cache: Map<string, Promise<SourceMap>>
+) => {
   let requests = browserMapRequests.get(cache)
-  if (!requests) { requests = new Map(); browserMapRequests.set(cache, requests) }
+  if (!requests) {
+    requests = new Map()
+    browserMapRequests.set(cache, requests)
+  }
   const cached = requests.get(file)
   if (cached) return cached
   const promise = (async () => {
     const response = await fetch(file)
     if (!response.ok) throw new Error("Bundle unavailable")
     const code = await response.text()
-    const declarations = [...code.matchAll(/(?:\/\/[@#]\s*sourceMappingURL=([^\s]+)|\/\*[@#]\s*sourceMappingURL=([^*]+)\*\/)/g)]
+    const declarations = [
+      ...code.matchAll(
+        /(?:\/\/[@#]\s*sourceMappingURL=([^\s]+)|\/\*[@#]\s*sourceMappingURL=([^*]+)\*\/)/g
+      ),
+    ]
     const last = declarations.at(-1)
     const reference = (last?.[1] ?? last?.[2])?.trim()
-    const url = reference ? new URL(reference, file) : new URL(`${new URL(file).pathname}.map`, file)
-    if (!/^https?:$/.test(url.protocol) && !/^data:application\/json[;,]/.test(url.href)) throw new Error("Unsupported source map URL")
+    const url = reference
+      ? new URL(reference, file)
+      : new URL(`${new URL(file).pathname}.map`, file)
+    if (
+      !/^https?:$/.test(url.protocol) &&
+      !/^data:application\/json[;,]/.test(url.href)
+    )
+      throw new Error("Unsupported source map URL")
     let pending = cache.get(url.href)
     if (!pending) {
-      pending = fetch(url.href).then(async response => {
+      pending = fetch(url.href).then(async (response) => {
         if (!response.ok) throw new Error("Source map unavailable")
-        return await response.json() as SourceMap
+        return (await response.json()) as SourceMap
       })
       cache.set(url.href, pending)
-      void pending.catch(() => { if (cache.get(url.href) === pending) cache.delete(url.href) })
+      void pending.catch(() => {
+        if (cache.get(url.href) === pending) cache.delete(url.href)
+      })
     }
-    return { map: await pending, url: url.protocol === "data:" ? new URL(file) : url }
+    return {
+      map: await pending,
+      url: url.protocol === "data:" ? new URL(file) : url,
+    }
   })()
   requests.set(file, promise)
-  void promise.catch(() => { if (requests!.get(file) === promise) requests!.delete(file) })
+  void promise.catch(() => {
+    if (requests!.get(file) === promise) requests!.delete(file)
+  })
   return promise
 }
 
-export const resolveBrowserStackFrame = async (frame: StackFrame, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
-  const { map: sourceMap, url: sourceMapUrl } = await loadBrowserSourceMap(frame.file, sourceMapCache)
-  const generatedLine = Math.max(0, frame.line1 - 1), generatedColumn = Math.max(0, frame.column1 - 1)
-  const section = sourceMap.sections ? getSourceMapSection(sourceMap.sections, generatedLine, generatedColumn) : null
+export const resolveBrowserStackFrame = async (
+  frame: StackFrame,
+  projectRoot: string,
+  sourceMapCache: Map<string, Promise<SourceMap>>
+) => {
+  const { map: sourceMap, url: sourceMapUrl } = await loadBrowserSourceMap(
+    frame.file,
+    sourceMapCache
+  )
+  const generatedLine = Math.max(0, frame.line1 - 1),
+    generatedColumn = Math.max(0, frame.column1 - 1)
+  const section = sourceMap.sections
+    ? getSourceMapSection(sourceMap.sections, generatedLine, generatedColumn)
+    : null
   if (sourceMap.sections && !section) return null
   const map = section?.map ?? sourceMap
   const relativeLine = generatedLine - (section?.offset.line ?? 0)
-  const relativeColumn = generatedColumn - (relativeLine === 0 ? (section?.offset.column ?? 0) : 0)
+  const relativeColumn =
+    generatedColumn - (relativeLine === 0 ? (section?.offset.column ?? 0) : 0)
   const position = decodeOriginalPosition(map, relativeLine, relativeColumn)
-  if (!position || (map.ignoreList?.includes(position.sourceIndex) || map.x_google_ignoreList?.includes(position.sourceIndex))) return null
+  if (
+    !position ||
+    map.ignoreList?.includes(position.sourceIndex) ||
+    map.x_google_ignoreList?.includes(position.sourceIndex)
+  )
+    return null
   let source = map.sources[position.sourceIndex]
-  if (!source || isVendorModulePath(source) || /\[turbopack\]|\[next\]|(?:^|\/)webpack\/runtime\//.test(source)) return null
+  if (
+    !source ||
+    isVendorModulePath(source) ||
+    /\[turbopack\]|\[next\]|(?:^|\/)webpack\/runtime\//.test(source)
+  )
+    return null
   // Bundler schemes denote original project files in maps, not generated chunks.
   const projectSource = /^(?:turbopack|webpack):\/\//.test(source)
-  source = source.replace(/^(?:turbopack|webpack):\/\/[^/]*\//, "").replace(/^\[project\]\//, "").replace(/\s+\[.*$/, "").replace(/\?.*$/, "")
+  source = source
+    .replace(/^(?:turbopack|webpack):\/\/[^/]*\//, "")
+    .replace(/^\[project\]\//, "")
+    .replace(/\s+\[.*$/, "")
+    .replace(/\?.*$/, "")
   if (isBundledOrExternalPath(source)) return null
-  const filePath = projectSource ? toAbsolutePath(source, projectRoot) : resolveSourceMapSourcePath({ source, sourceRoot: map.sourceRoot, sourceMapUrl, projectRoot })
+  const filePath = projectSource
+    ? toAbsolutePath(source, projectRoot)
+    : resolveSourceMapSourcePath({
+        source,
+        sourceRoot: map.sourceRoot,
+        sourceMapUrl,
+        projectRoot,
+      })
   if (isBundledOrExternalPath(filePath)) return null
-  return { filePath, line: position.originalLine + 1, column: position.originalColumn + 1 }
+  return {
+    filePath,
+    line: position.originalLine + 1,
+    column: position.originalColumn + 1,
+  }
 }
 
-const resolveRecoveredFiberSource = async (fiber: ReactFiber, projectRoot: string,
-  sourceMapCache: Map<string, Promise<SourceMap>>, definition = false): Promise<SourceLocation | null> => {
-  const map = (frames: ReturnType<typeof readFiberStack>, name?: string | null) =>
-    resolveFirstMappedFrame(frames.map(frame => ({ ...frame, arguments: [],
-      isServer: isReactServerStackFile(frame.file) })), projectRoot, sourceMapCache, name)
-  const mapped = await map(definition ? readDefinitionStack(fiber) : readFiberStack(fiber._debugStack),
-    definition ? readFiberComponentName(fiber) : null)
+const resolveRecoveredFiberSource = async (
+  fiber: ReactFiber,
+  projectRoot: string,
+  sourceMapCache: Map<string, Promise<SourceMap>>,
+  definition = false
+): Promise<SourceLocation | null> => {
+  const map = (
+    frames: ReturnType<typeof readFiberStack>,
+    name?: string | null
+  ) =>
+    resolveFirstMappedFrame(
+      frames.map((frame) => ({
+        ...frame,
+        arguments: [],
+        isServer: isReactServerStackFile(frame.file),
+      })),
+      projectRoot,
+      sourceMapCache,
+      name
+    )
+  const mapped = await map(
+    definition ? readDefinitionStack(fiber) : readFiberStack(fiber._debugStack),
+    definition ? readFiberComponentName(fiber) : null
+  )
   if (mapped) return mapped
-  const stack = fiber._debugStack instanceof Error ? fiber._debugStack.stack : fiber._debugStack
-  const unknownOwner = typeof stack === "string" && stack.includes("UnknownOwner")
+  const stack =
+    fiber._debugStack instanceof Error
+      ? fiber._debugStack.stack
+      : fiber._debugStack
+  const unknownOwner =
+    typeof stack === "string" && stack.includes("UnknownOwner")
   const visited = new Set<ReactFiber>()
-  for (let current: ReactFiber | null = fiber; current && !visited.has(current); current = current.return ?? null) {
+  for (
+    let current: ReactFiber | null = fiber;
+    current && !visited.has(current);
+    current = current.return ?? null
+  ) {
     visited.add(current)
-    if (typeof current.type !== "function" && (!current.type || typeof current.type !== "object")) continue
+    if (
+      typeof current.type !== "function" &&
+      (!current.type || typeof current.type !== "object")
+    )
+      continue
     if (!definition && current !== fiber) {
       const creation = await map(readFiberStack(current._debugStack))
       if (creation) return creation
     }
-    const recovered = await map(recoverComponentFrame(current.type), readFiberComponentName(current))
+    const recovered = await map(
+      recoverComponentFrame(current.type),
+      readFiberComponentName(current)
+    )
     if (recovered) return recovered
     // Known creation stacks retain the normal vendor/debug-info fallback.
     // UnknownOwner needs the render ancestry because it contains no author frame.
@@ -1276,16 +1819,36 @@ export const resolveHostAuthorSource = async (
 ) => {
   const target = getNamedTarget(fiber)
   if (!fiber._debugSource && !target?.fiber._debugSource) {
-    const recovered = await resolveRecoveredFiberSource(fiber, projectRoot, sourceMapCache)
+    const recovered = await resolveRecoveredFiberSource(
+      fiber,
+      projectRoot,
+      sourceMapCache
+    )
     if (recovered) return recovered
   }
-  const hostDebug = await resolveFiberDebugSource(fiber._debugSource, projectRoot, sourceMapCache)
-  const fromHost = pickOpenSource(hostDebug, absBoundedSource(fiber, target, projectRoot))
-  if (fromHost) return fromHost ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
+  const hostDebug = await resolveFiberDebugSource(
+    fiber._debugSource,
+    projectRoot,
+    sourceMapCache
+  )
+  const fromHost = pickOpenSource(
+    hostDebug,
+    absBoundedSource(fiber, target, projectRoot)
+  )
+  if (fromHost)
+    return fromHost ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
   if (target) {
     let current: ReactFiber | null = fiber
-    for (let hops = 0; current && hops < 24; hops += 1, current = current.return ?? null) {
-      const remapped = await resolveFiberDebugSource(current._debugSource, projectRoot, sourceMapCache)
+    for (
+      let hops = 0;
+      current && hops < 24;
+      hops += 1, current = current.return ?? null
+    ) {
+      const remapped = await resolveFiberDebugSource(
+        current._debugSource,
+        projectRoot,
+        sourceMapCache
+      )
       if (remapped) return remapped
       if (current === target.fiber) break
     }
@@ -1296,7 +1859,8 @@ export const resolveHostAuthorSource = async (
     sourceMapCache,
     null
   )
-  if (fromOwnStack) return fromOwnStack ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
+  if (fromOwnStack)
+    return fromOwnStack ?? findNearestAuthorCallSiteSync(fiber, projectRoot)
   return findNearestAuthorCallSite(fiber, projectRoot, sourceMapCache)
 }
 
@@ -1307,22 +1871,40 @@ export const resolveSource = async (
 ) => {
   const target = getNamedTarget(fiber)
   if (target && !target.fiber._debugSource) {
-    const recovered = await resolveRecoveredFiberSource(target.fiber, projectRoot, sourceMapCache, true)
+    const recovered = await resolveRecoveredFiberSource(
+      target.fiber,
+      projectRoot,
+      sourceMapCache,
+      true
+    )
     if (recovered) return recovered
   }
   const parts = definedSourceParts(
     fiber,
     projectRoot,
-    await resolveFiberDebugSource(fiber._debugSource, projectRoot, sourceMapCache)
+    await resolveFiberDebugSource(
+      fiber._debugSource,
+      projectRoot,
+      sourceMapCache
+    )
   )
   const map = (frames: StackFrame[], name?: string | null) =>
     resolveFirstMappedFrame(frames, projectRoot, sourceMapCache, name)
   const fromComponentDef = parts.target
-    ? (await map(getOwnStackFrames(parts.target.fiber), parts.componentName)) ??
-      (await map(getStackFrames(fiber, parts.target.fiber), parts.componentName)) ??
+    ? ((await map(
+        getOwnStackFrames(parts.target.fiber),
+        parts.componentName
+      )) ??
+      (await map(
+        getStackFrames(fiber, parts.target.fiber),
+        parts.componentName
+      )) ??
       (parts.target.debugInfo
-        ? await map(getDebugInfoFrames(parts.target.debugInfo), parts.componentName)
-        : null)
+        ? await map(
+            getDebugInfoFrames(parts.target.debugInfo),
+            parts.componentName
+          )
+        : null))
     : null
   return finishDefinedSource(
     parts,
@@ -1341,7 +1923,11 @@ export const resolveInstanceSource = async (
   const component = target.fiber
   // Read the component creation site before resolving its definition.
   if (!component._debugSource) {
-    const recovered = await resolveRecoveredFiberSource(component, projectRoot, sourceMapCache)
+    const recovered = await resolveRecoveredFiberSource(
+      component,
+      projectRoot,
+      sourceMapCache
+    )
     if (recovered) return recovered
   }
   const definition = await resolveSource(fiber, projectRoot, sourceMapCache)
@@ -1353,28 +1939,47 @@ export const resolveInstanceSource = async (
   const debug = async (node: ReactFiber | null) =>
     accept(
       node?._debugSource
-        ? await resolveFiberDebugSource(node._debugSource, projectRoot, sourceMapCache)
+        ? await resolveFiberDebugSource(
+            node._debugSource,
+            projectRoot,
+            sourceMapCache
+          )
         : null
     )
   const fromComponent = component._debugSource
-    ? await resolveFiberDebugSource(component._debugSource, projectRoot, sourceMapCache)
+    ? await resolveFiberDebugSource(
+        component._debugSource,
+        projectRoot,
+        sourceMapCache
+      )
     : null
   if (fromComponent) return fromComponent
   for (const stackFrame of getOwnStackFrames(component)) {
     try {
-      const usage = await resolveStackFrame(stackFrame, projectRoot, sourceMapCache)
+      const usage = await resolveStackFrame(
+        stackFrame,
+        projectRoot,
+        sourceMapCache
+      )
       if (usage && !isBundledOrExternalPath(usage.filePath)) return usage
     } catch {
       continue
     }
   }
-  let owner: ReactFiber | null = component._debugOwner ?? fiber._debugOwner ?? null
-  for (let hops = 0; owner && hops < 10; hops += 1, owner = owner._debugOwner ?? null) {
+  let owner: ReactFiber | null =
+    component._debugOwner ?? fiber._debugOwner ?? null
+  for (
+    let hops = 0;
+    owner && hops < 10;
+    hops += 1, owner = owner._debugOwner ?? null
+  ) {
     const fromOwner = await debug(owner)
     if (fromOwner) return fromOwner
     for (const stackFrame of getOwnStackFrames(owner)) {
       try {
-        const usage = accept(await resolveStackFrame(stackFrame, projectRoot, sourceMapCache))
+        const usage = accept(
+          await resolveStackFrame(stackFrame, projectRoot, sourceMapCache)
+        )
         if (usage) return usage
       } catch {
         continue
@@ -1384,37 +1989,79 @@ export const resolveInstanceSource = async (
   return null
 }
 
-export const resolveNearestAncestorSource = async (element: Element, projectRoot: string, sourceMapCache: Map<string, Promise<SourceMap>>) => {
-  for (let current = element.parentElement, hops = 0; current && hops < 24; hops += 1, current = current.parentElement) {
+export const resolveNearestAncestorSource = async (
+  element: Element,
+  projectRoot: string,
+  sourceMapCache: Map<string, Promise<SourceMap>>
+) => {
+  for (
+    let current = element.parentElement, hops = 0;
+    current && hops < 24;
+    hops += 1, current = current.parentElement
+  ) {
     if (isInspectorChrome(current)) continue
     const fiber = getFiber(current)
     if (!fiber) continue
-    const source = (await resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)) ?? getHostAuthorSource(fiber, projectRoot)
-    if (source && !isBundledOrExternalPath(source.filePath)) return { source, element: current }
+    const source =
+      (await resolveHostAuthorSource(fiber, projectRoot, sourceMapCache)) ??
+      getHostAuthorSource(fiber, projectRoot)
+    if (source && !isBundledOrExternalPath(source.filePath))
+      return { source, element: current }
   }
   return null
 }
 
 export const openInEditor = (source: SourceLocation, ide: InspectorIde) => {
   if (isFilesystemAbsolutePath(source.filePath)) {
-    window.location.href = INSPECTOR_IDES[ide].url(source.filePath, source.line, source.column)
+    window.location.href = INSPECTOR_IDES[ide].url(
+      source.filePath,
+      source.line,
+      source.column
+    )
     return
   }
   void (async () => {
-    const next = document.getElementById("__next") !== null || Array.from(document.scripts).some(script => script.src.includes("/_next/"))
-    const params = new URLSearchParams({ file: source.filePath, [next ? "line1" : "line"]: String(source.line), [next ? "column1" : "column"]: String(source.column) })
+    const next =
+      document.getElementById("__next") !== null ||
+      Array.from(document.scripts).some((script) =>
+        script.src.includes("/_next/")
+      )
+    const params = new URLSearchParams({
+      file: source.filePath,
+      [next ? "line1" : "line"]: String(source.line),
+      [next ? "column1" : "column"]: String(source.column),
+    })
     try {
-      const response = await fetch(`${next ? "/__nextjs_launch-editor" : "/__open-in-editor"}?${params}`)
+      const response = await fetch(
+        `${next ? "/__nextjs_launch-editor" : "/__open-in-editor"}?${params}`
+      )
       if (response.ok) return
-    } catch { /* Fall back to the configured editor URL. */ }
-    window.location.href = INSPECTOR_IDES[ide].url(source.filePath, source.line, source.column)
+    } catch {
+      /* Fall back to the configured editor URL. */
+    }
+    window.location.href = INSPECTOR_IDES[ide].url(
+      source.filePath,
+      source.line,
+      source.column
+    )
   })()
 }
 
-export const resolveDebugInfoPairSync = (info: ServerDebugInfo, projectRoot: string) => ({
-  source: preferredSourceFromFrames(getDebugInfoFrames(info), projectRoot, info.name),
+export const resolveDebugInfoPairSync = (
+  info: ServerDebugInfo,
+  projectRoot: string
+) => ({
+  source: preferredSourceFromFrames(
+    getDebugInfoFrames(info),
+    projectRoot,
+    info.name
+  ),
   renderedBy: info.owner
-    ? preferredSourceFromFrames(getDebugInfoFrames(info.owner), projectRoot, info.owner.name)
+    ? preferredSourceFromFrames(
+        getDebugInfoFrames(info.owner),
+        projectRoot,
+        info.owner.name
+      )
     : null,
 })
 
@@ -1425,17 +2072,45 @@ export const resolveDebugInfoPair = async (
 ) => {
   const sync = resolveDebugInfoPairSync(info, projectRoot)
   return {
-    source: sync.source ?? (await resolveFirstMappedFrame(getDebugInfoFrames(info), projectRoot, sourceMapCache, info.name)),
-    renderedBy: sync.renderedBy ?? (info.owner
-      ? await resolveFirstMappedFrame(getDebugInfoFrames(info.owner), projectRoot, sourceMapCache, info.owner.name)
-      : null),
+    source:
+      sync.source ??
+      (await resolveFirstMappedFrame(
+        getDebugInfoFrames(info),
+        projectRoot,
+        sourceMapCache,
+        info.name
+      )),
+    renderedBy:
+      sync.renderedBy ??
+      (info.owner
+        ? await resolveFirstMappedFrame(
+            getDebugInfoFrames(info.owner),
+            projectRoot,
+            sourceMapCache,
+            info.owner.name
+          )
+        : null),
   }
 }
 
-const CSS_SKIP = new Set(["", "normal", "none", "auto", "0px", "rgba(0, 0, 0, 0)"])
+const CSS_SKIP = new Set([
+  "",
+  "normal",
+  "none",
+  "auto",
+  "0px",
+  "rgba(0, 0, 0, 0)",
+])
 const CSS_PROPS = [
-  "display", "color", "background-color", "font-size", "font-weight",
-  "line-height", "padding", "border-radius", "gap",
+  "display",
+  "color",
+  "background-color",
+  "font-size",
+  "font-weight",
+  "line-height",
+  "padding",
+  "border-radius",
+  "gap",
 ]
 
 const getCssDeclarations = (element: Element) => {
@@ -1458,7 +2133,10 @@ const cssSpan = (text: string, color?: string) => {
 }
 
 const createCodeSurface = () => {
-  const wrap = markInspectNode(document.createElement("div"), "data-dev-inspector-code")
+  const wrap = markInspectNode(
+    document.createElement("div"),
+    "data-dev-inspector-code"
+  )
   const pre = document.createElement("pre")
   wrap.appendChild(pre)
   return { wrap, pre }
@@ -1470,7 +2148,9 @@ const classNameFromProps = (props: ReactFiber["memoizedProps"]) => {
   if (typeof raw === "string") return raw.trim()
   if (Array.isArray(raw)) {
     return raw
-      .filter((part): part is string => typeof part === "string" && part.length > 0)
+      .filter(
+        (part): part is string => typeof part === "string" && part.length > 0
+      )
       .join(" ")
       .trim()
   }
@@ -1497,7 +2177,10 @@ const getElementClassName = (element: Element) => {
 // an explicit Option action, independent of classes, roles, and icon markup.
 export const resolveInspectElement = (hit: Element): Element => hit
 
-export const getInspectElementAtPoint = (x: number, y: number): Element | null => {
+export const getInspectElementAtPoint = (
+  x: number,
+  y: number
+): Element | null => {
   if (!Number.isFinite(x) || !Number.isFinite(y)) return null
   const pick = (root: Document | ShadowRoot): Element | null => {
     for (const element of root.elementsFromPoint(x, y)) {
@@ -1507,13 +2190,24 @@ export const getInspectElementAtPoint = (x: number, y: number): Element | null =
       const tag = element.tagName.toLowerCase()
       if (tag === "html" || tag === "body") continue
       const style = getComputedStyle(element)
-      if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) continue
+      if (
+        style.display === "none" ||
+        style.visibility === "hidden" ||
+        Number(style.opacity) === 0
+      )
+        continue
       const rect = element.getBoundingClientRect()
       if (rect.width <= 0 || rect.height <= 0) continue
       // Skip transparent page-covering surfaces, rather than selecting a group.
-      if (rect.width >= window.innerWidth * 0.9 && rect.height >= window.innerHeight * 0.9
-        && (style.position === "fixed" || style.position === "absolute")
-        && (style.backgroundColor === "transparent" || style.backgroundColor === "rgba(0, 0, 0, 0)" || Number(style.opacity) < 0.1)) continue
+      if (
+        rect.width >= window.innerWidth * 0.9 &&
+        rect.height >= window.innerHeight * 0.9 &&
+        (style.position === "fixed" || style.position === "absolute") &&
+        (style.backgroundColor === "transparent" ||
+          style.backgroundColor === "rgba(0, 0, 0, 0)" ||
+          Number(style.opacity) < 0.1)
+      )
+        continue
       return element
     }
     return null
@@ -1525,10 +2219,12 @@ export const getInspectElementAtPoint = (x: number, y: number): Element | null =
   const priority = body.style.getPropertyPriority("pointer-events")
   const locked = getComputedStyle(body).pointerEvents === "none"
   if (locked) body.style.setProperty("pointer-events", "auto", "important")
-  try { return pick(document) }
-  finally {
+  try {
+    return pick(document)
+  } finally {
     if (locked) {
-      if (pointerEvents) body.style.setProperty("pointer-events", pointerEvents, priority)
+      if (pointerEvents)
+        body.style.setProperty("pointer-events", pointerEvents, priority)
       else body.style.removeProperty("pointer-events")
     }
   }
@@ -1577,12 +2273,21 @@ const createTailwindBlock = (element: Element) => {
 }
 
 export const createStylesSection = (element: Element, onLayout: () => void) => {
-  const root = markInspectNode(document.createElement("div"), "data-dev-inspector-styles")
-  const tabs = markInspectNode(document.createElement("div"), "data-dev-inspector-style-tabs")
+  const root = markInspectNode(
+    document.createElement("div"),
+    "data-dev-inspector-styles"
+  )
+  const tabs = markInspectNode(
+    document.createElement("div"),
+    "data-dev-inspector-style-tabs"
+  )
   const body = document.createElement("div")
   let mode: "tailwind" | "css" = "tailwind"
   const mkTab = (next: typeof mode, label: string) => {
-    const btn = markInspectNode(document.createElement("button"), "data-dev-inspector-style-tab")
+    const btn = markInspectNode(
+      document.createElement("button"),
+      "data-dev-inspector-style-tab"
+    )
     btn.type = "button"
     btn.textContent = label
     btn.onclick = (event) => {
@@ -1600,7 +2305,11 @@ export const createStylesSection = (element: Element, onLayout: () => void) => {
   const paint = () => {
     paintStyleTab(twTab, mode === "tailwind")
     paintStyleTab(cssTab, mode === "css")
-    body.replaceChildren(mode === "tailwind" ? createTailwindBlock(element) : createCssBlock(element))
+    body.replaceChildren(
+      mode === "tailwind"
+        ? createTailwindBlock(element)
+        : createCssBlock(element)
+    )
     onLayout()
   }
   root.append(tabs, body)

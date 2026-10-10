@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Field,
   FieldContent,
@@ -19,10 +19,10 @@ import {
   FieldLegend,
   FieldSet,
   FieldTitle,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 export function ReceivingMethod() {
   return (
@@ -45,14 +45,19 @@ export function ReceivingMethod() {
       <CardContent>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="account-holder">Account Holder Name</FieldLabel>
-            <Input id="account-holder" defaultValue="Synthetic Horizons Music LLC" />
+            <FieldLabel htmlFor="account-holder">
+              Account Holder Name
+            </FieldLabel>
+            <Input
+              id="account-holder"
+              defaultValue="Synthetic Horizons Music LLC"
+            />
           </Field>
           <FieldSet>
             <FieldLegend variant="label">Receiving Method</FieldLegend>
             <RadioGroup
               defaultValue="bank"
-              className="grid grid-cols-1 items-start gap-3 md:grid-cols-2 style-sera:grid-cols-1"
+              className="style-sera:grid-cols-1 grid grid-cols-1 items-start gap-3 md:grid-cols-2"
             >
               <FieldLabel htmlFor="method-bank">
                 <Field orientation="horizontal" className="pb-2.5">
@@ -68,7 +73,9 @@ export function ReceivingMethod() {
                   <RadioGroupItem value="paypal" id="method-paypal" />
                   <FieldContent>
                     <FieldTitle>PayPal</FieldTitle>
-                    <FieldDescription className="line-clamp-1">Instant Payout</FieldDescription>
+                    <FieldDescription className="line-clamp-1">
+                      Instant Payout
+                    </FieldDescription>
                   </FieldContent>
                 </Field>
               </FieldLabel>
@@ -86,5 +93,5 @@ export function ReceivingMethod() {
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

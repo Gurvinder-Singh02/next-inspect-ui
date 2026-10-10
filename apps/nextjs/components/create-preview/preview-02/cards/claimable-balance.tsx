@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -6,9 +6,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Item, ItemContent } from "@/components/ui/item";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/ui/card"
+import { Item, ItemContent } from "@/components/ui/item"
+import { Separator } from "@/components/ui/separator"
 
 export function ClaimableBalance() {
   return (
@@ -25,27 +25,35 @@ export function ClaimableBalance() {
         <Item variant="muted" className="flex-col items-stretch">
           <ItemContent className="gap-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Net Royalties</span>
+              <span className="text-sm text-muted-foreground">
+                Net Royalties
+              </span>
               <span className="text-sm font-medium tabular-nums">$0.00</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Processing Fee</span>
+              <span className="text-sm text-muted-foreground">
+                Processing Fee
+              </span>
               <span className="text-sm font-medium tabular-nums">-$0.00</span>
             </div>
             <Separator />
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Total Ready to Claim</span>
-              <span className="text-sm font-semibold tabular-nums">$0.00 USD</span>
+              <span className="text-sm text-muted-foreground">
+                Total Ready to Claim
+              </span>
+              <span className="text-sm font-semibold tabular-nums">
+                $0.00 USD
+              </span>
             </div>
           </ItemContent>
         </Item>
       </CardContent>
       <CardFooter>
         <CardDescription>
-          Once your bank is connected, balances over $10.00 are automatically eligible for monthly
-          distribution on the 15th of each month.
+          Once your bank is connected, balances over $10.00 are automatically
+          eligible for monthly distribution on the 15th of each month.
         </CardDescription>
       </CardFooter>
     </Card>
-  );
+  )
 }

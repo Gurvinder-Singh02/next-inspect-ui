@@ -3,19 +3,19 @@
  * Not full files — just enough to understand the component / usage.
  */
 
-import type { CaseSourceExample } from "./types";
+import type { CaseSourceExample } from "./types"
 
-const TEST_PAGE = "src/App.tsx";
-const BUTTON = "components/ui/button.tsx";
-const BADGE = "components/ui/badge.tsx";
-const CARD = "components/ui/card.tsx";
-const MOTION = "components/algo-test/motion-fixture.tsx";
-const LIBRARY = "components/algo-test/library-rendered-fixture.tsx";
-const RADIX = "components/algo-test/radix-fixture.tsx";
-const KINDS = "components/algo-test/kinds-fixture.tsx";
-const SERVER = "components/algo-test/server-fixture.tsx";
-const SERVER_BUTTON = "components/algo-test/server-button-fixture.tsx";
-const SVG = "components/algo-test/svg-fixture.tsx";
+const TEST_PAGE = "src/App.tsx"
+const BUTTON = "components/ui/button.tsx"
+const BADGE = "components/ui/badge.tsx"
+const CARD = "components/ui/card.tsx"
+const MOTION = "components/algo-test/motion-fixture.tsx"
+const LIBRARY = "components/algo-test/library-rendered-fixture.tsx"
+const RADIX = "components/algo-test/radix-fixture.tsx"
+const KINDS = "components/algo-test/kinds-fixture.tsx"
+const SERVER = "components/algo-test/server-fixture.tsx"
+const SERVER_BUTTON = "components/algo-test/server-button-fixture.tsx"
+const SVG = "components/algo-test/svg-fixture.tsx"
 
 export const CASE_SOURCE_EXAMPLES: Record<string, CaseSourceExample[]> = {
   "basic-html-heading": [
@@ -473,4 +473,4 @@ function CardHeader({ className, ...props }) {
 </Card>`,
     },
   ],
-};
+}

@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,8 +8,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+} from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 
 const YEARLY_ACTIVITY = [
   { month: "J", load: 72 },
@@ -24,7 +24,7 @@ const YEARLY_ACTIVITY = [
   { month: "O", load: 70 },
   { month: "N", load: 56 },
   { month: "D", load: 44 },
-];
+]
 
 export const YearlyActivity = ({ className }: { className?: string }) => (
   <Card className={cn(className)}>
@@ -54,4 +54,4 @@ export const YearlyActivity = ({ className }: { className?: string }) => (
       <Button className="w-full">View details</Button>
     </CardFooter>
   </Card>
-);
+)

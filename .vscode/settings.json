@@ -21,8 +21,8 @@
   "oxc.fixKind": "safe_fix",
   "oxc.enable.oxlint": true,
   "oxc.useExecPath": true,
-  "oxc.path.oxfmt": "site/node_modules/oxfmt/bin/oxfmt",
-  "oxc.path.oxlint": "site/node_modules/oxlint/bin/oxlint",
-  "oxc.fmt.configPath": "site/.oxfmtrc.jsonc",
+  "oxc.path.oxfmt": "node_modules/oxfmt/bin/oxfmt",
+  "oxc.path.oxlint": "node_modules/oxlint/bin/oxlint",
+  "oxc.fmt.configPath": ".oxfmtrc.jsonc",
   "oxc.configPath": "site/.oxlintrc.json"
 }

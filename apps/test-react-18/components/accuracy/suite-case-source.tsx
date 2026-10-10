@@ -1,22 +1,26 @@
-"use client";
+"use client"
 
-import { useMemo, useState } from "react";
-import { ChevronDownIcon, ChevronsUpDown, CodeIcon } from "lucide-react";
+import { useMemo, useState } from "react"
+import { ChevronDownIcon, ChevronsUpDown, CodeIcon } from "lucide-react"
 
-import { CodeBlock } from "@/components/accuracy/code-block";
-import type { SuiteSourceFile } from "@/components/accuracy/types";
-import { cn } from "@/lib/utils";
+import { CodeBlock } from "@/components/accuracy/code-block"
+import type { SuiteSourceFile } from "@/components/accuracy/types"
+import { cn } from "@/lib/utils"
 
 const tabLabel = (label: string) => {
-  const lower = label.toLowerCase();
-  if (lower.startsWith("used")) return "Used";
-  if (lower.includes("defined")) return "Defined";
-  return label;
-};
+  const lower = label.toLowerCase()
+  if (lower.startsWith("used")) return "Used"
+  if (lower.includes("defined")) return "Defined"
+  return label
+}
 
-export const SuiteCaseSource = ({ sources }: { sources: SuiteSourceFile[] }) => {
-  const [open, setOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+export const SuiteCaseSource = ({
+  sources,
+}: {
+  sources: SuiteSourceFile[]
+}) => {
+  const [open, setOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
 
   const tabs = useMemo(
     () =>
@@ -28,12 +32,12 @@ export const SuiteCaseSource = ({ sources }: { sources: SuiteSourceFile[] }) => 
         code: source.code,
         html: source.html,
       })),
-    [sources],
-  );
+    [sources]
+  )
 
-  const active = tabs[activeIndex] ?? tabs[0];
+  const active = tabs[activeIndex] ?? tabs[0]
 
-  if (sources.length === 0 || !active) return null;
+  if (sources.length === 0 || !active) return null
 
   return (
     <div className="flex flex-col gap-2 px-1">
@@ -43,8 +47,8 @@ export const SuiteCaseSource = ({ sources }: { sources: SuiteSourceFile[] }) => 
         aria-expanded={open}
         className={cn(
           "mb-2 inline-flex w-fit items-center gap-1.5",
-          "font-mono text-[10px] tracking-wide text-muted-foreground uppercase",
-          "transition-colors hover:text-foreground",
+          "text-muted-foreground font-mono text-[10px] tracking-wide uppercase",
+          "hover:text-foreground transition-colors"
         )}
       >
         <ChevronsUpDown className="size-3" aria-hidden />
@@ -52,11 +56,15 @@ export const SuiteCaseSource = ({ sources }: { sources: SuiteSourceFile[] }) => 
       </button>
 
       {open ? (
-        <div className="flex flex-col overflow-hidden rounded-xl bg-muted/30">
-          <div className="flex items-center justify-between gap-3 border-b border-border/70 px-1">
-            <div role="tablist" aria-label="Source view" className="flex min-w-0">
+        <div className="bg-muted/30 flex flex-col overflow-hidden rounded-xl">
+          <div className="border-border/70 flex items-center justify-between gap-3 border-b px-1">
+            <div
+              role="tablist"
+              aria-label="Source view"
+              className="flex min-w-0"
+            >
               {tabs.map((tab) => {
-                const isActive = tab.index === active.index;
+                const isActive = tab.index === active.index
                 return (
                   <button
                     key={tab.key}
@@ -67,8 +75,10 @@ export const SuiteCaseSource = ({ sources }: { sources: SuiteSourceFile[] }) => 
                     className={cn(
                       "relative inline-flex min-h-9 items-center px-3",
                       "font-mono text-[10px] tracking-wide uppercase",
-                      "transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-                      isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+                      "focus-visible:ring-ring transition-colors focus-visible:ring-2 focus-visible:outline-none",
+                      isActive
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     {tab.name}
@@ -76,16 +86,16 @@ export const SuiteCaseSource = ({ sources }: { sources: SuiteSourceFile[] }) => 
                       aria-hidden
                       className={cn(
                         "absolute inset-x-3 bottom-0 h-0.5 rounded-full transition-colors",
-                        isActive ? "bg-foreground" : "bg-transparent",
+                        isActive ? "bg-foreground" : "bg-transparent"
                       )}
                     />
                   </button>
-                );
+                )
               })}
             </div>
 
             <span
-              className="min-w-0 shrink truncate pr-3 text-right font-mono text-[11px] text-muted-foreground"
+              className="text-muted-foreground min-w-0 shrink truncate pr-3 text-right font-mono text-[11px]"
               title={active.file}
             >
               {active.file}
@@ -100,5 +110,5 @@ export const SuiteCaseSource = ({ sources }: { sources: SuiteSourceFile[] }) => 
         </div>
       ) : null}
     </div>
-  );
-};
+  )
+}

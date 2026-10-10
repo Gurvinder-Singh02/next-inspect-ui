@@ -1,8 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
-import { Item } from "@/components/ui/item";
-import { Label } from "@/components/ui/label";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card"
+import { Item } from "@/components/ui/item"
+import { Label } from "@/components/ui/label"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 export function CoverArt() {
   return (
@@ -29,7 +34,12 @@ export function CoverArt() {
             />
           </label>
         </Item>
-        <input id="cover-art" type="file" accept="image/jpeg,image/png" className="sr-only" />
+        <input
+          id="cover-art"
+          type="file"
+          accept="image/jpeg,image/png"
+          className="sr-only"
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2">
         <Button
@@ -47,5 +57,5 @@ export function CoverArt() {
         </CardDescription>
       </CardFooter>
     </Card>
-  );
+  )
 }

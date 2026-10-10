@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Item,
   ItemActions,
@@ -8,7 +8,7 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item";
+} from "@/components/ui/item"
 
 // Usage items with percentage and value.
 const items = [
@@ -42,13 +42,13 @@ const items = [
     percentage: 5.11,
     value: "5.11 GB Hrs / 1K GB Hrs",
   },
-];
+]
 
 // Circular gauge SVG component for displaying a percentage.
 function CircularGauge({ percentage }: { percentage: number }) {
-  const normalizedPercentage = Math.min(Math.max(percentage, 0), 100);
-  const circumference = 2 * Math.PI * 42.5;
-  const strokePercent = (normalizedPercentage / 100) * circumference;
+  const normalizedPercentage = Math.min(Math.max(percentage, 0), 100)
+  const circumference = 2 * Math.PI * 42.5
+  const strokePercent = (normalizedPercentage / 100) * circumference
 
   return (
     <svg
@@ -89,14 +89,16 @@ function CircularGauge({ percentage }: { percentage: number }) {
         }}
       />
     </svg>
-  );
+  )
 }
 
 export function UsageCard() {
   return (
     <Card className="w-full max-w-sm gap-4">
       <CardHeader>
-        <CardTitle className="px-1 text-sm">5 days remaining in cycle</CardTitle>
+        <CardTitle className="px-1 text-sm">
+          5 days remaining in cycle
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <ItemGroup className="gap-0">
@@ -123,5 +125,5 @@ export function UsageCard() {
         </ItemGroup>
       </CardContent>
     </Card>
-  );
+  )
 }

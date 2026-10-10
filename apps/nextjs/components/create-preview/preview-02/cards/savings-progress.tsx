@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import { Label, Pie, PieChart } from "recharts";
+import { Label, Pie, PieChart } from "recharts"
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/ui/chart"
+import { Separator } from "@/components/ui/separator"
 
 const chartData = [
   { name: "saved", value: 24000, fill: "var(--color-saved)" },
   { name: "remaining", value: 6000, fill: "var(--color-remaining)" },
-];
+]
 
 const chartConfig = {
   saved: {
@@ -25,15 +25,21 @@ const chartConfig = {
     label: "Remaining",
     color: "var(--chart-1)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export function SavingsProgress() {
   return (
     <Card>
       <CardContent>
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[220px]">
+        <ChartContainer
+          config={chartConfig}
+          className="mx-auto aspect-square max-h-[220px]"
+        >
           <PieChart>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
             <Pie
               data={chartData}
               dataKey="value"
@@ -69,7 +75,7 @@ export function SavingsProgress() {
                           80% of $30,000
                         </tspan>
                       </text>
-                    );
+                    )
                   }
                 }}
               />
@@ -79,7 +85,9 @@ export function SavingsProgress() {
       </CardContent>
       <CardFooter className="flex-col gap-0">
         <div className="flex w-full items-center justify-between py-3">
-          <span className="text-sm text-muted-foreground">Projected Finish</span>
+          <span className="text-sm text-muted-foreground">
+            Projected Finish
+          </span>
           <span className="text-sm font-semibold">October 2024</span>
         </div>
         <Separator />
@@ -94,5 +102,5 @@ export function SavingsProgress() {
         </div>
       </CardFooter>
     </Card>
-  );
+  )
 }

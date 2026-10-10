@@ -17,9 +17,9 @@ export default function ApiReferencePage() {
       <header className="flex flex-col gap-2">
         <h1>API Reference</h1>
         <p>
-          InspectUI works without required props. projectRoot is optional. Optional shortcut, ide,
-          tooltip, and spotlight props seed the overlay settings panel. Update
-          live in the{" "}
+          InspectUI works without required props. projectRoot is optional.
+          Optional shortcut, ide, tooltip, and spotlight props seed the overlay
+          settings panel. Update live in the{" "}
           <Link
             href="/lab"
             rel="nofollow"

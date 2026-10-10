@@ -112,9 +112,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const InspectUI = process.env.NODE_ENV === "development"
-    ? (await import("next-inspect-ui")).InspectUI
-    : null
+  const InspectUI =
+    process.env.NODE_ENV === "development"
+      ? (await import("next-inspect-ui")).InspectUI
+      : null
   return (
     <html
       lang="en"
@@ -135,9 +136,7 @@ export default async function RootLayout({
             <CuelumeBind />
             {children}
             <Toaster />
-            {InspectUI && (
-              <InspectUI />
-            )}
+            {InspectUI && <InspectUI />}
           </TooltipProvider>
         </ThemeProvider>
       </body>

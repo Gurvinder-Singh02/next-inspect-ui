@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import * as React from "react"
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile"
 import {
   Card,
   CardAction,
@@ -11,23 +11,23 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart";
+} from "@/components/ui/chart"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+} from "@/components/ui/select"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
-export const description = "An interactive area chart";
+export const description = "An interactive area chart"
 
 const chartData = [
   { date: "2024-04-01", desktop: 222, mobile: 150 },
@@ -121,7 +121,7 @@ const chartData = [
   { date: "2024-06-28", desktop: 149, mobile: 200 },
   { date: "2024-06-29", desktop: 103, mobile: 160 },
   { date: "2024-06-30", desktop: 446, mobile: 400 },
-];
+]
 
 const chartConfig = {
   visitors: {
@@ -135,39 +135,41 @@ const chartConfig = {
     label: "Mobile",
     color: "var(--primary)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export function ChartAreaInteractive() {
-  const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = React.useState("90d");
+  const isMobile = useIsMobile()
+  const [timeRange, setTimeRange] = React.useState("90d")
 
   React.useEffect(() => {
     if (isMobile) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setTimeRange("7d");
+      setTimeRange("7d")
     }
-  }, [isMobile]);
+  }, [isMobile])
 
   const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
+    const date = new Date(item.date)
+    const referenceDate = new Date("2024-06-30")
+    let daysToSubtract = 90
     if (timeRange === "30d") {
-      daysToSubtract = 30;
+      daysToSubtract = 30
     } else if (timeRange === "7d") {
-      daysToSubtract = 7;
+      daysToSubtract = 7
     }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
+    const startDate = new Date(referenceDate)
+    startDate.setDate(startDate.getDate() - daysToSubtract)
+    return date >= startDate
+  })
 
   return (
     <Card className="@container/card">
       <CardHeader>
         <CardTitle>Total Visitors </CardTitle>
         <CardDescription>
-          <span className="hidden @[540px]/card:block">Total for the last 3 months</span>
+          <span className="hidden @[540px]/card:block">
+            Total for the last 3 months
+          </span>
           <span className="@[540px]/card:hidden">Last 3 months</span>
         </CardDescription>
         <CardAction>
@@ -175,7 +177,7 @@ export function ChartAreaInteractive() {
             multiple={false}
             value={timeRange ? [timeRange] : []}
             onValueChange={(value) => {
-              setTimeRange(value[0] ?? "90d");
+              setTimeRange(value[0] ?? "90d")
             }}
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
@@ -188,7 +190,7 @@ export function ChartAreaInteractive() {
             value={timeRange}
             onValueChange={(value) => {
               if (value !== null) {
-                setTimeRange(value);
+                setTimeRange(value)
               }
             }}
           >
@@ -214,16 +216,35 @@ export function ChartAreaInteractive() {
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[250px] w-full"
+        >
           <AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-desktop)" stopOpacity={1.0} />
-                <stop offset="95%" stopColor="var(--color-desktop)" stopOpacity={0.1} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-desktop)"
+                  stopOpacity={1.0}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-desktop)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
               <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-mobile)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-mobile)" stopOpacity={0.1} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-mobile)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-mobile)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
@@ -234,11 +255,11 @@ export function ChartAreaInteractive() {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value);
+                const date = new Date(value)
                 return date.toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
-                });
+                })
               }}
             />
             <ChartTooltip
@@ -249,7 +270,7 @@ export function ChartAreaInteractive() {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
-                    });
+                    })
                   }}
                   indicator="dot"
                 />
@@ -273,5 +294,5 @@ export function ChartAreaInteractive() {
         </ChartContainer>
       </CardContent>
     </Card>
-  );
+  )
 }

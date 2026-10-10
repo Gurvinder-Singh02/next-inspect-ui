@@ -1,36 +1,41 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 export const CodeBlock = ({
   code,
   html,
   className,
 }: {
-  code: string;
-  html: string;
-  className?: string;
+  code: string
+  html: string
+  className?: string
 }) => {
-  const [hasCopied, setHasCopied] = useState(false);
+  const [hasCopied, setHasCopied] = useState(false)
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(code);
-      setHasCopied(true);
-      window.setTimeout(() => setHasCopied(false), 1600);
+      await navigator.clipboard.writeText(code)
+      setHasCopied(true)
+      window.setTimeout(() => setHasCopied(false), 1600)
     } catch {
-      setHasCopied(false);
+      setHasCopied(false)
     }
-  };
+  }
 
   return (
-    <div className={cn("landing-code relative rounded-xl bg-card px-4 py-3.5", className)}>
+    <div
+      className={cn(
+        "landing-code bg-card relative rounded-xl px-4 py-3.5",
+        className
+      )}
+    >
       <button
         type="button"
         onClick={handleCopy}
-        className="absolute top-3.5 right-4 z-10 font-inter text-[13px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline"
+        className="font-inter text-muted-foreground hover:text-foreground absolute top-3.5 right-4 z-10 text-[13px] transition-colors focus-visible:outline"
         aria-label={hasCopied ? "Copied" : "Copy code"}
       >
         {hasCopied ? "Copied" : "Copy"}
@@ -39,5 +44,5 @@ export const CodeBlock = ({
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </div>
     </div>
-  );
-};
+  )
+}

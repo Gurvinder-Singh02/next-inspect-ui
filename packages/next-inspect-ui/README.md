@@ -11,18 +11,21 @@ npm i -D next-inspect-ui
 
 import type { ReactNode } from "react"
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const InspectUI = process.env.NODE_ENV === "development"
-    ? (await import("next-inspect-ui")).InspectUI
-    : null
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode
+}) {
+  const InspectUI =
+    process.env.NODE_ENV === "development"
+      ? (await import("next-inspect-ui")).InspectUI
+      : null
 
   return (
     <html>
       <body>
         {children}
-        {InspectUI && (
-          <InspectUI />
-        )}
+        {InspectUI && <InspectUI />}
       </body>
     </html>
   )
@@ -31,28 +34,28 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
 Press <kbd>⌥</kbd><kbd>X</kbd> to toggle inspect mode.
 
-| key | action |
-|---|---|
-| hover | show the element's tag and source file |
-| click / Enter | open the selected source in your editor |
-| ⌥ hold | climb to the component that rendered it |
-| `[` / `{` · `]` / `}` | move to the parent / child element |
-| `Space` | toggle the Component and Element popover |
-| `↑` `↓` | select tree rows when the popover is open; otherwise move between siblings |
-| `←` `→` | open Component / Element when the popover is open; otherwise move between siblings |
-| Command / Ctrl + `↑` / `↓` | jump to the first / last row in the open tab |
-| `Esc` | exit |
+| key                        | action                                                                             |
+| -------------------------- | ---------------------------------------------------------------------------------- |
+| hover                      | show the element's tag and source file                                             |
+| click / Enter              | open the selected source in your editor                                            |
+| ⌥ hold                     | climb to the component that rendered it                                            |
+| `[` / `{` · `]` / `}`      | move to the parent / child element                                                 |
+| `Space`                    | toggle the Component and Element popover                                           |
+| `↑` `↓`                    | select tree rows when the popover is open; otherwise move between siblings         |
+| `←` `→`                    | open Component / Element when the popover is open; otherwise move between siblings |
+| Command / Ctrl + `↑` / `↓` | jump to the first / last row in the open tab                                       |
+| `Esc`                      | exit                                                                               |
 
 ## Props
 
-| prop | type | |
-|---|---|---|
-| `projectRoot` | `string` (optional) | Explicit root for relative source paths; not needed for basic setup. |
-| `shortcut` | `string` | Inspect-mode shortcut; defaults to `"Alt+X"`. |
-| `ide` | `InspectorIde` | Editor for source links; defaults to `"cursor"`. |
-| `tooltipProps` | `Partial<TooltipProps>` | Tooltip appearance, placement, and source labels. |
-| `devSpotlightProps` | `Partial<DevSpotlightProps>` | Spotlight color, fill, border, and animation. |
-| `popoverProps` | `{ defaultTab?: "component" \| "element" }` | initial tree tab; defaults to `"component"` |
+| prop                | type                                        |                                                                      |
+| ------------------- | ------------------------------------------- | -------------------------------------------------------------------- |
+| `projectRoot`       | `string` (optional)                         | Explicit root for relative source paths; not needed for basic setup. |
+| `shortcut`          | `string`                                    | Inspect-mode shortcut; defaults to `"Alt+X"`.                        |
+| `ide`               | `InspectorIde`                              | Editor for source links; defaults to `"cursor"`.                     |
+| `tooltipProps`      | `Partial<TooltipProps>`                     | Tooltip appearance, placement, and source labels.                    |
+| `devSpotlightProps` | `Partial<DevSpotlightProps>`                | Spotlight color, fill, border, and animation.                        |
+| `popoverProps`      | `{ defaultTab?: "component" \| "element" }` | initial tree tab; defaults to `"component"`                          |
 
 The Component tab nests immediate ancestors from the page down to the hovered element, stopping before layouts and the app shell. The Element tab shows 1–15 nested HTML nodes, prioritizing siblings, then parents, then children. Use `popoverProps={{ defaultTab: "element" }}` to start on Element. Shift does not climb.
 
@@ -126,9 +129,11 @@ The package also exports a self-contained script as `next-inspect-ui/script`. Se
 ```tsx
 import Script from "next/script"
 
-{process.env.NODE_ENV === "development" && (
-  <Script src="/inspect-ui.js" strategy="afterInteractive" />
-)}
+{
+  process.env.NODE_ENV === "development" && (
+    <Script src="/inspect-ui.js" strategy="afterInteractive" />
+  )
+}
 ```
 
 No inspector component import or mount is needed with this setup. Production excludes the script tag and download. The script includes its own React runtime; use the component setup for a smaller development download. Never include the script unconditionally.

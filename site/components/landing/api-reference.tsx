@@ -44,7 +44,8 @@ const API_SECTIONS: ApiSection[] = [
       {
         name: "popoverProps",
         type: '{ defaultTab?: "component" | "element" }',
-        description: 'Initial tree tab when Space opens the popover. Default "component".',
+        description:
+          'Initial tree tab when Space opens the popover. Default "component".',
       },
       {
         name: "devSpotlightProps",

@@ -1,7 +1,13 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Empty,
   EmptyContent,
@@ -9,8 +15,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+} from "@/components/ui/empty"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 export function FileUpload() {
   return (
@@ -40,5 +46,5 @@ export function FileUpload() {
         </Empty>
       </CardContent>
     </Card>
-  );
+  )
 }

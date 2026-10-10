@@ -47,7 +47,8 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["Space"],
     type: "panel",
-    description: "Open or close the Component and Element trees. Arrows preview rows; Enter opens their source while the original target stays pinned.",
+    description:
+      "Open or close the Component and Element trees. Arrows preview rows; Enter opens their source while the original target stays pinned.",
   },
   {
     keys: ["↑", "↓"],
@@ -71,7 +72,8 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["←"],
     type: "nav",
-    description: "Popover open: Component tab. Closed: previous sibling element.",
+    description:
+      "Popover open: Component tab. Closed: previous sibling element.",
   },
   {
     keys: ["→"],
@@ -93,12 +95,14 @@ const SHORTCUTS: KeyboardShortcut[] = [
   {
     keys: ["⌘", "↑"],
     type: "panel",
-    description: "Popover open: jump to the first row in the current tab (Ctrl on Windows/Linux).",
+    description:
+      "Popover open: jump to the first row in the current tab (Ctrl on Windows/Linux).",
   },
   {
     keys: ["⌘", "↓"],
     type: "panel",
-    description: "Popover open: jump to the last row in the current tab (Ctrl on Windows/Linux).",
+    description:
+      "Popover open: jump to the last row in the current tab (Ctrl on Windows/Linux).",
   },
 ]
 

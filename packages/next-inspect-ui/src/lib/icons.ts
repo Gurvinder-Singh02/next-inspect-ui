@@ -27,7 +27,16 @@ export const createOpenSourceIcon = () => createStrokeIcon(14, "2.2")
 
 export const createReactIcon = () => {
   const svg = document.createElementNS(SVG_NS, "svg")
-  for (const [key, value] of Object.entries({ width: "12", height: "12", viewBox: "-12 -12 24 24", fill: "none", stroke: "currentColor", "stroke-width": "1", "aria-hidden": "true" })) svg.setAttribute(key, value)
+  for (const [key, value] of Object.entries({
+    width: "12",
+    height: "12",
+    viewBox: "-12 -12 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    "stroke-width": "1",
+    "aria-hidden": "true",
+  }))
+    svg.setAttribute(key, value)
   for (const angle of [0, 60, 120]) {
     const ring = document.createElementNS(SVG_NS, "ellipse")
     ring.setAttribute("rx", "11")
@@ -44,7 +53,18 @@ export const createReactIcon = () => {
 
 export const createOptionIcon = () => {
   const svg = document.createElementNS(SVG_NS, "svg")
-  for (const [key, value] of Object.entries({ width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" })) svg.setAttribute(key, value)
+  for (const [key, value] of Object.entries({
+    width: "12",
+    height: "12",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    "stroke-width": "2",
+    "stroke-linecap": "round",
+    "stroke-linejoin": "round",
+    "aria-hidden": "true",
+  }))
+    svg.setAttribute(key, value)
   const path = document.createElementNS(SVG_NS, "path")
   path.setAttribute("d", "M3 5h5l8 14h5M14 5h7")
   svg.append(path)

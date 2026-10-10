@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { Card, CardContent } from "@/components/ui/card";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+import { Card, CardContent } from "@/components/ui/card"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 const PREVIEW_ICONS = [
   {
@@ -116,7 +116,7 @@ const PREVIEW_ICONS = [
     phosphor: "GearIcon",
     remixicon: "RiSettingsLine",
   },
-] as const;
+] as const
 
 export function IconPreviewGrid() {
   return (
@@ -126,7 +126,7 @@ export function IconPreviewGrid() {
           {PREVIEW_ICONS.map((icon, index) => (
             <div
               key={index}
-              className="flex size-8 items-center justify-center rounded-md ring ring-border style-sera:rounded-none *:[svg]:size-4"
+              className="style-sera:rounded-none flex size-8 items-center justify-center rounded-md ring ring-border *:[svg]:size-4"
             >
               <IconPlaceholder
                 lucide={icon.lucide}
@@ -140,5 +140,5 @@ export function IconPreviewGrid() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

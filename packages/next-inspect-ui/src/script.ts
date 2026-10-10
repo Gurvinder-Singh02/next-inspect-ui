@@ -16,8 +16,11 @@ const start = () => {
   container.setAttribute("data-dev-inspector-script-root", "")
   container.style.display = "none"
   document.body.append(container)
-  createRoot(container).render(createElement(InspectUI, host.__NEXT_INSPECT_UI_OPTIONS__ ?? {}))
+  createRoot(container).render(
+    createElement(InspectUI, host.__NEXT_INSPECT_UI_OPTIONS__ ?? {})
+  )
 }
 
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true })
+if (document.readyState === "loading")
+  document.addEventListener("DOMContentLoaded", start, { once: true })
 else start()

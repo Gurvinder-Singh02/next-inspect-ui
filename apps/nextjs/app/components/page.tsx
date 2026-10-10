@@ -1,15 +1,15 @@
-import { ActivateAgentDialog } from "@/components/create-preview/preview/cards/activate-agent-dialog";
-import { BarChartCard } from "@/components/create-preview/preview/cards/bar-chart-card";
-import { CodespacesCard } from "@/components/create-preview/preview/cards/codespaces-card";
-import { Contributors } from "@/components/create-preview/preview/cards/contributors";
-import { FileUpload } from "@/components/create-preview/preview/cards/file-upload";
-import { Invoice } from "@/components/create-preview/preview/cards/invoice";
-import { LiveWaveformCard } from "@/components/create-preview/preview/cards/live-waveform";
-import { SleepReport } from "@/components/create-preview/preview/cards/sleep-report";
-import { StyleOverview } from "@/components/create-preview/preview/cards/style-overview";
-import { TypographySpecimen } from "@/components/create-preview/preview/cards/typography-specimen";
-import { UsageCard } from "@/components/create-preview/preview/cards/usage-card";
-import { YearlyActivity } from "@/components/create-preview/preview/cards/yearly-activity";
+import { ActivateAgentDialog } from "@/components/create-preview/preview/cards/activate-agent-dialog"
+import { BarChartCard } from "@/components/create-preview/preview/cards/bar-chart-card"
+import { CodespacesCard } from "@/components/create-preview/preview/cards/codespaces-card"
+import { Contributors } from "@/components/create-preview/preview/cards/contributors"
+import { FileUpload } from "@/components/create-preview/preview/cards/file-upload"
+import { Invoice } from "@/components/create-preview/preview/cards/invoice"
+import { LiveWaveformCard } from "@/components/create-preview/preview/cards/live-waveform"
+import { SleepReport } from "@/components/create-preview/preview/cards/sleep-report"
+import { StyleOverview } from "@/components/create-preview/preview/cards/style-overview"
+import { TypographySpecimen } from "@/components/create-preview/preview/cards/typography-specimen"
+import { UsageCard } from "@/components/create-preview/preview/cards/usage-card"
+import { YearlyActivity } from "@/components/create-preview/preview/cards/yearly-activity"
 
 export default function ComponentsPage() {
   return (
@@ -46,5 +46,5 @@ export default function ComponentsPage() {
         </div>
       </section>
     </main>
-  );
+  )
 }

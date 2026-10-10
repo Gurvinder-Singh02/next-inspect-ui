@@ -25,8 +25,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/works-with" },
 }
 
-const benchmark = sourceBenchmark.summary.find((result) => result.library === "next-inspect-ui")!
-const benchmarkLink = "text-foreground no-underline hover:underline underline-offset-4"
+const benchmark = sourceBenchmark.summary.find(
+  (result) => result.library === "next-inspect-ui"
+)!
+const benchmarkLink =
+  "text-foreground no-underline hover:underline underline-offset-4"
 
 export default async function WorksWithPage() {
   const highlighted = Object.fromEntries(
@@ -46,9 +49,23 @@ export default async function WorksWithPage() {
           Works with almost all React patterns represented in the benchmark,
           from native elements to wrapped and compound components. The fixtures
           come from{" "}
-          <a className={benchmarkLink} href="https://github.com/millionco/react-grab-bench" target="_blank" rel="noopener noreferrer">React Grab Bench</a>.
-          Our direct source checks live in the{" "}
-          <a className={benchmarkLink} href="https://github.com/Gurvinder-Singh02/next-inspect-bench" target="_blank" rel="noopener noreferrer">Next Inspect UI benchmark repository</a>{" "}
+          <a
+            className={benchmarkLink}
+            href="https://github.com/millionco/react-grab-bench"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            React Grab Bench
+          </a>
+          . Our direct source checks live in the{" "}
+          <a
+            className={benchmarkLink}
+            href="https://github.com/Gurvinder-Singh02/next-inspect-bench"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Next Inspect UI benchmark repository
+          </a>{" "}
           (private).
         </p>
       </header>
@@ -56,27 +73,47 @@ export default async function WorksWithPage() {
       <section className="flex flex-col gap-3" aria-label="Benchmark results">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <caption className="sr-only">Next Inspect UI source lookup benchmark</caption>
+            <caption className="sr-only">
+              Next Inspect UI source lookup benchmark
+            </caption>
             <thead className="text-muted-foreground">
               <tr className="border-b border-border">
-                {["Definition files", "In component tree", "Median", "p95"].map((heading) => (
-                  <th key={heading} scope="col" className="whitespace-nowrap py-2 pr-6 font-normal">{heading}</th>
-                ))}
+                {["Definition files", "In component tree", "Median", "p95"].map(
+                  (heading) => (
+                    <th
+                      key={heading}
+                      scope="col"
+                      className="py-2 pr-6 font-normal whitespace-nowrap"
+                    >
+                      {heading}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody className="font-mono">
               <tr>
-                <td className="whitespace-nowrap py-3 pr-6">{benchmark.exactFile}/{benchmark.total}</td>
-                <td className="whitespace-nowrap py-3 pr-6">{benchmark.chainContainsFile}/{benchmark.total}</td>
-                <td className="whitespace-nowrap py-3 pr-6">{benchmark.medianMs.toFixed(1)} ms</td>
-                <td className="whitespace-nowrap py-3 pr-6">{benchmark.p95Ms.toFixed(1)} ms</td>
+                <td className="py-3 pr-6 whitespace-nowrap">
+                  {benchmark.exactFile}/{benchmark.total}
+                </td>
+                <td className="py-3 pr-6 whitespace-nowrap">
+                  {benchmark.chainContainsFile}/{benchmark.total}
+                </td>
+                <td className="py-3 pr-6 whitespace-nowrap">
+                  {benchmark.medianMs.toFixed(1)} ms
+                </td>
+                <td className="py-3 pr-6 whitespace-nowrap">
+                  {benchmark.p95Ms.toFixed(1)} ms
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
         <p className="text-sm text-muted-foreground">
-          Direct definition-file lookup across {benchmark.total} fixtures, with {benchmark.missing} missing targets and {benchmark.errors} lookup errors.
-          Timing includes source lookup and component context, not editor launch time.
+          Direct definition-file lookup across {benchmark.total} fixtures, with{" "}
+          {benchmark.missing} missing targets and {benchmark.errors} lookup
+          errors. Timing includes source lookup and component context, not
+          editor launch time.
         </p>
       </section>
 
@@ -91,7 +128,10 @@ export default async function WorksWithPage() {
       </section>
 
       <div className="flex flex-col gap-12">
-        <p>In addition to the benchmark patterns, Next Inspect UI works especially well with shadcn, Base UI, Motion, and SVG.</p>
+        <p>
+          In addition to the benchmark patterns, Next Inspect UI works
+          especially well with shadcn, Base UI, Motion, and SVG.
+        </p>
         <WorksWithPattern
           title="shadcn"
           description="Button, variants, and a Button nested in Card."

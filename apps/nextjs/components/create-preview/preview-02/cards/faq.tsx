@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/accordion"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -14,8 +14,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const GENERAL_QUESTIONS = [
   {
@@ -30,7 +30,7 @@ const GENERAL_QUESTIONS = [
     q: "Can I export my data for tax purposes?",
     a: "Yes. Navigate to Reports > Tax Export to download a CSV or PDF summary of your transactions, dividends, and capital gains for any tax year.",
   },
-];
+]
 
 const BILLING_QUESTIONS = [
   {
@@ -45,7 +45,7 @@ const BILLING_QUESTIONS = [
     q: "Do you offer a free trial?",
     a: "Yes. All new accounts start with a 14-day Pro trial. No credit card required.",
   },
-];
+]
 
 const GOALS_QUESTIONS = [
   {
@@ -60,9 +60,13 @@ const GOALS_QUESTIONS = [
     q: "How are monthly contributions calculated?",
     a: "We divide the remaining amount by the number of months until your target date, adjusted for your current savings rate and any auto-transfer schedules.",
   },
-];
+]
 
-function QuestionList({ questions }: { questions: { q: string; a: string }[] }) {
+function QuestionList({
+  questions,
+}: {
+  questions: { q: string; a: string }[]
+}) {
   return (
     <Accordion defaultValue={[0]}>
       {questions.map((item, index) => (
@@ -72,7 +76,7 @@ function QuestionList({ questions }: { questions: { q: string; a: string }[] }) 
         </AccordionItem>
       ))}
     </Accordion>
-  );
+  )
 }
 
 export function Faq() {
@@ -111,5 +115,5 @@ export function Faq() {
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }
