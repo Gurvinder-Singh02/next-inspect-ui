@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { fileURLToPath } from "node:url";
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import { fileURLToPath } from "node:url"
 
 export default defineConfig({
   plugins: [react()],
@@ -10,4 +10,4 @@ export default defineConfig({
   },
   define: { __PROJECT_ROOT__: JSON.stringify(import.meta.dirname) },
   build: { sourcemap: true, target: "es2022" },
-});
+})

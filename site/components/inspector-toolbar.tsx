@@ -1013,9 +1013,7 @@ export const InspectorSettingsControls = ({
           <KitToggleRow
             label="Show full URL"
             checked={tooltip.showFullUrl}
-            onCheckedChange={(showFullUrl) =>
-              setTooltipProps({ showFullUrl })
-            }
+            onCheckedChange={(showFullUrl) => setTooltipProps({ showFullUrl })}
           />
         </KitSection>
 

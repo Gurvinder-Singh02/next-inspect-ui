@@ -1,5 +1,7 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  // Prefer the repo-root `.oxfmtrc.jsonc` when formatting from the monorepo.
+  // This nested copy keeps `site/` consistent if formatted in isolation.
   "endOfLine": "lf",
   "semi": false,
   "singleQuote": false,

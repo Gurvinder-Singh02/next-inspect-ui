@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "benchmark": "bun run build && node scripts/benchmark-inspectors.cjs",
-    "format": "oxfmt --write apps site '!**/dist/**' '!**/.next/**' '!**/node_modules/**' '!**/coverage/**' '!**/.turbo/**'",
+    "format": "oxfmt --write -c .oxfmtrc.jsonc --disable-nested-config apps packages site '!**/dist/**' '!**/.next/**' '!**/node_modules/**' '!**/coverage/**' '!**/.turbo/**'",
     "dev": "pnpm --filter site dev",
     "dev:test": "bun run scripts/dev-tests.ts",
     "dev:example": "bun run dev:nextjs",

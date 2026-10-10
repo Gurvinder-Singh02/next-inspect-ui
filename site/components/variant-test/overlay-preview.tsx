@@ -395,8 +395,7 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
   }
 
   const onModeChange = (value: string | number | null) => {
-    const next =
-      value === "none" ? "none" : "autoplay"
+    const next = value === "none" ? "none" : "autoplay"
     setMode(next)
     setIsPlaying(next === "autoplay")
   }

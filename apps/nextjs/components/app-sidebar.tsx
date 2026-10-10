@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { NavDocuments } from "@/components/nav-documents";
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { NavDocuments } from "@/components/nav-documents"
+import { NavMain } from "@/components/nav-main"
+import { NavSecondary } from "@/components/nav-secondary"
+import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "@/components/ui/sidebar"
 import {
   LayoutDashboardIcon,
   ListIcon,
@@ -30,7 +30,7 @@ import {
   FileChartColumnIcon,
   FileIcon,
   CommandIcon,
-} from "lucide-react";
+} from "lucide-react"
 
 const data = {
   user: {
@@ -147,7 +147,7 @@ const data = {
       icon: <FileIcon />,
     },
   ],
-};
+}
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -173,5 +173,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

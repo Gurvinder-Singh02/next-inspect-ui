@@ -1,16 +1,22 @@
-"use client";
+"use client"
 
-import { Area, AreaChart } from "recharts";
+import { Area, AreaChart } from "recharts"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardAction, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart";
+} from "@/components/ui/chart"
 
 // Monthly visitor data for the area chart.
 const chartData = [
@@ -20,7 +26,7 @@ const chartData = [
   { month: "April", visitors: 73 },
   { month: "May", visitors: 209 },
   { month: "June", visitors: 214 },
-];
+]
 
 // Chart configuration for the visitors dataset.
 const chartConfig = {
@@ -28,7 +34,7 @@ const chartConfig = {
     label: "Visitors",
     color: "var(--chart-1)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export function AnalyticsCard() {
   return (
@@ -67,5 +73,5 @@ export function AnalyticsCard() {
         </AreaChart>
       </ChartContainer>
     </Card>
-  );
+  )
 }

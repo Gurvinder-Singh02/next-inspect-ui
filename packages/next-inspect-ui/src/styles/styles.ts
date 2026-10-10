@@ -1,7 +1,4 @@
-import {
-  INSPECTOR_COLORS,
-  type InspectorSettings,
-} from "../lib/index.ts"
+import { INSPECTOR_COLORS, type InspectorSettings } from "../lib/index.ts"
 
 const STYLE_ATTR = "data-dev-inspector-style"
 const HOOK_PREFIX = "data-dev-inspector-"
@@ -39,9 +36,7 @@ export const paintUsedIcon = (el: HTMLElement, open: boolean) => {
 
 export const paintTreeRow = (el: HTMLElement, active: boolean) => {
   el.style.background = active ? "rgb(255 255 255 / 8%)" : ""
-  el.style.color = active
-    ? "var(--inspect-fg, var(--foreground, #e4e4e7))"
-    : ""
+  el.style.color = active ? "var(--inspect-fg, var(--foreground, #e4e4e7))" : ""
 }
 
 export const paintTwisty = (el: HTMLElement, open: boolean) => {
@@ -123,6 +118,9 @@ export const applyOverlayPaint = (
   tooltip.style.setProperty("--inspect-tooltip-border", paint.tooltipBorder)
   tooltip.style.setProperty("--inspect-tooltip-text", paint.tooltipText)
   tooltip.style.setProperty("--inspect-tooltip-padding", paint.tooltipPadding)
-  tooltip.style.setProperty("--inspect-tooltip-radius", paint.tooltipBorderRadius)
+  tooltip.style.setProperty(
+    "--inspect-tooltip-radius",
+    paint.tooltipBorderRadius
+  )
   setInspectMotion(overlay, tooltip, paint.animated)
 }

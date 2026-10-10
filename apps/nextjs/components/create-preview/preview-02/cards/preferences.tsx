@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Field,
   FieldContent,
@@ -15,7 +15,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field";
+} from "@/components/ui/field"
 import {
   Select,
   SelectContent,
@@ -23,23 +23,25 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+} from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 const CURRENCIES = [
   { label: "USD — United States Dollar", value: "usd" },
   { label: "EUR — Euro", value: "eur" },
   { label: "GBP — British Pound", value: "gbp" },
   { label: "JPY — Japanese Yen", value: "jpy" },
-];
+]
 
 export function Preferences() {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Preferences</CardTitle>
-        <CardDescription>Manage your account settings and notifications.</CardDescription>
+        <CardDescription>
+          Manage your account settings and notifications.
+        </CardDescription>
         <CardAction>
           <Button variant="ghost" size="icon-sm" className="bg-muted">
             <IconPlaceholder
@@ -71,21 +73,28 @@ export function Preferences() {
               </SelectContent>
             </Select>
           </Field>
-          <FieldSeparator className="-my-4 style-sera:hidden" />
+          <FieldSeparator className="style-sera:hidden -my-4" />
           <Field orientation="horizontal">
             <FieldContent>
-              <FieldLabel htmlFor="public-statistics">Public Statistics</FieldLabel>
+              <FieldLabel htmlFor="public-statistics">
+                Public Statistics
+              </FieldLabel>
               <FieldDescription>
-                Allow others to see your total stream count and listening activity
+                Allow others to see your total stream count and listening
+                activity
               </FieldDescription>
             </FieldContent>
             <Switch id="public-statistics" defaultChecked />
           </Field>
-          <FieldSeparator className="-my-4 style-sera:hidden" />
+          <FieldSeparator className="style-sera:hidden -my-4" />
           <Field orientation="horizontal">
             <FieldContent>
-              <FieldLabel htmlFor="email-notifications">Email Notifications</FieldLabel>
-              <FieldDescription>Monthly royalty reports and distribution updates</FieldDescription>
+              <FieldLabel htmlFor="email-notifications">
+                Email Notifications
+              </FieldLabel>
+              <FieldDescription>
+                Monthly royalty reports and distribution updates
+              </FieldDescription>
             </FieldContent>
             <Switch id="email-notifications" defaultChecked />
           </Field>
@@ -96,5 +105,5 @@ export function Preferences() {
         <Button className="ml-auto">Save Preferences</Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

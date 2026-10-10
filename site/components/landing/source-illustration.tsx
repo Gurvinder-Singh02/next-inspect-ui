@@ -5,7 +5,10 @@ const steps = [
   ["DOM element", "Find the exact visible element"],
   ["React Fiber", "Follow its React reference"],
   ["Fiber debug metadata", "Read source clues with the built-in stack reader"],
-  ["Source maps (when needed)", "Resolve original files with the built-in decoder"],
+  [
+    "Source maps (when needed)",
+    "Resolve original files with the built-in decoder",
+  ],
   ["file.tsx:42:8", "Resolve the file, line, and column"],
   ["Editor link / dev server", "Send the source location"],
   ["Cursor / VS Code", "Open the code in your editor"],

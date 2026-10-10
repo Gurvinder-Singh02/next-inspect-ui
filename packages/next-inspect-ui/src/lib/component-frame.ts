@@ -1,7 +1,9 @@
 import * as React from "react"
 import { readFiberStack, type FiberStackFrame } from "./fiber-stack.ts"
 
-type Component = ((...args: unknown[]) => unknown) & { prototype?: { isReactComponent?: unknown } }
+type Component = ((...args: unknown[]) => unknown) & {
+  prototype?: { isReactComponent?: unknown }
+}
 const frames = new WeakMap<Component, FiberStackFrame[]>()
 let recovering = false
 
@@ -19,14 +21,22 @@ export const recoverComponentFrame = (type: unknown): FiberStackFrame[] => {
   const cached = frames.get(component)
   if (cached) return cached
   const internals = React as unknown as {
-    __CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE?: { H: unknown }
-    __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED?: { ReactCurrentDispatcher?: { current: unknown } }
+    __CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE?: {
+      H: unknown
+    }
+    __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED?: {
+      ReactCurrentDispatcher?: { current: unknown }
+    }
   }
-  const modern = internals.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE
-  const legacy = internals.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED?.ReactCurrentDispatcher
+  const modern =
+    internals.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE
+  const legacy =
+    internals.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
+      ?.ReactCurrentDispatcher
   const modernDispatcher = modern?.H
   const legacyDispatcher = legacy?.current
-  const previousError = console.error, previousWarn = console.warn
+  const previousError = console.error,
+    previousWarn = console.warn
   let result: FiberStackFrame[] = []
   recovering = true
   try {
@@ -36,7 +46,11 @@ export const recoverComponentFrame = (type: unknown): FiberStackFrame[] => {
     if (component.prototype?.isReactComponent) {
       // React class constructors assign props; intercept that before rendering.
       function ThrowingInstance() {}
-      Object.defineProperty(ThrowingInstance.prototype, "props", { set() { throw new Error("component frame") } })
+      Object.defineProperty(ThrowingInstance.prototype, "props", {
+        set() {
+          throw new Error("component frame")
+        },
+      })
       Reflect.construct(component, [], ThrowingInstance)
     } else {
       const value = Reflect.apply(component, undefined, [])
@@ -48,14 +62,17 @@ export const recoverComponentFrame = (type: unknown): FiberStackFrame[] => {
   } catch (error) {
     if (error instanceof Error) {
       const candidates = readFiberStack(error)
-      const boundary = candidates.findIndex(frame => frame.methodName.includes("recoverComponentFrame"))
+      const boundary = candidates.findIndex((frame) =>
+        frame.methodName.includes("recoverComponentFrame")
+      )
       const last = boundary > 0 ? candidates[boundary - 1] : undefined
       if (last) result = [last]
     }
   } finally {
     if (modern) modern.H = modernDispatcher
     if (legacy) legacy.current = legacyDispatcher
-    console.error = previousError; console.warn = previousWarn
+    console.error = previousError
+    console.warn = previousWarn
     recovering = false
   }
   frames.set(component, result)

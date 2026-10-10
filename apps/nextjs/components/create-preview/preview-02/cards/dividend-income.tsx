@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { Bar, BarChart, XAxis } from "recharts";
+import { Bar, BarChart, XAxis } from "recharts"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -10,16 +10,22 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart";
-import { Item, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@/components/ui/item";
-import { useDesignSystemSearchParams } from "@/components/create-preview/search-params";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+} from "@/components/ui/chart"
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item"
+import { useDesignSystemSearchParams } from "@/components/create-preview/search-params"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 const HOLDINGS = [
   {
@@ -66,18 +72,18 @@ const HOLDINGS = [
       { q: "Q4", value: 360 },
     ],
   },
-];
+]
 
 const miniChartConfig = {
   value: {
     label: "Dividend",
     color: "var(--chart-2)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export function DividendIncome() {
-  const [params] = useDesignSystemSearchParams();
-  const isRounded = !["lyra", "sera"].includes(params.style);
+  const [params] = useDesignSystemSearchParams()
+  const isRounded = !["lyra", "sera"].includes(params.style)
 
   return (
     <Card>
@@ -106,9 +112,18 @@ export function DividendIncome() {
                 <ItemTitle>{holding.name}</ItemTitle>
                 <ItemDescription>{holding.shares}</ItemDescription>
               </ItemContent>
-              <ChartContainer config={miniChartConfig} className="hidden h-8 w-24 md:block">
-                <BarChart data={holding.data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
-                  <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+              <ChartContainer
+                config={miniChartConfig}
+                className="hidden h-8 w-24 md:block"
+              >
+                <BarChart
+                  data={holding.data}
+                  margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                >
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent hideLabel />}
+                  />
                   <Bar
                     dataKey="value"
                     fill="var(--color-value)"
@@ -124,5 +139,5 @@ export function DividendIncome() {
         </ItemGroup>
       </CardContent>
     </Card>
-  );
+  )
 }

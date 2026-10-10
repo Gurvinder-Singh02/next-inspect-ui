@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,15 +8,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/card"
+import { Field, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group";
+} from "@/components/ui/input-group"
 import {
   Select,
   SelectContent,
@@ -24,9 +24,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+} from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 export function InviteTeam() {
   return (
@@ -80,7 +80,11 @@ export function InviteTeam() {
         <Field>
           <FieldLabel htmlFor="invite-link">Or share invite link</FieldLabel>
           <InputGroup>
-            <InputGroupInput id="invite-link" defaultValue="https://app.co/invite/x8f2k" readOnly />
+            <InputGroupInput
+              id="invite-link"
+              defaultValue="https://app.co/invite/x8f2k"
+              readOnly
+            />
             <InputGroupAddon align="inline-end">
               <InputGroupButton size="icon-xs" aria-label="Copy link">
                 <IconPlaceholder
@@ -99,5 +103,5 @@ export function InviteTeam() {
         <Button className="w-full">Send Invites</Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

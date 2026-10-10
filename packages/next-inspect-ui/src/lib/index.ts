@@ -43,7 +43,10 @@ export type InspectorIde =
 // with no dev-server round-trip or process spawn, so the editor opens instantly.
 export const INSPECTOR_IDES: Record<
   InspectorIde,
-  { label: string; url: (filePath: string, line: number, column: number) => string }
+  {
+    label: string
+    url: (filePath: string, line: number, column: number) => string
+  }
 > = {
   cursor: {
     label: "Cursor",
@@ -449,7 +452,12 @@ export const tooltipDefaultsForColor = (
   const palette = INSPECTOR_COLORS[color]
   return {
     background: palette.tooltip,
-    text: color === "yellow" ? "#000000" : color === "white" ? "#121212" : "#ffffff",
+    text:
+      color === "yellow"
+        ? "#000000"
+        : color === "white"
+          ? "#121212"
+          : "#ffffff",
   }
 }
 
@@ -463,7 +471,9 @@ export const spotlightDefaultsForColor = (
   }
 }
 
-export const formatInspectorComponentSnippet = (settings: InspectorSettings) => {
+export const formatInspectorComponentSnippet = (
+  settings: InspectorSettings
+) => {
   const props: string[] = []
   if (settings.shortcut !== DEFAULT_INSPECTOR_SETTINGS.shortcut) {
     props.push(`  shortcut=${JSON.stringify(settings.shortcut)}`)
@@ -473,14 +483,20 @@ export const formatInspectorComponentSnippet = (settings: InspectorSettings) => 
   }
   const addChangedProps = (name: string, values: object, defaults: object) => {
     const changed = Object.fromEntries(
-      Object.entries(values).filter(([key, value]) => value !== Reflect.get(defaults, key))
+      Object.entries(values).filter(
+        ([key, value]) => value !== Reflect.get(defaults, key)
+      )
     )
     if (!Object.keys(changed).length) return
     const json = JSON.stringify(changed, null, 2).replace(/\n/g, "\n  ")
     props.push(`  ${name}={${json}}`)
   }
   addChangedProps("tooltipProps", settings.tooltipProps, DEFAULT_TOOLTIP_PROPS)
-  addChangedProps("devSpotlightProps", settings.devSpotlightProps, DEFAULT_DEV_SPOTLIGHT_PROPS)
+  addChangedProps(
+    "devSpotlightProps",
+    settings.devSpotlightProps,
+    DEFAULT_DEV_SPOTLIGHT_PROPS
+  )
   return props.length ? `<InspectUI\n${props.join("\n")}\n/>` : "<InspectUI />"
 }
 
@@ -493,7 +509,10 @@ const emit = () => {
 export const getInspectorSettings = () => settings
 
 export const setInspectorSettings = (
-  patch: Omit<Partial<InspectorSettings>, "tooltipProps" | "devSpotlightProps"> & {
+  patch: Omit<
+    Partial<InspectorSettings>,
+    "tooltipProps" | "devSpotlightProps"
+  > & {
     tooltipProps?: Partial<TooltipProps>
     devSpotlightProps?: Partial<DevSpotlightProps>
   }

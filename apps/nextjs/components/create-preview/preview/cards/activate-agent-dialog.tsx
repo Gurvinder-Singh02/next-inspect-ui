@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,9 +10,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Item, ItemContent, ItemGroup, ItemMedia, ItemTitle } from "@/components/ui/item";
-import { IconPlaceholder } from "@/components/create-preview/icon-placeholder";
+} from "@/components/ui/card"
+import {
+  Item,
+  ItemContent,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
+import { IconPlaceholder } from "@/components/create-preview/icon-placeholder"
 
 // Agent feature descriptions.
 const agentFeatures = [
@@ -29,7 +35,8 @@ const agentFeatures = [
     id: "code-suggestions",
     content: (
       <>
-        <strong>Code suggestions</strong> validated in sandboxes before you merge.
+        <strong>Code suggestions</strong> validated in sandboxes before you
+        merge.
       </>
     ),
   },
@@ -37,14 +44,15 @@ const agentFeatures = [
     id: "root-cause",
     content: (
       <>
-        <strong>Root-cause analysis</strong> for production issues with deployment context.{" "}
+        <strong>Root-cause analysis</strong> for production issues with
+        deployment context.{" "}
         <Badge variant="secondary" className="bg-chart-1 text-chart-5">
           Requires Observability Plus
         </Badge>
       </>
     ),
   },
-];
+]
 
 export function ActivateAgentDialog() {
   return (
@@ -52,7 +60,8 @@ export function ActivateAgentDialog() {
       <CardHeader>
         <CardTitle>Ship faster & safer with Vercel Agent</CardTitle>
         <CardDescription>
-          Your use is subject to Vercel&apos;s <a href="#">Public Beta Agreement</a> and{" "}
+          Your use is subject to Vercel&apos;s{" "}
+          <a href="#">Public Beta Agreement</a> and{" "}
           <a href="#">AI Product Terms</a>.
         </CardDescription>
       </CardHeader>
@@ -80,7 +89,8 @@ export function ActivateAgentDialog() {
         </ItemGroup>
         <Alert>
           <AlertDescription>
-            Pro teams get $100 in Vercel Agent trial credit for 2 weeks after activation.
+            Pro teams get $100 in Vercel Agent trial credit for 2 weeks after
+            activation.
           </AlertDescription>
         </Alert>
       </CardContent>
@@ -91,5 +101,5 @@ export function ActivateAgentDialog() {
         <Button className="style-sera:w-full">Enable with $100 credits</Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

@@ -131,9 +131,9 @@ export default function HowItWorksPage() {
         <h2>Keep the inspector out of production</h2>
         <p>
           A development-only import guard lets your bundler{" "}
-          <strong>tree-shake the whole library</strong>, leaving 0 B of inspector
-          code in production. A static import turns off the inspector but may
-          retain a small wrapper.
+          <strong>tree-shake the whole library</strong>, leaving 0 B of
+          inspector code in production. A static import turns off the inspector
+          but may retain a small wrapper.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">

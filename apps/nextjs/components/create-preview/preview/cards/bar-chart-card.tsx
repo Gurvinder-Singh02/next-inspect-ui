@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import * as React from "react"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   ChartContainer,
   ChartLegend,
@@ -19,8 +19,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart";
-import { useDesignSystemSearchParams } from "@/components/create-preview/search-params";
+} from "@/components/ui/chart"
+import { useDesignSystemSearchParams } from "@/components/create-preview/search-params"
 
 const barChartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -29,7 +29,7 @@ const barChartData = [
   { month: "April", desktop: 73, mobile: 190 },
   { month: "May", desktop: 209, mobile: 130 },
   { month: "June", desktop: 214, mobile: 140 },
-];
+]
 
 const barChartConfig = {
   desktop: {
@@ -40,28 +40,33 @@ const barChartConfig = {
     label: "Mobile",
     color: "var(--chart-2)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
-const desktopTotal = barChartData.reduce((sum, item) => sum + item.desktop, 0);
-const mobileTotal = barChartData.reduce((sum, item) => sum + item.mobile, 0);
-const desktopDelta = Math.round(((desktopTotal - mobileTotal) / mobileTotal) * 100);
-const desktopDeltaPrefix = desktopDelta > 0 ? "+" : "";
+const desktopTotal = barChartData.reduce((sum, item) => sum + item.desktop, 0)
+const mobileTotal = barChartData.reduce((sum, item) => sum + item.mobile, 0)
+const desktopDelta = Math.round(
+  ((desktopTotal - mobileTotal) / mobileTotal) * 100
+)
+const desktopDeltaPrefix = desktopDelta > 0 ? "+" : ""
 
 export function BarChartCard() {
-  const [params] = useDesignSystemSearchParams();
-  const isRounded = !["lyra", "sera"].includes(params.style);
+  const [params] = useDesignSystemSearchParams()
+  const isRounded = !["lyra", "sera"].includes(params.style)
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-lg">Traffic channels</CardTitle>
         <CardDescription className="line-clamp-2 text-sm leading-snug">
-          Monthly desktop and mobile traffic for the last six months—compare volume and mix across
-          platforms and devices at a glance.
+          Monthly desktop and mobile traffic for the last six months—compare
+          volume and mix across platforms and devices at a glance.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 pt-0">
-        <ChartContainer config={barChartConfig} className="max-h-[180px] w-full">
+        <ChartContainer
+          config={barChartConfig}
+          className="max-h-[180px] w-full"
+        >
           <BarChart
             accessibilityLayer
             data={barChartData}
@@ -75,7 +80,10 @@ export function BarChartCard() {
               axisLine={false}
               tickFormatter={(value) => String(value).slice(0, 3)}
             />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dashed" />}
+            />
             <ChartLegend content={<ChartLegendContent />} />
             <Bar
               dataKey="desktop"
@@ -91,15 +99,25 @@ export function BarChartCard() {
         </ChartContainer>
         <div className="grid w-full grid-cols-3 divide-x divide-border/60">
           <div className="px-2 text-center">
-            <div className="text-[0.65rem] text-muted-foreground uppercase">Desktop</div>
-            <div className="text-sm font-medium tabular-nums">{desktopTotal.toLocaleString()}</div>
+            <div className="text-[0.65rem] text-muted-foreground uppercase">
+              Desktop
+            </div>
+            <div className="text-sm font-medium tabular-nums">
+              {desktopTotal.toLocaleString()}
+            </div>
           </div>
           <div className="px-2 text-center">
-            <div className="text-[0.65rem] text-muted-foreground uppercase">Mobile</div>
-            <div className="text-sm font-medium tabular-nums">{mobileTotal.toLocaleString()}</div>
+            <div className="text-[0.65rem] text-muted-foreground uppercase">
+              Mobile
+            </div>
+            <div className="text-sm font-medium tabular-nums">
+              {mobileTotal.toLocaleString()}
+            </div>
           </div>
           <div className="px-2 text-center">
-            <div className="text-[0.65rem] text-muted-foreground uppercase">Mix Delta</div>
+            <div className="text-[0.65rem] text-muted-foreground uppercase">
+              Mix Delta
+            </div>
             <div className="text-sm font-medium tabular-nums">
               {desktopDeltaPrefix}
               {desktopDelta}%
@@ -111,5 +129,5 @@ export function BarChartCard() {
         <Button className="w-full">View report</Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

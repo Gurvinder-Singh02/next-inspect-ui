@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -19,24 +19,27 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table"
 
 const INVOICE_ITEMS = [
   { item: "Design System License", qty: 1, unitPrice: 499 },
   { item: "Priority Support", qty: 12, unitPrice: 99 },
   { item: "Custom Components", qty: 3, unitPrice: 250 },
-] as const;
+] as const
 
-const subtotal = INVOICE_ITEMS.reduce((sum, row) => sum + row.qty * row.unitPrice, 0);
-const tax = 0;
-const totalDue = subtotal + tax;
+const subtotal = INVOICE_ITEMS.reduce(
+  (sum, row) => sum + row.qty * row.unitPrice,
+  0
+)
+const tax = 0
+const totalDue = subtotal + tax
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 2,
-  }).format(value);
+  }).format(value)
 }
 
 export function Invoice() {
@@ -63,7 +66,9 @@ export function Invoice() {
             {INVOICE_ITEMS.map((row) => (
               <TableRow key={row.item}>
                 <TableCell>{row.item}</TableCell>
-                <TableCell className="text-right tabular-nums">{row.qty}</TableCell>
+                <TableCell className="text-right tabular-nums">
+                  {row.qty}
+                </TableCell>
                 <TableCell className="text-right tabular-nums">
                   {formatCurrency(row.unitPrice)}
                 </TableCell>
@@ -76,7 +81,9 @@ export function Invoice() {
               <TableCell colSpan={3} className="text-right">
                 Subtotal
               </TableCell>
-              <TableCell className="text-right tabular-nums">{formatCurrency(subtotal)}</TableCell>
+              <TableCell className="text-right tabular-nums">
+                {formatCurrency(subtotal)}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={3} className="text-right">
@@ -88,7 +95,9 @@ export function Invoice() {
               <TableCell colSpan={3} className="text-right">
                 Total Due
               </TableCell>
-              <TableCell className="text-right tabular-nums">{formatCurrency(totalDue)}</TableCell>
+              <TableCell className="text-right tabular-nums">
+                {formatCurrency(totalDue)}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -102,5 +111,5 @@ export function Invoice() {
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

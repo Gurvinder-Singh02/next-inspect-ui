@@ -1,0 +1,60 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "endOfLine": "lf",
+  "semi": false,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 80,
+  "sortTailwindcss": {
+    "functions": ["cn", "cva"],
+  },
+  "overrides": [
+    {
+      "files": ["site/**"],
+      "options": {
+        "sortTailwindcss": {
+          "stylesheet": "./site/app/globals.css",
+          "functions": ["cn", "cva"],
+        },
+      },
+    },
+    {
+      "files": ["apps/nextjs/**"],
+      "options": {
+        "sortTailwindcss": {
+          "stylesheet": "./apps/nextjs/app/globals.css",
+          "functions": ["cn", "cva"],
+        },
+      },
+    },
+    {
+      "files": ["apps/test-next-js/**"],
+      "options": {
+        "sortTailwindcss": {
+          "stylesheet": "./apps/test-next-js/app/globals.css",
+          "functions": ["cn", "cva"],
+        },
+      },
+    },
+    {
+      "files": ["apps/test-next-js-webpack/**"],
+      "options": {
+        "sortTailwindcss": {
+          "stylesheet": "./apps/test-next-js-webpack/app/globals.css",
+          "functions": ["cn", "cva"],
+        },
+      },
+    },
+  ],
+  "ignorePatterns": [
+    "dist/**",
+    "node_modules/**",
+    ".next/**",
+    ".turbo/**",
+    "coverage/**",
+    "pnpm-lock.yaml",
+    ".pnpm-store/**",
+    "AGENTS.md",
+  ],
+}

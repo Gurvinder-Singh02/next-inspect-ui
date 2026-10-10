@@ -11,8 +11,8 @@ export const ServerCard = ({
   title,
   ...props
 }: {
-  title: string;
-  "data-accuracy-target"?: string;
+  title: string
+  "data-accuracy-target"?: string
 }) => (
   <div className="rounded-lg border border-border p-4" {...props}>
     <h3 className="font-inter text-[15px] font-medium">{title}</h3>
@@ -20,20 +20,20 @@ export const ServerCard = ({
       Rendered on the server. Every element here should resolve into this file.
     </p>
   </div>
-);
+)
 
 export const NestedServer = () => (
   <section className="flex flex-col gap-3">
     <ServerCard title="First" />
     <ServerCard title="Second" />
   </section>
-);
+)
 
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 /** Async RSC — resolution must survive the await boundary. */
 export const AsyncServerCard = async () => {
-  await wait(1);
+  await wait(1)
   return (
     <div className="rounded-lg border border-border p-4">
       <h3 className="font-inter text-[15px] font-medium">After an await</h3>
@@ -41,5 +41,5 @@ export const AsyncServerCard = async () => {
         This subtree resolved after suspending.
       </p>
     </div>
-  );
-};
+  )
+}

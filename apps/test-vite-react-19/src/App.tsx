@@ -1,23 +1,32 @@
-import { Suspense } from "react";
-import Link from "./link";
-import { SparklesIcon, CircleIcon, ArrowRightIcon, TrendingUpIcon } from "lucide-react";
-import { SuiteCase } from "@/components/accuracy/suite-case";
-import { SuiteGroup } from "@/components/accuracy/suite-group";
-import { TestSuiteShell } from "@/components/accuracy/test-suite-shell";
-import { RendersOwnHost } from "@/components/algo-test/library-rendered-fixture";
-import { SvgBars } from "@/components/algo-test/svg-fixture";
-import { CompoundDemo, ForwardedInput, MemoPill } from "@/components/algo-test/kinds-fixture";
+import { Suspense } from "react"
+import Link from "./link"
+import {
+  SparklesIcon,
+  CircleIcon,
+  ArrowRightIcon,
+  TrendingUpIcon,
+} from "lucide-react"
+import { SuiteCase } from "@/components/accuracy/suite-case"
+import { SuiteGroup } from "@/components/accuracy/suite-group"
+import { TestSuiteShell } from "@/components/accuracy/test-suite-shell"
+import { RendersOwnHost } from "@/components/algo-test/library-rendered-fixture"
+import { SvgBars } from "@/components/algo-test/svg-fixture"
+import {
+  CompoundDemo,
+  ForwardedInput,
+  MemoPill,
+} from "@/components/algo-test/kinds-fixture"
 import {
   MotionBoxes,
   MotionSimplePair,
   MotionSvg,
   MotionWrapped,
-} from "@/components/algo-test/motion-fixture";
-import { SlotFixtures } from "@/components/algo-test/radix-fixture";
-import { ServerButtonCard } from "@/components/algo-test/server-button-fixture";
-import { ServerCard } from "@/components/algo-test/server-fixture";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+} from "@/components/algo-test/motion-fixture"
+import { SlotFixtures } from "@/components/algo-test/radix-fixture"
+import { ServerButtonCard } from "@/components/algo-test/server-button-fixture"
+import { ServerCard } from "@/components/algo-test/server-fixture"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -26,7 +35,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 
 import {
   TEST_CASE_META,
@@ -50,13 +59,16 @@ import {
   shadcnVariantTargets,
   thirdPartyIconTargets,
   parentInspectableCardTargets,
-} from "@/test-cases";
-import { loadCaseSources } from "./load-case-sources";
+} from "@/test-cases"
+import { loadCaseSources } from "./load-case-sources"
 
 export default function TestSuitePage({
   sourcesByCase,
 }: {
-  sourcesByCase: Record<string, import("@/components/accuracy/types").SuiteSourceFile[]>;
+  sourcesByCase: Record<
+    string,
+    import("@/components/accuracy/types").SuiteSourceFile[]
+  >
 }) {
   return (
     <TestSuiteShell
@@ -91,7 +103,14 @@ export default function TestSuitePage({
             aria-label="plain bar"
             className="overflow-visible"
           >
-            <rect x={4} y={4} width={28} height={28} rx={6} className="fill-muted-foreground/30" />
+            <rect
+              x={4}
+              y={4}
+              width={28}
+              height={28}
+              rx={6}
+              className="fill-muted-foreground/30"
+            />
           </svg>
         </SuiteCase>
 
@@ -131,7 +150,11 @@ export default function TestSuitePage({
             <Button data-accuracy-target="ghost" variant="ghost">
               Ghost
             </Button>
-            <Button data-accuracy-target="destructive" variant="destructive" size="sm">
+            <Button
+              data-accuracy-target="destructive"
+              variant="destructive"
+              size="sm"
+            >
               Destructive
             </Button>
           </div>
@@ -253,7 +276,10 @@ export default function TestSuitePage({
           targets={kindsForwardRefTargets}
         >
           <div className="flex flex-col items-center gap-3">
-            <ForwardedInput data-accuracy-target="forward-ref" hint="forwardRef" />
+            <ForwardedInput
+              data-accuracy-target="forward-ref"
+              hint="forwardRef"
+            />
             <MemoPill data-accuracy-target="memo" label="memo" />
             <CompoundDemo data-accuracy-target="compound" />
           </div>
@@ -273,7 +299,7 @@ export default function TestSuitePage({
               <span
                 key={item}
                 data-accuracy-target={item}
-                className="rounded-md border border-border px-3 py-1.5 font-mono text-[13px]"
+                className="border-border rounded-md border px-3 py-1.5 font-mono text-[13px]"
               >
                 {item}
               </span>
@@ -297,7 +323,7 @@ export default function TestSuitePage({
             <Link
               data-accuracy-target="docs"
               href="/"
-              className="inline-flex items-center gap-2 font-inter text-[14px] underline underline-offset-4"
+              className="font-inter inline-flex items-center gap-2 text-[14px] underline underline-offset-4"
             >
               Docs
               <ArrowRightIcon className="size-4" />
@@ -316,7 +342,9 @@ export default function TestSuitePage({
         >
           <Card className="w-full max-w-sm" data-accuracy-target="card">
             <CardHeader data-accuracy-target="header">
-              <CardDescription data-accuracy-target="description">Total Revenue</CardDescription>
+              <CardDescription data-accuracy-target="description">
+                Total Revenue
+              </CardDescription>
               <CardTitle
                 data-accuracy-target="title"
                 className="text-2xl font-semibold tabular-nums"
@@ -348,5 +376,5 @@ export default function TestSuitePage({
         </SuiteCase>
       </SuiteGroup>
     </TestSuiteShell>
-  );
+  )
 }

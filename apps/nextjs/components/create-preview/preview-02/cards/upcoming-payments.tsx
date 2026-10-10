@@ -1,10 +1,16 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { Badge } from "@/components/ui/badge";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Item,
   ItemContent,
@@ -12,16 +18,18 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item";
+} from "@/components/ui/item"
 
 export function UpcomingPayments() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Upcoming Payments</CardTitle>
-        <CardDescription>Select a date to view scheduled payments.</CardDescription>
+        <CardDescription>
+          Select a date to view scheduled payments.
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <Item variant="outline" className="justify-center">
@@ -29,7 +37,7 @@ export function UpcomingPayments() {
             mode="single"
             selected={date}
             onSelect={setDate}
-            className="w-full [--cell-size:--spacing(8)] md:[--cell-size:--spacing(10)] style-sera:md:[--cell-size:--spacing(9)]"
+            className="style-sera:md:[--cell-size:--spacing(9)] w-full [--cell-size:--spacing(8)] md:[--cell-size:--spacing(10)]"
           />
         </Item>
         <ItemGroup className="w-full">
@@ -57,5 +65,5 @@ export function UpcomingPayments() {
         </ItemGroup>
       </CardContent>
     </Card>
-  );
+  )
 }

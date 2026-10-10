@@ -182,19 +182,31 @@ test("formats tooltip copy for component and host tags", () => {
 
 test("matches Alt+X on the physical KeyX even when the glyph is not x", () => {
   assert.equal(
-    matchesInspectorShortcut(keyEvent({ altKey: true, key: "≈", code: "KeyX" }), "Alt+X"),
+    matchesInspectorShortcut(
+      keyEvent({ altKey: true, key: "≈", code: "KeyX" }),
+      "Alt+X"
+    ),
     true
   )
   assert.equal(
-    matchesInspectorShortcut(keyEvent({ altKey: true, code: "KeyX", repeat: true }), "Alt+X"),
+    matchesInspectorShortcut(
+      keyEvent({ altKey: true, code: "KeyX", repeat: true }),
+      "Alt+X"
+    ),
     false
   )
   assert.equal(
-    matchesInspectorShortcut(keyEvent({ altKey: false, code: "KeyX" }), "Alt+X"),
+    matchesInspectorShortcut(
+      keyEvent({ altKey: false, code: "KeyX" }),
+      "Alt+X"
+    ),
     false
   )
   assert.equal(
-    matchesInspectorShortcut(keyEvent({ altKey: true, metaKey: true, code: "KeyX" }), "Alt+X"),
+    matchesInspectorShortcut(
+      keyEvent({ altKey: true, metaKey: true, code: "KeyX" }),
+      "Alt+X"
+    ),
     false
   )
 })

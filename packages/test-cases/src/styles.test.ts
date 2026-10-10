@@ -5,9 +5,8 @@ import { registerDom } from "./register-dom.ts"
 
 registerDom()
 
-const { DEFAULT_DEV_SPOTLIGHT_PROPS, DEFAULT_INSPECTOR_SETTINGS } = await import(
-  "../../next-inspect-ui/src/lib/index.ts"
-)
+const { DEFAULT_DEV_SPOTLIGHT_PROPS, DEFAULT_INSPECTOR_SETTINGS } =
+  await import("../../next-inspect-ui/src/lib/index.ts")
 const {
   applyOverlayPaint,
   ensureInspectorStyles,
@@ -16,7 +15,8 @@ const {
   markInspectNode,
   paintUsedIcon,
 } = await import("../../next-inspect-ui/src/styles/styles.ts")
-const { createUsedIcon } = await import("../../next-inspect-ui/src/lib/icons.ts")
+const { createUsedIcon } =
+  await import("../../next-inspect-ui/src/lib/icons.ts")
 
 test("maps inspect hooks to class names", () => {
   assert.equal(
@@ -30,13 +30,17 @@ test("maps inspect hooks to class names", () => {
 })
 
 test("injects the overlay sheet once", () => {
-  document.head.querySelectorAll("style[data-dev-inspector-style]").forEach((node) => {
-    node.remove()
-  })
+  document.head
+    .querySelectorAll("style[data-dev-inspector-style]")
+    .forEach((node) => {
+      node.remove()
+    })
   const css = ".next-inspect-ui-overlay { --inspect-fill: orange; }"
   ensureInspectorStyles(css, document)
   ensureInspectorStyles(css, document)
-  const sheets = document.head.querySelectorAll("style[data-dev-inspector-style]")
+  const sheets = document.head.querySelectorAll(
+    "style[data-dev-inspector-style]"
+  )
   assert.equal(sheets.length, 1)
   assert.match(sheets[0]?.textContent ?? "", /\.next-inspect-ui-overlay/)
   assert.match(sheets[0]?.textContent ?? "", /--inspect-fill/)
@@ -46,12 +50,18 @@ test("paints overlay and tooltip through CSS variables", () => {
   const overlay = document.createElement("div")
   const tooltip = document.createElement("div")
   applyOverlayPaint(overlay, tooltip, DEFAULT_INSPECTOR_SETTINGS)
-  assert.equal(overlay.style.getPropertyValue("--inspect-fill"), "rgb(0 110 254 / 0.1)")
+  assert.equal(
+    overlay.style.getPropertyValue("--inspect-fill"),
+    "rgb(0 110 254 / 0.1)"
+  )
   assert.equal(
     overlay.style.getPropertyValue("--inspect-border"),
     "0.5px solid rgba(0 110 254 / 1)"
   )
-  assert.equal(tooltip.style.getPropertyValue("--inspect-tooltip-bg"), "#006efe")
+  assert.equal(
+    tooltip.style.getPropertyValue("--inspect-tooltip-bg"),
+    "#006efe"
+  )
   assert.equal(overlay.classList.contains(INSTANT_CLASS), false)
 })
 
@@ -76,9 +86,8 @@ test("used icon is a real svg node, not innerHTML", () => {
 })
 
 test("builds a tooltip with a text-only under chip", async () => {
-  const { createInspectTooltip, underStackTransform } = await import(
-    "../../next-inspect-ui/src/lib/tooltip.ts"
-  )
+  const { createInspectTooltip, underStackTransform } =
+    await import("../../next-inspect-ui/src/lib/tooltip.ts")
   const tooltip = createInspectTooltip()
   tooltip.setLabel("<Button/>")
   tooltip.pushUnder("<Card/>")

@@ -1,6 +1,12 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardTitle,
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 
 export function AlbumCard() {
   return (
@@ -25,7 +31,9 @@ export function AlbumCard() {
         <Separator />
         <div className="grid w-full grid-cols-2 gap-4">
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs tracking-wider text-muted-foreground uppercase">Tracks</span>
+            <span className="text-xs tracking-wider text-muted-foreground uppercase">
+              Tracks
+            </span>
             <span className="text-lg font-medium tabular-nums">6 Tracks</span>
           </div>
           <div className="flex flex-col gap-0.5">
@@ -37,5 +45,5 @@ export function AlbumCard() {
         </div>
       </CardFooter>
     </Card>
-  );
+  )
 }

@@ -1,32 +1,35 @@
 {
   "name": "next-inspect-ui",
   "version": "0.3.0",
-  "description": "Dev-only overlay for Next.js \u2014 hover any component to see its source, click to open it in your editor.",
-  "type": "module",
+  "description": "Dev-only overlay for Next.js — hover any component to see its source, click to open it in your editor.",
+  "keywords": [
+    "devtools",
+    "inspector",
+    "next",
+    "nextjs",
+    "open-in-editor",
+    "react"
+  ],
+  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui#readme",
+  "bugs": {
+    "url": "https://github.com/Gurvinder-Singh02/next-inspect-ui/issues"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Gurvinder-Singh02/next-inspect-ui.git",
     "directory": "packages/next-inspect-ui"
   },
-  "homepage": "https://github.com/Gurvinder-Singh02/next-inspect-ui#readme",
-  "bugs": {
-    "url": "https://github.com/Gurvinder-Singh02/next-inspect-ui/issues"
-  },
-  "keywords": [
-    "next",
-    "nextjs",
-    "react",
-    "inspector",
-    "devtools",
-    "open-in-editor"
-  ],
-  "sideEffects": [
-    "./dist/index.global.js"
-  ],
   "files": [
     "dist"
   ],
+  "type": "module",
+  "sideEffects": [
+    "./dist/index.global.js"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./script": "./dist/index.global.js",
     ".": {
@@ -41,18 +44,14 @@
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && tsup --config tsup.script.config.ts",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
-  },
-  "peerDependencies": {
-    "react": ">=19",
-    "react-dom": ">=19"
   },
   "devDependencies": {
     "@types/node": "^20.19.43",
@@ -61,7 +60,8 @@
     "tsup": "^8.5.0",
     "typescript": "^5"
   },
-  "publishConfig": {
-    "access": "public"
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
   }
 }

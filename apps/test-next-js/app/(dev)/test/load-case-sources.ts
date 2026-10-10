@@ -1,9 +1,11 @@
-import { CASE_SOURCE_EXAMPLES, type SuiteSourceFile } from "@/test-cases";
-import { highlightCode } from "@/lib/highlight-code";
+import { CASE_SOURCE_EXAMPLES, type SuiteSourceFile } from "@/test-cases"
+import { highlightCode } from "@/lib/highlight-code"
 
 /** Highlight short example snippets for every case’s Show source panel. */
-export const loadCaseSources = async (): Promise<Record<string, SuiteSourceFile[]>> => {
-  const byCase: Record<string, SuiteSourceFile[]> = {};
+export const loadCaseSources = async (): Promise<
+  Record<string, SuiteSourceFile[]>
+> => {
+  const byCase: Record<string, SuiteSourceFile[]> = {}
 
   await Promise.all(
     Object.entries(CASE_SOURCE_EXAMPLES).map(async ([id, examples]) => {
@@ -13,10 +15,10 @@ export const loadCaseSources = async (): Promise<Record<string, SuiteSourceFile[
           file: example.file,
           code: example.code,
           html: await highlightCode(example.code, "tsx"),
-        })),
-      );
-    }),
-  );
+        }))
+      )
+    })
+  )
 
-  return byCase;
-};
+  return byCase
+}

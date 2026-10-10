@@ -1,45 +1,52 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { STYLES } from "@/components/create-preview/styles";
-import { FONTS } from "@/components/create-preview/fonts";
-import { useDesignSystemSearchParams } from "@/components/create-preview/search-params";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { STYLES } from "@/components/create-preview/styles"
+import { FONTS } from "@/components/create-preview/fonts"
+import { useDesignSystemSearchParams } from "@/components/create-preview/search-params"
 
 export function StyleOverview() {
-  const [params] = useDesignSystemSearchParams();
+  const [params] = useDesignSystemSearchParams()
 
   const currentFont = React.useMemo(
     () => FONTS.find((font) => font.value === params.font),
-    [params.font],
-  );
+    [params.font]
+  )
 
   const currentFontHeading = React.useMemo(
     () => FONTS.find((font) => font.value === params.fontHeading),
-    [params.fontHeading],
-  );
+    [params.fontHeading]
+  )
 
   const currentStyle = React.useMemo(
     () => STYLES.find((style) => style.name === params.style),
-    [params.style],
-  );
+    [params.style]
+  )
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="cn-font-heading text-2xl font-medium style-lyra:text-lg style-mira:text-lg style-sera:text-lg style-sera:font-semibold style-sera:tracking-wide style-sera:uppercase">
+        <CardTitle className="cn-font-heading style-lyra:text-lg style-mira:text-lg style-sera:text-lg style-sera:font-semibold style-sera:tracking-wide style-sera:uppercase text-2xl font-medium">
           {currentStyle?.title} -{" "}
-          {currentFontHeading?.name && currentFontHeading.name !== currentFont?.name
+          {currentFontHeading?.name &&
+          currentFontHeading.name !== currentFont?.name
             ? currentFontHeading.name
             : currentFont?.name}
         </CardTitle>
-        <CardDescription className="line-clamp-2 style-lyra:text-sm style-mira:text-sm style-sera:text-sm style-sera:leading-relaxed">
-          Designers love packing quirky glyphs into test phrases. This is a preview of the
-          typography styles.
+        <CardDescription className="style-lyra:text-sm style-mira:text-sm style-sera:text-sm style-sera:leading-relaxed line-clamp-2">
+          Designers love packing quirky glyphs into test phrases. This is a
+          preview of the typography styles.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-6 style-lyra:gap-4 style-mira:gap-4">
+      <CardContent className="style-lyra:gap-4 style-mira:gap-4 flex flex-col gap-6">
         <div className="grid grid-cols-6 gap-3">
           {[
             "--background",
@@ -55,16 +62,19 @@ export function StyleOverview() {
             "--chart-4",
             "--chart-5",
           ].map((variant) => (
-            <div key={variant} className="flex flex-col flex-wrap items-center gap-2">
+            <div
+              key={variant}
+              className="flex flex-col flex-wrap items-center gap-2"
+            >
               <div
-                className="relative aspect-square w-full rounded-lg bg-(--color) after:absolute after:inset-0 after:rounded-lg after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten style-sera:rounded-none style-sera:after:rounded-none"
+                className="style-sera:rounded-none style-sera:after:rounded-none relative aspect-square w-full rounded-lg bg-(--color) after:absolute after:inset-0 after:rounded-lg after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten"
                 style={
                   {
                     "--color": `var(${variant})`,
                   } as React.CSSProperties
                 }
               />
-              <div className="hidden max-w-14 truncate font-mono text-[0.60rem] md:block style-lyra:max-w-10 style-mira:max-w-10">
+              <div className="style-lyra:max-w-10 style-mira:max-w-10 hidden max-w-14 truncate font-mono text-[0.60rem] md:block">
                 {variant}
               </div>
             </div>
@@ -72,5 +82,5 @@ export function StyleOverview() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

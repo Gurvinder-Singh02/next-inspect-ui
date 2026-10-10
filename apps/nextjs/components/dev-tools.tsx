@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { Agentation } from "agentation";
-import { InterfaceKit } from "interface-kit/react";
+import { Agentation } from "agentation"
+import { InterfaceKit } from "interface-kit/react"
 
 export const DevTools = () => {
   return (
@@ -9,5 +9,5 @@ export const DevTools = () => {
       <Agentation />
       <InterfaceKit />
     </>
-  );
-};
+  )
+}

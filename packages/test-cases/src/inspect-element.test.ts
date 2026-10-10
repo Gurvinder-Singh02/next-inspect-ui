@@ -5,10 +5,8 @@ import { registerDom } from "./register-dom.ts"
 
 registerDom()
 
-const {
-  isInspectorChrome,
-  resolveInspectElement,
-} = await import("../../next-inspect-ui/src/lib/engine.ts")
+const { isInspectorChrome, resolveInspectElement } =
+  await import("../../next-inspect-ui/src/lib/engine.ts")
 
 const attachFiber = (element: Element, className?: string) => {
   Object.assign(element, {
@@ -75,7 +73,7 @@ test("treats the info panel as chrome, not a page host", () => {
   assert.equal(isInspectorChrome(row), true)
 })
 
- test("keeps classless and inline-styled children instead of a classed group", () => {
+test("keeps classless and inline-styled children instead of a classed group", () => {
   const group = attachFiber(document.createElement("section"), "group")
   const button = attachFiber(document.createElement("button"), "button")
   const child = attachFiber(document.createElement("span"))

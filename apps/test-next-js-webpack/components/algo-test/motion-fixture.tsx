@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react"
+import { AnimatePresence, motion } from "motion/react"
 
 /**
  * Motion fixtures.
@@ -15,7 +15,7 @@ import { AnimatePresence, motion } from "motion/react";
  * resolve into it.
  */
 
-const motionBoxClass = "size-12 rounded-lg bg-muted-foreground/20";
+const motionBoxClass = "size-12 rounded-lg bg-muted-foreground/20"
 
 /** Return-root motion.div — same climb as `return (<div/>)`. */
 export const MotionSimple = (props: { "data-accuracy-target"?: string }) => (
@@ -25,7 +25,7 @@ export const MotionSimple = (props: { "data-accuracy-target"?: string }) => (
     className={motionBoxClass}
     {...props}
   />
-);
+)
 
 /** Bare MotionSimple next to nested div→div→motion.div. */
 export const MotionSimplePair = () => (
@@ -42,9 +42,9 @@ export const MotionSimplePair = () => (
       </div>
     </div>
   </div>
-);
+)
 
-const MOTION_BOX_IDS = ["box-0", "box-1", "box-2"] as const;
+const MOTION_BOX_IDS = ["box-0", "box-1", "box-2"] as const
 
 export const MotionBoxes = () => (
   <div className="flex gap-3">
@@ -59,7 +59,7 @@ export const MotionBoxes = () => (
       />
     ))}
   </div>
-);
+)
 
 /** SVG primitives — the exact case that produced the original wrong file. */
 export const MotionSvg = () => (
@@ -78,7 +78,7 @@ export const MotionSvg = () => (
       />
     ))}
   </svg>
-);
+)
 
 /** A motion element nested inside plain host JSX. */
 export const MotionNested = () => (
@@ -93,11 +93,11 @@ export const MotionNested = () => (
       hover me
     </motion.span>
   </div>
-);
+)
 
 /** Mount and unmount — resolution must survive elements appearing later. */
 export const MotionPresence = () => {
-  const [shown, setShown] = useState(true);
+  const [shown, setShown] = useState(true)
 
   return (
     <div className="flex flex-col items-start gap-3">
@@ -122,11 +122,17 @@ export const MotionPresence = () => {
         )}
       </AnimatePresence>
     </div>
-  );
-};
+  )
+}
 
 /** A user component whose return root is motion.div. */
-const Chip = ({ label, ...props }: { label: string; "data-accuracy-target"?: string }) => (
+const Chip = ({
+  label,
+  ...props
+}: {
+  label: string
+  "data-accuracy-target"?: string
+}) => (
   <motion.div
     whileHover={{ y: -2 }}
     className="rounded-full border border-border px-3 py-1 font-mono text-[12px]"
@@ -134,11 +140,11 @@ const Chip = ({ label, ...props }: { label: string; "data-accuracy-target"?: str
   >
     {label}
   </motion.div>
-);
+)
 
 export const MotionWrapped = () => (
   <div className="flex gap-2">
     <Chip label="alpha" data-accuracy-target="alpha" />
     <Chip label="beta" data-accuracy-target="beta" />
   </div>
-);
+)
