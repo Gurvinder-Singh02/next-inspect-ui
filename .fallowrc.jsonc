@@ -14,6 +14,8 @@
   },
   // Published library: treat its package exports as public API.
   "publicPackages": ["next-inspect-ui"],
+  // IIFE bundle entry (tsup.script.config.ts → package exports "./script").
+  "entry": ["packages/next-inspect-ui/src/script.ts"],
   // Used inside ignored `components/ui/**` (and root Playwright scripts).
   // Without this, `fallow fix` would strip real UI / test tooling deps.
   "ignoreDependencies": [
@@ -46,6 +48,12 @@
     "**/components/ui/**",
     // unused preview card variants in the example app
     "apps/nextjs/components/create-preview/preview/**",
+    // helpers only consumed by ignored preview/ + ignored shadcn sidebar
+    "apps/nextjs/components/create-preview/fonts.ts",
+    "apps/nextjs/components/create-preview/styles.ts",
+    "apps/nextjs/components/create-preview/icon-placeholder.tsx",
+    "apps/nextjs/components/create-preview/search-params.ts",
+    "**/hooks/use-mobile.ts",
     "scripts/**",
   ],
   "duplicates": {
