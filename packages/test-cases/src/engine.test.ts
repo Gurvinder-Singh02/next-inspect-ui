@@ -428,8 +428,7 @@ test("source labels hide machine paths without a project root", () => {
   assert.equal(
     formatPageLabel(
       {
-        filePath:
-          "/Users/me/repo/apps/demo/components/tailwind/tw-card.tsx",
+        filePath: "/Users/me/repo/apps/demo/components/tailwind/tw-card.tsx",
         line: 5,
         column: 1,
       },

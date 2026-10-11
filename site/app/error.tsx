@@ -46,7 +46,7 @@ export default function Error(_props: {
         <h3 className="font-mono text-xs font-medium tracking-tight text-foreground/50 uppercase lg:text-sm">
           Something went wrong
         </h3>
-        <div className="mt-4 flex flex-col items-center gap-2 text-base font-medium tracking-tight text-foreground lg:text-xl leading-loose">
+        <div className="mt-4 flex flex-col items-center gap-2 text-base leading-loose font-medium tracking-tight text-foreground lg:text-xl">
           <div className="flex items-center justify-center gap-4">
             <div
               onClick={handleBack}

@@ -112,8 +112,8 @@ export default async function BenchmarksPage() {
           Direct definition-file lookup across {benchmark.total} fixtures, with{" "}
           {benchmark.missing} missing targets and {benchmark.errors} lookup
           errors. Timing includes source lookup and component context, not
-          editor launch time. Numbers are copied from the private benchmark
-          repo after a run there.
+          editor launch time. Numbers are copied from the private benchmark repo
+          after a run there.
         </p>
       </section>
 
