@@ -10,6 +10,7 @@ import {
   AUTHOR_NAME,
   AUTHOR_URL,
   GITHUB_REPO,
+  NPM_PACKAGE_URL,
   OG_IMAGE,
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -51,13 +52,18 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   authors: [{ name: AUTHOR_NAME, url: AUTHOR_URL }],
   creator: AUTHOR_NAME,
+  category: "technology",
   keywords: [
     "Next.js",
     "React",
-    "inspector",
-    "devtools",
+    "React inspector",
+    "Next.js inspector",
     "component source",
+    "click to component",
+    "devtools",
     "next-inspect-ui",
+    "open in editor",
+    "React Fiber",
   ],
   openGraph: {
     type: "website",
@@ -77,6 +83,13 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 }
 
@@ -91,7 +104,7 @@ const jsonLd = {
       description: SITE_DESCRIPTION,
       url: siteUrl,
       image: `${siteUrl}${OG_IMAGE.url}`,
-      downloadUrl: "https://www.npmjs.com/package/next-inspect-ui",
+      downloadUrl: NPM_PACKAGE_URL,
       codeRepository: GITHUB_REPO,
       author: {
         "@type": "Person",
@@ -106,9 +119,11 @@ const jsonLd = {
     },
     {
       "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
       name: SITE_NAME,
       url: siteUrl,
       description: SITE_DESCRIPTION,
+      inLanguage: "en",
       publisher: {
         "@type": "Person",
         name: AUTHOR_NAME,

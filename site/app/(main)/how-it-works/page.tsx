@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { SourceIllustration } from "@/components/landing/source-illustration"
+import { contentLinkClassName } from "@/lib/content-link"
 import benchmarks from "../../../../docs/benchmark-results.json"
 
 export const metadata: Metadata = {
@@ -8,10 +9,11 @@ export const metadata: Metadata = {
   description:
     "From a browser element to React Fiber, source maps, and the exact line in your editor.",
   alternates: { canonical: "/how-it-works" },
+  openGraph: {
+    url: "/how-it-works",
+    title: "How it works | Next Inspect UI",
+  },
 }
-
-const externalLink =
-  "relative inline-block text-foreground no-underline before:pointer-events-none before:absolute before:inset-x-0 before:-bottom-0.5 before:h-px before:origin-left before:scale-x-0 before:bg-current before:transition-transform before:duration-150 before:ease-[cubic-bezier(0.4,0,0.2,1)] before:content-[''] hover:before:scale-x-100 motion-reduce:before:transition-none"
 const inspector = benchmarks.results.find(
   (row) => row.name === "Next Inspect UI"
 )!
@@ -36,7 +38,7 @@ export default function HowItWorksPage() {
             target="_blank"
             rel="noopener noreferrer"
             href="https://github.com/ericclemmons/click-to-component"
-            className={externalLink}
+            className={contentLinkClassName}
           >
             click-to-component
           </a>
@@ -45,7 +47,7 @@ export default function HowItWorksPage() {
             target="_blank"
             rel="noopener noreferrer"
             href="https://github.com/zthxxx/react-dev-inspector"
-            className={externalLink}
+            className={contentLinkClassName}
           >
             react-dev-inspector
           </a>
@@ -54,7 +56,7 @@ export default function HowItWorksPage() {
             target="_blank"
             rel="noopener noreferrer"
             href="https://github.com/aidenybai/react-grab"
-            className={externalLink}
+            className={contentLinkClassName}
           >
             React Grab
           </a>
@@ -99,7 +101,7 @@ export default function HowItWorksPage() {
             target="_blank"
             rel="noopener noreferrer"
             href="https://code.visualstudio.com/docs/configure/command-line#_opening-vs-code-with-urls"
-            className={externalLink}
+            className={contentLinkClassName}
           >
             VS Code’s URL handling documentation
           </a>{" "}
@@ -120,7 +122,7 @@ export default function HowItWorksPage() {
         </p>
         <p>
           See{" "}
-          <Link href="/shortcuts" className={externalLink}>
+          <Link href="/shortcuts" className={contentLinkClassName}>
             all keyboard shortcuts
           </Link>
           .
@@ -162,7 +164,7 @@ export default function HowItWorksPage() {
 
         <p>
           Follow the development-only setup in{" "}
-          <Link href="/#overview-usage" className={externalLink}>
+          <Link href="/#overview-usage" className={contentLinkClassName}>
             Usage
           </Link>
           . For the standalone script, keep both its route and script tag

@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import inspectUIPackage from "next-inspect-ui/package.json"
 
+import { contentLinkClassName } from "@/lib/content-link"
 import { AUTHOR_NAME, AUTHOR_URL, GITHUB_AVATAR, GITHUB_REPO } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
@@ -13,14 +14,11 @@ const FooterLink = ({
   href: string
   children: ReactNode
 }) => {
-  const className =
-    "inline-flex min-h-6 items-center text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-
   if (href.startsWith("/")) {
     return (
       <Link
         href={href}
-        className={className}
+        className={contentLinkClassName}
         rel={href === "/lab" ? "nofollow" : undefined}
       >
         {children}
@@ -29,7 +27,7 @@ const FooterLink = ({
   }
 
   return (
-    <a href={href} className={className} target="_blank">
+    <a href={href} className={contentLinkClassName} target="_blank">
       {children}
     </a>
   )
@@ -42,13 +40,18 @@ export const SiteFooter = ({ className }: { className?: string }) => (
       <a
         href={AUTHOR_URL}
         target="_blank"
-        className="inline-flex min-h-6 items-center gap-2 text-foreground transition-colors hover:text-foreground/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        className={cn(
+          contentLinkClassName,
+          "inline-flex min-h-6 items-center gap-2"
+        )}
       >
         <img
           src={GITHUB_AVATAR}
-          alt={AUTHOR_NAME}
+          alt=""
           width={24}
           height={24}
+          decoding="async"
+          loading="lazy"
           className="size-4 rounded-full outline outline-black/10 dark:outline-white/10"
         />
         {AUTHOR_NAME}

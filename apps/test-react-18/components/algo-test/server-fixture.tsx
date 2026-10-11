@@ -7,7 +7,7 @@
  * element's own line.
  */
 
-const ServerCard = ({
+export const ServerCard = ({
   title,
   ...props
 }: {

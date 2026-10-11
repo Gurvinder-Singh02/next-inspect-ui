@@ -59,10 +59,10 @@ Do not describe the full workspace audit as clean.
 
 ## Deployment checks still required
 
-Set NEXT_PUBLIC_SITE_URL to the actual public HTTPS origin, or use Vercel's
-VERCEL_PROJECT_PRODUCTION_URL, and rebuild. Production builds now reject missing
-or invalid origins instead of publishing localhost metadata. The local verification
-build used https://example.com only as a test value; it must not be deployed.
+Set NEXT_PUBLIC_SITE_URL to the actual public HTTPS origin (https://niu.gxuri.me)
+and rebuild. Production defaults to that origin when the env var is unset.
+Invalid origins are still rejected. The local verification build used
+https://example.com only as a test value; it must not be deployed.
 
 Verify the live site's TLS, response headers, sitemap, and browser requests after
 building with the real domain. Hosting-provider request logs and any platform

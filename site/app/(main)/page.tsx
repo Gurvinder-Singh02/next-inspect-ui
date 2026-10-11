@@ -7,7 +7,13 @@ import inspectUIPackage from "next-inspect-ui/package.json"
 
 import { FaqList } from "@/components/landing/faq-list"
 import { InstallSection } from "@/components/landing/install-section"
-import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/site"
+import { contentLinkClassName } from "@/lib/content-link"
+import {
+  FAQ_ENTRIES,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  getSiteUrl,
+} from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 const shortcutKeyClassName = cn(
@@ -20,57 +26,67 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   alternates: { canonical: "/" },
+  openGraph: {
+    url: "/",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
 }
 
-const FAQ: { q: string; a: ReactNode }[] = [
-  {
-    q: "How does this work?",
-    a: "Press Option / Alt + X to enable inspect mode, then hover an element. The inspector reads React Fiber metadata and source maps to find its source. Click or press Enter to open it. Hold Option / Alt to inspect the owning component’s usage.",
-  },
-  {
-    q: "Does this affect production?",
-    a: "Use the development-only dynamic import shown in Usage. Your bundler tree-shakes the whole library, leaving 0 B of inspector code in production. A static import disables the inspector but may retain a small wrapper. Serve the standalone script only in development.",
-  },
-  {
-    q: "Does it rely on any other libraries internally?",
-    a: "No additional runtime libraries are required. Source resolution, stack parsing, and source-map decoding are built in. React and ReactDOM are peer dependencies.",
-  },
-  {
-    q: "Is this a build plugin?",
-    a: "No. There is no Webpack, Vite, Turbopack, Babel, or SWC plugin. You mount InspectUI in development. It reads the React fiber tree at runtime. No props are required. projectRoot can optionally resolve relative paths explicitly.",
-  },
-  {
-    q: "Does this only work with Next.js?",
-    a: "No. It supports React 19+ apps, including Next.js and Vite. React 18 compatibility is experimental. Source accuracy depends on your framework’s development metadata and source maps; Next.js Server Component locations use available server debug metadata.",
-  },
-  {
-    q: "How do I navigate the tree?",
-    a: "Press Space to open the popover. Component nests from the page boundary down to the hovered element. Element shows nearby HTML, stopping at body. Left opens Component and Right opens Element; Up / Down moves between rows and previews their elements. Enter opens the selected source. Press Space to close the popover or Escape to exit inspect mode.",
-  },
-  {
-    q: "Which editors does it support?",
-    a: "Cursor, VS Code, VS Code Insiders, Windsurf, and Zed. Choose your editor in the inspector settings. The inspector opens source through an editor URL or your framework’s development endpoint.",
-  },
-  {
-    q: "What kind of elements can I inspect?",
-    a: (
-      <>
-        Any React element in the rendered tree: HTML, SVG, shadcn, compound
-        components, and the rest of the usual patterns.{" "}
-        <Link
-          href="/benchmarks"
-          className="text-foreground underline-offset-4 hover:underline"
-        >
-          See the patterns
-        </Link>
-      </>
-    ),
-  },
-]
+const FAQ: { q: string; a: ReactNode }[] = FAQ_ENTRIES.map((item) =>
+  item.q === "What kind of elements can I inspect?"
+    ? {
+        q: item.q,
+        a: (
+          <>
+            {item.a}{" "}
+            <Link href="/benchmarks" className={contentLinkClassName}>
+              See the patterns
+            </Link>
+          </>
+        ),
+      }
+    : item
+)
 
 export default function OverviewPage() {
+  const siteUrl = getSiteUrl()
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_ENTRIES.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  }
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${siteUrl}/#webpage`,
+    url: siteUrl,
+    name: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    isPartOf: { "@id": `${siteUrl}/#website` },
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <header className="flex flex-col gap-6">
         <div className="flex items-center gap-2.5">
           <h1>next-inspect-ui</h1>
@@ -86,7 +102,8 @@ export default function OverviewPage() {
             <a
               href="https://vercel.com/academy/shadcn-ui/compound-components-and-advanced-composition"
               target="_blank"
-              className="text-foreground no-underline hover:text-foreground/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              rel="noopener noreferrer"
+              className={contentLinkClassName}
             >
               compound components
             </a>{" "}
@@ -108,17 +125,11 @@ export default function OverviewPage() {
         <h2>FAQ</h2>
         <FaqList items={FAQ} />
         <p className="pt-4 text-sm">
-          <Link
-            href="/walkthrough"
-            className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
+          <Link href="/walkthrough" className={contentLinkClassName}>
             See it in action
           </Link>
           {" · "}
-          <Link
-            href="/api-reference"
-            className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
+          <Link href="/api-reference" className={contentLinkClassName}>
             API reference
           </Link>
         </p>

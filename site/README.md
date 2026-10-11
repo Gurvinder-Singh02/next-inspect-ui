@@ -5,10 +5,10 @@ Marketing site for next-inspect-ui.
 ## Production configuration
 
 Set `NEXT_PUBLIC_SITE_URL` to the website's public HTTPS origin before running
-`bun run build:site`. On Vercel, `VERCEL_PROJECT_PRODUCTION_URL` is also supported.
-Production builds reject a missing origin, localhost, credentials, paths, and
-query parameters. Rebuild after changing the origin; metadata and the sitemap
-are generated at build time.
+`bun run build:site`. Production defaults to `https://niu.gxuri.me` when that
+env var is unset. Explicit `NEXT_PUBLIC_SITE_URL` always wins. Production
+builds reject localhost, credentials, paths, and query parameters. Rebuild
+after changing the origin; metadata and the sitemap are generated at build time.
 
 Fonts and the author avatar are served from this website. Google font files are
 downloaded at build time by `next/font`, not by visitors. There is no application

@@ -16,6 +16,7 @@ import {
 } from "@/components/landing/works-with-previews"
 import { WorksWithServerCard } from "@/components/landing/works-with-server"
 import { WORKS_WITH_SNIPPETS } from "@/components/landing/works-with-snippets"
+import { contentLinkClassName } from "@/lib/content-link"
 import { highlightCode } from "@/lib/highlight-code"
 
 export const metadata: Metadata = {
@@ -23,11 +24,13 @@ export const metadata: Metadata = {
   description:
     "Source lookup results from React Grab Bench, plus the component patterns Next Inspect UI handles especially well.",
   alternates: { canonical: "/benchmarks" },
+  openGraph: {
+    url: "/benchmarks",
+    title: "Benchmarks | Next Inspect UI",
+  },
 }
 
 const benchmark = sourceBenchmark.nextInspectUi
-const benchmarkLink =
-  "text-foreground no-underline hover:underline underline-offset-4"
 
 export default async function BenchmarksPage() {
   const highlighted = Object.fromEntries(
@@ -46,7 +49,7 @@ export default async function BenchmarksPage() {
         <p>
           The fixtures come from{" "}
           <a
-            className={benchmarkLink}
+            className={contentLinkClassName}
             href="https://github.com/millionco/react-grab-bench"
             target="_blank"
             rel="noopener noreferrer"
@@ -55,7 +58,7 @@ export default async function BenchmarksPage() {
           </a>
           . Our direct source checks live in the{" "}
           <a
-            className={benchmarkLink}
+            className={contentLinkClassName}
             href="https://github.com/Gurvinder-Singh02/next-inspect-bench"
             target="_blank"
             rel="noopener noreferrer"

@@ -4,12 +4,17 @@ import Link from "next/link"
 
 import { UsageVideo } from "@/components/landing/usage-video"
 import { Kbd } from "@/components/ui/kbd"
+import { contentLinkClassName } from "@/lib/content-link"
 
 export const metadata: Metadata = {
   title: "Walkthrough",
   description:
     "Hover any node to see the component name. Click or Enter opens its source in your editor. Hold Option to select the owning component. Press Space to browse the trees. Learn more in Shortcuts.",
   alternates: { canonical: "/walkthrough" },
+  openGraph: {
+    url: "/walkthrough",
+    title: "Walkthrough | Next Inspect UI",
+  },
 }
 
 export default function WalkthroughPage() {
@@ -42,10 +47,7 @@ export default function WalkthroughPage() {
           </p>
           <p>
             Learn more in{" "}
-            <Link
-              href="/shortcuts"
-              className="text-foreground underline-offset-4 hover:underline"
-            >
+            <Link href="/shortcuts" className={contentLinkClassName}>
               Shortcuts
             </Link>
             .
@@ -61,7 +63,7 @@ export default function WalkthroughPage() {
             href="https://ui.shadcn.com/blocks"
             target="_blank"
             rel="noreferrer"
-            className="text-foreground/90 hover:text-foreground/80"
+            className={contentLinkClassName}
           >
             shadcn/ui Dashboard 01
           </a>{" "}

@@ -3,12 +3,18 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 
 import { ApiReference } from "@/components/landing/api-reference"
+import { contentLinkClassName } from "@/lib/content-link"
+import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "API Reference",
   description:
     "InspectUI props. projectRoot is optional; shortcut, editor, tooltip, and spotlight props seed the overlay settings panel.",
   alternates: { canonical: "/api-reference" },
+  openGraph: {
+    url: "/api-reference",
+    title: "API Reference | Next Inspect UI",
+  },
 }
 
 export default function ApiReferencePage() {
@@ -23,7 +29,10 @@ export default function ApiReferencePage() {
           <Link
             href="/lab"
             rel="nofollow"
-            className="inline-flex items-center gap-1 align-middle text-foreground no-underline hover:text-foreground/80"
+            className={cn(
+              contentLinkClassName,
+              "inline-flex items-center gap-1 align-middle"
+            )}
           >
             Playground
             <ArrowRight className="size-3.5" aria-hidden />

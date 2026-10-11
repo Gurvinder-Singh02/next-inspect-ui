@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { getSiteUrl } from "../../../site/lib/site.ts"
+import { SITE_ORIGIN, getSiteUrl } from "../../../site/lib/site.ts"
 
 const withEnvironment = (
   values: Record<string, string | undefined>,
@@ -23,7 +23,7 @@ const withEnvironment = (
   }
 }
 
-test("production refuses missing or unsafe public origins", () => {
+test("production refuses unsafe public origins", () => {
   withEnvironment(
     {
       NODE_ENV: "production",
@@ -31,7 +31,7 @@ test("production refuses missing or unsafe public origins", () => {
       NEXT_PUBLIC_SITE_URL: undefined,
     },
     () => {
-      assert.throws(getSiteUrl)
+      assert.equal(getSiteUrl(), SITE_ORIGIN)
       for (const value of [
         "http://localhost:3000",
         "https://localhost",
@@ -51,7 +51,7 @@ test("production refuses missing or unsafe public origins", () => {
   )
 })
 
-test("Vercel production origin is supported and explicit origin takes priority", () => {
+test("explicit origin takes priority over the canonical production origin", () => {
   withEnvironment(
     {
       NODE_ENV: "production",
@@ -59,7 +59,7 @@ test("Vercel production origin is supported and explicit origin takes priority",
       NEXT_PUBLIC_SITE_URL: undefined,
     },
     () => {
-      assert.equal(getSiteUrl(), "https://project.vercel.app")
+      assert.equal(getSiteUrl(), SITE_ORIGIN)
       process.env.NEXT_PUBLIC_SITE_URL = "https://example.com"
       assert.equal(getSiteUrl(), "https://example.com")
     }

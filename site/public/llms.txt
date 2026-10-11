@@ -1,0 +1,32 @@
+# Next Inspect UI
+
+> Inspect any React or Next.js component in the browser and jump to its source in your IDE.
+
+- Site: https://niu.gxuri.me/
+- npm: https://www.npmjs.com/package/next-inspect-ui
+- GitHub: https://github.com/Gurvinder-Singh02/next-inspect-ui
+- Author: Gxuri (https://gxuri.me)
+
+## Docs
+
+- [Overview](https://niu.gxuri.me/): Install, usage snippets, FAQ
+- [Walkthrough](https://niu.gxuri.me/walkthrough): Hover, click, Option-climb, Space trees
+- [How it works](https://niu.gxuri.me/how-it-works): Fiber metadata, source maps, editor open
+- [Benchmarks](https://niu.gxuri.me/benchmarks): Source lookup results and component patterns
+- [API Reference](https://niu.gxuri.me/api-reference): InspectUI props
+- [Shortcuts](https://niu.gxuri.me/shortcuts): Keyboard and pointer controls
+
+## Install
+
+```bash
+npm i -D next-inspect-ui
+```
+
+Mount only in development. Dynamically import `InspectUI` behind a `NODE_ENV === "development"` (or Vite `import.meta.env.DEV`) check so production bundles tree-shake it away.
+
+## Notes for agents
+
+- No build plugin is required (no Webpack/Vite/Turbopack/Babel/SWC plugin).
+- Works with React 19+ apps including Next.js and Vite; React 18 is experimental.
+- Supported editors: Cursor, VS Code, VS Code Insiders, Windsurf, Zed.
+- Optional `projectRoot` helps resolve relative paths; other props seed the settings panel.

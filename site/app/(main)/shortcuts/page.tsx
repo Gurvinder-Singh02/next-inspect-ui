@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   description:
     "Keyboard and pointer controls for next-inspect-ui while inspect mode is active: hover, click, Option-climb, and the info panel.",
   alternates: { canonical: "/shortcuts" },
+  openGraph: {
+    url: "/shortcuts",
+    title: "Shortcuts | Next Inspect UI",
+  },
 }
 
 export default function ShortcutsPage() {

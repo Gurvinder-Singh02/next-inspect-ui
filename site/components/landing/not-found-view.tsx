@@ -8,6 +8,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { contentLinkClassName } from "@/lib/content-link"
 
 const NotFoundTooltip = ({
   title,
@@ -45,7 +46,9 @@ export const NotFoundView = () => {
         <div className="mt-4 flex flex-col items-center gap-2">
           <p className="max-w-lg text-base font-medium tracking-tight text-balance text-foreground lg:text-xl has-[a:hover]:text-foreground/10">
             Bruh you&apos;re looking for something that doesn&apos;t exist{" "}
-            <Link href="/" className="hover:text-foreground">Go Home</Link>
+            <Link href="/" className={contentLinkClassName}>
+              Go Home
+            </Link>
           </p>
      
         </div>
