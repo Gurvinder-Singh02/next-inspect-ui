@@ -7,6 +7,7 @@ import inspectUIPackage from "next-inspect-ui/package.json"
 
 import { FaqList } from "@/components/landing/faq-list"
 import { InstallSection } from "@/components/landing/install-section"
+import { Kbd } from "@/components/ui/kbd"
 import { contentLinkClassName } from "@/lib/content-link"
 import {
   FAQ_ENTRIES,
@@ -14,11 +15,9 @@ import {
   SITE_TITLE,
   getSiteUrl,
 } from "@/lib/site"
-import { cn } from "@/lib/utils"
 
-const shortcutKeyClassName = cn(
-  "pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 align-middle font-sans text-xs font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3"
-)
+/** Option sits high vs paragraph glyphs. */
+const optionKbdClassName = "align-middle -translate-y-px"
 
 export const metadata: Metadata = {
   title: {
@@ -108,9 +107,9 @@ export default function OverviewPage() {
               compound components
             </a>{" "}
             too. Hold{" "}
-            <kbd className={shortcutKeyClassName}>
+            <Kbd className={optionKbdClassName}>
               <Option />
-            </kbd>{" "}
+            </Kbd>{" "}
             to inspect the owning component’s usage.
           </p>
         </div>

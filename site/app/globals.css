@@ -272,6 +272,28 @@ html {
 .landing-code .shiki .line {
   display: inline-block;
   width: 100%;
+  box-decoration-break: clone;
+}
+
+.landing-code .shiki .line .line-number {
+  display: inline-block;
+  width: 2.5rem;
+  margin-right: 0.75rem;
+  user-select: none;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground);
+  opacity: 0.7;
+}
+
+.landing-code .shiki .line.highlighted {
+  margin-inline: -1rem;
+  padding-inline: 1rem;
+  background: rgb(59 130 246 / 12%) !important;
+}
+
+html.dark .landing-code .shiki .line.highlighted {
+  background: rgb(59 130 246 / 18%) !important;
 }
 
 .landing-code .shiki,

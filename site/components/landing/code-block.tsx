@@ -99,6 +99,8 @@ export const CodeBlock = ({
   html,
   morph = false,
   morphPrefix,
+  showCopy = true,
+  fileName,
   className,
 }: {
   code: string
@@ -106,6 +108,9 @@ export const CodeBlock = ({
   morph?: boolean
   /** When set with `morph`, only this prefix animates; the rest stays Shiki. */
   morphPrefix?: string
+  showCopy?: boolean
+  /** Optional file header with a bottom border above the code. */
+  fileName?: string
   className?: string
 }) => {
   const [hasCopied, setHasCopied] = useState(false)
@@ -149,21 +154,38 @@ export const CodeBlock = ({
   return (
     <div
       className={cn(
-        "landing-code relative rounded-xl bg-card px-4 py-3.5",
+        "landing-code relative overflow-hidden rounded-xl bg-card",
+        !fileName && "px-4 py-3.5",
         className
       )}
     >
-      <button
-        type="button"
-        onClick={handleCopy}
-        className="absolute top-3.5 right-4 z-10 font-inter text-[13px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline"
-        aria-label={hasCopied ? "Copied" : "Copy code"}
+      {fileName ? (
+        <div className="border-b border-border px-4 py-2.5 font-azeret-mono text-[12px] text-muted-foreground">
+          {fileName}
+        </div>
+      ) : null}
+      {showCopy ? (
+        <button
+          type="button"
+          onClick={handleCopy}
+          className={cn(
+            "absolute right-4 z-10 font-inter text-[13px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline",
+            fileName ? "top-2.5" : "top-3.5"
+          )}
+          aria-label={hasCopied ? "Copied" : "Copy code"}
+        >
+          <TextMorph className="transform-gpu">
+            {hasCopied ? "Copied" : "Copy"}
+          </TextMorph>
+        </button>
+      ) : null}
+      <div
+        className={cn(
+          "overflow-x-auto",
+          fileName ? "px-4 py-3.5" : null,
+          showCopy && "pr-14"
+        )}
       >
-        <TextMorph className="transform-gpu">
-          {hasCopied ? "Copied" : "Copy"}
-        </TextMorph>
-      </button>
-      <div className="overflow-x-auto pr-14">
         {prefix && shikiSplit ? (
           <pre className={preClassName} style={preStyle} tabIndex={0}>
             <code>

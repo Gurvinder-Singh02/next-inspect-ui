@@ -26,7 +26,7 @@ const DashedRule = ({ edge }: { edge: "top" | "bottom" }) => (
       y2="0"
       stroke="currentColor"
       strokeWidth="1"
-      strokeDasharray="8 10"
+      strokeDasharray="5 6"
     />
   </svg>
 )
@@ -43,7 +43,7 @@ export const SourceIllustration = () => (
         fill="none"
         stroke="currentColor"
         strokeWidth="1"
-        strokeDasharray="8 10"
+        strokeDasharray="5 6"
       />
     </svg>
     <figcaption className="absolute -top-2 left-1/2 w-max max-w-[90%] -translate-x-1/2 bg-background px-3 text-center text-xs tracking-widest text-accent">

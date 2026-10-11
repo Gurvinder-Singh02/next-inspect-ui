@@ -318,6 +318,12 @@
   color: var(--inspect-muted, var(--muted-foreground, #8b949e));
 }
 
+@media (hover: hover) {
+  .next-inspect-ui-tree-row:hover {
+    background: rgb(255 255 255 / 3%);
+  }
+}
+
 .next-inspect-ui-tree-gutter {
   display: flex;
   align-items: center;
@@ -367,6 +373,7 @@
 }
 
 .next-inspect-ui-tree-name {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;

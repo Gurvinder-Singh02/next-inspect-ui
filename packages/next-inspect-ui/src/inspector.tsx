@@ -818,7 +818,8 @@ export const InspectUI = ({
 
     const syncInfoTreeSelection = (
       node: InfoTreeNode,
-      updateTooltip = false
+      updateTooltip = false,
+      preview = true
     ) => {
       infoSelectedNode = node
       if (infoTitleEl)
@@ -828,9 +829,7 @@ export const InspectUI = ({
       if (infoSourceBox) paintSourceBox(infoSourceBox, node.source)
       if (infoTab === "element") {
         infoClimbSelection = null
-        paintGhost(node)
       } else {
-        paintGhost(node)
         const step = node.isDom ? null : infoTreeChain[node.climbIndex]
         infoClimbSelection = step ? { depth: node.climbIndex, step } : null
         const targetFiber = infoTarget ? getFiber(infoTarget) : null
@@ -857,6 +856,8 @@ export const InspectUI = ({
           if (lastTargetRect) positionTooltip(lastTargetRect)
         }
       }
+      if (preview) paintGhost(node)
+      else clearGhost()
     }
 
     const createInfoTreeSection = (
@@ -908,11 +909,16 @@ export const InspectUI = ({
           : "Source unavailable"
         paintTreePath(path, node.source ? "open" : "empty")
       }
-      const select = (index: number, focus = true) => {
+      const select = (
+        index: number,
+        focus = true,
+        options: { preview?: boolean } = {}
+      ) => {
+        const preview = options.preview !== false
         const changed = selectedIndex !== index
         selectedIndex = index
         paint(focus)
-        syncInfoTreeSelection(nodes[index]!, changed)
+        syncInfoTreeSelection(nodes[index]!, changed, preview)
       }
       const paint = (focus = false) => {
         const hadFocus = tree.contains(document.activeElement)
@@ -952,22 +958,24 @@ export const InspectUI = ({
             nameEl.title = markup.opening
             pathEl.textContent = "…"
             pathEl.classList.add("next-inspect-ui-element-select")
-            pathEl.setAttribute("aria-label", `Select ${node.name} element`)
-            pathEl.title = "Select this element"
+            pathEl.setAttribute("aria-label", `Open ${node.name} source`)
+            pathEl.title = "Open source"
           } else paintPath(pathEl, node)
-          pathEl.onclick = (event) => {
+          // pointerdown + preventDefault: open IDE only — no focus/select,
+          // so title, description, and active row stay put.
+          pathEl.onpointerdown = (event) => {
+            if (event.button !== 0) return
             event.preventDefault()
             event.stopPropagation()
-            if (node.element) openInfoNode(node)
-            else if (node.source) openInEditor(node.source, settings.ide)
+            openInfoNode(node)
           }
           row.append(indent, nameEl)
           if (!node.element) row.append(pathEl)
-          row.onclick = (event) => {
+          row.onpointerdown = (event) => {
+            if (event.button !== 0) return
             if (pathEl.contains(event.target as Node)) return
             event.preventDefault()
-            if (node.element) openInfoNode(node)
-            else select(index)
+            openInfoNode(node)
           }
           row.onfocus = () => {
             if (selectedIndex !== index) select(index)
