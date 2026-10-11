@@ -25,7 +25,7 @@ Run commands from the repository root, found from the current workspace or `git 
 |---|---|---|
 | Marketing site | `bun run dev` | `http://localhost:3000/` |
 | Next.js accuracy suite | `bun run dev:test-next-js` | `http://localhost:3001/test` |
-| Dashboard / component demo | `bun run dev:nextjs` | `http://localhost:3102/components` |
+| Component gallery | `bun run dev:nextjs` | `http://localhost:3102/components` |
 | All compatibility suites | `bun run dev:test` | Ports 3001, 3002, 5173, 5174 at `/test` |
 
 The site does not host `/test` or `/components`. Use the URL printed by the selected server if its configured port differs.
@@ -53,7 +53,7 @@ Select checks relevant to the change:
 
 Activate inspection with the keyboard rather than an internal setter. `window.__inspectUI.inspect` may diagnose source resolution, but a probe result alone does not verify hover, shortcuts, or editor opening.
 
-Use stable fixture IDs, ARIA roles, visible labels, or existing inspector data attributes. Click the page body first so Alt+X reaches the document. In Playwright, `keyboard.press('Alt+KeyX')` is a reliable chord when separate down/up presses miss. Assert overlay or tooltip after hovering; activating the tool alone need not show an overlay. Prefer `textContent` or computed style for `[data-dev-inspector-tooltip]` because it is `aria-hidden` and Playwright text matchers can read it as empty. The dashboard demo may load InspectUI through `/inspect-ui.js` instead of the React component. If headless keyboard input fails, diagnose focus or retry headed mode rather than bypassing the interaction.
+Use stable fixture IDs, ARIA roles, visible labels, or existing inspector data attributes. Click the page body first so Alt+X reaches the document. In Playwright, `keyboard.press('Alt+KeyX')` is a reliable chord when separate down/up presses miss. Assert overlay or tooltip after hovering; activating the tool alone need not show an overlay. Prefer `textContent` or computed style for `[data-dev-inspector-tooltip]` because it is `aria-hidden` and Playwright text matchers can read it as empty. The component gallery may load InspectUI through `/inspect-ui.js` instead of the React component. If headless keyboard input fails, diagnose focus or retry headed mode rather than bypassing the interaction.
 
 Done when each selected action has an assertion for its observable result.
 
