@@ -13,7 +13,7 @@ export function SiteHeader() {
           className="mx-2 h-4 data-vertical:self-auto"
         />
         <div className="flex w-full items-center justify-between">
-          <h1 className="text-base font-medium">Test</h1>
+          <h1 className="text-base font-medium">Analytics</h1>
           <Button size="sm" variant="outline">
             {" "}
             <WandSparkles /> Ask AI
