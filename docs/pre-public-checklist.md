@@ -18,7 +18,7 @@ No hardcoded API keys or `.env` secrets were found in the tree.
 
 | Item | Status | Notes |
 | --- | --- | --- |
-| Package name / version | OK | `next-inspect-ui@0.3.1` |
+| Package name / version | OK | `next-inspect-ui@0.3.2` |
 | License | OK | MIT (`LICENSE` in package + root) |
 | Publish access | OK | `publishConfig.access: "public"` |
 | Runtime dependencies | Excellent | **None** — only `peerDependencies`: `react` / `react-dom` `>=19` |

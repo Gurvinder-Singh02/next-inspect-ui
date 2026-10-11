@@ -1,6 +1,6 @@
 {
   "name": "next-inspect-ui",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Dev-only overlay for Next.js — hover any component to see its source, click to open it in your editor.",
   "keywords": [
     "devtools",

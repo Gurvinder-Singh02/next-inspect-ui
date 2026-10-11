@@ -4,6 +4,13 @@ User-visible changes are recorded here. New entries belong under **Unreleased** 
 
 ## Unreleased
 
+## 0.3.2
+
+### Changed
+
+- Info popover tree rows open their source on whole-row click without changing the active row, panel title, source label, or ghost preview.
+- Tree rows show a light hover background; keyboard Up / Down still select and preview.
+
 ## 0.3.1
 
 ### Added
