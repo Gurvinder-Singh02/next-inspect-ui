@@ -458,8 +458,8 @@ export const OverlayPreview = ({ className }: { className?: string }) => {
                     Live Audio Waveform
                   </GhostCardTitle>
                   <GhostCardDescription ref={setTarget("ghost-description")}>
-                    Real-time microphone input visualization with audio
-                    reactivity.
+                    Uses your microphone after you press Start Listening and
+                    grant permission. Audio stays in your browser.
                   </GhostCardDescription>
                 </GhostCardHeader>
                 <GhostCardContent ref={setTarget("ghost-chart")}>

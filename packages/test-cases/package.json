@@ -4,11 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --experimental-strip-types --test \"src/**/*.test.ts\"",
+    "test": "node --experimental-strip-types --import ./register-css.mjs --test \"src/**/*.test.ts\"",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^20.19.43",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=22.15.0"
   }
 }

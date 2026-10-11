@@ -15,20 +15,46 @@ export const AUTHOR_URL = "https://gxuri.me"
 const GITHUB_PROFILE = "https://github.com/Gurvinder-Singh02"
 export const GITHUB_REPO =
   "https://github.com/Gurvinder-Singh02/next-inspect-ui"
-export const GITHUB_AVATAR = "https://github.com/Gurvinder-Singh02.png"
+export const GITHUB_AVATAR = "/author-avatar.png"
 
 export const getSiteUrl = () => {
-  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "")
-  if (fromEnv) return fromEnv
-
-  const fromVercel = process.env.VERCEL_PROJECT_PRODUCTION_URL?.replace(
-    /\/$/,
-    ""
-  )
-  if (fromVercel) {
-    return fromVercel.startsWith("http") ? fromVercel : `https://${fromVercel}`
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+  const deployment = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim()
+  const value =
+    configured ||
+    (deployment
+      ? `https://${deployment.replace(/^https?:\/\//, "")}`
+      : undefined)
+  if (value) {
+    const url = new URL(value)
+    if (
+      !/^https?:$/.test(url.protocol) ||
+      url.username ||
+      url.password ||
+      url.pathname !== "/" ||
+      url.search ||
+      url.hash
+    ) {
+      throw new Error(
+        "NEXT_PUBLIC_SITE_URL must be an HTTP(S) origin without credentials, paths or query parameters."
+      )
+    }
+    if (
+      process.env.NODE_ENV === "production" &&
+      (url.protocol !== "https:" ||
+        /^(localhost|127\.|\[::1\])/.test(url.hostname))
+    ) {
+      throw new Error(
+        "Production requires a public HTTPS NEXT_PUBLIC_SITE_URL."
+      )
+    }
+    return url.origin
   }
-
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "Set NEXT_PUBLIC_SITE_URL to the public HTTPS origin before building, or use VERCEL_PROJECT_PRODUCTION_URL."
+    )
+  }
   return "http://localhost:3000"
 }
 

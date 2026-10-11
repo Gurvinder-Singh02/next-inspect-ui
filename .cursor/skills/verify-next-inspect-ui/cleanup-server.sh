@@ -1,27 +1,21 @@
 #!/usr/bin/env bash
-# Kill dev server and verify port is free
-
-if [ -f /tmp/dev-server.pid ]; then
-  PID=$(cat /tmp/dev-server.pid)
-  if kill -0 $PID 2>/dev/null; then
-    kill $PID
-    wait $PID 2>/dev/null || true
-    echo "Killed PID $PID"
-  fi
-  rm /tmp/dev-server.pid
-fi
-
-# Also kill any remaining next dev processes
-pkill -f "next dev" || true
-
-# Wait a moment for processes to die
-sleep 1
-
-# Verify port is free
-if lsof -i :3000 >/dev/null 2>&1; then
-  echo "WARNING: Port 3000 still in use"
-  lsof -i :3000
-  exit 1
-else
-  echo "Port 3000 is free"
-fi
+set -euo pipefail
+python3 - <<'PY'
+import json, os, pathlib, signal, subprocess, time
+state = pathlib.Path('/tmp') / ('next-inspect-verify-' + str(os.getuid())) / 'server.json'
+if not state.exists(): print('No owned server recorded'); raise SystemExit(0)
+record = json.loads(state.read_text())
+pid = record['pid']
+command = subprocess.run(['ps', '-p', str(pid), '-o', 'command='], capture_output=True, text=True).stdout.strip()
+if not command: state.unlink(); print('Owned launcher already stopped'); raise SystemExit(0)
+if record['command'] not in command or os.getpgid(pid) != pid:
+    raise SystemExit('Process identity changed; refusing to stop an unrelated process')
+os.killpg(pid, signal.SIGTERM)
+for _ in range(50):
+    try: os.killpg(pid, 0)
+    except ProcessLookupError: break
+    time.sleep(.1)
+else: raise SystemExit('Owned process group is still running; keep the record for inspection')
+state.unlink()
+print('Stopped owned server group', pid, '; evidence preserved')
+PY

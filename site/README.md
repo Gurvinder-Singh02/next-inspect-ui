@@ -2,6 +2,27 @@
 
 Marketing site for next-inspect-ui.
 
+## Production configuration
+
+Set `NEXT_PUBLIC_SITE_URL` to the website's public HTTPS origin before running
+`bun run build:site`. On Vercel, `VERCEL_PROJECT_PRODUCTION_URL` is also supported.
+Production builds reject a missing origin, localhost, credentials, paths, and
+query parameters. Rebuild after changing the origin; metadata and the sitemap
+are generated at build time.
+
+Fonts and the author avatar are served from this website. Google font files are
+downloaded at build time by `next/font`, not by visitors. There is no application
+analytics or source-code upload service. Theme preferences use browser storage;
+copy buttons write to the clipboard only when clicked. The Lab microphone demo
+requests permission after Start Listening and processes audio in the browser.
+The hosting provider may still retain ordinary HTTP request logs.
+
+Production responses include a same-origin Content Security Policy, frame
+protection, `nosniff`, no-referrer, Permissions Policy, and HSTS. The policy
+allows inline scripts for Next.js hydration and the theme script, and inline
+styles for the demos. It is a baseline policy, not a nonce-based strict CSP.
+Verify HTTPS and these headers on the real deployment before announcing it.
+
 ```bash
 pnpm --filter site dev
 ```

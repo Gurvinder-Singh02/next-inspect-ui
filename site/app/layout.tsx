@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Inter, Azeret_Mono } from "next/font/google"
 
 import "./globals.css"
 import { CuelumeBind } from "@/components/cuelume-bind"
@@ -26,6 +26,17 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
+})
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-local-inter",
+  display: "swap",
+})
+const azeretMono = Azeret_Mono({
+  subsets: ["latin"],
+  variable: "--font-local-azeret",
+  display: "swap",
 })
 
 const siteUrl = getSiteUrl()
@@ -123,13 +134,17 @@ export default async function RootLayout({
       className={cn(
         "font-inter antialiased",
         geistSans.variable,
-        geistMono.variable
+        geistMono.variable,
+        inter.variable,
+        azeretMono.variable
       )}
     >
       <body>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
         />
         <ThemeProvider>
           <TooltipProvider>

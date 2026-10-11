@@ -1,72 +1,34 @@
-const { chromium } = require('playwright');
+const { chromium, expect } = require('playwright/test');
+const { mkdirSync } = require('node:fs');
 
 async function verifyLandingPage() {
+  const url = process.env.SITE_URL || 'http://localhost:3000';
+  const evidence = '/tmp/verify-evidence';
+  mkdirSync(evidence, { recursive: true });
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
-  
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
   try {
-    console.log('Navigating to landing page...');
-    await page.goto('http://localhost:3000');
-    await page.waitForLoadState('networkidle');
-    
-    // Verify title
-    const title = await page.locator('h1', { hasText: 'next-inspect-ui' }).count();
-    if (title === 0) throw new Error('Page title not found');
-    
-    // Verify version display
-    const version = await page.getByText(/v\d+\.\d+\.\d+/).count() > 0;
-    if (!version) throw new Error('Version not displayed');
-    
-    // Capture entry screenshot
-    await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-loaded.png',
-      fullPage: true
-    });
-    
-    // Verify "What it does" section
-    const whatItDoes = await page.locator('h2', { hasText: 'What it does' }).count() > 0;
-    if (!whatItDoes) throw new Error('"What it does" section not found');
-    
-    // Verify Installation section
-    const installation = await page.locator('h2', { hasText: 'Installation' }).count() > 0;
-    if (!installation) throw new Error('Installation section not found');
-    
-    // Verify Usage section
-    const usage = await page.locator('h2', { hasText: 'Usage' }).count() > 0;
-    if (!usage) throw new Error('Usage section not found');
-    
-    // Verify demo link exists
-    const demoLink = await page.getByRole('link', { name: /live demo/i }).count() > 0;
-    if (!demoLink) throw new Error('Demo link not found');
-    
-    console.log('✓ Landing page sections verified');
-    
-    // Test navigation to demo
-    await page.getByRole('link', { name: /live demo/i }).first().click();
-    await page.waitForURL('**/components');
-    await page.waitForLoadState('networkidle');
-    
-    await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-demo-navigation.png',
-      fullPage: true
-    });
-    
-    console.log('✓ Navigation to demo works');
-    return true;
-    
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('h1').first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Usage', exact: true })).toBeVisible();
+    const frameworks = page.getByRole('tablist', { name: 'Framework' });
+    await expect(frameworks).toBeVisible();
+    await expect(frameworks.getByRole('tab', { name: 'Next.js', exact: true })).toHaveAttribute('aria-selected', 'true');
+    await frameworks.getByRole('tab', { name: 'React (Vite)', exact: true }).click();
+    await expect(page.getByRole('tabpanel')).toContainText('src/main.tsx');
+    await frameworks.getByRole('tab', { name: 'Next.js', exact: true }).click();
+    await expect(page.getByRole('tabpanel')).toContainText('app/layout.tsx');
+    await expect(page.getByRole('link', { name: 'Shortcuts', exact: true }).first()).toBeVisible();
+    if (errors.length) throw new Error(errors.join('\n'));
+    await page.screenshot({ path: `${evidence}/landing-page-verified.png`, fullPage: true });
+    console.log(`Landing usage tabs verified: ${url}`);
   } catch (error) {
-    console.error('✗ Landing page verification failed:', error);
-    await page.screenshot({
-      path: '/tmp/verify-evidence/landing-page-error.png',
-      fullPage: true
-    });
+    await page.screenshot({ path: `${evidence}/landing-page-error.png`, fullPage: true }).catch(() => {});
     throw error;
   } finally {
     await browser.close();
   }
 }
-
-verifyLandingPage().catch((error) => {
-  console.error('Fatal error:', error);
-  process.exit(1);
-});
+verifyLandingPage().catch(error => { console.error(error); process.exitCode = 1; });

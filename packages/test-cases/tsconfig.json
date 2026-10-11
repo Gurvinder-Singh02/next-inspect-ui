@@ -13,5 +13,5 @@
     "verbatimModuleSyntax": false,
     "allowImportingTsExtensions": true
   },
-  "include": ["src"]
+  "include": ["src", "../next-inspect-ui/src/styles/css-modules.d.ts"]
 }
