@@ -4,6 +4,8 @@ User-visible changes are recorded here. New entries belong under **Unreleased** 
 
 ## Unreleased
 
+## 0.3.1
+
 ### Added
 
 - Internal React development stack reader and source-map decoder, replacing the `bippy/source` runtime dependency.

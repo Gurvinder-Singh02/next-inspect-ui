@@ -18,7 +18,7 @@ No hardcoded API keys or `.env` secrets were found in the tree.
 
 | Item | Status | Notes |
 | --- | --- | --- |
-| Package name / version | OK | `next-inspect-ui@0.3.0` |
+| Package name / version | OK | `next-inspect-ui@0.3.1` |
 | License | OK | MIT (`LICENSE` in package + root) |
 | Publish access | OK | `publishConfig.access: "public"` |
 | Runtime dependencies | Excellent | **None** — only `peerDependencies`: `react` / `react-dom` `>=19` |
@@ -100,7 +100,7 @@ Before first public `npm publish`:
 2. `npm pack` in `packages/next-inspect-ui` and inspect the tarball (only `dist` + LICENSE + README + package.json)
 3. Install the packed tarball into a **fresh** Next app and a Vite app; confirm overlay works and production build does **not** include the inspector chunk
 4. Confirm npm account 2FA and package name availability (`next-inspect-ui`)
-5. Decide version strategy (`0.3.0` vs `1.0.0`) and changelog / GitHub Release
+5. Decide version strategy (`0.3.1` vs `1.0.0`) and changelog / GitHub Release
 6. Optional: npm provenance / Trusted Publishing from CI
 
 Monorepo root and apps stay `"private": true` — only publish `packages/next-inspect-ui`.
