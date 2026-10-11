@@ -15,9 +15,10 @@ log = state_dir / 'server.log'
 with log.open('w') as output:
     process = subprocess.Popen(['bun', 'run', script], cwd=root, stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
 state.write_text(json.dumps({'pid': process.pid, 'command': 'bun run ' + script, 'root': root}))
+ready_marks = ('Ready in', 'ready in', 'Local:', 'started server on')
 for _ in range(120):
     text = log.read_text()
-    if 'Ready in' in text or 'ready in' in text:
+    if any(mark in text for mark in ready_marks):
         print(text); print('Owned server PID:', process.pid); break
     if process.poll() is not None: raise SystemExit('Launch failed; inspect ' + str(log) + ' and run cleanup-server.sh')
     time.sleep(.5)

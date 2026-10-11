@@ -1,6 +1,10 @@
 ---
 name: verify-next-inspect-ui
-description: Verify InspectUI hover, editor opening, keyboard navigation, and tree previews in a real browser; capture evidence for UI changes.
+description: >-
+  Verify InspectUI hover, editor opening, keyboard navigation, and tree
+  previews in a real browser; capture evidence for UI changes. Use when
+  verifying inspector interactions, accuracy-suite results, marketing usage
+  tabs, or shortcut docs against flow.md.
 ---
 
 # Verify Next Inspect UI
@@ -28,7 +32,7 @@ The site does not host `/test` or `/components`. Use the URL printed by the sele
 
 Reuse a suitable running server. Record any server/session started for this verification so cleanup can stop only owned processes. Install dependencies only if missing. Rebuild with `bun run build` when testing library source changes through built package exports; documentation-only edits need no build.
 
-Wait for the ready message, navigate to the intended route, and wait for a specific page element. Capture `pageerror` and relevant console/network failures. Prefer DOM readiness and explicit selectors over `networkidle` on development servers.
+Wait for the ready message, navigate to the intended route, and wait for a specific page element. Capture `pageerror` and relevant console/network failures. Prefer DOM readiness and explicit selectors over `networkidle` on development servers. Doctor the route with a successful page load before driving interactions; after a failed drive, doctor again or relaunch rather than continuing on a wedged state.
 
 Done when the selected route loads without a blocking runtime error.
 
@@ -38,14 +42,14 @@ Use Playwright with real mouse and keyboard events for user interactions. The re
 
 Select checks relevant to the change:
 
-- **Hover:** press `Alt+X`, then move onto a known fixture. Assert the visible `[data-dev-inspector-overlay]` bounds and `[data-dev-inspector-tooltip]` label match the actual element. Include a nested child or SVG part when changing hit testing.
-- **Climb:** hold Alt on a fixture with an owning component. Assert the selected source and icon match `flow.md`; release Alt and check the host returns. Include plain HTML without a climb owner.
-- **Tree:** press Space, check `[data-dev-inspector-info]` is visible, and test its Component / Element tabs, row order, selection, title, and source label against `flow.md`.
-- **Navigation:** exercise the affected arrow, parent/child, or first/last shortcuts. Check the resulting selection, including closing-tag rows when relevant.
-- **Preview:** select another tree row and check the separate ghost highlight. Check that opening its source preserves the intended hovered target and tooltip.
+- **Hover:** press `Alt+X`, then move onto a known fixture. Assert the visible `[data-dev-inspector-overlay]` bounds and `[data-dev-inspector-tooltip]` label match the actual element. Include a nested child or SVG part when changing hit testing. Confirm icons and button children are not promoted to a parent unless `flow.md` says so.
+- **Climb:** hold Alt on a fixture with an owning component. Assert the selected source and icon match `flow.md`; release Alt and check the host returns. Include plain HTML without a climb owner. Shift must not climb.
+- **Tree:** press Space, check `[data-dev-inspector-info]` is visible, and test its Component / Element tabs, row order, selection, title, and source label against `flow.md`. Confirm Space pins the hovered target and Up / Down do not adopt a new hover target.
+- **Navigation:** exercise the affected control-table shortcuts from `flow.md` (closed vs open arrows, `[` / `{` parent, `]` / `}` child, ⌘↑ / ⌘↓ first/last when open). Check the resulting selection, including closing-tag rows when relevant. If `/shortcuts` lists a control absent from `flow.md`, report the mismatch; do not treat the page as the source of truth.
+- **Preview:** select another tree row and check the separate ghost highlight. Confirm the original tooltip stays pinned. Check that opening the previewed row’s source preserves the intended hovered target. Switching tabs or closing the panel clears the preview.
 - **Close:** Space closes the popover; Escape exits inspection. Verify the relevant overlay elements become hidden.
 - **Opening:** intercept the final editor endpoint request or editor URL assignment and assert file, line, and column. Leave resolution and input handlers intact. State that the editor launch was intercepted; open a real editor only when requested.
-- **Accuracy suite:** use the existing Test / Run all controls and inspect expected/result logs. Report failures rather than treating a rendered page as a passing suite. Check compatibility apps when the change affects React versions or build tools.
+- **Accuracy suite:** use the existing Test / Run all controls, open Logs, and inspect expected/result entries. Report failures rather than treating a rendered page as a passing suite. Check compatibility apps when the change affects React versions or build tools.
 
 Activate inspection with the keyboard rather than an internal setter. `window.__inspectUI.inspect` may diagnose source resolution, but a probe result alone does not verify hover, shortcuts, or editor opening.
 
@@ -65,7 +69,7 @@ Report what passed, what failed or was not tested, and the evidence paths. Disti
 
 For broad source or open-file comparisons, read `docs/source-benchmarks.md` and the source-benchmark section of `flow.md`. The benchmark checkout is separate from this repository; inspect `scripts/benchmark-checkout.ts` for its location and overrides.
 
-`bun run scripts/verify-exact-hover.ts` delegates to that checkout's hover verification. Use it only when the checkout is available and the requested change warrants benchmark coverage. It does not replace testing the affected site or accuracy-suite interaction.
+`bun run scripts/verify-exact-hover.ts` delegates to that checkout's hover verification. `bun run benchmark:open` exercises hover/click and Option-click with intercepted editor requests. Use either only when the checkout is available and the requested change warrants benchmark coverage. Neither replaces testing the affected site or accuracy-suite interaction.
 
 ## Helpers
 
