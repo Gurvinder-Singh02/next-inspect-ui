@@ -9,3 +9,9 @@ packages/next-inspect-ui/.tmp/
 .cursor/skills/verify-next-inspect-ui/.run/
 .cursor/skills/verify-next-inspect-ui/artifacts/
 .fallow/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.vercel/
