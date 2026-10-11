@@ -251,21 +251,6 @@ html {
   }
 }
 
-.docs-h3-s {
-  font-family:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  color: color-mix(in oklab, var(--foreground) 50%, transparent);
-}
-
-.docs-p {
-  font-size: var(--text-xl);
-  line-height: var(--tw-leading, var(--text-xl--line-height));
-}
-
 .landing-code .shiki {
   margin: 0;
   background: transparent !important;

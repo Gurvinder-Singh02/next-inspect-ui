@@ -2,16 +2,32 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { CircleArrowOutUpLeft } from "lucide-react"
+import { ArrowUpLeftFromCircleIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
-const actionClassName = cn(
-  "relative flex cursor-pointer items-center gap-2 text-[15px] text-foreground active:scale-95"
-)
-
-const iconButtonClassName = cn(
-  "flex size-8 items-center justify-center rounded-full bg-muted4 text-foreground"
+const ErrorTooltip = ({
+  title,
+  className,
+  children,
+}: {
+  title: string
+  className?: string
+  children: React.ReactNode
+}) => (
+  <Tooltip>
+    <TooltipTrigger type="button" className={className}>
+      {children}
+      <span className="sr-only">{title}</span>
+    </TooltipTrigger>
+    <TooltipContent side="bottom" sideOffset={15}>
+      {title}
+    </TooltipContent>
+  </Tooltip>
 )
 
 export default function Error(_props: {
@@ -20,30 +36,42 @@ export default function Error(_props: {
 }) {
   const router = useRouter()
 
-  const goBack = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) {
-      router.back()
-      return
-    }
-    router.push("/")
+  const handleBack = () => {
+    router.back()
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-6">
+    <div className="flex min-h-screen items-center justify-center bg-muted">
       <div className="space-y-6 text-center">
-        <h3 className="docs-h3-s">Something went wrong</h3>
-        <div className="docs-p mt-4 flex flex-col items-center gap-2 text-muted-foreground">
-          <div className="flex items-center gap-4">
-            <button type="button" onClick={goBack} className={actionClassName}>
-              <span className={iconButtonClassName} aria-hidden>
-                <CircleArrowOutUpLeft className="size-4" />
-              </span>
+        <h3 className="font-mono text-xs font-medium tracking-tight text-foreground/50 uppercase lg:text-sm">
+          Something went wrong
+        </h3>
+        <div className="mt-4 flex flex-col items-center gap-2 text-base font-medium tracking-tight text-foreground lg:text-xl leading-loose">
+          <div className="flex items-center justify-center gap-4">
+            <div
+              onClick={handleBack}
+              className="relative flex cursor-pointer items-center justify-center gap-2 active:scale-95"
+            >
+              <ErrorTooltip
+                title="Go back"
+                className="flex size-8 items-center justify-center rounded-full bg-muted4"
+              >
+                <span className="flex size-full cursor-pointer items-center justify-center">
+                  <ArrowUpLeftFromCircleIcon className="size-4" />
+                </span>
+              </ErrorTooltip>
               Go back
-            </button>
-            <Link href="/" className={actionClassName}>
-              <span className={iconButtonClassName} aria-hidden>
+            </div>
+            <Link
+              href="/"
+              className="relative flex cursor-pointer items-center justify-center gap-2 active:scale-95"
+            >
+              <ErrorTooltip
+                title="Home"
+                className="flex size-8 items-center justify-center rounded-full bg-muted4"
+              >
                 <div className="size-6 rounded-full bg-accent" />
-              </span>
+              </ErrorTooltip>
               Home
             </Link>
           </div>
