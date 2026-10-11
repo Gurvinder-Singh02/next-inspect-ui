@@ -60,12 +60,10 @@ export const NotFoundView = () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-6">
+    <div className="flex min-h-screen items-center justify-center  px-6">
       <div className="space-y-6 text-center">
-        <h3 className="font-inter text-sm font-medium tracking-tight text-foreground">
-          404 page not found
-        </h3>
-        <div className="mt-4 flex flex-col items-center gap-2 font-inter text-[15px] leading-relaxed text-muted-foreground">
+        <h3 className="docs-h3-s">404 page not found</h3>
+        <div className="docs-p mt-4 flex flex-col items-center gap-2 text-muted-foreground">
           <p>Bruh you&apos;re looking for something that doesn&apos;t exist</p>
           <div className="flex items-center gap-4">
             <button type="button" onClick={goBack} className={actionClassName}>
@@ -76,7 +74,7 @@ export const NotFoundView = () => {
             </button>
             <Link href="/" className={actionClassName}>
               <span className={iconButtonClassName} aria-hidden>
-                <img src="/logos/logo.svg" alt="" className="size-6" />
+                <div className="size-6 rounded-full bg-accent" />
               </span>
               Home
             </Link>

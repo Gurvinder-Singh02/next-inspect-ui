@@ -31,10 +31,8 @@ export default function Error(_props: {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted px-6">
       <div className="space-y-6 text-center">
-        <h3 className="font-inter text-sm font-medium tracking-tight text-foreground">
-          Something went wrong
-        </h3>
-        <div className="mt-4 flex flex-col items-center gap-2 font-inter text-[15px] leading-relaxed text-muted-foreground">
+        <h3 className="docs-h3-s">Something went wrong</h3>
+        <div className="docs-p mt-4 flex flex-col items-center gap-2 text-muted-foreground">
           <div className="flex items-center gap-4">
             <button type="button" onClick={goBack} className={actionClassName}>
               <span className={iconButtonClassName} aria-hidden>
@@ -44,7 +42,7 @@ export default function Error(_props: {
             </button>
             <Link href="/" className={actionClassName}>
               <span className={iconButtonClassName} aria-hidden>
-                <img src="/logos/logo.svg" alt="" className="size-6" />
+                <div className="size-6 rounded-full bg-accent" />
               </span>
               Home
             </Link>

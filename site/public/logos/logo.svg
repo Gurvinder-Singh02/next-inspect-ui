@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-  <defs>
-    <radialGradient id="orb" cx="32%" cy="32%" r="70%">
-      <stop offset="0%" stop-color="#7ec8ff" />
-      <stop offset="38%" stop-color="#0070ff" />
-      <stop offset="68%" stop-color="#003d8f" />
-      <stop offset="100%" stop-color="#0a0a0a" />
-    </radialGradient>
-  </defs>
-  <circle cx="12" cy="12" r="10" fill="url(#orb)" />
+<svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="26.999" cy="27.1006" r="26.2295" fill="url(#paint0_radial_278_381)"/>
+<defs>
+<radialGradient id="paint0_radial_278_381" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0.769531 0.871094) rotate(45) scale(74.1882)">
+<stop offset="0.352001" stop-color="#090909"/>
+<stop offset="0.591494" stop-color="#2770EA"/>
+<stop offset="0.793825" stop-color="#06C4F8"/>
+<stop offset="0.972489" stop-color="#0CBFF9"/>
+</radialGradient>
+</defs>
 </svg>
