@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function ApiReferencePage() {
   return (
     <>
-      <header className="flex flex-col gap-2">
+      <header className="flex flex-col gap-3">
         <h1>API Reference</h1>
         <p>
           InspectUI works without required props. projectRoot is optional.

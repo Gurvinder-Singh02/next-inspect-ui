@@ -41,7 +41,7 @@ export default async function BenchmarksPage() {
 
   return (
     <>
-      <header className="flex flex-col gap-2">
+      <header className="flex flex-col gap-3">
         <h1>Benchmarks</h1>
         <p>
           The fixtures come from{" "}
