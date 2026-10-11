@@ -310,12 +310,12 @@ export const thirdPartyIconTargets: AccuracyTarget[] = [
   },
 ]
 
-export const serverDirectNodes: AccuracyNode[] = [
+const serverDirectNodes: AccuracyNode[] = [
   { name: "ServerCard", file: TEST_PAGE, line: 338 },
   { name: "div", file: SERVER, line: 17 },
 ]
 
-export const serverNestedTargets: AccuracyTarget[] = [
+const serverNestedTargets: AccuracyTarget[] = [
   {
     id: "first",
     label: "First",
@@ -334,7 +334,7 @@ export const serverNestedTargets: AccuracyTarget[] = [
   },
 ]
 
-export const serverClientButtonNodes: AccuracyNode[] = [
+const serverClientButtonNodes: AccuracyNode[] = [
   { name: "Button", file: SERVER_BUTTON, line: 9 },
   { name: "button", file: BUTTON, line: 51 },
 ]

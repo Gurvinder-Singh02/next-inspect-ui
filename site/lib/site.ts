@@ -1,5 +1,5 @@
 export const SITE_NAME = "Next Inspect UI"
-export const SITE_TAGLINE = "Never search for Next.js components again"
+const SITE_TAGLINE = "Never search for Next.js components again"
 export const SITE_TITLE = `${SITE_NAME} | Inspect`
 export const SITE_DESCRIPTION =
   "Inspect any React or Next.js element in your browser and jump directly to its source in your IDE. Works with compound components too. Hold Option to select the owning component. Press Space to browse Component and Element trees."
@@ -12,7 +12,7 @@ export const OG_IMAGE = {
 
 export const AUTHOR_NAME = "Gxuri"
 export const AUTHOR_URL = "https://gxuri.me"
-export const GITHUB_PROFILE = "https://github.com/Gurvinder-Singh02"
+const GITHUB_PROFILE = "https://github.com/Gurvinder-Singh02"
 export const GITHUB_REPO =
   "https://github.com/Gurvinder-Singh02/next-inspect-ui"
 export const GITHUB_AVATAR = "https://github.com/Gurvinder-Singh02.png"

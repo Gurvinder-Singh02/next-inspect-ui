@@ -7,7 +7,7 @@
  * element's own line.
  */
 
-export const ServerCard = ({
+const ServerCard = ({
   title,
   ...props
 }: {
@@ -22,7 +22,7 @@ export const ServerCard = ({
   </div>
 )
 
-export const NestedServer = () => (
+const NestedServer = () => (
   <section className="flex flex-col gap-3">
     <ServerCard title="First" />
     <ServerCard title="Second" />
@@ -32,7 +32,7 @@ export const NestedServer = () => (
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 /** Async RSC — resolution must survive the await boundary. */
-export const AsyncServerCard = async () => {
+const AsyncServerCard = async () => {
   await wait(1)
   return (
     <div className="border-border rounded-lg border p-4">

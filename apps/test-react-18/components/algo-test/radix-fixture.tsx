@@ -54,7 +54,7 @@ export const SlotFixtures = () => (
 )
 
 /** A real Radix primitive, with portalled content. */
-export const RadixMenu = () => (
+const RadixMenu = () => (
   <DropdownMenu.Root>
     <DropdownMenu.Trigger className="border-border rounded-md border px-3 py-1.5 font-mono text-[13px]">
       Open menu
@@ -81,7 +81,7 @@ export const RadixMenu = () => (
 )
 
 /** Trigger using asChild — the trigger's DOM comes from the child. */
-export const RadixAsChildTrigger = () => (
+const RadixAsChildTrigger = () => (
   <DropdownMenu.Root>
     <DropdownMenu.Trigger asChild>
       <span className="bg-muted cursor-default rounded-md px-3 py-1.5 font-mono text-[13px]">

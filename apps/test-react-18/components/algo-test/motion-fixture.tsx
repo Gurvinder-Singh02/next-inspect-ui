@@ -18,7 +18,7 @@ import { AnimatePresence, motion } from "motion/react"
 const motionBoxClass = "size-12 rounded-lg bg-muted-foreground/20"
 
 /** Return-root motion.div — same climb as `return (<div/>)`. */
-export const MotionSimple = (props: { "data-accuracy-target"?: string }) => (
+const MotionSimple = (props: { "data-accuracy-target"?: string }) => (
   <motion.div
     initial={{ opacity: 0.4 }}
     animate={{ opacity: 1 }}
@@ -81,7 +81,7 @@ export const MotionSvg = () => (
 )
 
 /** A motion element nested inside plain host JSX. */
-export const MotionNested = () => (
+const MotionNested = () => (
   <div className="border-border rounded-lg border p-4">
     <p className="font-inter text-muted-foreground mb-3 text-[14px]">
       A motion element inside ordinary markup.
@@ -96,7 +96,7 @@ export const MotionNested = () => (
 )
 
 /** Mount and unmount — resolution must survive elements appearing later. */
-export const MotionPresence = () => {
+const MotionPresence = () => {
   const [shown, setShown] = useState(true)
 
   return (
