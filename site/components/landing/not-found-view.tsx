@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowUpLeftFromCircleIcon } from "lucide-react"
 
 import {
   Tooltip,
@@ -44,37 +43,11 @@ export const NotFoundView = () => {
           404 page not found
         </h3>
         <div className="mt-4 flex flex-col items-center gap-2">
-          <p className="text-base font-medium tracking-tight text-foreground leading-loose lg:text-xl">
-            Bruh you&apos;re looking for something that doesn&apos;t exist
+          <p className="max-w-lg text-base font-medium tracking-tight text-balance text-foreground lg:text-xl has-[a:hover]:text-foreground/10">
+            Bruh you&apos;re looking for something that doesn&apos;t exist{" "}
+            <Link href="/" className="hover:text-foreground">Go Home</Link>
           </p>
-          <div className="flex items-center justify-center gap-4">
-            <div
-              onClick={handleBack}
-              className="relative flex cursor-pointer items-center justify-center gap-2 active:scale-95"
-            >
-              <NotFoundTooltip
-                title="Go back"
-                className="flex size-8 items-center justify-center rounded-full bg-muted4"
-              >
-                <span className="flex size-full cursor-pointer items-center justify-center">
-                  <ArrowUpLeftFromCircleIcon className="size-4" />
-                </span>
-              </NotFoundTooltip>
-              Go back
-            </div>
-            <Link
-              href="/"
-              className="relative flex cursor-pointer items-center justify-center gap-2 active:scale-95"
-            >
-              <NotFoundTooltip
-                title="Home"
-                className="flex size-8 items-center justify-center rounded-full bg-muted4"
-              >
-                <div className="size-6 rounded-full bg-accent" />
-              </NotFoundTooltip>
-              Home
-            </Link>
-          </div>
+     
         </div>
       </div>
     </div>
