@@ -64,7 +64,7 @@ export default async function WorksWithPage() {
           >
             Next Inspect UI benchmark repository
           </a>{" "}
-          (private) — a fork of that bench with Next Inspect UI wired in.
+          (private): a fork of that bench with Next Inspect UI wired in.
         </p>
       </header>
 

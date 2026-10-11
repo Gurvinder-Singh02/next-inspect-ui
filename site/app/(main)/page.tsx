@@ -55,7 +55,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
     q: "What kind of elements can I inspect?",
     a: (
       <>
-        Any React element in the rendered tree — HTML, SVG, shadcn, compound
+        Any React element in the rendered tree: HTML, SVG, shadcn, compound
         components, and the rest of the usual patterns.{" "}
         <Link
           href="/works-with"

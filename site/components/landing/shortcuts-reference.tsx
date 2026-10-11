@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 
 type KeyboardShortcut = {
   keys: React.ReactNode[]
-  /** How to join keys — `+` for chords, `/` for alternatives. Default `+`. */
+  /** How to join keys: `+` for chords, `/` for alternatives. Default `+`. */
   join?: "+" | "/"
   type: string
   description: string
