@@ -74,7 +74,7 @@ For performance or bundle changes:
 bun run benchmark
 ```
 
-See [bundle measurements](docs/benchmarks.md). Source-retrieval comparisons against [React Grab Bench](https://github.com/millionco/react-grab-bench) live in the private fork [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench). After a run there, copy the `next-inspect-ui` summary into `docs/source-benchmark-summary.json` for the Works with overview.
+See [bundle measurements](docs/benchmarks.md). Source-retrieval comparisons against [React Grab Bench](https://github.com/millionco/react-grab-bench) live in the private fork [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench). After a run there, copy the `next-inspect-ui` summary into `docs/source-benchmark-summary.json` for the Benchmarks page.
 
 Documentation-only changes need working links and examples; they do not require rerunning every browser check.
 

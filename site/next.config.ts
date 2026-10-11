@@ -44,6 +44,11 @@ const nextConfig: NextConfig = {
         destination: "/walkthrough",
         permanent: true,
       },
+      {
+        source: "/works-with",
+        destination: "/benchmarks",
+        permanent: true,
+      },
     ]
   },
 }

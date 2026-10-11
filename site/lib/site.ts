@@ -62,7 +62,7 @@ export const INDEXABLE_PATHS = [
   "/",
   "/walkthrough",
   "/how-it-works",
-  "/works-with",
+  "/benchmarks",
   "/api-reference",
   "/shortcuts",
 ] as const

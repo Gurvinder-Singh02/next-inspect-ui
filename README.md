@@ -291,7 +291,7 @@ In the Element tab, Up/Down previews HTML elements with a highlight that follows
 
 Run `bun run benchmark` for [bundle sizes](docs/benchmarks.md). The development component is 23.1 kB gzip and the standalone script is 81.2 kB gzip. A development-only dynamic import excludes the whole library from production, leaving 0 B of inspector code. A static import disables the inspector but can retain a small wrapper.
 
-Source-retrieval comparisons against the 330 React patterns from [React Grab Bench](https://github.com/millionco/react-grab-bench) live in a separate private fork, [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench). Run them there, then copy the `next-inspect-ui` summary into [docs/source-benchmark-summary.json](docs/source-benchmark-summary.json) for the Works with overview. See [docs/benchmarks.md](docs/benchmarks.md).
+Source-retrieval comparisons against the 330 React patterns from [React Grab Bench](https://github.com/millionco/react-grab-bench) live in a separate private fork, [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench). Run them there, then copy the `next-inspect-ui` summary into [docs/source-benchmark-summary.json](docs/source-benchmark-summary.json) for the Benchmarks page. See [docs/benchmarks.md](docs/benchmarks.md).
 
 A dev-only standalone script is also available, like React Grab. The Next.js dashboard uses a guarded `/inspect-ui.js` script; the route returns 404 in production. See the [script setup](packages/next-inspect-ui/README.md#dev-only-script-like-react-grab).
 

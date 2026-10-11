@@ -19,17 +19,17 @@ import { WORKS_WITH_SNIPPETS } from "@/components/landing/works-with-snippets"
 import { highlightCode } from "@/lib/highlight-code"
 
 export const metadata: Metadata = {
-  title: "Works with",
+  title: "Benchmarks",
   description:
-    "Component patterns next-inspect-ui can inspect: HTML, SVG, shadcn, Base UI, Motion, Radix Slot, forwardRef, memo, compound components, and more.",
-  alternates: { canonical: "/works-with" },
+    "Source lookup results from React Grab Bench, plus the component patterns Next Inspect UI handles especially well.",
+  alternates: { canonical: "/benchmarks" },
 }
 
 const benchmark = sourceBenchmark.nextInspectUi
 const benchmarkLink =
   "text-foreground no-underline hover:underline underline-offset-4"
 
-export default async function WorksWithPage() {
+export default async function BenchmarksPage() {
   const highlighted = Object.fromEntries(
     await Promise.all(
       Object.entries(WORKS_WITH_SNIPPETS).map(async ([key, code]) => [
@@ -42,11 +42,9 @@ export default async function WorksWithPage() {
   return (
     <>
       <header className="flex flex-col gap-2">
-        <h1>Works with</h1>
+        <h1>Benchmarks</h1>
         <p>
-          Works with almost all React patterns represented in the benchmark,
-          from native elements to wrapped and compound components. The fixtures
-          come from{" "}
+          The fixtures come from{" "}
           <a
             className={benchmarkLink}
             href="https://github.com/millionco/react-grab-bench"
@@ -64,7 +62,7 @@ export default async function WorksWithPage() {
           >
             Next Inspect UI benchmark repository
           </a>{" "}
-          (private): a fork of that bench with Next Inspect UI wired in.
+          (private), a fork of that bench with Next Inspect UI wired in.
         </p>
       </header>
 

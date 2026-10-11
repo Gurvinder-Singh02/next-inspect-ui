@@ -9,7 +9,7 @@ const NAV_ITEMS = [
   { href: "/", label: "Overview" },
   { href: "/walkthrough", label: "Walkthrough" },
   { href: "/how-it-works", label: "How it works" },
-  { href: "/works-with", label: "Works with" },
+  { href: "/benchmarks", label: "Benchmarks" },
   { href: "/api-reference", label: "API Reference" },
   { href: "/shortcuts", label: "Shortcuts" },
 ] as const

@@ -58,7 +58,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
         Any React element in the rendered tree: HTML, SVG, shadcn, compound
         components, and the rest of the usual patterns.{" "}
         <Link
-          href="/works-with"
+          href="/benchmarks"
           className="text-foreground underline-offset-4 hover:underline"
         >
           See the patterns

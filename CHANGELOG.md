@@ -16,7 +16,7 @@ User-visible changes are recorded here. New entries belong under **Unreleased** 
 
 ### Changed
 
-- Source-retrieval benchmarks live in a separate repository forked from open-source React Grab Bench, with Next Inspect UI wired in. The Works with page shows a copied summary from that repo.
+- Source-retrieval benchmarks live in a separate repository forked from open-source React Grab Bench, with Next Inspect UI wired in. The Benchmarks page shows a copied summary from that repo.
 - Source lookup shares pending requests, caches Fiber source results, decodes source maps once, and batches Next.js frame requests.
 - Hover resolves the visible element’s source before loading parent-component details.
 - Component and Element previews keep the original element pinned while opening the selected source.

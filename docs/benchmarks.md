@@ -4,7 +4,7 @@ Run `bun run benchmark` from the repository root. The command builds the library
 
 ## Source lookup overview
 
-The marketing [Works with](../site/app/(main)/works-with/page.tsx) page shows a short summary from [source-benchmark-summary.json](source-benchmark-summary.json). Full source-retrieval runs live in the private [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench) fork of [React Grab Bench](https://github.com/millionco/react-grab-bench).
+The marketing [Benchmarks](../site/app/(main)/benchmarks/page.tsx) page shows a short summary from [source-benchmark-summary.json](source-benchmark-summary.json). Full source-retrieval runs live in the private [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench) fork of [React Grab Bench](https://github.com/millionco/react-grab-bench).
 
 To refresh the overview: run the source benchmark in that separate repo, then copy the `next-inspect-ui` row from its `summary` into `docs/source-benchmark-summary.json` (`measuredAt`, `metric`, and the `nextInspectUi` fields). Do not vendor the full results JSON here.
 
