@@ -8,7 +8,7 @@ This is a review checklist, not a change log. Numbers below were measured on the
 
 ## Verdict
 
-**Safe to open-source** if you treat the library as **dev-only**, keep the private benchmark repo private, and finish the publish / site checklist below.
+**Safe to open-source** if you treat the library as **dev-only** and finish the publish / site checklist below.
 
 No hardcoded API keys or `.env` secrets were found in the tree.
 
@@ -86,7 +86,7 @@ These are **candidates**, not confirmed CVEs. They match the product: a browser 
 | --- | --- |
 | Root + package MIT | Keep; copyright “Gurvinder Singh” / 2026 |
 | Third-party UI (shadcn / Radix / Base UI / Lucide) | Used in site & apps; keep their notices; do not claim ownership of their design systems |
-| Benchmark fixtures / private bench repo | README points at a **private** benchmark repo — keep that private; do not publish its source inside this repo |
+| Broader source-retrieval bench | Lives in the separate `next-inspect-bench` repository — do not vendor its fixtures here |
 | Demo cards / preview UI in `apps/nextjs` | Confirm none are copied from proprietary/customer projects you cannot relicense under MIT |
 | Images / fonts on the site | Confirm licenses allow OSS + commercial use on the live domain |
 
@@ -116,7 +116,7 @@ Monorepo root and apps stay `"private": true` — only publish `packages/next-in
 | Env vars in Vercel | No secrets in client-exposed `NEXT_PUBLIC_*` that you would not put in a public repo |
 | Domain / SEO | `site/lib/site.ts` GitHub + author URLs should match the public repo |
 | Analytics / cookies | Add only if you want them; disclose if required |
-| Broken links | README “private benchmark” link should stay private or be reworded so public visitors are not confused |
+| Broken links | Confirm marketing and README links resolve for public visitors |
 
 ---
 

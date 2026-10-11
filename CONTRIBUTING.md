@@ -74,16 +74,9 @@ For performance or bundle changes:
 bun run benchmark
 ```
 
-For source-lookup or editor-destination measurements, run these commands; each starts the fork app automatically if needed:
+See [bundle measurements](docs/benchmarks.md). Source-retrieval comparisons against [React Grab Bench](https://github.com/millionco/react-grab-bench) live in the private fork [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench). After a run there, copy the `next-inspect-ui` summary into `docs/source-benchmark-summary.json` for the Works with overview.
 
-```bash
-bun run benchmark:source
-bun run benchmark:open
-```
-
-The editor-opening benchmark intercepts destinations and opens no editor. The source benchmark compares definition files; a returned file path alone does not prove that the intended source was found. See [bundle measurements](docs/benchmarks.md) and [source measurements](docs/source-benchmarks.md) for the scoring limits.
-
-Documentation-only changes need working links and examples; they do not require rerunning every browser benchmark.
+Documentation-only changes need working links and examples; they do not require rerunning every browser check.
 
 ## Submit a change
 
@@ -94,5 +87,3 @@ Add user-visible changes to the **Unreleased** section of [CHANGELOG.md](CHANGEL
 ## License
 
 The project uses the [MIT license](LICENSE). Preserve the copyright and license notices, including the separate licenses for third-party material.
-
-The source benchmark lives in [the private benchmark repository](https://github.com/Gurvinder-Singh02/next-inspect-bench/tree/main/packages/benchmark). Clone it beside this repository as `react-grab-bench`. The commands build Next Inspect UI and install the fork dependencies automatically. `REACT_BENCH_DIR` overrides the checkout path. The benchmark commands use that checkout and save reports in this repository’s `docs` folder.

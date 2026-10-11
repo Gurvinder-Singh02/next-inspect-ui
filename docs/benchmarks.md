@@ -1,6 +1,12 @@
 # Bundle benchmarks
 
-Run `bun run benchmark` from the repository root. The command builds the library, measures standalone bundles, and writes [benchmark-results.json](benchmark-results.json). If the external benchmark fork is installed, the command also measures the comparison libraries. Without it, the command measures Next Inspect UI alone. Source lookup and editor navigation are measured separately in [Source benchmarks](source-benchmarks.md).
+Run `bun run benchmark` from the repository root. The command builds the library, measures standalone bundles, and writes [benchmark-results.json](benchmark-results.json).
+
+## Source lookup overview
+
+The marketing [Works with](../site/app/(main)/works-with/page.tsx) page shows a short summary from [source-benchmark-summary.json](source-benchmark-summary.json). Full source-retrieval runs live in the private [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench) fork of [React Grab Bench](https://github.com/millionco/react-grab-bench).
+
+To refresh the overview: run the source benchmark in that separate repo, then copy the `next-inspect-ui` row from its `summary` into `docs/source-benchmark-summary.json` (`measuredAt`, `metric`, and the `nextInspectUi` fields). Do not vendor the full results JSON here.
 
 ## Current sizes
 
@@ -39,6 +45,4 @@ For the standalone script, keep both the serving route and script tag developmen
 
 ## Internal resolver
 
-The library has no additional runtime dependencies beyond its React and ReactDOM peers. The internal stack reader and source-map decoder replace `bippy/source`. Compared with the previous report, component gzip drops from 30,510 B to 23,624 B and script gzip drops from 89,516 B to 83,171 B.
-
-React Grab still uses bippy in the comparison apps, so bippy remains in the benchmark fork as a competitor dependency. It is not imported by Next Inspect UI or included in its library bundle.
+The library has no additional runtime dependencies beyond its React and ReactDOM peers. The internal stack reader and source-map decoder replace `bippy/source`. Compared with the previous report, component gzip drops from 30,510 B to 23,624 B and script gzip falls from 89,516 B to 83,171 B.

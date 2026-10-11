@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import sourceBenchmark from "../../../../docs/source-benchmark-results.json"
+import sourceBenchmark from "../../../../docs/source-benchmark-summary.json"
 
 import { WorksWithPattern } from "@/components/landing/works-with-pattern"
 import {
@@ -25,9 +25,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/works-with" },
 }
 
-const benchmark = sourceBenchmark.summary.find(
-  (result) => result.library === "next-inspect-ui"
-)!
+const benchmark = sourceBenchmark.nextInspectUi
 const benchmarkLink =
   "text-foreground no-underline hover:underline underline-offset-4"
 
@@ -66,7 +64,7 @@ export default async function WorksWithPage() {
           >
             Next Inspect UI benchmark repository
           </a>{" "}
-          (private).
+          (private) — a fork of that bench with Next Inspect UI wired in.
         </p>
       </header>
 
@@ -113,7 +111,8 @@ export default async function WorksWithPage() {
           Direct definition-file lookup across {benchmark.total} fixtures, with{" "}
           {benchmark.missing} missing targets and {benchmark.errors} lookup
           errors. Timing includes source lookup and component context, not
-          editor launch time.
+          editor launch time. Numbers are copied from the private benchmark
+          repo after a run there.
         </p>
       </section>
 

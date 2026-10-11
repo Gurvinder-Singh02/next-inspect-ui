@@ -429,7 +429,7 @@ test("source labels hide machine paths without a project root", () => {
     formatPageLabel(
       {
         filePath:
-          "/Users/me/repo/apps/react-grab-bench/components/tailwind/tw-card.tsx",
+          "/Users/me/repo/apps/demo/components/tailwind/tw-card.tsx",
         line: 5,
         column: 1,
       },

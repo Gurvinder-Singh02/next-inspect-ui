@@ -291,16 +291,12 @@ In the Element tab, Up/Down previews HTML elements with a highlight that follows
 
 Run `bun run benchmark` for [bundle sizes](docs/benchmarks.md). The development component is 23.1 kB gzip and the standalone script is 81.2 kB gzip. A development-only dynamic import excludes the whole library from production, leaving 0 B of inspector code. A static import disables the inspector but can retain a small wrapper.
 
-The October 11, 2026 [source benchmark](docs/source-benchmarks.md) measures 1.3 ms median and 3.8 ms p95, with 305 of 330 expected definition files found. These measurements include source lookup and tree/context gathering; they do not measure hover FPS or editor launch time.
+Source-retrieval comparisons against the 330 React patterns from [React Grab Bench](https://github.com/millionco/react-grab-bench) live in a separate private fork, [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench). Run them there, then copy the `next-inspect-ui` summary into [docs/source-benchmark-summary.json](docs/source-benchmark-summary.json) for the Works with overview. See [docs/benchmarks.md](docs/benchmarks.md).
 
 A dev-only standalone script is also available, like React Grab. The Next.js dashboard uses a guarded `/inspect-ui.js` script; the route returns 404 in production. See the [script setup](packages/next-inspect-ui/README.md#dev-only-script-like-react-grab).
-
-For the 330-case component source comparison, see [source-benchmarks](docs/source-benchmarks.md). Run `bun run benchmark:source`. It builds the local library, installs the fork dependencies, starts the benchmark app when needed, and stops that app after the run.
 
 Hover selects the exact visible element under the pointer, including SVG parts and classless children. Hold Option / Alt to climb to a component; hover does not automatically select its group.
 
 Source lookup uses the built-in React stack reader and source-map decoder. It reads JSX debug metadata when available and recovers component frames when creation stacks are missing. No additional source-resolution library is required. The inspector keeps its own UI, editor opening, and component navigation; no AI or clipboard feature is involved.
 
 </details>
-
-The source benchmark lives in [the private benchmark repository](https://github.com/Gurvinder-Singh02/next-inspect-bench/tree/main/packages/benchmark). Clone it beside this repository as `react-grab-bench`. The commands build Next Inspect UI and install the fork dependencies automatically. `REACT_BENCH_DIR` overrides the checkout path. The benchmark commands use that checkout and save reports in this repository’s `docs` folder.

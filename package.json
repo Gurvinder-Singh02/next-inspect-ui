@@ -28,10 +28,7 @@
     "build:test-next-js-webpack": "bun run --cwd apps/test-next-js-webpack build",
     "dev:test-vite-react-19": "bun run --cwd apps/test-vite-react-19 dev",
     "build:test-vite-react-19": "bun run --cwd apps/test-vite-react-19 build",
-    "sync:test-ui": "bun run scripts/sync-test-ui.ts",
-    "dev:bench": "bun run scripts/benchmark-checkout.ts dev",
-    "benchmark:source": "bun run scripts/benchmark-checkout.ts source",
-    "benchmark:open": "bun run scripts/benchmark-checkout.ts open"
+    "sync:test-ui": "bun run scripts/sync-test-ui.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

@@ -1,0 +1,16 @@
+{
+  "measuredAt": "2026-10-10T23:05:38.326Z",
+  "metric": "Direct source lookup, expected component definition file; not agent success",
+  "source": "https://github.com/Gurvinder-Singh02/next-inspect-bench",
+  "upstream": "https://github.com/millionco/react-grab-bench",
+  "nextInspectUi": {
+    "library": "next-inspect-ui",
+    "total": 330,
+    "exactFile": 305,
+    "chainContainsFile": 311,
+    "missing": 6,
+    "errors": 0,
+    "medianMs": 1.2999999821186066,
+    "p95Ms": 3.800000011920929
+  }
+}

@@ -118,8 +118,6 @@ To try the package in another local project, install it from its directory and b
 
 Run `bun run benchmark` for [bundle measurements](../../docs/benchmarks.md): 23.1 kB gzip for the development component, 81.2 kB for the standalone script, and 0 B of inspector code with a guarded production import.
 
-Run `bun run benchmark:source` for the [330-case source comparison](../../docs/source-benchmarks.md). The command builds the library, installs the private benchmark checkout’s dependencies, and starts and stops its server when needed. The October 11, 2026 run measures 1.3 ms median and 3.8 ms p95, finding 305 expected definition files. This score does not verify exact JSX lines or editor launch time.
-
 On October 5, 2026, the local compatibility suites passed all 74 exact-source cases in Chromium; all 84 unit tests and workspace type checks also passed. React 18 remains experimental despite those passing fixtures.
 
 ## Dev-only script (like React Grab)

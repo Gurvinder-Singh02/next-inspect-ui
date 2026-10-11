@@ -65,12 +65,6 @@ Close the verification browser. Stop only servers started for this run, using th
 
 Report what passed, what failed or was not tested, and the evidence paths. Distinguish source-file accuracy, exact-line accuracy, intercepted editor opening, and actual editor launch.
 
-## Optional benchmark checks
-
-For broad source or open-file comparisons, read `docs/source-benchmarks.md` and the source-benchmark section of `flow.md`. The benchmark checkout is separate from this repository; inspect `scripts/benchmark-checkout.ts` for its location and overrides.
-
-`bun run scripts/verify-exact-hover.ts` delegates to that checkout's hover verification. `bun run benchmark:open` exercises hover/click and Option-click with intercepted editor requests. Use either only when the checkout is available and the requested change warrants benchmark coverage. Neither replaces testing the affected site or accuracy-suite interaction.
-
 ## Helpers
 
 `features/README.md` lists short surface checklists. Run `bun .cursor/skills/verify-next-inspect-ui/verify-landing-page.js` for home-page usage checks (`SITE_URL` overrides the URL). Optional `launch-server.sh [dev-script]` and `cleanup-server.sh` manage only the recorded verification process group. Reuse existing servers through the main workflow instead.

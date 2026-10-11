@@ -144,12 +144,6 @@ Run `bun run benchmark` for the repeatable bundle check. The current component i
 
 Next.js can also load `<Script src="/inspect-ui.js" strategy="afterInteractive" />` only when `NODE_ENV` is development. The local route serves the installed `next-inspect-ui/script` file and returns 404 in production. The standalone script mounts the inspector automatically; do not mount the component too. Production visitors receive no inspector script tag or script download. The script bundles its own React runtime, making it larger in development than the component setup.
 
-## Source benchmark flow
-
-`bun run benchmark:source` → build local library → start fork app on port 3106 → 330 upstream cases → compare expected definition files with source results → `docs/source-benchmark-results.json`. This local test opens no editor and uses no agent API. See `docs/source-benchmarks.md` for scoring limits.
-
-`bun run benchmark:open` exercises the actual hover and click handlers for normal click and Option-click. It intercepts editor endpoint requests, records file/line/column in `docs/open-benchmark-results.json`, and opens no editor. Pointer hits are controlled so offscreen fixtures can be tested. The upstream expected file is the component definition; JSX usage correctness needs separate expectations.
-
 Source labels in the tooltip and panel show project-relative paths, never the machine’s absolute path. When no projectRoot is set, recovered absolute paths are shortened at the workspace app/package or a source folder; root files show their filename. Editor opening still uses the original full source path.
 
 Unavailable source or navigation targets do not shake or flash the highlight or tooltip.
@@ -160,10 +154,8 @@ Unavailable source or navigation targets do not shake or flash the highlight or 
 
 Hover, panel, pointer-down warming, and editor opening share per-fiber source promises. Cache revisions include React source metadata so edits trigger a new lookup; missing sources and failed requests are evicted. Outdated Option requests cannot repaint a different hovered element. Host promises and map requests belong to the mounted inspector. Parsed stacks and component samples use weak caches keyed by Error or component type, so they can be collected when those objects are no longer referenced.
 
-The development inspection probe still waits for the full owner chain. Host and chain work run concurrently, and the optional profiling flag reports both durations from their common start; the durations overlap and must not be added. The source benchmark retains its complete context and exact-file scoring.
+The development inspection probe still waits for the full owner chain. Host and chain work run concurrently, and the optional profiling flag reports both durations from their common start; the durations overlap and must not be added.
 
-The October 11, 2026 source report measures 1.3 ms median and 3.8 ms p95 for lookup plus tree/context gathering. It finds 305/330 expected definition files, including six missing targets in the denominator. This is not an exact-line score, hover FPS, or editor launch time. On October 5, 2026, all 84 unit tests and workspace/compatibility type checks passed. See [Source benchmarks](docs/source-benchmarks.md) for the full report.
-
-The source benchmark lives in [the private benchmark repository](https://github.com/Gurvinder-Singh02/next-inspect-bench/tree/main/packages/benchmark). Clone it beside this repository as `react-grab-bench`. The commands build Next Inspect UI and install the fork dependencies automatically. `REACT_BENCH_DIR` overrides the checkout path. The benchmark commands use that checkout and save reports in this repository’s `docs` folder.
+On October 5, 2026, all 84 unit tests and workspace/compatibility type checks passed. Bundle size measurements live in [Bundle benchmarks](docs/benchmarks.md). Broader source-retrieval comparisons use the 330 fixtures from [React Grab Bench](https://github.com/millionco/react-grab-bench) and live in the private fork [next-inspect-bench](https://github.com/Gurvinder-Singh02/next-inspect-bench). After a run there, copy the `next-inspect-ui` summary into [docs/source-benchmark-summary.json](docs/source-benchmark-summary.json) for the Works with overview.
 
 The Lab copy snippet includes only settings that differ from the library defaults. Default settings produce `<InspectUI />`; changing only the shortcut produces only the `shortcut` prop. Tooltip and spotlight objects contain only changed fields. A changed editor adds `ide`.
