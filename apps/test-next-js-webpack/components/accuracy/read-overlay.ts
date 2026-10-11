@@ -7,7 +7,7 @@ const stripTag = (raw: string) =>
  * Read the Inspect UI info panel NODE TREE.
  * Public overlay only — no debug verify / probe APIs.
  */
-export const readOwnerTreeFromOverlay = (): FoundNode[] | null => {
+const readOwnerTreeFromOverlay = (): FoundNode[] | null => {
   const section = document.querySelector("[data-dev-inspector-owner-tree]")
   if (!section) return null
 

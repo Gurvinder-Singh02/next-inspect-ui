@@ -25,7 +25,7 @@ declare global {
   }
 }
 
-export const getInspectUIProbe = () => {
+const getInspectUIProbe = () => {
   if (typeof window === "undefined") return null
   return window.__inspectUI ?? null
 }

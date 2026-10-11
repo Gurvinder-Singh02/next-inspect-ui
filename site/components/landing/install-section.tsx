@@ -6,14 +6,14 @@ import {
 import { UsageTabs, type UsageTab } from "@/components/landing/usage-tabs"
 import { highlightCode } from "@/lib/highlight-code"
 
-export const INSTALL_COMMANDS: Record<PackageManager, string> = {
+const INSTALL_COMMANDS: Record<PackageManager, string> = {
   npm: "npm i -D next-inspect-ui",
   pnpm: "pnpm add -D next-inspect-ui",
   yarn: "yarn add -D next-inspect-ui",
   bun: "bun add -D next-inspect-ui",
 }
 
-export const LAYOUT_CODE = `export default async function RootLayout({
+const LAYOUT_CODE = `export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode

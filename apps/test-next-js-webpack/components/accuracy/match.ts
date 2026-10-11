@@ -10,7 +10,7 @@ const parseSource = (source: string | null) => {
   return { file: normalized.slice(0, lastColon), line }
 }
 
-export const filesMatch = (foundFile: string, expectFile: string) => {
+const filesMatch = (foundFile: string, expectFile: string) => {
   const a = foundFile.replace(/\\/g, "/")
   const b = expectFile.replace(/\\/g, "/")
   return a === b || a.endsWith(`/${b}`) || a.endsWith(b)
