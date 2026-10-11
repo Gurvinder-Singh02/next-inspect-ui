@@ -17,12 +17,13 @@ async function verifyLandingPage() {
     await expect(frameworks).toBeVisible();
     await expect(frameworks.getByRole('tab', { name: 'Next.js', exact: true })).toHaveAttribute('aria-selected', 'true');
     const panel = page.getByRole('tabpanel');
-    await expect(panel).toContainText(/layout\.tsx|main\.tsx|index\.js/);
+    await expect(panel).toContainText('app/layout.tsx');
     await frameworks.getByRole('tab', { name: 'React (Vite)', exact: true }).click();
     await expect(frameworks.getByRole('tab', { name: 'React (Vite)', exact: true })).toHaveAttribute('aria-selected', 'true');
-    await expect(panel).toContainText(/layout\.tsx|main\.tsx|index\.js/);
+    await expect(panel).toContainText('src/main.tsx');
     await frameworks.getByRole('tab', { name: 'Next.js', exact: true }).click();
     await expect(frameworks.getByRole('tab', { name: 'Next.js', exact: true })).toHaveAttribute('aria-selected', 'true');
+    await expect(panel).toContainText('app/layout.tsx');
     await expect(page.getByRole('link', { name: 'Shortcuts', exact: true }).first()).toBeVisible();
     if (errors.length) throw new Error(errors.join('\n'));
     await page.screenshot({ path: `${evidence}/landing-page-verified.png`, fullPage: true });
