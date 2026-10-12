@@ -322,6 +322,18 @@ html.dark .landing-code .shiki span {
     initial-value: 40px;
   }
 
+  @property --fl {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
+
+  @property --fr {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 40px;
+  }
+
   .scroll-fade-y,
   [data-slot="scroll-area-viewport"] {
     --ft: 0px;
@@ -344,6 +356,27 @@ html.dark .landing-code .shiki span {
       88% 100%;
   }
 
+  .scroll-fade-x {
+    --fl: 0px;
+    --fr: 40px;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 var(--fl),
+      #000 calc(100% - var(--fr)),
+      transparent 100%
+    );
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    animation:
+      fadeLeft 1 linear both,
+      fadeRight 1 linear both;
+    animation-timeline: scroll(self inline), scroll(self inline);
+    animation-range:
+      0% 12%,
+      88% 100%;
+  }
+
   @keyframes fadeTop {
     from {
       --ft: 0px;
@@ -359,6 +392,31 @@ html.dark .landing-code .shiki span {
     }
     to {
       --fb: 0px;
+    }
+  }
+
+  @keyframes fadeLeft {
+    from {
+      --fl: 0px;
+    }
+    to {
+      --fl: 40px;
+    }
+  }
+
+  @keyframes fadeRight {
+    from {
+      --fr: 40px;
+    }
+    to {
+      --fr: 0px;
+    }
+  }
+
+  @media (width >= 64rem) {
+    .scroll-fade-none-lg {
+      mask-image: none;
+      animation: none;
     }
   }
 }
