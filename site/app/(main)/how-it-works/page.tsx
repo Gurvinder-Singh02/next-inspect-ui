@@ -51,6 +51,8 @@ export default function HowItWorksPage() {
           >
             react-dev-inspector
           </a>
+          ,{" "}
+          vite inspector
           , and{" "}
           <a
             target="_blank"

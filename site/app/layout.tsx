@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono, Inter, Azeret_Mono } from "next/font/google"
 
@@ -169,6 +170,7 @@ export default async function RootLayout({
             {InspectUI && <InspectUI />}
           </TooltipProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )

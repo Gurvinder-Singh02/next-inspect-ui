@@ -17,10 +17,12 @@ const nextConfig: NextConfig = {
         { key: "Strict-Transport-Security", value: "max-age=31536000" },
         {
           key: "Content-Security-Policy",
-          // Next hydration and the theme script require inline scripts. Styles
-          // are also used by the interactive demos and syntax highlighting.
+          // Next hydration and the theme script require inline scripts. Vercel Web
+          // Analytics loads from va.vercel-scripts.com and reports to
+          // vitals.vercel-insights.com. Styles are also used by the interactive
+          // demos and syntax highlighting.
           value:
-            "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+            "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://vitals.vercel-insights.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
         }
       )
     }

@@ -11,16 +11,18 @@ builds reject localhost, credentials, paths, and query parameters. Rebuild
 after changing the origin; metadata and the sitemap are generated at build time.
 
 Fonts and the author avatar are served from this website. Google font files are
-downloaded at build time by `next/font`, not by visitors. There is no application
-analytics or source-code upload service. Theme preferences use browser storage;
+downloaded at build time by `next/font`, not by visitors. Vercel Web Analytics
+records page views in production. There is no source-code upload service. Theme
+preferences use browser storage;
 copy buttons write to the clipboard only when clicked. The Lab microphone demo
 requests permission after Start Listening and processes audio in the browser.
 The hosting provider may still retain ordinary HTTP request logs.
 
-Production responses include a same-origin Content Security Policy, frame
-protection, `nosniff`, no-referrer, Permissions Policy, and HSTS. The policy
-allows inline scripts for Next.js hydration and the theme script, and inline
-styles for the demos. It is a baseline policy, not a nonce-based strict CSP.
+Production responses include a Content Security Policy, frame protection,
+`nosniff`, no-referrer, Permissions Policy, and HSTS. The policy allows inline
+scripts for Next.js hydration and the theme script, Vercel Web Analytics
+(`va.vercel-scripts.com` and `vitals.vercel-insights.com`), and inline styles
+for the demos. It is a baseline policy, not a nonce-based strict CSP.
 Verify HTTPS and these headers on the real deployment before announcing it.
 
 ```bash
