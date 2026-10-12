@@ -29,16 +29,19 @@ export const OpenExample = ({
     <Collapsible open={open} onOpenChange={setOpen} className="flex flex-col gap-2">
       <CollapsibleTrigger
         className={cn(
-          "inline-flex max-w-full items-center gap-1.5 text-left outline-none",
+          "inline-flex max-w-full text-muted-foreground hover:text-foreground items-center gap-1.5 text-left outline-none",
           "focus-visible:ring-3 focus-visible:ring-ring/50",
           "touch-action-manipulation [-webkit-tap-highlight-color:transparent]"
         )}
       >
         <PlayIcon
-          className="size-3.5 shrink-0 fill-current text-muted-foreground"
+          className={cn(
+            "size-2.5 shrink-0 fill-current  transition-transform duration-200 ease-out motion-reduce:transition-none",
+            open && "rotate-90"
+          )}
           aria-hidden
         />
-        <span className="min-w-0 font-inter text-[13px] text-muted-foreground">
+        <span className="min-w-0 font-inter text-[13px] ">
           Example: {children ?? "it will open"}
         </span>
       </CollapsibleTrigger>
