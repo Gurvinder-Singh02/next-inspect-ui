@@ -4,7 +4,13 @@ import Link from "next/link"
 import inspectUIPackage from "next-inspect-ui/package.json"
 
 import { contentLinkClassName } from "@/lib/content-link"
-import { AUTHOR_NAME, AUTHOR_URL, GITHUB_AVATAR, GITHUB_REPO } from "@/lib/site"
+import {
+  AUTHOR_NAME,
+  AUTHOR_URL,
+  GITHUB_AVATAR,
+  GITHUB_REPO,
+  NPM_PACKAGE_URL,
+} from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 const FooterLink = ({
@@ -61,7 +67,9 @@ export const SiteFooter = ({ className }: { className?: string }) => (
       aria-label="Footer"
       className="mt-3 flex flex-wrap items-center justify-center gap-x-2 font-inter text-[13px] text-muted-foreground"
     >
-      <span>v{inspectUIPackage.version}</span>
+      <FooterLink href={NPM_PACKAGE_URL}>
+        v{inspectUIPackage.version}
+      </FooterLink>
       <span aria-hidden>·</span>
       <FooterLink href="/lab">Lab</FooterLink>
       <span aria-hidden>·</span>

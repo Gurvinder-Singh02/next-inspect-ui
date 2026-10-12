@@ -13,7 +13,7 @@ export const ErrorView = () => {
         </h3>
         <div className="mt-4 flex flex-col items-center gap-2">
           <p className="max-w-lg text-base font-medium tracking-tight text-balance text-foreground has-[a:hover]:text-foreground/10 lg:text-xl">
-            Bruh something broke on this page{" "}
+            Bruh something broke on this page,{" "}
             <Link href="/" className={contentLinkClassName}>
               Go Home
             </Link>
